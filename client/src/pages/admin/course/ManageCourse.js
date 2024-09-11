@@ -19,6 +19,7 @@ const ManageCourse = () => {
   const [openQuizIndex, setOpenQuizIndex] = useState(0);
   const [openLessonIndex, setOpenLessonIndex] = useState(0);
   const [sortedData, setSortedData] = useState([]);  // acedemic student name 
+  const [openQuizResult, setopenQuizResult] = useState(false); // state for quiz result modal
 
   const toggleDropdown = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
@@ -55,7 +56,9 @@ const ManageCourse = () => {
   const addQuestionToggleModal = () => {
     setAddQuestionOpen(!addquestionOpen);
   };
-
+  const openQuizResultmodule = () => {
+    setopenQuizResult(!addquestionOpen);
+  };
   const lessons = [
     {
       title: "Introduction to Security Guard",
@@ -136,7 +139,7 @@ const ManageCourse = () => {
   const initialData = [
 
     {
-      Student_name: "fgdg",
+      Student_name: "Hlimon Sorey",
       Enroll_Date: "27-12-2024",
       Completed_Date: "27-12-2024",
       Time_Spent: "37:09:32",
@@ -299,7 +302,7 @@ const ManageCourse = () => {
                   <th>Enroll Date</th>
                   <th>Completed Date</th>
                   <th>Time Spent</th>
-                  <th>Progress </th>
+                  <th>Progress</th>
                   <th>Completed Lesson</th>
                   <th>Last Seen</th>
                   <th>Quiz Passed</th>
@@ -313,9 +316,7 @@ const ManageCourse = () => {
                     <tr key={index}>
                       <td className="id">{index + 1}</td>
                       <td>
-                        <h6>
-                          <NavLink to={"/manage-course"}>{i.Student_name}</NavLink>
-                        </h6>
+                        <h6 onClick={openQuizResultmodule}>{i.Student_name}</h6>
                       </td>
                       <td>{i.Enroll_Date}</td>
                       <td>{i.Completed_Date}</td>
@@ -324,6 +325,16 @@ const ManageCourse = () => {
                       <td>{i.Completed_Lesson}</td>
                       <td>{i.Last_Seen}</td>
                       <td style={{ textAlign: "center" }}>{i.Quiz_Passed}<i class="fa-solid fa-money-bill-1-wave"></i></td>
+                      <td>
+                        <button className="resource-btn module-btn">
+                          <i
+                            class="fa-regular fa-file"
+                            style={{ marginRight: "8px" }}
+                          ></i>
+                          Document
+                        </button>
+
+                      </td>
                     </tr>
                   );
                 })}
@@ -333,7 +344,7 @@ const ManageCourse = () => {
           )}
         </div>
 
-        {/* Module Model */}
+        {/* Module Modal */}
         {moduleOpen && (
           <div className="modal">
             <div className="add-lesson-container">
@@ -375,7 +386,7 @@ const ManageCourse = () => {
           </div>
         )}
 
-        {/* Lesson Model */}
+        {/* Lesson Modal */}
         {lessonOpen && (
           <div className="modal">
             <div className="add-lesson-container">
@@ -514,7 +525,7 @@ const ManageCourse = () => {
           </div>
         )}
 
-        {/* Quiz Model */}
+        {/* Quiz Modal */}
         {quizOpen && (
           <div className="modal">
             <div className="add-lesson-container">
@@ -652,7 +663,7 @@ const ManageCourse = () => {
           </div>
         )}
 
-        {/* Question Model */}
+        {/* Question Modal */}
         {questionOpen && (
           <div className="modal">
             <div className="add-lesson-container">
@@ -730,7 +741,7 @@ const ManageCourse = () => {
           </div>
         )}
 
-        {/* Question Model */}
+        {/* Question Modal */}
         {addquestionOpen && (
           <div className="modal">
             <div className="add-lesson-container">
@@ -820,6 +831,28 @@ const ManageCourse = () => {
                     onClick={addQuestionToggleModal}
                     className="secondary-btn"
                   >
+                    Close
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Quiz Result Modal  */}
+        {openQuizResult && (
+          <div className="modal">
+            <div className="add-lesson-container">
+              <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "2px solid #dfdfe1", marginBottom: "10px" }}>
+                <h5 style={{ paddingBottom: "5px" }}>Quiz Result</h5>
+                <div>
+                  <i class="fa-solid fa-xmark"></i>
+                </div>
+
+              </div>
+              <form>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button type="" className="secondary-btn">
                     Close
                   </button>
                 </div>
