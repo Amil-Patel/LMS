@@ -1,0 +1,51 @@
+
+.text:first-child {
+  margin: 0 5px;
+}
+
+.del_icon{
+    text-align: center;
+    padding: 10px 0 0 9px !important;    
+}
+
+  .edit{
+    margin-left: 5px;
+  }
+
+
+  
+  .delete-icon:hover {
+    color: rgb(180, 4, 4); 
+  }
+  
+  
+.select_course{
+    width: 100% !important;
+}
+
+  
+
+/* inqure css  */
+
+.inq_message{
+  width: 18%;
+}
+.edit-icon {
+  color: #4880FF; 
+  cursor: pointer;
+  font-size: 20px;
+  text-align: center;
+  margin-left: 10px;
+  transition: color 0.3s ease;
+}
+
+.edit-icon:hover {
+  color: #2f6cfb; 
+}
+
+.succes p{
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  width: 60%;
+}
