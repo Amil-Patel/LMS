@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
-// import "../../../assets/css/course/course.css";
-// import "../../../assets/css/main.css";
+import "../../../assets/css/course/course.css";
+import "../../../assets/css/main.css";
 import "../../../assets/css/sidebar.css";
 import { NavLink } from "react-router-dom";
 
