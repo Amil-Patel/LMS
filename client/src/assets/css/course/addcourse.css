@@ -213,15 +213,6 @@
   cursor: pointer;
 }
 
-.faq-button.remove {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
 .faq-button {
   font-size: 16px;
   width: 30px;
@@ -269,6 +260,7 @@
   border: none;
   padding: 5px 10px;
   margin-left: 10px;
+  margin-top: 6px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -291,12 +283,6 @@
   background-color: #007bff;
   color: white;
   margin-top: 6px;
-}
-
-.faq-button.remove {
-  background-color: #dc3545;
-  color: white;
-  margin-top: 10px;
 }
 
 .input-button {
@@ -331,6 +317,7 @@
 .tag-container {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .tag {
@@ -347,4 +334,7 @@
   margin-left: 8px;
   cursor: pointer;
   font-weight: bold;
+}
+.tag-close i{
+  font-size: 14px;
 }

@@ -14,6 +14,25 @@ const AddCourse = () => {
   const [authors, setAuthors] = useState(["Author One"]);
   const [isContentVisible, setIsContentVisible] = useState(false);
 
+  const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
+  const [fileName, setFileName] = useState("");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileName(file.name);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleButtonClick = () => {
+    document.getElementById("fileInput").click();
+  };
+
   const handleChangeTab = (tabName) => {
     setTab(tabName);
   };
@@ -115,7 +134,7 @@ const AddCourse = () => {
               alt="X Logo"
             />
           </div>
-          <a className="save-button" style={{ cursor: "pointer" }}>
+          <a className="primary-btn module-btn" style={{ cursor: "pointer" }}>
             <span className="text">Save</span>
           </a>
         </div>
@@ -226,7 +245,7 @@ const AddCourse = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Course Level</label>
+                    <label>Publish Date</label>
                     <input
                       type="date"
                       placeholder="Enter Course Title"
@@ -299,29 +318,42 @@ const AddCourse = () => {
                     marginLeft: "30px",
                     alignItems: "end",
                     gap: "20px",
+                    justifyContent: "normal"
                   }}
                 >
                   <div className="form-group mb-0" style={{ width: "50%" }}>
                     <label>
                       Course Thumbnail <span className="required">*</span>
                     </label>
-                    <input type="text" placeholder="" className="col12input" />
+                    <input type="text" placeholder="" className="col12input" value={fileName}
+                      readOnly />
                   </div>
 
-                  <button className="primary-btn module-btn">Browser</button>
+                  <button
+                    className="primary-btn module-btn"
+                    type="button"
+                    onClick={handleButtonClick}
+                  >
+                    Browse
+                  </button>
+
+                  <input
+                    id="fileInput"
+                    type="file"
+                    style={{ display: "none" }}
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
 
                   <div>
-                    <img
-                      src="https://via.placeholder.com/150"
-                      style={{ width: "45%" }}
-                    />
+                    <img src={imageSrc} style={{ width: "67px", height: "auto" }} alt="Selected Thumbnail" />
                   </div>
                 </div>
               </div>
 
               {/* course overview link */}
               <div style={{ display: "flex" }}>
-                <div className="flex-row flex-row40" style={{border:"none"}}>
+                <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
                     <label>Course OverView Link</label>
                     <input
@@ -346,7 +378,7 @@ const AddCourse = () => {
                   </div>
                 </div>
 
-                <div className="flex-row flex-row40" style={{border:"none"}}>
+                <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
                     <label>Author</label>
                     <input
@@ -358,12 +390,12 @@ const AddCourse = () => {
                     <div className="tag-container">
                       {authors.map((keyword, index) => (
                         <div className="tag" key={index}>
-                          {authors}
+                          <span>{authors}</span>
                           <span
                             className="tag-close"
                             onClick={() => handleRemoveKeyword(index)}
                           >
-                            X
+                            <i className="fa-solid fa-xmark"></i>
                           </span>
                         </div>
                       ))}
@@ -391,7 +423,9 @@ const AddCourse = () => {
           {tab == "additional" && (
             <div className="faq-section">
               <div className="section">
-                <h5>FAQS</h5>
+                <label htmlFor="courseDescription" className="description-label">
+                  FAQS
+                </label>
                 {faqs.map((faq, index) => (
                   <div key={index} className="faq-item">
                     {/* FAQ Question with Button on the Right */}
@@ -407,9 +441,8 @@ const AddCourse = () => {
 
                       {/* Add/Remove Button */}
                       <button
-                        className={`faq-button ${
-                          index === faqs.length - 1 ? "add" : "remove"
-                        }`}
+                        className={`faq-button ${index === faqs.length - 1 ? "add" : "remove"
+                          }`}
                         onClick={
                           index === faqs.length - 1
                             ? handleAddFaq
@@ -437,7 +470,9 @@ const AddCourse = () => {
               </div>
 
               <div className="section">
-                <h5>What You Will Learn ?</h5>
+                <label htmlFor="courseDescription" className="description-label">
+                  What You Will Learn ?
+                </label>
                 {learningPoints.map((point, index) => (
                   <div key={index} className="learning-item">
                     <input
@@ -448,9 +483,8 @@ const AddCourse = () => {
                       className="col12input input-space"
                     />
                     <button
-                      className={`faq-button ${
-                        index === learningPoints.length - 1 ? "add" : "remove"
-                      }`}
+                      className={`faq-button ${index === learningPoints.length - 1 ? "add" : "remove"
+                        }`}
                       onClick={
                         index === learningPoints.length - 1
                           ? handleAddLearning
@@ -464,7 +498,9 @@ const AddCourse = () => {
               </div>
 
               <div className="section">
-                <h5>Prerequisites</h5>
+                <label htmlFor="courseDescription" className="description-label">
+                  Prerequisites
+                </label>
                 {prerequisites.map((point, index) => (
                   <div key={index} className="learning-item">
                     <input
@@ -477,9 +513,8 @@ const AddCourse = () => {
                       className="col12input input-space"
                     />
                     <button
-                      className={`faq-button ${
-                        index === prerequisites.length - 1 ? "add" : "remove"
-                      }`}
+                      className={`faq-button ${index === prerequisites.length - 1 ? "add" : "remove"
+                        }`}
                       onClick={
                         index === prerequisites.length - 1
                           ? handleAddPrerequisite
@@ -526,12 +561,12 @@ const AddCourse = () => {
                 <div className="tag-container">
                   {keywords.map((keyword, index) => (
                     <div className="tag" key={index}>
-                      {keyword}
+                      <span>{keyword}</span>
                       <span
                         className="tag-close"
                         onClick={() => handleRemoveKeyword(index)}
                       >
-                        X
+                        <i className="fa-solid fa-xmark"></i>
                       </span>
                     </div>
                   ))}
@@ -549,12 +584,12 @@ const AddCourse = () => {
                 <div className="tag-container">
                   {tags.map((tag, index) => (
                     <div className="tag" key={index}>
-                      {tag}
+                      <span>{tag}</span>
                       <span
                         className="tag-close"
                         onClick={() => handleRemoveTag(index)}
                       >
-                        X
+                        <i className="fa-solid fa-xmark"></i>
                       </span>
                     </div>
                   ))}

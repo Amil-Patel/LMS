@@ -22,7 +22,6 @@
   --button-secondary-color: #EEEEEE;
   --net-amount-row-color: #f5f6fa;
   --module-list-bg: #F5F6FA;
-  ;
 }
 
 /*---------------------------------
@@ -142,7 +141,9 @@ td {
 input:focus-visible, textarea:focus-visible, select:focus-visible{
 outline: 0;
 }
-
+textarea{
+  resize: vertical;
+}
 .col6input,
 .col3input,
 .col12input,
