@@ -1,0 +1,107 @@
+.security-btn{
+    margin-top: 10px;
+    display: flex;
+}
+
+.security-btn a{
+    padding: 5px 10px;
+    color: #666;
+    font-size: 14px;
+    border: 1px solid #000;
+    text-decoration: none;
+    border-radius: 25px ;
+    margin-right:10px
+
+}
+
+.security-service{
+    margin-top: 15px;
+}
+.security-service-box{
+    background-color: #fff;
+    padding: 20px;
+    width: 60%;
+}
+
+.services-section{
+    background-color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.courses-category {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .card {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+  
+  .card-content {
+    margin-top: 10px;
+  }
+
+  .card-content h5{
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .card-content p{
+    font-size: 12px;
+  }
+  
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    align-items: center;
+  }
+
+  .horizontal-card .card-actions{
+    align-items: start;
+    margin: 0;
+  }
+
+  .action-btn {
+    display: flex;
+    gap: 5px;
+  }
+
+  button.edit-btn, .delete-btn {
+    padding: 2px 4px;
+}
+
+.horizontal-card .card{
+  width: 49%;
+  justify-content: space-between;
+  display: flex;
+  margin-top: 20px;
+}
+.horizontal-card .card img{
+  width: 45%;
+}
+
+
+
+
+select {
+  width: 100%;
+  padding: 8px 0 8px 5px;
+  margin-bottom: 10px;
+}
+
+
+
+
