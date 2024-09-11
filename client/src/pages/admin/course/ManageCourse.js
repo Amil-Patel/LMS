@@ -7,58 +7,77 @@ import { NavLink } from "react-router-dom";
 
 const ManageCourse = () => {
   const [tab, setTab] = useState("course"); // state for tab
-  const [lessonOpen, setLessonOpen] = useState(false); // state for lesson modal
-  const [moduleOpen, setModuleOpen] = useState(false); // state for module modal
-  const [quizOpen, setQuizOpen] = useState(false); // state for quiz modal
-  const [questionOpen, setQuestionOpen] = useState(false); // state for question modal
-  const [addquestionOpen, setAddQuestionOpen] = useState(false); // state for add question modal
+  const [lessonOpen, setLessonOpen] = useState(false); // state for open lesson modal
+  const [moduleOpen, setModuleOpen] = useState(false); // state for open module modal
+  const [quizOpen, setQuizOpen] = useState(false); // state for open quiz modal
+  const [questionOpen, setQuestionOpen] = useState(false); // state for open question modal
+  const [addquestionOpen, setAddQuestionOpen] = useState(false); // state for open add question modal
+  const [editquestionOpen, setEditQuestionOpen] = useState(false); // state for open edit question modal
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [isContentVisible, setIsContentVisible] = useState(true);
+  const [isContentVisible, setIsContentVisible] = useState(true); // state for module dropdown icon
   const [showQuiz, setShowQuiz] = useState(true);
   const [selectedLessonType, setSelectedLessonType] = useState("text");
   const [openQuizIndex, setOpenQuizIndex] = useState(0);
-  const [openLessonIndex, setOpenLessonIndex] = useState(0);
-  const [sortedData, setSortedData] = useState([]);  // acedemic student name 
-  const [openQuizResult, setopenQuizResult] = useState(false); // state for quiz result modal
+  const [sortedData, setSortedData] = useState([]); // acedemic student name
+  const [openQuizResult, setopenQuizResult] = useState(false); // state for open quiz result modal
+  const [quizDocumentOpen, setQuizDocumentOpen] = useState(false); // state for open quiz document modal
 
+  // Function to toggle dropdown visibility based on index
   const toggleDropdown = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
+  // Function to change the currently active tab
   const handleChangeTab = (tabName) => {
     setTab(tabName);
   };
 
+  // Function to toggle visibility of content
   const toggleContent = () => {
     setIsContentVisible(!isContentVisible);
   };
 
-  const showtoggleContent = () => {
-    setShowQuiz(!showQuiz);
-  };
-
+  // Function to toggle visibility of module modal
   const moduleToggleModal = () => {
     setModuleOpen(!moduleOpen);
   };
 
+  // Function to toggle visibility of lesson modal
   const lessonToggleModal = () => {
     setLessonOpen(!lessonOpen);
   };
 
+  // Function to toggle visibility of quiz modal
   const quizToggleModal = () => {
     setQuizOpen(!quizOpen);
   };
 
+  // Function to toggle visibility of question modal
   const questionToggleModal = () => {
     setQuestionOpen(!questionOpen);
   };
 
+  // Function to toggle visibility of add question modal
   const addQuestionToggleModal = () => {
     setAddQuestionOpen(!addquestionOpen);
   };
-  const openQuizResultmodule = () => {
-    setopenQuizResult(!addquestionOpen);
+
+  // Function to toggle visibility of edit question modal
+  const editQuestionToggleModal = () => {
+    setEditQuestionOpen(!editquestionOpen);
   };
+
+  // Function to toggle visibility of quiz result module
+  const openQuizResultmodule = () => {
+    setopenQuizResult(!openQuizResult); // Correctly toggling openQuizResult state
+  };
+
+  // Function to toggle visibility of quiz document modal
+  const quizDocumentToggleModal = () => {
+    setQuizDocumentOpen(!quizDocumentOpen); // Fixed the state variable name
+  };
+
+  // Sample data for lessons
   const lessons = [
     {
       title: "Introduction to Security Guard",
@@ -72,7 +91,12 @@ const ManageCourse = () => {
       status: 1,
       isQuiz: false,
     },
-    { title: "Quiz-1", status: "red", isQuiz: true, addQuestions: true },
+    {
+      title: "Quiz-1",
+      status: "red",
+      isQuiz: true,
+      addQuestions: true,
+    },
     {
       title: "Introduction to Security Guard",
       time: "",
@@ -81,7 +105,7 @@ const ManageCourse = () => {
     },
   ];
 
-  // Example data for the quiz modules
+  // Example data for the quiz modal
   const quizData = [
     {
       question: "1. Your First Question Will Appear Here ?",
@@ -112,32 +136,13 @@ const ManageCourse = () => {
     },
   ];
 
-  // Toggle which module is open
+  // Function to toggle which quiz module is open based on index
   const toggleQuizModule = (index) => {
-    setOpenQuizIndex(index === openQuizIndex ? null : index); // Close if it's already open
+    setOpenQuizIndex(index === openQuizIndex ? null : index);
   };
 
-  // acdemic tab function start
-
-  const courses = [
-    {
-      id: 1,
-      name: "Christine Brooks",
-      contactInfo: {
-        email: "admin@gmail.com",
-        call: "+919510672871",
-        wp: "9510672871",
-      },
-      country: "India",
-      message: "Message Submitted By User will Appear Here",
-      status: "success",
-    },
-  ];
-
-  // acedemic student name 
-
+  // Array of initial data for student progress
   const initialData = [
-
     {
       Student_name: "Hlimon Sorey",
       Enroll_Date: "27-12-2024",
@@ -148,14 +153,61 @@ const ManageCourse = () => {
       Last_Seen: "27-12-2024",
       Quiz_Passed: "2/9 ",
     },
-
   ];
 
-
+  // useEffect hook to set sorted data when the component mounts or when `setSortedData` changes
   useEffect(() => {
-    setSortedData(initialData)
-  }, [setSortedData])
+    setSortedData(initialData);
+  }, [setSortedData]);
 
+  // Quiz Result Table Data
+  const data = [
+    {
+      id: 1,
+      title: "Quiz 1",
+      totalMarks: 100,
+      passMarks: 33,
+      obtainMarks: 80,
+      attempts: 1,
+      result: "Pass",
+    },
+    {
+      id: 2,
+      title: "Quiz 2",
+      totalMarks: 100,
+      passMarks: 33,
+      obtainMarks: 60,
+      attempts: 2,
+      result: "Pass",
+    },
+    {
+      id: 3,
+      title: "Quiz 3",
+      totalMarks: 100,
+      passMarks: 33,
+      obtainMarks: 20,
+      attempts: 1,
+      result: "Fail",
+    },
+  ];
+
+  // Quiz Document Table Data
+  const document_data = [
+    {
+      id: 1,
+      doc_category: "General",
+      doc_title: "Title",
+      date_upload: "27-04-2024",
+      description: "Description",
+    },
+    {
+      id: 2,
+      doc_category: "Course : Course Name",
+      doc_title: "Title",
+      date_upload: "27-04-2024",
+      description: "Description",
+    },
+  ];
 
   return (
     <>
@@ -193,22 +245,23 @@ const ManageCourse = () => {
               </li>
             </ul>
           </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "10px",
-            }}
-          >
-            <button
-              className="primary-btn module-btn"
-              onClick={moduleToggleModal}
+          {tab == "course" && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "10px",
+              }}
             >
-              + Add Module
-            </button>
-            <button className="primary-btn module-btn">Sort</button>
-          </div>
+              <button
+                className="primary-btn module-btn"
+                onClick={moduleToggleModal}
+              >
+                + Add Module
+              </button>
+              <button className="primary-btn module-btn">Sort</button>
+            </div>
+          )}
         </div>
 
         <div className="course-form-container">
@@ -270,7 +323,7 @@ const ManageCourse = () => {
                           <input
                             type="checkbox"
                             checked={lesson.status === 1}
-                          // onChange={() => handleStatusChange(index)}
+                            // onChange={() => handleStatusChange(index)}
                           />
                           <span class="slider"></span>
                         </label>
@@ -316,7 +369,7 @@ const ManageCourse = () => {
                     <tr key={index}>
                       <td className="id">{index + 1}</td>
                       <td>
-                        <h6 onClick={openQuizResultmodule}>{i.Student_name}</h6>
+                        <h6>{i.Student_name}</h6>
                       </td>
                       <td>{i.Enroll_Date}</td>
                       <td>{i.Completed_Date}</td>
@@ -324,22 +377,28 @@ const ManageCourse = () => {
                       <td>{i.Progress}</td>
                       <td>{i.Completed_Lesson}</td>
                       <td>{i.Last_Seen}</td>
-                      <td style={{ textAlign: "center" }}>{i.Quiz_Passed}<i class="fa-solid fa-money-bill-1-wave"></i></td>
+                      <td style={{ textAlign: "center" }}>
+                        {i.Quiz_Passed}
+                        <span className="view" onClick={openQuizResultmodule}>
+                          <i className="fa-regular fa-eye"></i>
+                        </span>
+                      </td>
                       <td>
-                        <button className="resource-btn module-btn">
+                        <button
+                          className="resource-btn module-btn"
+                          onClick={quizDocumentToggleModal}
+                        >
                           <i
-                            class="fa-regular fa-file"
+                            className="fa-regular fa-file"
                             style={{ marginRight: "8px" }}
                           ></i>
                           Document
                         </button>
-
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
-
             </table>
           )}
         </div>
@@ -420,11 +479,11 @@ const ManageCourse = () => {
                 </div>
                 {(selectedLessonType === "pdf" ||
                   selectedLessonType === "video") && (
-                    <div className="form-group">
-                      <label>Attachment</label>
-                      <input type="file" className="col12input" />
-                    </div>
-                  )}
+                  <div className="form-group">
+                    <label>Attachment</label>
+                    <input type="file" className="col12input" />
+                  </div>
+                )}
 
                 <div style={{ display: "flex", gap: "10px" }}>
                   {selectedLessonType === "youtube-video" && (
@@ -450,11 +509,11 @@ const ManageCourse = () => {
                 </div>
                 {(selectedLessonType === "youtube-video" ||
                   selectedLessonType === "video") && (
-                    <div className="form-group">
-                      <label>Thumbnail Preview Image</label>
-                      <input type="file" className="col12input" />
-                    </div>
-                  )}
+                  <div className="form-group">
+                    <label>Thumbnail Preview Image</label>
+                    <input type="file" className="col12input" />
+                  </div>
+                )}
 
                 <div style={{ display: "flex" }}>
                   <div
@@ -694,7 +753,10 @@ const ManageCourse = () => {
                     <div className="module-header quiz-module">
                       <span className="module-title">{quiz.question}</span>
                       <div className="module-controls">
-                        <button className="edit-btn">
+                        <button
+                          className="edit-btn"
+                          onClick={editQuestionToggleModal}
+                        >
                           <i className="fa fa-pencil"></i>
                         </button>
                         <button className="delete-btn">
@@ -705,10 +767,11 @@ const ManageCourse = () => {
                           onClick={() => toggleQuizModule(index)}
                         >
                           <i
-                            className={`fa-solid ${openQuizIndex === index
-                              ? "fa-angle-up"
-                              : "fa-angle-down"
-                              }`}
+                            className={`fa-solid ${
+                              openQuizIndex === index
+                                ? "fa-angle-up"
+                                : "fa-angle-down"
+                            }`}
                           ></i>
                         </button>
                       </div>
@@ -741,7 +804,7 @@ const ManageCourse = () => {
           </div>
         )}
 
-        {/* Question Modal */}
+        {/* Add Quiz Question Modal */}
         {addquestionOpen && (
           <div className="modal">
             <div className="add-lesson-container">
@@ -839,24 +902,256 @@ const ManageCourse = () => {
           </div>
         )}
 
-        {/* Quiz Result Modal  */}
-        {openQuizResult && (
+        {/* Edit Quiz Question Modal */}
+        {editquestionOpen && (
           <div className="modal">
             <div className="add-lesson-container">
-              <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "2px solid #dfdfe1", marginBottom: "10px" }}>
-                <h5 style={{ paddingBottom: "5px" }}>Quiz Result</h5>
-                <div>
-                  <i class="fa-solid fa-xmark"></i>
+              <h5 style={{ marginBottom: "20px" }}>Edit Quiz Question</h5>
+              <form>
+                <div className="form-group">
+                  <label>Question:</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col12input"
+                  />
                 </div>
 
-              </div>
-              <form>
+                <div className="quiz-answer">
+                  <label>A</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col8input"
+                    style={{ margin: "0px 10px", width: "90%" }}
+                  />
+                  <input type="checkbox" className="quiz-checkbox" />
+                </div>
+
+                <div className="quiz-answer">
+                  <label>B</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col8input"
+                    style={{ margin: "0px 10px", width: "90%" }}
+                  />
+                  <input type="checkbox" className="quiz-checkbox" />
+                </div>
+
+                <div className="quiz-answer">
+                  <label>C</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col8input"
+                    style={{ margin: "0px 10px", width: "90%" }}
+                  />
+                  <input type="checkbox" className="quiz-checkbox" />
+                </div>
+
+                <div className="quiz-answer">
+                  <label>D</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col8input"
+                    style={{ margin: "0px 10px", width: "90%" }}
+                  />
+                  <input type="checkbox" className="quiz-checkbox" />
+                </div>
+
+                <div className="quiz-answer">
+                  <label>E</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col8input"
+                    style={{ margin: "0px 10px", width: "90%" }}
+                  />
+                  <input type="checkbox" className="quiz-checkbox" />
+                </div>
+
+                <div className="quiz-answer">
+                  <label>F</label>
+                  <input
+                    type="text"
+                    placeholder="Lesson Type"
+                    className="col8input"
+                    style={{ margin: "0px 10px", width: "90%" }}
+                  />
+                  <input type="checkbox" className="quiz-checkbox" />
+                </div>
+
                 <div style={{ display: "flex", gap: "10px" }}>
-                  <button type="" className="secondary-btn">
+                  <button type="submit" className="primary-btn">
+                    Save
+                  </button>
+                  <button
+                    type=""
+                    onClick={addQuestionToggleModal}
+                    className="secondary-btn"
+                  >
                     Close
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Quiz Result Modal  */}
+        {openQuizResult && (
+          <div className="modal">
+            <div className="add-lesson-container" style={{ width: "70%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: "2px solid #dfdfe1",
+                  marginBottom: "10px",
+                }}
+              >
+                <h5 style={{ paddingBottom: "5px" }}>Quiz Result</h5>
+                <div
+                  onClick={openQuizResultmodule}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+
+              <div className="student-details">
+                <div>
+                  <strong>Student :</strong>
+                  <span> Student Name With link</span>
+                </div>
+                <div>
+                  <strong>Enrollment Id :</strong>
+                  <span> 12453</span>
+                </div>
+                <div>
+                  <strong>Course Name :</strong>
+                  <span> Course Name Name With link</span>
+                </div>
+              </div>
+
+              <table style={{ margin: "10px 0" }}>
+                <thead className="academic-table">
+                  <tr>
+                    <th>ID</th>
+                    <th>Quiz Title</th>
+                    <th>Total Marks</th>
+                    <th>Pass Marks</th>
+                    <th>Obtain Marks</th>
+                    <th>Max Attempts</th>
+                    <th>Attempts</th>
+                    <th>Result </th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {data.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.id}</td>
+                      <td>
+                        <h6>{item.title}</h6>
+                      </td>
+                      <td>{item.totalMarks}</td>
+                      <td>{item.passMarks}</td>
+                      <td>{item.obtainMarks}</td>
+                      <td>-</td>
+                      <td>{item.attempts}</td>
+                      <td>{item.result}</td>
+                      <td>
+                        <span className="view">
+                          <i className="fa-regular fa-eye"></i>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Quiz Document Modal  */}
+        {quizDocumentOpen && (
+          <div className="modal">
+            <div className="add-lesson-container" style={{ width: "70%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: "2px solid #dfdfe1",
+                  marginBottom: "10px",
+                }}
+              >
+                <h5 style={{ paddingBottom: "5px" }}>Documents</h5>
+                <div
+                  onClick={quizDocumentToggleModal}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+
+              <div className="student-details">
+                <div>
+                  <strong>Student :</strong>
+                  <span> Student Name With link</span>
+                </div>
+                <div>
+                  <strong>Enrollment Id :</strong>
+                  <span> 12453</span>
+                </div>
+                <div>
+                  <strong>Course Name :</strong>
+                  <span> Course Name Name With link</span>
+                </div>
+              </div>
+
+              <table style={{ margin: "10px 0" }}>
+                <thead className="academic-table">
+                  <tr>
+                    <th>ID</th>
+                    <th>Doc Catagory</th>
+                    <th>Document Title</th>
+                    <th>Date Upload</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {document_data.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.id}</td>
+                      <td>
+                        <h6>{item.doc_category}</h6>
+                      </td>
+                      <td>{item.doc_title}</td>
+                      <td>{item.date_upload}</td>
+                      <td>{item.description}</td>
+                      <td>
+                        <label class="switch">
+                          <input type="checkbox" />
+                          <span class="slider"></span>
+                        </label>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <span className="view">
+                          <i className="fa-regular fa-eye"></i>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

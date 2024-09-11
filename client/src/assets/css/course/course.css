@@ -229,6 +229,9 @@
     font-size: 12px;
   }
 
-  hr{
-    border-color: var(--border-color       );
+  .student-details{
+    display: flex;
+    font-size: 12px;
+    gap: 20px;
   }
+
