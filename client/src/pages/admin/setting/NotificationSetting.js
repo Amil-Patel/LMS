@@ -25,20 +25,23 @@ function NotificationSetting() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 
-          <a className="add-button" style={{ cursor: "pointer" }}>
-           <button className="primary-btn">Save</button>
-            
+          <a>
+            <button className="primary-btn module-btn">Save</button>
           </a>
         </div>
 
         <div className="admin-panel-tab-bar">
           <ul className="tab">
             <li onClick={() => handleChangeTab("smtp")}>
-              <NavLink>Smtp Setting</NavLink>
+              <NavLink className={tab === "smtp" ? "active-tab" : ""}>
+                Smtp Setting
+              </NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("email")}>
-              <NavLink>Email Template</NavLink>
+              <NavLink className={tab === "email" ? "active-tab" : ""}>
+                Email Template
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -56,7 +59,7 @@ function NotificationSetting() {
             <div className="protocol" id="pro_2">
               <span>Currency</span>
               <p>
-                <select name="currency" id="currency" form="currencyform">
+                <select name="currency" id="currency" className="col12input" form="currencyform">
                   <option value="USD">US Dollar (USD)</option>
                   <option value="EUR">Euro (EUR)</option>
                   <option value="JPY">Japanese Yen (JPY)</option>

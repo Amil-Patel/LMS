@@ -1,5 +1,5 @@
 .main_pay_sec {
-  background-color:  var(--white);
+  background-color: var(--white);
   width: 99%;
   border-radius: 5px;
   border: 1px solid var(--border-color);
@@ -40,7 +40,7 @@
   margin-left: 15px;
 }
 
-.text1{
+.text1 {
   position: relative;
   top: -3px;
 }
@@ -58,13 +58,9 @@
   margin-top: 30px;
 }
 .str_text {
-  color: var( --dropdown-bg-color);
+  color: var(--dropdown-bg-color);
   font-weight: 600;
 }
-
-
-
-
 
 .priv p {
   margin-top: 20px;
@@ -85,34 +81,32 @@
   margin-left: 5px;
 }
 
-.status_test{
+.status_test {
   border: 1px solid var(--border-color);
   margin: 20px 0;
   border-radius: 5px;
   padding: 10px;
-
 }
 
-.carrency_div select{
+.carrency_div select {
   width: 60% !important;
 }
 
-.currency_title{
+.currency_title {
   font-weight: 500;
 }
 
-@media only screen and (max-width: 426px){
-    .currency_page{
-        flex-wrap: wrap;
-        width: 100% !important;
-    }
-    .currency_input{
-        width: 100%;
-    }
-    .cur_posi{
-        margin-top: 10px !important;
-    }
-
+@media only screen and (max-width: 426px) {
+  .currency_page {
+    flex-wrap: wrap;
+    width: 100% !important;
+  }
+  .currency_input {
+    width: 100%;
+  }
+  .cur_posi {
+    margin-top: 10px !important;
+  }
 }
 @media only screen and (max-width: 769px) {
   .main_pay_sec {
@@ -139,121 +133,89 @@
   }
   #strip_cur {
     margin-top: 15px;
-}
-}
-
-
-@media only screen and (min-width:770px) and (max-width: 1025px){
-    .currency_page {
-        width: 61%;
-    }
+  }
 }
 
-
+@media only screen and (min-width: 770px) and (max-width: 1025px) {
+  .currency_page {
+    width: 61%;
+  }
+}
 
 /* emailsetting */
 
-.admin-panel-tab-bar{
+.admin-panel-tab-bar {
   display: flex;
   justify-content: space-between;
   margin: 10px 0 10px 0px;
 }
-.admin-panel-tab-bar .tab{
+.admin-panel-tab-bar .tab {
   display: flex;
   font-size: 14px;
   margin-bottom: 5px;
 }
 
-.admin-panel-tab-bar .tab li{
+.admin-panel-tab-bar .tab li {
   margin: 0 10px;
   text-decoration: none;
   text-transform: uppercase;
-    
 }
 
-.admin-panel-tab-bar .tab li:nth-child(1){
+.admin-panel-tab-bar .tab li:nth-child(1) {
   margin-left: 0;
 }
 
-.admin-panel-tab-bar .tab  li a {
-  color: var( --black);
+.admin-panel-tab-bar .tab li a {
+  color: var(--black);
   text-decoration: none;
 }
-
-.admin-panel-tab-bar .tab  li a {
-  text-decoration: none;
-  color:  var( --black);
+.admin-panel-tab-bar .tab li > a.active-tab {
+  color: var(--hover-color);
 }
-#not_bt{
+#not_bt {
   margin: 0;
   margin-right: 35px;
 }
 
-.protocol{
+.protocol {
   /* font-size: 14px; */
 }
-#etc{
+#etc {
   margin-left: 10px;
   color: var(--sidebar-pages-color);
 }
 
-
-
-
-#pro_2{
+#pro_2 {
   margin-top: 20px;
 }
 
-
-
-
 /* Email template css  */
 
-
-
-
-
-.id{
+.id {
   padding-left: 5px;
 }
-.h5{
+.h5 {
   /* font-size: 13px; */
-  color: var( --dropdown-bg-color);
+  color: var(--dropdown-bg-color);
 }
 
-.lesson{
+.lesson {
   padding: 10px;
   width: 30%;
 }
 
-#edit{
-  padding-left: 50px; 
+#edit {
+  padding-left: 50px;
 }
 
-
-
-@media only screen and (max-width: 426px){
-
+@media only screen and (max-width: 426px) {
   .admin-panel-tab-bar .tab {
-      flex-wrap: wrap;
+    flex-wrap: wrap;
   }
-
 }
-
 
 @media only screen and (max-width: 768px) {
-
-
-
-
-
-
-
-
-
- #action {
-  padding-right: 70px;
+  #action {
+    padding-right: 70px;
+  }
 }
-
-
-} 

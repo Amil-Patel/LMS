@@ -16,6 +16,39 @@ function Payment() {
     setCurrentCourse(null);
   };
 
+  const data = [
+    {
+      id: 1,
+      name: "Christine Brooks",
+      email: "example@gmail.com",
+      service: "Security Service",
+      count: 2,
+      amount: "250.00",
+      paymentMethod: "Stripe",
+      orderId: "#12542554",
+    },
+    {
+      id: 2,
+      name: "John Doe",
+      email: "johndoe@gmail.com",
+      service: "Security Service",
+      count: 3,
+      amount: "300.00",
+      paymentMethod: "PayPal",
+      orderId: "#22552555",
+    },
+    {
+      id: 3,
+      name: "Jane Smith",
+      email: "janesmith@gmail.com",
+      service: "Security Service",
+      count: 1,
+      amount: "150.00",
+      paymentMethod: "Stripe",
+      orderId: "#32562556",
+    },
+  ];
+
   return (
     <>
       <Hoc />
@@ -45,28 +78,28 @@ function Payment() {
           </thead>
 
           <tbody>
-            <tr>
-              <td className="id">1</td>
-              <td>
-                <h6>Christine Brooks</h6>
-                <p>example@gmail.com</p>
-              </td>
-              <td>Security Service..</td>
-              <td>2</td>
-              <td>250.00</td>
-              <td>Stripe</td>
-              <td>#12542554</td>
-              <td>
-                <span
-                  className="view"
-                  onClick={() =>
-                    handleViewClick("Security Service Training BootCamp")
-                  }
-                >
-                  <i className="fa-regular fa-eye"></i>
-                </span>
-              </td>
-            </tr>
+            {data.map((item) => (
+              <tr key={item.id}>
+                <td className="id">{item.id}</td>
+                <td>
+                  <h6>{item.name}</h6>
+                  <p>{item.email}</p>
+                </td>
+                <td>{item.service}</td>
+                <td>{item.count}</td>
+                <td>{item.amount}</td>
+                <td>{item.paymentMethod}</td>
+                <td>{item.orderId}</td>
+                <td>
+                  <span
+                    className="view"
+                    onClick={() => handleViewClick(item.service)}
+                  >
+                    <i className="fa-regular fa-eye"></i>
+                  </span>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -196,11 +229,17 @@ function Payment() {
                 </table>
               </div>
 
-              <div style={{ display: "flex", gap: "10px" }}>
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <button
                   type="button"
                   onClick={handleCloseEditModal}
-                  className="back-to-coupons"
+                  className="secondary-btn module-btn"
                 >
                   Close
                 </button>

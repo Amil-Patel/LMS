@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import "../../../assets/css/sidebar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
-  const toggleDropdown = (menu) => {
+  const location = useLocation();
+
+  // List of paths where "Course" should be highlighted
+  const coursePaths = [
+    "/all-course",
+    "/add-course",
+    "/course-category",
+    "/course-coupon",
+  ];
+
+  const settingPathes = ["/payment-setting", "/notification-setting"];
+
+  const isCourseActive = coursePaths.includes(location.pathname);
+  const isSettingActive = settingPathes.includes(location.pathname);
+
+  const toggleDropdown = (menu, event) => {
+    event.preventDefault(); // Prevent default anchor behavior
     setActiveDropdown((prevMenu) => (prevMenu === menu ? null : menu));
   };
 
@@ -15,14 +31,18 @@ const Sidebar = () => {
         <div className="sidebar-top">
           <ul>
             <li className="main-li">
-              <a href="#" onClick={() => toggleDropdown("dropdown1")}>
+              <a href="#" onClick={(e) => toggleDropdown("dropdown1", e)}>
                 <i className="fa-solid fa-gauge-high"></i>{" "}
                 <span>Dashboard</span>
               </a>
             </li>
 
             <li className="main-li">
-              <a href="#" onClick={() => toggleDropdown("course")}>
+              <a
+                href="#"
+                onClick={(e) => toggleDropdown("course", e)}
+                className={isCourseActive ? "active" : ""}
+              >
                 <i className="fa-solid fa-border-all"></i>
                 <span>Course</span>
                 <i
@@ -66,9 +86,9 @@ const Sidebar = () => {
             </li>
 
             <li className="main-li">
-            <NavLink to={"/inquiry"}>
+              <NavLink to={"/inquiry"}>
                 <i class="fa fa-question-circle"></i>
-               <span>Inquiry</span>
+                <span>Inquiry</span>
               </NavLink>
             </li>
 
@@ -80,79 +100,35 @@ const Sidebar = () => {
             </li>
             <li className="main-li">
               <NavLink to={"/roles-list"}>
-              <i class="fa fa-indent" aria-hidden="true"></i>
+                <i class="fa fa-indent" aria-hidden="true"></i>
                 <span>Roles List</span>
+              </NavLink>
+            </li>
+            <li className="main-li">
+              <NavLink to={"/user"}>
+                <i class="fa-regular fa-user"></i>
+                <span>User</span>
               </NavLink>
             </li>
           </ul>
         </div>
 
-        {/* <div className="sidebar-pages">
-          <p>PAGES</p>
-          <ul>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-solid fa-gift"></i>
-                <span>Pricing</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-regular fa-calendar-days"></i>
-                <span>Calender</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-regular fa-clipboard"></i>
-                <span>To-Do</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-regular fa-id-badge"></i>
-                <span>Contact</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-regular fa-money-bill-1"></i>
-                <span>Invoice</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-solid fa-chart-simple"></i>
-                <span>UI Elements</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-solid fa-users"></i>
-                <span>Team</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-            <li className="main-li">
-              <a href="#">
-                <i className="fa-solid fa-table-cells"></i>
-                <span>Table</span>
-                <i className="fa-solid fa-angle-down"></i>
-              </a>
-            </li>
-          </ul>
-        </div> */}
+        {/* -------------------- setting ----------------------- */}
 
         <div className="sidebar-bottom">
           <ul>
             <li className="main-li">
-              <a href="#" onClick={() => toggleDropdown("setting")}>
+              <NavLink to={"/profile"}>
+                <i class="fa-regular fa-user"></i>
+                <span>Profile</span>
+              </NavLink>
+            </li>
+            <li className="main-li">
+              <a
+                href="#"
+                onClick={(e) => toggleDropdown("setting", e)}
+                className={isSettingActive ? "active" : ""}
+              >
                 <i className="fa-solid fa-gear"></i>
                 <span>Setting</span>
                 <i
@@ -179,6 +155,7 @@ const Sidebar = () => {
                 </ul>
               )}
             </li>
+
             <li className="main-li">
               <a href="#">
                 <i className="fa-solid fa-power-off"></i>

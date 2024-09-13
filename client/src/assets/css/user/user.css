@@ -1,0 +1,11 @@
+.profile-img img{
+    width: 50%;
+    height: 35px;
+    margin-bottom: -5px;
+    border-radius: 100%;
+    border: 1px dashed var(--button-primary-color);
+}
+
+.profile-img {
+
+}

@@ -166,10 +166,6 @@ const AllCourse = () => {
                         {activeDropdown === index && (
                           <div className="menu-content">
                             <a
-                              // onClick={() => {
-                              //   editToggleModal();
-                              // }}
-                              className="add-button"
                               style={{ cursor: "pointer" }}
                             >
                               <p>Edit</p>

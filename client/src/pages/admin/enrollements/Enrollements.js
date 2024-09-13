@@ -4,17 +4,10 @@ import Hoc from "../layout/Hoc";
 
 function Enrollements() {
   const [addOpen, setAddOpen] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
-  const [discountType, setDiscountType] = useState("percentage");
 
   const [courses, setCourses] = useState([
     { id: 1, name: "Security Service", status: true },
   ]);
-
-  const generateRandomCode = () => {
-    const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-    setCouponCode(randomCode);
-  };
 
   const addToggleModal = () => {
     setAddOpen(!addOpen);
@@ -28,7 +21,7 @@ function Enrollements() {
       )
     );
   };
-
+  
   return (
     <>
       <Hoc />
@@ -42,12 +35,8 @@ function Enrollements() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 
-          <a
-            onClick={addToggleModal}
-            className="add-button"
-            style={{ cursor: "pointer" }}
-          >
-            <button className="primary-btn">+ Add</button>
+          <a onClick={addToggleModal} style={{ cursor: "pointer" }}>
+            <button className="primary-btn module-btn">+ Add</button>
           </a>
         </div>
 
@@ -55,6 +44,7 @@ function Enrollements() {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Profile</th>
               <th>Student name</th>
               <th>Course Name</th>
               <th>Course Expire</th>
@@ -66,8 +56,9 @@ function Enrollements() {
 
           <tbody className="email_tbody">
             {courses.map((course) => (
-              <tr key={course.id}>
-                <td>{course.id}</td>
+              <tr>
+                <td>1</td>
+            <td className="profile-img"><img src={require("../../../assets/image/user_img.jpeg")} alt="User" /></td>
                 <td>
                   <h6>Christine Brooks</h6>
                   <p>example@gmail.com</p>
@@ -103,15 +94,17 @@ function Enrollements() {
       {addOpen && (
         <div className="modal">
           <div className="modal-container">
-            <h3>Add Enrollements</h3>
+            <h5>Add Enrollements</h5>
             <form className="coupon-form">
               <div className="form-group">
                 <label>
                   Student Name<span className="required">*</span>
                 </label>
-                <div className="input-group">
-                  <input type="text" placeholder="Enter Student Name" />
-                </div>
+                <input
+                  type="text"
+                  className="col12input"
+                  placeholder="Enter Student Name"
+                />
               </div>
 
               <div className="form-group">
@@ -120,7 +113,7 @@ function Enrollements() {
                   name="currency"
                   id="currency"
                   form="currencyform"
-                  className="select_course"
+                  className="col12input"
                 >
                   <option value="USD">US Dollar (USD)</option>
                   <option value="EUR">Euro (EUR)</option>
@@ -132,10 +125,10 @@ function Enrollements() {
               </div>
 
               <div style={{ display: "flex", gap: "10px" }}>
-                <button type="submit" className="submit-btn">
+                <button type="submit" className="primary-btn">
                   Submit
                 </button>
-                <button onClick={addToggleModal} className="back-to-coupons">
+                <button onClick={addToggleModal} className="secondary-btn">
                   Close
                 </button>
               </div>
@@ -143,8 +136,6 @@ function Enrollements() {
           </div>
         </div>
       )}
-
-      
     </>
   );
 }

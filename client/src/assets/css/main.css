@@ -145,8 +145,7 @@ textarea{
 }
 .col6input,
 .col3input,
-.col12input,
-#currency {
+.col12input{
   border: 1px solid var(--border-color);
   padding: 8px 10px;
   border-radius: 5px;
@@ -297,6 +296,4 @@ button{
  }
  
 }
-
-
 

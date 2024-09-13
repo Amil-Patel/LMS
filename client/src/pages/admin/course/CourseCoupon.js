@@ -350,7 +350,6 @@ const CourseCoupon = () => {
                               onClick={() => {
                                 editToggleModal(i.id);
                               }}
-                              className="add-button"
                               style={{ cursor: "pointer" }}
                             >
                               <p>Edit</p>
