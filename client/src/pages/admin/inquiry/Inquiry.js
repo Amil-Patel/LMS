@@ -80,8 +80,13 @@ function Inquiry() {
                 <td className="inq_message">
                   <p>Message Submitted By User will Appear Here</p>
                 </td>
-                <td className="succes" >
-                  <p style={{backgroundColor:"#daf8da"}}>succes</p>
+                <td>
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                    />
+                    <span class="slider"></span>
+                  </label>
                 </td>
                 <td className="del_icon">
                   <span className="view">

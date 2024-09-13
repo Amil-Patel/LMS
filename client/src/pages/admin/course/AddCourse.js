@@ -12,7 +12,6 @@ const AddCourse = () => {
   const [keywords, setKeywords] = useState(["Keyword-1 India"]);
   const [tags, setTags] = useState(["Tag-1 India"]);
   const [authors, setAuthors] = useState(["Author One"]);
-  const [isContentVisible, setIsContentVisible] = useState(false);
 
   const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
   const [fileName, setFileName] = useState("");
@@ -84,6 +83,18 @@ const AddCourse = () => {
     setPrerequisites(newPrerequisites);
   };
 
+  const handleAddAuthor = (e) => {
+    if (e.key === "Enter" && e.target.value) {
+      const newKeywords = e.target.value.split(",").map((kw) => kw.trim());
+      setAuthors([...keywords, ...newKeywords]);
+      e.target.value = "";
+    }
+  };
+
+  const handleRemoveAuthor = (indexToRemove) => {
+    setAuthors(keywords.filter((_, index) => index !== indexToRemove));
+  };
+
   const handleAddKeywords = (e) => {
     if (e.key === "Enter" && e.target.value) {
       const newKeywords = e.target.value.split(",").map((kw) => kw.trim());
@@ -106,10 +117,6 @@ const AddCourse = () => {
 
   const handleRemoveTag = (indexToRemove) => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
-  };
-
-  const toggleContent = () => {
-    setIsContentVisible(!isContentVisible);
   };
 
   return (
@@ -142,19 +149,19 @@ const AddCourse = () => {
         <div className="admin-panel-tab-bar">
           <ul className="tab">
             <li onClick={() => handleChangeTab("basic-info")}>
-              <NavLink>BASIC INFO</NavLink>
+              <NavLink className={tab === "basic-info" ? "active-tab" : ""}>BASIC INFO</NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("course")}>
-              <NavLink>COURSE DESCRIPTIONS</NavLink>
+              <NavLink className={tab === "course" ? "active-tab" : ""}>COURSE DESCRIPTIONS</NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("additional")}>
-              <NavLink>ADDITIONAL INFO</NavLink>
+              <NavLink className={tab === "additional" ? "active-tab" : ""}>ADDITIONAL INFO</NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("seo")}>
-              <NavLink>SEO</NavLink>
+              <NavLink className={tab === "seo" ? "active-tab" : ""}>SEO</NavLink>
             </li>
           </ul>
         </div>
@@ -346,7 +353,7 @@ const AddCourse = () => {
                   />
 
                   <div>
-                    <img src={imageSrc} style={{ width: "67px", height: "auto" }} alt="Selected Thumbnail" />
+                    <img src={imageSrc} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
                   </div>
                 </div>
               </div>
@@ -385,7 +392,7 @@ const AddCourse = () => {
                       type="text"
                       placeholder="Enter Author"
                       className="col12input"
-                      onKeyDown={handleAddKeywords}
+                      onKeyDown={handleAddAuthor}
                     />
                     <div className="tag-container">
                       {authors.map((keyword, index) => (
@@ -393,7 +400,7 @@ const AddCourse = () => {
                           <span>{authors}</span>
                           <span
                             className="tag-close"
-                            onClick={() => handleRemoveKeyword(index)}
+                            onClick={() => handleRemoveAuthor(index)}
                           >
                             <i className="fa-solid fa-xmark"></i>
                           </span>

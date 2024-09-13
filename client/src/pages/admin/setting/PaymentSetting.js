@@ -61,7 +61,12 @@ function PaymentSetting() {
             <div className="currency_input2" id="strip_cur">
               <p>Currency</p>
               <div className="carrency_div">
-                <select name="currency" id="currency" form="currencyform">
+                <select
+                  name="currency"
+                  id="currency"
+                  className="col12input"
+                  form="currencyform"
+                >
                   <option value="USD">US Dollar (USD)</option>
                   <option value="EUR">Euro (EUR)</option>
                   <option value="JPY">Japanese Yen (JPY)</option>

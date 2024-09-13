@@ -13,7 +13,7 @@
 }
 .pay_modulhead div {
   border-right: 1px solid var(--border-color);
-  padding: 0 20px;
+  padding: 0 16px;
 }
 
 .pay_modulhead :nth-child(1) {
@@ -25,6 +25,7 @@
 .head_text {
   font-size: 12px;
   font-weight: 500;
+  margin-bottom: 3px !important;
 }
 
 .payment_view_table {

@@ -237,11 +237,11 @@ const ManageCourse = () => {
           <div>
             <ul className="tab">
               <li onClick={() => handleChangeTab("course")}>
-                <NavLink>COURSE</NavLink>
+                <NavLink className={tab === "course" ? "active-tab" : ""}>COURSE</NavLink>
               </li>
               |
               <li onClick={() => handleChangeTab("academic-progress")}>
-                <NavLink>ACADEMIC PROGRESS</NavLink>
+                <NavLink className={tab === "academic-progress" ? "active-tab" : ""}>ACADEMIC PROGRESS</NavLink>
               </li>
             </ul>
           </div>
@@ -265,8 +265,8 @@ const ManageCourse = () => {
         </div>
 
         <div className="course-form-container">
-          {/* Module TAB */}
-          {tab == "course" && (
+        {/* Module TAB */}
+        {tab == "course" && (
             <div className="module">
               <div className="module-header">
                 <span className="module-title">
@@ -343,10 +343,10 @@ const ManageCourse = () => {
                 </div>
               )}
             </div>
-          )}
+        )}
 
-          {/* Academic TAB */}
-          {tab === "academic-progress" && (
+        {/* Academic TAB */}
+        {tab === "academic-progress" && (
             <table>
               <thead className="academic-table">
                 <tr>
@@ -400,7 +400,7 @@ const ManageCourse = () => {
                 })}
               </tbody>
             </table>
-          )}
+        )}
         </div>
 
         {/* Module Modal */}

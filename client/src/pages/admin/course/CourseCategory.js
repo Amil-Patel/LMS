@@ -204,7 +204,6 @@ const CourseCategory = () => {
             <img src={require("../../../assets/image/x-logo.png")} />
           </div>
           <a
-            className="add-button"
             style={{ cursor: "pointer" }}
             onClick={addToggleModal}
           >
