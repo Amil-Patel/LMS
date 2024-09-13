@@ -16,6 +16,19 @@ const getNullCourseCategoryData = async (req, res) => {
         res.sendStatus(500);
     }
 }
+const getNotNullCourseCategory = async (req, res) => {
+    try {
+        const data = await Course_Category.findAll({
+            where: {
+                cate_parent_id: !null
+            }
+        });
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
 const getNullCourseCategoryWithId = async (req, res) => {
     const id = req.params.id
     try {
@@ -171,6 +184,7 @@ const deleteCourseCategoryData = async (req, res) => {
 
 module.exports = {
     getNullCourseCategoryData,
+    getNotNullCourseCategory,
     getNullCourseCategoryWithId,
     getCourseCategoryWithParentId,
     getCourseCategoryWithId,

@@ -577,7 +577,7 @@ const CourseCoupon = () => {
                       onChange={handleEditCourseSelection}
                       value=""
                     >
-                      <option value="" disabled>
+                      <option value="">
                         Select a course
                       </option>
                       {courseData.map((course, index) => (
