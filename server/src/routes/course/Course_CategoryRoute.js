@@ -5,6 +5,7 @@ const CourseCateController = require("../../controller/course/Course_Category");
 
 
 CourseCateRoute.get("/gettingNullCourseCategory", CourseCateController.getNullCourseCategoryData);
+CourseCateRoute.get("/gettingNotNullCourseCategory", CourseCateController.getNotNullCourseCategory);
 CourseCateRoute.get("/gettingNullCourseCategoryWithId/:id", CourseCateController.getNullCourseCategoryWithId);
 CourseCateRoute.get("/gettingCourseCategoryWithParentId/:id", CourseCateController.getCourseCategoryWithParentId);
 CourseCateRoute.get("/gettingCoureseCategoryWithId/:id", CourseCateController.getCourseCategoryWithId);

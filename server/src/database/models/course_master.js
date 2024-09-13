@@ -106,6 +106,18 @@ module.exports = (sequelize, DataTypes) => {
     course_discount: {
       type: DataTypes.INTEGER
     },
+    is_tax: {
+      type: DataTypes.INTEGER
+    },
+    tax_name: {
+      type: DataTypes.STRING
+    },
+    is_inclusive: {
+      type: DataTypes.INTEGER
+    },
+    is_exclusive: {
+      type: DataTypes.INTEGER
+    },
     expiring_time: {
       type: DataTypes.STRING
     },
@@ -120,11 +132,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
+    meta_tag: {
+      type: DataTypes.STRING
+    },
     meta_keyword: {
       type: DataTypes.TEXT
     },
     meta_desc: {
       type: DataTypes.TEXT
+    },
+    canonical_url: {
+      type: DataTypes.STRING
+    },
+    title_tag: {
+      type: DataTypes.STRING
     },
     createdAt: {
       allowNull: false,
