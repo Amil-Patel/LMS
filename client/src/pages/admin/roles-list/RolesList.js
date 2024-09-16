@@ -141,7 +141,6 @@ function RolesList() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
-
         <div className="course-form-container">
           <div className="list-data">
             <table>
