@@ -18,6 +18,7 @@ const CurrencyRoute = require("./currency/CurrencyRoute");
 const TimezoneRoute = require("./timezone/TimezoneRoute");
 const EnrollmentRoute = require("./enrollments/EnrollmentRoute");
 const AcademicProgressRoute = require("./academic_progress/Academic_ProgressRoute");
+const RolePermissionRoute = require("./role/RolePermissionRoute");
 
 
 router.use("/", UserRoleRoute);
@@ -37,6 +38,7 @@ router.use("/", CurrencyRoute);
 router.use("/", TimezoneRoute);
 router.use("/", EnrollmentRoute);
 router.use("/", AcademicProgressRoute);
+router.use("/", RolePermissionRoute);
 
 
 

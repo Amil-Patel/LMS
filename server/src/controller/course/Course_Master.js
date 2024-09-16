@@ -1,4 +1,5 @@
 const { Course_Master } = require("../../database/models/index");
+const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 
 const getCourseMasterData = async (req, res) => {
     try {
@@ -26,6 +27,9 @@ const getCourseMasterDataWithId = async (req, res) => {
 }
 
 const addCourseMasterData = async (req, res) => {
+    const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
+    const publishDate = DateToUnixNumber(req.body.course_publish_date, 'America/Toronto');
+
     const data = {
         course_title: req.body.course_title,
         short_desc: req.body.short_desc,
@@ -35,8 +39,8 @@ const addCourseMasterData = async (req, res) => {
         course_language: req.body.course_language,
         drip_content: req.body.drip_content,
         course_status: req.body.course_status,
-        upcoming_course_thumbnail: course_status == "upcoming" ? (req?.body?.upcoming_course_thumbnail || null) : null,
-        publish_date: course_status == 'upcoming' ? (publish_date || null) : null,
+        upcoming_course_thumbnail: null,
+        publish_date: req.body.course_status == 'upcoming' ? (publishDate || null) : null,
         is_top_course: req.body.is_top_course,
         featured_course: req.body.featured_course,
         course_faqs: JSON.stringify(req.body.course_faqs),
@@ -45,13 +49,13 @@ const addCourseMasterData = async (req, res) => {
         course_price: req.body.course_price,
         course_discount: req.body.course_discount,
         is_tax: req.body.is_tax,
-        tax_name: is_tax == 1 ? (req.body.tax_name || null) : null,
-        tax_rate: is_tax == 1 ? (req.body.tax_rate || null) : null,
-        is_inclusive: is_tax == 1 ? (req.body.is_inclusive || null) : null,
-        is_exclusive: is_tax == 1 ? (req.body.is_exclusive || null) : null,
-        auther: req.body.auther,
+        tax_name: req.body.is_tax == 1 ? (req.body.tax_name || null) : null,
+        tax_rate: req.body.is_tax == 1 ? (req.body.tax_rate || null) : null,
+        is_inclusive: req.body.is_tax == 1 ? (req.body.is_inclusive || null) : null,
+        is_exclusive: req.body.is_tax == 1 ? (req.body.is_exclusive || null) : null,
+        auther: JSON.stringify(req.body.auther),
         expiring_time: req.body.expiring_time,
-        no_of_month: expiring_time == "limited_time" ? (req.body.no_of_month || null) : null,
+        no_of_month: req.body.expiring_time == "limited_time" ? (req.body.no_of_month || null) : null,
         course_overview_link: req.body.course_overview_link,
         course_thumbnail: req?.body?.course_thumbnail || null,
         meta_tag: JSON.stringify(req.body.meta_tag),
@@ -59,12 +63,13 @@ const addCourseMasterData = async (req, res) => {
         meta_desc: req.body.meta_desc,
         canonical_url: req.body.canonical_url,
         title_tag: req.body.title_tag,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: createddate,
+        updatedAt: createddate,
     }
+    console.log(data)
     try {
         const courseCatedate = await Course_Master.create(data);
-        res.staus(200).json(courseCatedate);
+        res.status(200).json(courseCatedate);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
