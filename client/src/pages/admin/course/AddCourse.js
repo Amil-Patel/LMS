@@ -3,7 +3,7 @@ import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/addcourse.css";
 import "../../../assets/css/main.css";
 import axios from "axios";
-import { Form, NavLink } from "react-router-dom";
+import { Form, NavLink, useNavigate } from "react-router-dom";
 const port = process.env.REACT_APP_URL
 
 const AddCourse = () => {
@@ -45,7 +45,7 @@ const AddCourse = () => {
     tax_rate: "",
     is_inclusive: false,
     is_exclusive: false,
-    author: [''],
+    auther: [''],
     expiring_time: "",
     no_of_month: "",
     course_overview_link: "",
@@ -65,7 +65,7 @@ const AddCourse = () => {
     let updatedFields = { ...addCourse };
 
     if (type === "checkbox") {
-      updatedFields[name] = checked; 
+      updatedFields[name] = checked;
     } else {
       updatedFields[name] = value;
     }
@@ -179,7 +179,7 @@ const AddCourse = () => {
       const newKeywords = e.target.value.split(",").map((kw) => kw.trim());
       setAddCourse((prevState) => ({
         ...prevState,
-        author: [...(prevState.author || []), ...newKeywords],
+        auther: [...(prevState.auther || []), ...newKeywords],
       }));
       e.target.value = "";
     }
@@ -187,7 +187,7 @@ const AddCourse = () => {
   const handleRemoveAuther = (indexToRemove) => {
     setAddCourse({
       ...addCourse,
-      author: addCourse.author.filter(
+      auther: addCourse.auther.filter(
         (_, index) => index !== indexToRemove
       ),
     });
@@ -229,16 +229,50 @@ const AddCourse = () => {
       ),
     });
   };
-
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
-    console.log(addCourse)
-    // e.preventDefault();
-    // try {
-    //   const res = await axios.post(`${port}/addCourse`, addCourse);
-    //   console.log(res.data)
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("course_title", addCourse.course_title);
+    formData.append('short_desc', addCourse.short_desc);
+    formData.append('long_desc', addCourse.long_desc);
+    formData.append('course_cate', addCourse.course_cate);
+    formData.append('course_level', addCourse.course_level);
+    formData.append('course_language', addCourse.course_language);
+    formData.append('drip_content', addCourse.drip_content);
+    formData.append('course_status', addCourse.course_status);
+    formData.append('upcoming_course_thumbnail', addCourse.upcoming_course_thumbnail);
+    formData.append('publish_date', addCourse.publish_date);
+    formData.append('is_top_course', addCourse.is_top_course);
+    formData.append('featured_course', addCourse.featured_course);
+    formData.append('course_faqs', JSON.stringify(addCourse.course_faqs));
+    formData.append('course_topics', JSON.stringify(addCourse.course_topics));
+    formData.append('course_requirenment', JSON.stringify(addCourse.course_requirenment));
+    formData.append('course_price', addCourse.course_price);
+    formData.append('course_discount', addCourse.course_discount);
+    formData.append('is_tax', addCourse.is_tax);
+    formData.append('tax_name', addCourse.tax_name);
+    formData.append('tax_rate', addCourse.tax_rate);
+    formData.append('is_inclusive', addCourse.is_inclusive);
+    formData.append('is_exclusive', addCourse.is_exclusive);
+    formData.append('auther', JSON.stringify(addCourse.auther));
+    formData.append('expiring_time', addCourse.expiring_time);
+    formData.append('no_of_month', addCourse.no_of_month);
+    formData.append('course_overview_link', addCourse.course_overview_link);
+    formData.append('course_thumbnail', addCourse.course_thumbnail);
+    formData.append('meta_tag', JSON.stringify(addCourse.meta_tag));
+    formData.append('meta_keyword', JSON.stringify(addCourse.meta_keyword));
+    formData.append('meta_desc', addCourse.meta_desc);
+    formData.append('canonical_url', addCourse.canonical_url);
+    formData.append('title_tag', addCourse.title_tag)
+
+
+    try {
+      const res = await axios.post(`${port}/addingCourseMaster`, addCourse);
+      navigate('/all-course');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 
@@ -527,11 +561,11 @@ const AddCourse = () => {
                   {
                     newImage ? (
                       <div>
-                        <img src={URL.createObjectURL(newImage)} style={{ width: "70px", height: "auto" }} alt="Selected Thumbnail" />
+                        <img src={URL.createObjectURL(newImage)} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
                       </div>
                     ) : (
                       <div>
-                        <img src={imageSrc} style={{ width: "90px", height: "auto" }} alt="Selected Thumbnail" />
+                        <img src={imageSrc} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
                       </div>
                     )
                   }
@@ -570,16 +604,16 @@ const AddCourse = () => {
 
                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
-                    <label>Author</label>
+                    <label>auther</label>
                     <input
                       type="text"
-                      name="author"
-                      placeholder="Enter One Or More Author"
+                      name="auther"
+                      placeholder="Enter One Or More auther"
                       className="col12input"
                       onKeyDown={handleAddAuther}
                     />
                     <div className="tag-container">
-                      {addCourse.author.map((keyword, index) => (
+                      {addCourse.auther.map((keyword, index) => (
                         <div className="tag" key={index}>
                           <span>{keyword}</span>
                           <span

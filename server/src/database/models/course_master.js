@@ -118,6 +118,12 @@ module.exports = (sequelize, DataTypes) => {
     is_exclusive: {
       type: DataTypes.INTEGER
     },
+    is_exclusive: {
+      type: DataTypes.JSON
+    },
+    auther: {
+      type: DataTypes.JSON
+    },
     expiring_time: {
       type: DataTypes.STRING
     },

@@ -302,7 +302,9 @@ const CourseCategory = () => {
                           </div>
                         </div>
                       </>
-                    ) : null}
+                    ) : (
+                      <p>No data found</p>
+                    )}
                   </>
                 ) : (
                   <p>No data found</p>

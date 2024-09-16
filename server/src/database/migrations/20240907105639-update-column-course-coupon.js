@@ -7,10 +7,18 @@ module.exports = {
       type: Sequelize.DataTypes.JSON,
       allowNull: true,
     });
+    await queryInterface.changeColumn('course_masters', 'auther', {
+      type: Sequelize.DataTypes.JSON,
+      allowNull: true,
+    });
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.changeColumn('course_coupons', 'course_name', {
+      type: Sequelize.DataTypes.STRING,
+      allowNull: true,
+    });
+    await queryInterface.changeColumn('course_masters', 'auther', {
       type: Sequelize.DataTypes.STRING,
       allowNull: true,
     });

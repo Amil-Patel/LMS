@@ -1,13 +1,28 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+const port = process.env.REACT_APP_URL
 
 const AllCourse = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
+  //getting course data
+  const [courseData, setCourseData] = useState([]);
+  const getCourseData = async () => {
+    try {
+      const res = await axios.get(`${port}/gettingCourseMasterData`);
+      setCourseData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  useEffect(() => {
+    getCourseData();
+  }, [])
   const [user, setUser] = useState([
     {
       title: "Christine Brooks",
@@ -71,7 +86,7 @@ const AllCourse = () => {
   };
 
   const sortedData = useMemo(() => {
-    let sortableItems = [...user];
+    let sortableItems = [...courseData];
     if (sortConfig.key !== null) {
       sortableItems.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -84,7 +99,7 @@ const AllCourse = () => {
       });
     }
     return sortableItems;
-  }, [user, sortConfig]);
+  }, [courseData, sortConfig]);
 
 
   return (
@@ -110,37 +125,50 @@ const AllCourse = () => {
             />
           </div> */}
         </div>
-        
-        <div className="course-form-container">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title <i class="fa-solid fa-sort"  onClick={() => handleSort('title')}></i></th>
-              <th>Category <i class="fa-solid fa-sort"  onClick={() => handleSort('category')}></i></th>
-              <th>Price <i class="fa-solid fa-sort"  onClick={() => handleSort('price')}></i></th>
-              <th>Enrollments <i class="fa-solid fa-sort"  onClick={() => handleSort('enrollment')}></i></th>
-              <th>Lessions <i class="fa-solid fa-sort"  onClick={() => handleSort('lession')}></i></th>
-              <th>Author <i class="fa-solid fa-sort"  onClick={() => handleSort('author')}></i></th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
 
-          <tbody>
-          {sortedData.map((i, index) => {
-            return (
-            <tr key={index}>
-              <td className="id">{index + 1}</td>
-              <td>
-                <h6><NavLink to={"/manage-course"}>{i.title}</NavLink></h6>
-              </td>
-              <td>{i.category}</td>
-              <td>{i.price}</td>
-              <td>{i.enrollment}</td>
-              <td>{i.lession}</td>
-              <td>{i.author}</td>
-              <td>
+        <div className="course-form-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title <i class="fa-solid fa-sort" onClick={() => handleSort('course_title')}></i></th>
+                <th>Category <i class="fa-solid fa-sort" onClick={() => handleSort('course_cate')}></i></th>
+                <th>Price <i class="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
+                <th>Enrollments <i class="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
+                <th>Lessions <i class="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
+                <th>Author <i class="fa-solid fa-sort" onClick={() => handleSort('author')}></i></th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {sortedData.map((i, index) => {
+                let auther = i.auther;
+                try {
+                  auther = JSON.parse(auther);
+                  if (typeof auther === 'string') {
+                    auther = JSON.parse(auther);
+                  }
+                } catch (e) {
+                  auther = "Invalid data";
+                }
+                const formattedData = Array.isArray(auther) ? auther.join(", ") : "Invalid data";
+
+                return (
+                  <tr key={index}>
+                    <td className="id">{index + 1}</td>
+                    <td>
+                      <h6><NavLink to={"/manage-course"}>{i.course_title}</NavLink></h6>
+                    </td>
+                    <td>{i.course_cate}</td>
+                    <td>{i.course_price}</td>
+                    <td>{i.enrollment}</td>
+                    <td>{i.lession}</td>
+                    <td>
+                      {formattedData}
+                    </td>
+                    <td>
                       <label class="switch">
                         <input
                           type="checkbox"
@@ -149,12 +177,11 @@ const AllCourse = () => {
                         />
                         <span class="slider"></span>
                       </label>
-                </td>
-                <td>
+                    </td>
+                    <td>
                       <div
-                        className={`menu-container ${
-                          activeDropdown === index ? "active" : ""
-                        }`}
+                        className={`menu-container ${activeDropdown === index ? "active" : ""
+                          }`}
                       >
                         <div
                           class="menu-button"
@@ -180,13 +207,13 @@ const AllCourse = () => {
                         )}
                       </div>
                     </td>
-            </tr>
-            )
-             })}
-          </tbody>
-        </table>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
         </div>
-        
+
       </div>
     </>
   );
