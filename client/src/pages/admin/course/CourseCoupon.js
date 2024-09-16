@@ -3,8 +3,8 @@ import Hoc from "../layout/Hoc";
 import axios from "axios";
 import "../../../assets/css/course/addcoupon.css";
 import "../../../assets/css/main.css";
-import { NavLink } from "react-router-dom";
-const port = process.env.REACT_APP_URL
+import DeleteModal from "../layout/DeleteModal";
+const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -18,7 +18,8 @@ const CourseCoupon = () => {
     discount_in_percentage: "",
     discount_in_amount: "",
     expired_date: "",
-  })
+  });
+
   const [discountType, setDiscountType] = useState("percentage");
 
   const generateRandomCode = (num) => {
@@ -26,16 +27,15 @@ const CourseCoupon = () => {
     if (num === 1) {
       setAddCouponData({
         ...addCouponData,
-        coupon_code: randomCode
-      })
+        coupon_code: randomCode,
+      });
     }
     if (num === 2) {
       setEditCouponData({
         ...editCouponData,
-        coupon_code: randomCode
-      })
+        coupon_code: randomCode,
+      });
     }
-
   };
 
   const toggleDropdown = (index) => {
@@ -50,7 +50,7 @@ const CourseCoupon = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   //get coupon data
   const getCouponData = async () => {
     try {
@@ -59,7 +59,7 @@ const CourseCoupon = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   //add coupon data
   const handleCourseSelection = (e) => {
     const selectedCourse = e.target.value;
@@ -72,7 +72,10 @@ const CourseCoupon = () => {
   };
   const handleEditCourseSelection = (e) => {
     const selectedCourse = e.target.value;
-    if (selectedCourse && !editCouponData.course_name.includes(selectedCourse)) {
+    if (
+      selectedCourse &&
+      !editCouponData.course_name.includes(selectedCourse)
+    ) {
       setEditCouponData({
         ...editCouponData,
         course_name: [...editCouponData.course_name, selectedCourse],
@@ -98,7 +101,7 @@ const CourseCoupon = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setAddCouponData({
       ...addCouponData,
       [name]: value,
@@ -108,8 +111,15 @@ const CourseCoupon = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${port}/addingCourseCoupon`, addCouponData)
+      const res = await axios.post(`${port}/addingCourseCoupon`, addCouponData);
       getCouponData();
+      setAddCouponData({
+        coupon_code: "",
+        course_name: [],
+        discount_in_percentage: "",
+        discount_in_amount: "",
+        expired_date: "",
+      });
       setAddOpen(false);
     } catch (error) {
       console.log(error);
@@ -120,7 +130,9 @@ const CourseCoupon = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`${port}/deletingCourseCoupon/${deleteId}`);
+      const res = await axios.delete(
+        `${port}/deletingCourseCoupon/${deleteId}`
+      );
       getCouponData();
       setDeleteOpen(false);
     } catch (error) {
@@ -135,10 +147,12 @@ const CourseCoupon = () => {
     discount_in_percentage: "",
     discount_in_amount: "",
     expired_date: "",
-  })
+  });
   const getCouponDataForEdit = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingCourseCouponDataWithId/${id}`);
+      const res = await axios.get(
+        `${port}/gettingCourseCouponDataWithId/${id}`
+      );
       let courseName = res.data.course_name;
 
       try {
@@ -150,13 +164,15 @@ const CourseCoupon = () => {
       res.data.course_name = Array.isArray(courseName) ? courseName : [];
 
       setEditCouponData(res.data);
-      setDiscountType(res.data.discount_in_percentage ? "percentage" : "amount");
+      setDiscountType(
+        res.data.discount_in_percentage ? "percentage" : "amount"
+      );
 
       console.log(res.data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   const handleEditChange = (e) => {
     const { name, value } = e.target;
 
@@ -195,10 +211,12 @@ const CourseCoupon = () => {
       });
     }
     try {
-      const res = await axios.put(`${port}/updatingCourseCoupon/${editCouponData.id}`, editCouponData)
+      const res = await axios.put(
+        `${port}/updatingCourseCoupon/${editCouponData.id}`,
+        editCouponData
+      );
       getCouponData();
       setEditOpen(false);
-
     } catch (error) {
       console.log(error);
     }
@@ -207,14 +225,16 @@ const CourseCoupon = () => {
   useEffect(() => {
     getCouponData();
     getCourseData();
-  }, [])
+  }, []);
   //status change code
   const handleStatusChange = async (id, status) => {
     try {
-      const res = await axios.put(`${port}/updatingCourseCouponStatus/${id}`, { status: status });
+      const res = await axios.put(`${port}/updatingCourseCouponStatus/${id}`, {
+        status: status,
+      });
       getCouponData();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -229,12 +249,11 @@ const CourseCoupon = () => {
     setEditOpen(!editOpen);
   };
 
-  const [deleteId, setDeleteId] = useState(null)
+  const [deleteId, setDeleteId] = useState(null);
   const deleteToggleModal = (index) => {
     setDeleteOpen(!deleteOpen);
-    setDeleteId(index)
+    setDeleteId(index);
   };
-
 
   // sorting table
 
@@ -264,6 +283,21 @@ const CourseCoupon = () => {
     return sortableItems;
   }, [couponData, sortConfig]);
 
+  const handleClickOutside = (event) => {
+    if (
+      !event.target.closest(".menu-content") &&
+      !event.target.closest(".dropdown-trigger")
+    ) {
+      setActiveDropdown(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -291,10 +325,38 @@ const CourseCoupon = () => {
             <thead>
               <tr>
                 <th style={{ width: "5%", paddingLeft: "10px" }}>Id</th>
-                <th style={{ width: "15%" }}>Coupon code <i class="fa-solid fa-sort" onClick={() => handleSort('coupon_code')}></i></th>
-                <th style={{ width: "25%" }}>Course Name <i class="fa-solid fa-sort" onClick={() => handleSort('course_name')}></i></th>
-                <th style={{ width: "15%" }}>Discount <i class="fa-solid fa-sort" onClick={() => handleSort('discount_in_persentage' || 'discount_in_amount')}></i></th>
-                <th style={{ width: "15%" }}>Validity till <i class="fa-solid fa-sort" onClick={() => handleSort('expired_date')}></i></th>
+                <th style={{ width: "15%" }}>
+                  Coupon code{" "}
+                  <i
+                    class="fa-solid fa-sort"
+                    onClick={() => handleSort("coupon_code")}
+                  ></i>
+                </th>
+                <th style={{ width: "25%" }}>
+                  Course Name{" "}
+                  <i
+                    class="fa-solid fa-sort"
+                    onClick={() => handleSort("course_name")}
+                  ></i>
+                </th>
+                <th style={{ width: "15%" }}>
+                  Discount{" "}
+                  <i
+                    class="fa-solid fa-sort"
+                    onClick={() =>
+                      handleSort(
+                        "discount_in_persentage" || "discount_in_amount"
+                      )
+                    }
+                  ></i>
+                </th>
+                <th style={{ width: "15%" }}>
+                  Validity till{" "}
+                  <i
+                    class="fa-solid fa-sort"
+                    onClick={() => handleSort("expired_date")}
+                  ></i>
+                </th>
                 <th style={{ width: "10%" }}>Status</th>
                 <th style={{ width: "10%" }}>Action</th>
               </tr>
@@ -309,18 +371,20 @@ const CourseCoupon = () => {
                   courseName = "Invalid data";
                 }
 
-                const formattedData = Array.isArray(courseName) ? courseName.join(", ") : "Invalid data";
+                const formattedData = Array.isArray(courseName)
+                  ? courseName.join(", ")
+                  : "Invalid data";
 
                 return (
                   <tr key={index}>
                     <td style={{ paddingLeft: "10px" }}>{index + 1}</td>
+                    <td>{i.coupon_code}</td>
+                    <td>{formattedData}</td>
                     <td>
-                      {i.coupon_code}
+                      {i.discount_in_percentage
+                        ? i.discount_in_percentage + "%"
+                        : i.discount_in_amount}
                     </td>
-                    <td>
-                      {formattedData}
-                    </td>
-                    <td>{i.discount_in_percentage ? i.discount_in_percentage + "%" : i.discount_in_amount}</td>
                     <td>{i.expired_date}</td>
                     <td>
                       <label class="switch">
@@ -334,8 +398,9 @@ const CourseCoupon = () => {
                     </td>
                     <td>
                       <div
-                        className={`menu-container ${activeDropdown === index ? "active" : ""
-                          }`}
+                        className={`menu-container ${
+                          activeDropdown === index ? "active" : ""
+                        }`}
                       >
                         <div
                           class="menu-button"
@@ -354,11 +419,10 @@ const CourseCoupon = () => {
                             >
                               <p>Edit</p>
                             </a>
-                            <p
-                              onClick={() => deleteToggleModal(i.id)} // Open delete modal
-                              style={{ cursor: "pointer" }}
-                            >
-                              Delete
+                            <p>
+                              <DeleteModal
+                                onDelete={() => handleDelete(i.id)}
+                              />
                             </p>
                           </div>
                         )}
@@ -408,25 +472,22 @@ const CourseCoupon = () => {
                   </div>
                 </div>
 
-
                 <div className="form-group">
-                  <div className="currency_input">
-                    <label>Course Name</label>
-                    <select
-                      className="form-control"
-                      onChange={handleCourseSelection}
-                      value=""
-                    >
-                      <option value="" disabled>
-                        Select a course
+                  <label>Course Name</label>
+                  <select
+                    className="form-control col12input"
+                    onChange={handleCourseSelection}
+                    value=""
+                  >
+                    <option value="" disabled>
+                      Select a course
+                    </option>
+                    {courseData.map((course, index) => (
+                      <option key={index} value={course.course_title}>
+                        {course.course_title}
                       </option>
-                      {courseData.map((course, index) => (
-                        <option key={index} value={course.course_title}>
-                          {course.course_title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                    ))}
+                  </select>
                   <div className="tag-container">
                     {addCouponData.course_name.map((coursename, index) => (
                       <div className="tag" key={index}>
@@ -576,9 +637,7 @@ const CourseCoupon = () => {
                       onChange={handleEditCourseSelection}
                       value=""
                     >
-                      <option value="">
-                        Select a course
-                      </option>
+                      <option value="">Select a course</option>
                       {courseData.map((course, index) => (
                         <option key={index} value={course.course_title}>
                           {course.course_title}
@@ -628,7 +687,6 @@ const CourseCoupon = () => {
                   className="form-group"
                   style={{ display: "flex", alignItems: "center", gap: "15px" }}
                 >
-
                   {discountType === "percentage" && (
                     <div className="flex-item">
                       <label>Discount percentage</label>

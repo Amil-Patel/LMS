@@ -3,7 +3,7 @@ import Hoc from "../layout/Hoc";
 import axios from "axios";
 import "../../../assets/css/course/coursecategory.css";
 import "../../../assets/css/main.css";
-const port = process.env.REACT_APP_URL
+const port = process.env.REACT_APP_URL;
 
 const CourseCategory = () => {
   // Sample data for the cards
@@ -27,7 +27,7 @@ const CourseCategory = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   //add course category data
   const [addCourseCategoryData, setAddCourseCategoryData] = useState({
@@ -36,26 +36,26 @@ const CourseCategory = () => {
     cate_thumbnail: null,
     created_by: 1,
     updated_by: 1,
-  })
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddCourseCategoryData({
       ...addCourseCategoryData,
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
   const [addNewImage, setAddNewImage] = useState(null);
   const handleImageChange = (e) => {
     setAddCourseCategoryData({
       ...addCourseCategoryData,
-      [e.target.name]: e.target.files[0]
-    })
+      [e.target.name]: e.target.files[0],
+    });
     setAddNewImage(e.target.files[0]);
-  }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(addCourseCategoryData)
+    console.log(addCourseCategoryData);
     const formData = new FormData();
     formData.append("cate_title", addCourseCategoryData.cate_title);
     formData.append("cate_parent_id", addCourseCategoryData.cate_parent_id);
@@ -64,7 +64,7 @@ const CourseCategory = () => {
     formData.append("created_by", addCourseCategoryData.created_by);
     formData.append("updated_by", addCourseCategoryData.updated_by);
     try {
-      const res = await axios.post(`${port}/addingCourseCategory`, formData)
+      const res = await axios.post(`${port}/addingCourseCategory`, formData);
       getNullCourseCategoryData();
       setAddOpen(false);
       setAddCourseCategoryData({
@@ -73,41 +73,46 @@ const CourseCategory = () => {
         cate_thumbnail: null,
         created_by: 1,
         updated_by: 1,
-      })
+      });
+      setAddNewImage(null);
     } catch (error) {
       console.log(error);
     }
-  }
-  //get course data with id and clicking on null 
+  };
+  //get course data with id and clicking on null
   const [nullCourseDataWithId, setNullCourseDataWithId] = useState([]);
   const [courseDataWithParentId, setCourseDataWithParentId] = useState([]);
   const handleGetCourseDetail = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingNullCourseCategoryWithId/${id}`);
-      const res2 = await axios.get(`${port}/gettingCourseCategoryWithParentId/${id}`);
+      const res = await axios.get(
+        `${port}/gettingNullCourseCategoryWithId/${id}`
+      );
+      const res2 = await axios.get(
+        `${port}/gettingCourseCategoryWithParentId/${id}`
+      );
       setCourseDataWithParentId(res2.data);
       setNullCourseDataWithId(res.data);
-      console.log(res.data)
+      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
-  }
-  //delete data code 
+  };
+  //delete data code
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`${port}/deletingCourseCategory/${deleteId}`);
+      const res = await axios.delete(
+        `${port}/deletingCourseCategory/${deleteId}`
+      );
       getNullCourseCategoryData();
       setDeleteOpen(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   useEffect(() => {
     getNullCourseCategoryData();
-  }, [])
-
-
+  }, []);
 
   //edit data section start
   const [editData, setEditData] = useState({
@@ -115,7 +120,7 @@ const CourseCategory = () => {
     cate_parent_id: null,
     cate_thumbnail: null,
     updated_by: 1,
-  })
+  });
   const getDataForEdit = async (id) => {
     try {
       const res = await axios.get(`${port}/gettingCoureseCategoryWithId/${id}`);
@@ -123,23 +128,23 @@ const CourseCategory = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditData({
       ...editData,
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
   const [newImage, setNewImage] = useState(null);
   const handleEditImageChange = (e) => {
     setEditData({
       ...editData,
-      [e.target.name]: e.target.files[0]
-    })
+      [e.target.name]: e.target.files[0],
+    });
     setNewImage(e.target.files[0]);
-  }
+  };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -151,27 +156,39 @@ const CourseCategory = () => {
     }
     formData.append("updated_by", editData.updated_by);
     try {
-      const res = await axios.put(`${port}/updatingCourseCategory/${editData.id}`, formData)
+      const res = await axios.put(
+        `${port}/updatingCourseCategory/${editData.id}`,
+        formData
+      );
       getNullCourseCategoryData();
       setEditOpen(false);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   //status change
 
   const handleStatusChange = async (id, status) => {
     try {
-      const res = await axios.put(`${port}/updatingCourseCategoryStatus/${id}`, { status: status });
+      const res = await axios.put(
+        `${port}/updatingCourseCategoryStatus/${id}`,
+        { status: status }
+      );
       getNullCourseCategoryData();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const addToggleModal = () => {
     setAddOpen(!addOpen);
+    setAddCourseCategoryData({
+      cate_title: "",
+      cate_parent_id: "",
+      cate_thumbnail: "",
+    });
+    setAddNewImage(null); // Reset the image state when modal is closed
   };
 
   const editToggleModal = async (editid) => {
@@ -180,12 +197,11 @@ const CourseCategory = () => {
     }
     setEditOpen(!editOpen);
   };
-  const [deleteId, setDeleteId] = useState(null)
+  const [deleteId, setDeleteId] = useState(null);
   const deleteToggleModal = (id) => {
     setDeleteId(id);
     setDeleteOpen(!deleteOpen);
   };
-
 
   return (
     <>
@@ -203,162 +219,170 @@ const CourseCategory = () => {
             <img src={require("../../../assets/image/pdf-logo.png")} />
             <img src={require("../../../assets/image/x-logo.png")} />
           </div>
-          <a
-            style={{ cursor: "pointer" }}
-            onClick={addToggleModal}
-          >
+          <a style={{ cursor: "pointer" }} onClick={addToggleModal}>
             <span className="primary-btn module-btn">+ Add</span>
           </a>
         </div>
 
         <div className="services-section">
           <div className="security-btn">
-            {
-              nullCourseCategory.map((course) => (
-                <a className="" style={{ cursor: "pointer" }} onClick={() => handleGetCourseDetail(course.id)}>
-                  <p>{course.cate_title}</p>
-                </a>
-              ))
-            }
+            {nullCourseCategory.map((course) => (
+              <a
+                className=""
+                style={{ cursor: "pointer" }}
+                onClick={() => handleGetCourseDetail(course.id)}
+              >
+                <p>{course.cate_title}</p>
+              </a>
+            ))}
           </div>
           <div className="horizontal-card">
             <div className="card">
-              {
-                (nullCourseDataWithId?.data || firstNullParentData) ? (
-                  <>
-                    {nullCourseDataWithId?.data ? (
-                      <>
-                        <img
-                          src={`./upload/${nullCourseDataWithId.data.cate_thumbnail}`}
-                          alt={nullCourseDataWithId.data.cate_title}
-                          className="card-image"
-                        />
-                        <div className="content">
-                          <h5>{nullCourseDataWithId.data.cate_title}</h5>
-                          <p>Sub Course: {nullCourseDataWithId.subcoursecount}</p>
-                        </div>
-                        <div className="card-actions">
-                          <label className="switch" style={{ marginTop: "4px" }}>
-                            <input
-                              type="checkbox"
-                              checked={nullCourseDataWithId.data.status}
-                              onClick={() => handleStatusChange(nullCourseDataWithId.data.id, nullCourseDataWithId.data.status)}
-                            />
-                            <span className="slider"></span>
-                          </label>
-                          <div className="action-btn">
-                            <span
-                              onClick={() => {
-                                editToggleModal(nullCourseDataWithId.data.id);
-                              }}
-                              className="edit"
-                            >
-                              <i className="fa fa-pencil"></i>
-                            </span>
-                            <span
-                              onClick={() => deleteToggleModal(nullCourseDataWithId.data.id)}
-                              className="delete"
-                            >
-                              <i className="fa fa-trash"></i>
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    ) : firstNullParentData ? (
-                      <>
-                        <img
-                          src={`./upload/${firstNullParentData.cate_thumbnail}`}
-                          alt={firstNullParentData.cate_title}
-                          className="card-image"
-                        />
-                        <div className="content">
-                          <h5>{firstNullParentData.cate_title}</h5>
-                          <p>Sub Course: {firstNullParentData.subcoursecount}</p>
-                        </div>
-                        <div className="card-actions">
-                          <label className="switch" style={{ marginTop: "4px" }}>
-                            <input
-                              type="checkbox"
-                              checked={firstNullParentData.status}
-                              onClick={() => handleStatusChange(firstNullParentData.id, firstNullParentData.status)}
-                            />
-                            <span className="slider"></span>
-                          </label>
-                          <div className="action-btn">
-                            <span
-                              onClick={() => {
-                                editToggleModal(firstNullParentData.id);
-                              }}
-                              className="edit"
-                            >
-                              <i className="fa fa-pencil"></i>
-                            </span>
-                            <span
-                              onClick={() => deleteToggleModal(firstNullParentData.id)}
-                              className="delete"
-                            >
-                              <i className="fa fa-trash"></i>
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    ) : null}
-                  </>
-                ) : (
-                  <p>No data found</p>
-                )
-              }
-
-
-            </div>
-          </div>
-
-          <div className="courses-category">
-            {
-              courseDataWithParentId.length > 0 ? (
-                courseDataWithParentId.map((course) => (
-                  <div key={course.id} className="card">
-                    <img
-                      src={`./upload/${course.cate_thumbnail}`}
-                      alt={course.cate_title}
-                      className="card-image"
-                    />
-                    <div className="card-content">
-                      <h5>{course.cate_title}</h5>
+              {nullCourseDataWithId?.data || firstNullParentData ? (
+                <>
+                  {nullCourseDataWithId?.data ? (
+                    <>
+                      <img
+                        src={`./upload/${nullCourseDataWithId.data.cate_thumbnail}`}
+                        alt={nullCourseDataWithId.data.cate_title}
+                        className="card-image"
+                      />
+                      <div className="content">
+                        <h5>{nullCourseDataWithId.data.cate_title}</h5>
+                        <p>Sub Course: {nullCourseDataWithId.subcoursecount}</p>
+                      </div>
                       <div className="card-actions">
-                        <label className="switch">
+                        <label className="switch" style={{ marginTop: "4px" }}>
                           <input
                             type="checkbox"
-                            checked={course.status}
-                            onClick={() => handleStatusChange(course.id, course.status)}
+                            checked={nullCourseDataWithId.data.status}
+                            onClick={() =>
+                              handleStatusChange(
+                                nullCourseDataWithId.data.id,
+                                nullCourseDataWithId.data.status
+                              )
+                            }
                           />
                           <span className="slider"></span>
                         </label>
                         <div className="action-btn">
                           <span
                             onClick={() => {
-                              editToggleModal(course.id);
+                              editToggleModal(nullCourseDataWithId.data.id);
                             }}
                             className="edit"
                           >
                             <i className="fa fa-pencil"></i>
                           </span>
                           <span
-                            onClick={() => deleteToggleModal(course.id)}
+                            onClick={() =>
+                              deleteToggleModal(nullCourseDataWithId.data.id)
+                            }
                             className="delete"
                           >
                             <i className="fa fa-trash"></i>
                           </span>
                         </div>
                       </div>
+                    </>
+                  ) : firstNullParentData ? (
+                    <>
+                      <img
+                        src={`./upload/${firstNullParentData.cate_thumbnail}`}
+                        alt={firstNullParentData.cate_title}
+                        className="card-image"
+                      />
+                      <div className="content">
+                        <h5>{firstNullParentData.cate_title}</h5>
+                        <p>Sub Course: {firstNullParentData.subcoursecount}</p>
+                      </div>
+                      <div className="card-actions">
+                        <label className="switch" style={{ marginTop: "4px" }}>
+                          <input
+                            type="checkbox"
+                            checked={firstNullParentData.status}
+                            onClick={() =>
+                              handleStatusChange(
+                                firstNullParentData.id,
+                                firstNullParentData.status
+                              )
+                            }
+                          />
+                          <span className="slider"></span>
+                        </label>
+                        <div className="action-btn">
+                          <span
+                            onClick={() => {
+                              editToggleModal(firstNullParentData.id);
+                            }}
+                            className="edit"
+                          >
+                            <i className="fa fa-pencil"></i>
+                          </span>
+                          <span
+                            onClick={() =>
+                              deleteToggleModal(firstNullParentData.id)
+                            }
+                            className="delete"
+                          >
+                            <i className="fa fa-trash"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  ) : null}
+                </>
+              ) : (
+                <p>No data found</p>
+              )}
+            </div>
+          </div>
+
+          <div className="courses-category">
+            {courseDataWithParentId.length > 0 ? (
+              courseDataWithParentId.map((course) => (
+                <div key={course.id} className="card">
+                  <img
+                    src={`./upload/${course.cate_thumbnail}`}
+                    alt={course.cate_title}
+                    className="card-image"
+                  />
+                  <div className="card-content">
+                    <h5>{course.cate_title}</h5>
+                    <div className="card-actions">
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={course.status}
+                          onClick={() =>
+                            handleStatusChange(course.id, course.status)
+                          }
+                        />
+                        <span className="slider"></span>
+                      </label>
+                      <div className="action-btn">
+                        <span
+                          onClick={() => {
+                            editToggleModal(course.id);
+                          }}
+                          className="edit"
+                        >
+                          <i className="fa fa-pencil"></i>
+                        </span>
+                        <span
+                          onClick={() => deleteToggleModal(course.id)}
+                          className="delete"
+                        >
+                          <i className="fa fa-trash"></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
-                ))
-              ) : (
-                <p>No Sub Course Found</p>
-              )
-            }
-
+                </div>
+              ))
+            ) : (
+              <p>Course Not Found</p>
+            )}
           </div>
 
           {/* Add Model */}
@@ -394,13 +418,14 @@ const CourseCategory = () => {
                         value={addCourseCategoryData.cate_parent_id}
                       >
                         <option value="NULL">None</option>
-                        {
-                          nullCourseCategory.map((course, index) => (
-                            <option value={course.id} key={index}>{course.cate_title}</option>
-                          ))
-                        }
+                        {nullCourseCategory.map((course, index) => (
+                          <option value={course.id} key={index}>
+                            {course.cate_title}
+                          </option>
+                        ))}
                       </select>
                     </div>
+
                     <label>
                       Category Thumbnail<span className="required">*</span>
                     </label>
@@ -412,15 +437,13 @@ const CourseCategory = () => {
                       placeholder="Category Image"
                       onChange={handleImageChange}
                     />
-                    {
-                      addNewImage && (
-                        <img
-                          src={URL.createObjectURL(addNewImage)}
-                          alt="Thumbnail"
-                          width="30%"
-                        />
-                      )
-                    }
+                    {addNewImage && (
+                      <img
+                        src={URL.createObjectURL(addNewImage)}
+                        alt="Thumbnail"
+                        width="30%"
+                      />
+                    )}
 
                     <div style={{ display: "flex", gap: "10px" }}>
                       <button type="submit" className="primary-btn">
@@ -474,11 +497,11 @@ const CourseCategory = () => {
                         form="parentform"
                       >
                         <option value="NULL">None</option>
-                        {
-                          nullCourseCategory.map((course, index) => (
-                            <option value={course.id} key={index}>{course.cate_title}</option>
-                          ))
-                        }
+                        {nullCourseCategory.map((course, index) => (
+                          <option value={course.id} key={index}>
+                            {course.cate_title}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <label>
@@ -491,13 +514,14 @@ const CourseCategory = () => {
                       className="col12input"
                       style={{ marginBottom: "20px" }}
                     />
-                    {
-                      newImage ? (
-                        <img src={URL.createObjectURL(newImage)} width="30%" />
-                      ) : (
-                        <img src={`upload/${editData.cate_thumbnail}`} width="30%" />
-                      )
-                    }
+                    {newImage ? (
+                      <img src={URL.createObjectURL(newImage)} width="30%" />
+                    ) : (
+                      <img
+                        src={`upload/${editData.cate_thumbnail}`}
+                        width="30%"
+                      />
+                    )}
 
                     <div style={{ display: "flex", gap: "10px" }}>
                       <button type="submit" className="primary-btn">
@@ -522,9 +546,7 @@ const CourseCategory = () => {
             <div className="modal">
               <div className="modal-container">
                 <h5>Delete Course Category</h5>
-                <p>
-                  Are you sure you want to delete the course category{" "}?
-                </p>
+                <p>Are you sure you want to delete the course category ?</p>
                 <div style={{ display: "flex", gap: "10px" }}>
                   <button onClick={handleDelete} className="primary-btn">
                     Confirm

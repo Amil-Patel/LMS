@@ -43,7 +43,7 @@ function RolesList() {
                 <th>Title</th>
                 <th>Type</th>
                 <th>Total Users</th>
-                <th>Action</th>
+                <th style={{width:"19%"}}>Action</th>
               </tr>
             </thead>
 
