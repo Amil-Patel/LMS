@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Hoc from "../layout/Hoc";
 import axios from "axios";
+import { userRolesContext } from "../layout/RoleContext";
 import "../../../assets/css/course/coursecategory.css";
 import "../../../assets/css/main.css";
 const port = process.env.REACT_APP_URL;
 
 const CourseCategory = () => {
   // Sample data for the cards
-
+  const { userRole, userId } = useContext(userRolesContext);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -34,8 +35,8 @@ const CourseCategory = () => {
     cate_title: "",
     cate_parent_id: null,
     cate_thumbnail: null,
-    created_by: 1,
-    updated_by: 1,
+    created_by: userId,
+    updated_by: userId,
   });
 
   const handleChange = (e) => {
@@ -71,8 +72,6 @@ const CourseCategory = () => {
         cate_title: "",
         cate_parent_id: null,
         cate_thumbnail: null,
-        created_by: 1,
-        updated_by: 1,
       });
       setAddNewImage(null);
     } catch (error) {
@@ -92,7 +91,6 @@ const CourseCategory = () => {
       );
       setCourseDataWithParentId(res2.data);
       setNullCourseDataWithId(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -119,7 +117,7 @@ const CourseCategory = () => {
     cate_title: "",
     cate_parent_id: null,
     cate_thumbnail: null,
-    updated_by: 1,
+    updated_by: userId,
   });
   const getDataForEdit = async (id) => {
     try {

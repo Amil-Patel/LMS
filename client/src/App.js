@@ -14,24 +14,32 @@ import RoleslistRoute from "./routes/admin/roles-list/RoleslistRoute";
 import ManageCourseRoute from "./routes/admin/course/ManageCourseRoute";
 import UserRoute from "./routes/admin/user/UserRoute";
 import ProfileRoute from "./routes/admin/profile/ProfileRoute";
+import { RoleContext } from "./pages/admin/layout/RoleContext";
+import LoginRoute from "./routes/admin/LoginRoute";
+import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
+
 
 const App = () => {
   return (
     <>
-      <DashboardRoute />
-      <CourseCouponRoute />
-      <CourseCategoryRoute />
-      <AddCourseRoute />
-      <AllCourseRoute />
-      <ManageCourseRoute />
-      <EnrollementsRoute />
-      <InquiryRoute />
-      <PaymentRoute />
-      <RoleslistRoute />
-      <UserRoute/>
-      <NotificationSettingRoute />
-      <PaymentSettingRoute />
-      <ProfileRoute/>
+      <RoleContext>
+        <DashboardRoute />
+        <CourseCouponRoute />
+        <CourseCategoryRoute />
+        <AddCourseRoute />
+        <AllCourseRoute />
+        <ManageCourseRoute />
+        <EnrollementsRoute />
+        <InquiryRoute />
+        <PaymentRoute />
+        <RoleslistRoute />
+        <UserRoute />
+        <NotificationSettingRoute />
+        <PaymentSettingRoute />
+        <ProfileRoute />
+        <LoginRoute />
+        <EditCourseRoute />
+      </RoleContext>
     </>
   );
 };

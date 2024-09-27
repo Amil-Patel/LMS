@@ -44,6 +44,8 @@ const addCourseCouponData = async (req, res) => {
         discount_in_amount: req.body.discount_in_amount || null,
         expired_date: expiredate,
         status: 1,
+        created_by: req.body.created_by || 0,
+        updated_by: req.body.updated_by || 0,
         createdAt: createdate,
         updatedAt: createdate,
     }
@@ -66,6 +68,7 @@ const updateCourseCouponData = async (req, res) => {
         discount_in_percentage: req.body.discount_in_percentage || null,
         discount_in_amount: req.body.discount_in_amount || null,
         expired_date: expiredate,
+        updated_by: req.body.updated_by || 0,
         updatedAt: updatedat,
     }
     console.log(data)

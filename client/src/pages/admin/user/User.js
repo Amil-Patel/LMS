@@ -1,53 +1,137 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/user/user.css";
 import { Form, NavLink } from "react-router-dom";
+import axios from "axios";
+import { userRolesContext } from "../layout/RoleContext";
+const port = process.env.REACT_APP_URL
 
 const User = () => {
-  const [tab, setTab] = useState("user");
+  const { userRole, userId } = useContext(userRolesContext);
+  const [tab, setTab] = useState("student");
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [addUserOpen, setAddUserOpen] = useState(false); // state for open add user modal
-  const [editUserOpen, setEditUserOpen] = useState(false); // state for open edit user modal
-
+  const [addUserOpen, setAddUserOpen] = useState(false);
+  const [editUserOpen, setEditUserOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
-  const [fileName, setFileName] = useState("");
+  const [sameNumber, setSameNumber] = useState(false);
+  const [sameNumberForedit, setSameNumberForedit] = useState(false);
+  const handleSameNumberChange = (e) => {
+    setSameNumber(e.target.checked);
+    if (!sameNumber) {
+      setAddUser((prev) => ({ ...prev, whatsapp_number: prev.contact }));
+    } else {
+      setAddUser((prev) => ({ ...prev, whatsapp_number: "" }));
+    }
+  };
+  const handleEditSameNumberChange = (e) => {
+    const isChecked = e.target.checked;
+    setSameNumberForedit(isChecked);
+
+    if (isChecked) {
+      setEditData((prev) => ({ ...prev, whatsapp_number: prev.contact }));
+    } else {
+      setEditData((prev) => ({ ...prev, whatsapp_number: "" }));
+    }
+  };
+
 
   const handleChangeTab = (tabName) => {
     setTab(tabName);
+    filterUserData(tabName);
   };
 
-  // User Table Data
-  const data = [
-    {
-      id: 1,
-      profile: require("../../../assets/image/user_img.jpeg"),
-      name: "Christine Brooks",
-      email: "089 Kutch Green Apt.",
-      contact: "+91 9876543210",
-      gender: "Male",
-      country: "India",
-    },
+  //check the user permission
+  const roleName = userRole || "superAdmin";
+  const [checkUserPerm, setCheckUserPerm] = useState([]);
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const res = await axios.get(`${port}/checkingUserPermission`, {
+          params: { name: roleName }
+        });
+        setCheckUserPerm(res.data);
+      } catch (error) {
+        console.error("Error fetching permissions:", error);
+      }
+    };
 
-    {
-      id: 1,
-      profile: require("../../../assets/image/user_img.jpeg"),
-      name: "Christine Brooks",
-      email: "089 Kutch Green Apt.",
-      contact: "+91 9876543210",
-      gender: "Female",
-      country: "India",
-    },
+    fetchPermissions();
+  }, [roleName]);
 
-    {
-      id: 1,
-      profile: require("../../../assets/image/user_img.jpeg"),
-      name: "Christine Brooks",
-      email: "089 Kutch Green Apt.",
-      contact: "+91 9876543210",
-      gender: "Male",
-      country: "India",
-    },
-  ];
+  //check the user permission
+  const studentPermCateId = 9;
+  const instructurerPermCateId = 10;
+  const adminPermCateId = 11;
+  const [student, setStudent] = useState(false);
+  const [admin, setAdmin] = useState(false);
+  const [instructure, setInstructor] = useState(false);
+  const checkePermissionForAdd = async () => {
+    try {
+      if (checkUserPerm.length > 0) {
+        const studentPerm = checkUserPerm.find(perm => perm.perm_cate_id === studentPermCateId && perm.can_add === 1);
+        const adminPerm = checkUserPerm.find(perm => perm.perm_cate_id === adminPermCateId && perm.can_add === 1);
+        const instructurePerm = checkUserPerm.find(perm => perm.perm_cate_id === instructurerPermCateId && perm.can_add === 1);
+
+        setStudent(!!studentPerm);
+        setAdmin(!!adminPerm);
+        setInstructor(!!instructurePerm);
+      }
+    } catch (error) {
+      console.error("Error checking permissions:", error);
+    }
+  };
+  //check permission for view
+  const [studentView, setStudentView] = useState(false);
+  const [adminView, setAdminView] = useState(false);
+  const [instructureView, setInstructorView] = useState(false);
+  const checkePermissionForView = async () => {
+    try {
+      const studentPerm = checkUserPerm.find(perm => perm.perm_cate_id === studentPermCateId && perm.can_view === 1);
+      const adminPerm = checkUserPerm.find(perm => perm.perm_cate_id === adminPermCateId && perm.can_view === 1);
+      const instructurePerm = checkUserPerm.find(perm => perm.perm_cate_id === instructurerPermCateId && perm.can_view === 1);
+
+      setStudentView(!!studentPerm);
+      setAdminView(!!adminPerm);
+      setInstructorView(!!instructurePerm);
+    } catch (error) {
+      console.error("Error checking permissions:", error);
+    }
+  };
+
+  //check permission for edit
+  const [studentEdit, setStudentEdit] = useState(false);
+  const [adminEdit, setAdminEdit] = useState(false);
+  const [instructureEdit, setInstructureEdit] = useState(false);
+  const checkePermissionForEdit = async () => {
+    try {
+      const studentPerm = checkUserPerm.find(perm => perm.perm_cate_id === studentPermCateId && perm.can_edit === 1);
+      const adminPerm = checkUserPerm.find(perm => perm.perm_cate_id === adminPermCateId && perm.can_edit === 1);
+      const instructurePerm = checkUserPerm.find(perm => perm.perm_cate_id === instructurerPermCateId && perm.can_edit === 1);
+
+      setStudentEdit(!!studentPerm);
+      setAdminEdit(!!adminPerm);
+      setInstructureEdit(!!instructurePerm);
+    } catch (error) {
+      console.error("Error checking permissions:", error);
+    }
+  };
+  //check permission for delete
+  const [studentDelete, setStudentDelete] = useState(false);
+  const [adminDelete, setAdminDelete] = useState(false);
+  const [instructureDelete, setInstructureDelete] = useState(false);
+  const checkePermissionForDelete = async () => {
+    try {
+      const studentPerm = checkUserPerm.find(perm => perm.perm_cate_id === studentPermCateId && perm.can_delete === 1);
+      const adminPerm = checkUserPerm.find(perm => perm.perm_cate_id === adminPermCateId && perm.can_delete === 1);
+      const instructurePerm = checkUserPerm.find(perm => perm.perm_cate_id === instructurerPermCateId && perm.can_delete === 1);
+
+      setStudentDelete(!!studentPerm);
+      setAdminDelete(!!adminPerm);
+      setInstructureDelete(!!instructurePerm);
+    } catch (error) {
+      console.error("Error checking permissions:", error);
+    }
+  };
 
   const toggleDropdown = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
@@ -56,29 +140,276 @@ const User = () => {
   // Function to toggle visibility of add user modal
   const userToggleModal = () => {
     setAddUserOpen(!addUserOpen);
+    checkePermissionForAdd();
   };
 
   // Function to toggle visibility of edit user modal
-  const editUserToggleModal = () => {
-    setEditUserOpen(!editUserOpen);
+  const editUserToggleModal = async (id) => {
+    if (editUserOpen) {
+      setEditUserOpen(false);
+      setActiveDropdown(false);
+    } else {
+      setEditUserOpen(true);
+      if (id) {
+        try {
+          await getDataForEdit(id);
+        } catch (error) {
+          console.error("Error fetching data for edit:", error);
+        }
+      }
+      setActiveDropdown(false);
+      checkePermissionForAdd();
+    }
   };
+
 
   const handleButtonClick = () => {
     document.getElementById("fileInput").click();
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  useEffect(() => {
+    const checkPermissions = async () => {
+      try {
+        if (checkUserPerm.length > 0) {
+          await checkePermissionForView();
+          await checkePermissionForEdit();
+          await checkePermissionForDelete();
+        }
+      } catch (error) {
+        console.error("Error checking permissions:", error);
+      }
+    };
+
+    checkPermissions();
+  }, [checkUserPerm]);
+  console.log(checkUserPerm.length)
+
+  //add user section start
+  const [addUser, setAddUser] = useState({
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    description: "",
+    gender: "",
+    dob: "",
+    address: "",
+    profile: null,
+    contact: "",
+    whatsapp_number: "",
+    country: "",
+    email: "",
+    password: "",
+    role_id: "",
+    status: "",
+    created_by: userId,
+    updated_by: userId,
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAddUser((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+  const [newImage, setNewImage] = useState(null);
+  const [filename, setFilename] = useState("")
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFilename(file.name)
     if (file) {
-      setFileName(file.name);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImageSrc(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setAddUser({ ...addUser, profile: file });
+      setNewImage(file);
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(addUser)
+    const formData = new FormData();
+    formData.append("first_name", addUser.first_name);
+    formData.append("middle_name", addUser.middle_name);
+    formData.append("last_name", addUser.last_name);
+    formData.append("description", addUser.description);
+    formData.append("gender", addUser.gender);
+    formData.append("dob", addUser.dob);
+    formData.append("address", addUser.address);
+    formData.append("profile", addUser.profile);
+    formData.append("contact", addUser.contact);
+    formData.append("whatsapp_number", addUser.whatsapp_number);
+    formData.append("country", addUser.country);
+    formData.append("email", addUser.email);
+    formData.append("password", addUser.password);
+    formData.append("role_id", addUser.role_id);
+    formData.append("status", addUser.status);
+    formData.append("created_by", addUser.created_by);
+    formData.append("updated_by", addUser.updated_by);
+    try {
+      const res = await axios.post(`${port}/addingUserMaster`, formData);
+      setAddUserOpen(false);
+      getAllUserData();
+      setAddUser({
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        description: "",
+        gender: "",
+        dob: "",
+        address: "",
+        profile: null,
+        contact: "",
+        whatsapp_number: "",
+        country: "",
+        email: "",
+        password: "",
+        role_id: "",
+        status: "",
+      })
+      setNewImage(null);
+      setSameNumber(false);
+      setFilename("")
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
+  }
+
+  //get all user data for display on the table
+
+  const [userData, setUserData] = useState([]);
+  const [allUserData, setAllUserData] = useState([]);
+
+  const getAllUserData = async () => {
+    try {
+      const res = await axios.get(`${port}/gettingUserMasterData`);
+      setAllUserData(res.data);
+      if (studentView) {
+        filterUserData("student", res.data);
+      } else if (instructureView) {
+        filterUserData("instructure", res.data);
+      } else if (adminView) {
+        filterUserData("admin", res.data);
+      } else {
+        setUserData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
     }
   };
 
+  const filterUserData = (roleName, data = allUserData) => {
+    if (roleName) {
+      const filteredData = data.filter((user) => user.role_id === roleName);
+      setUserData(filteredData);
+    } else {
+      setUserData(data);
+    }
+  };
+  //delete data section start
+  const [deleteId, setDeleteId] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const deleteToggleModal = (id) => {
+    setDeleteId(id);
+    setDeleteOpen(!deleteOpen);
+    setActiveDropdown(false)
+  };
+  const deleteUserData = async () => {
+    try {
+      const res = await axios.delete(`${port}/deletingUserMaster/${deleteId}`);
+      getAllUserData();
+      setDeleteOpen(false);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  }
+
+  //edit user data section start
+  const [editData, setEditData] = useState({
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    description: "",
+    gender: "",
+    dob: "",
+    address: "",
+    profile: null,
+    contact: "",
+    whatsapp_number: "",
+    country: "",
+    email: "",
+    password: "",
+    role_id: "",
+    status: "",
+    updated_by: userId,
+  });
+  const getDataForEdit = async (id) => {
+    try {
+      const res = await axios.get(`${port}/gettingUserMasterDataWithId/${id}`);
+      setEditData(res.data);
+      console.log(res.data)
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditData((prev) => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const [newEditImage, setNewEditImage] = useState(null);
+  const [editfilename, setEditFilename] = useState("")
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEditFilename(file.name);
+      setNewEditImage(file);
+      setEditData({ ...editData, profile: file });
+    }
+  };
+
+
+  const editUserData = async () => {
+    const formData = new FormData();
+    formData.append("first_name", editData.first_name);
+    formData.append("middle_name", editData.middle_name);
+    formData.append("last_name", editData.last_name);
+    formData.append("description", editData.description);
+    formData.append("gender", editData.gender);
+    formData.append("dob", editData.dob);
+    formData.append("address", editData.address);
+    if (newEditImage) {
+      formData.append("profile", newEditImage);
+    }
+    formData.append("contact", editData.contact);
+    formData.append("whatsapp_number", editData.whatsapp_number);
+    formData.append("country", editData.country);
+    formData.append("email", editData.email);
+    formData.append("password", editData.password);
+    formData.append("role_id", editData.role_id);
+    formData.append("status", editData.status);
+    formData.append("updated_by", editData.updated_by);
+    try {
+      const res = await axios.put(`${port}/updatingUserMaster/${editData.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      getAllUserData();
+      setEditUserOpen(false);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  }
+
+  useEffect(() => {
+    getAllUserData();
+  }, [studentView, adminView, instructureView]);
+
+
+
+  //delete data code start
   return (
     <>
       <Hoc />
@@ -95,31 +426,64 @@ const User = () => {
 
         <div className="admin-panel-tab-bar">
           <ul className="tab">
-            <li onClick={() => handleChangeTab("user")}>
-              <NavLink className={tab === "user" ? "active-tab" : ""}>
-                USER
-              </NavLink>
-            </li>
-            |
-            <li onClick={() => handleChangeTab("instructure")}>
-              <NavLink className={tab === "instructure" ? "active-tab" : ""}>
-                instructure
-              </NavLink>
-            </li>
-            |
-            <li onClick={() => handleChangeTab("admin")}>
-              <NavLink className={tab === "admin" ? "active-tab" : ""}>
-                admin 
-              </NavLink>
-            </li>
-            |
-            <li onClick={() => handleChangeTab("super-admin")}>
-              <NavLink className={tab === "super-admin" ? "active-tab" : ""}>
-                super admin
-              </NavLink>
-            </li>
-          </ul>
+            {
+              roleName === "SuperAdmin" && (
+                <>
+                  <li onClick={() => handleChangeTab("student")}>
+                    <NavLink className={tab === "student" ? "active-tab" : ""}>
+                      USER
+                    </NavLink>
+                  </li>
+                  |
+                  <li onClick={() => handleChangeTab("instructure")}>
+                    <NavLink className={tab === "instructure" ? "active-tab" : ""}>
+                      instructure
+                    </NavLink>
+                  </li>
+                  |
+                  <li onClick={() => handleChangeTab("admin")}>
+                    <NavLink className={tab === "admin" ? "active-tab" : ""}>
+                      admin
+                    </NavLink>
+                  </li>
+                  |
+                  <li onClick={() => handleChangeTab("superAdmin")}>
+                    <NavLink className={tab === "superAdmin" ? "active-tab" : ""}>
+                      super admin
+                    </NavLink>
+                  </li>
+                </>
 
+              )
+            }
+            {roleName !== "SuperAdmin" && (
+              <>
+                {studentView && (
+                  <li onClick={() => handleChangeTab("student")}>
+                    <NavLink className={tab === "student" ? "active-tab" : ""}>
+                      USER |
+                    </NavLink>
+                  </li>
+                )}
+
+                {instructureView && (
+                  <li onClick={() => handleChangeTab("instructure")}>
+                    <NavLink className={tab === "instructure" ? "active-tab" : ""}>
+                      INSTRUCTOR |
+                    </NavLink>
+                  </li>
+                )}
+
+                {adminView && (
+                  <li onClick={() => handleChangeTab("admin")}>
+                    <NavLink className={tab === "admin" ? "active-tab" : ""}>
+                      ADMIN
+                    </NavLink>
+                  </li>
+                )}
+              </>
+            )}
+          </ul>
           <button className="primary-btn module-btn" onClick={userToggleModal}>
             Add New
           </button>
@@ -127,7 +491,282 @@ const User = () => {
 
         <div className="course-form-container">
           {/* Basic Info Tab */}
-          {tab == "user" && (
+          {tab == "student" && (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Profile</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Contact</th>
+                  <th>Gender</th>
+                  <th>Country</th>
+                  <th>Status</th>
+                  {
+                    (studentEdit || studentDelete) ? (
+                      <th>Action</th>
+                    ) : null
+                  }
+
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  userData.length === 0 ? (
+                    <tr>
+                      <td colSpan="9">No data found</td>
+                    </tr>
+                  ) : (
+                    userData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td className="profile-img">
+                          <img src={`./upload/${item.profile}`} />
+                        </td>
+                        <td>{item.first_name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.contact}</td>
+                        <td>{item.gender}</td>
+                        <td>{item.country}</td>
+                        <td>
+                          <label class="switch">
+                            <input type="checkbox" />
+                            <span class="slider"></span>
+                          </label>
+                        </td>
+                        {
+                          (studentEdit || studentDelete) ? (
+                            <td>
+                              <div
+                                className={`menu-container ${activeDropdown === index ? "active" : ""
+                                  }`}
+                              >
+                                <div
+                                  class="menu-button"
+                                  onClick={() => toggleDropdown(index)}
+                                >
+                                  {" "}
+                                  ⋮{" "}
+                                </div>
+                                {activeDropdown === index && (
+                                  <div className="menu-content">
+                                    {
+                                      studentEdit && (
+                                        <a
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                        </a>
+                                      )
+                                    }
+                                    {
+                                      studentDelete && (
+                                        <a
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                        </a>
+                                      )
+                                    }
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          ) : (null)
+                        }
+
+                      </tr>
+                    ))
+                  )
+                }
+              </tbody>
+            </table>
+          )}
+          {tab == "instructure" && (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Profile</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Contact</th>
+                  <th>Gender</th>
+                  <th>Country</th>
+                  <th>Status</th>
+                  {
+                    (instructureEdit || instructureDelete) ? (
+                      <th>Action</th>
+                    ) : null
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  userData.length === 0 ? (
+                    <tr>
+                      <td colSpan="9">No data found</td>
+                    </tr>
+                  ) : (
+                    userData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td className="profile-img">
+                          <img src={`./upload/${item.profile}`} />
+                        </td>
+                        <td>{item.first_name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.contact}</td>
+                        <td>{item.gender}</td>
+                        <td>{item.country}</td>
+                        <td>
+                          <label class="switch">
+                            <input type="checkbox" />
+                            <span class="slider"></span>
+                          </label>
+                        </td>
+                        {
+                          (instructureEdit || instructureDelete) ? (
+                            <td>
+                              <div
+                                className={`menu-container ${activeDropdown === index ? "active" : ""
+                                  }`}
+                              >
+                                <div
+                                  class="menu-button"
+                                  onClick={() => toggleDropdown(index)}
+                                >
+                                  {" "}
+                                  ⋮{" "}
+                                </div>
+                                {activeDropdown === index && (
+                                  <div className="menu-content">
+                                    {
+                                      instructureEdit && (
+                                        <a
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                        </a>
+                                      )
+                                    }
+                                    {
+                                      instructureDelete && (
+                                        <a
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                        </a>
+                                      )
+                                    }
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          ) : (null)
+                        }
+
+                      </tr>
+                    ))
+                  )
+                }
+              </tbody>
+            </table>
+          )}
+          {tab == "admin" && (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Profile</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Contact</th>
+                  <th>Gender</th>
+                  <th>Country</th>
+                  <th>Status</th>
+                  {
+                    (adminEdit || adminDelete) ? (
+                      <th>Action</th>
+                    ) : null
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  userData.length === 0 ? (
+                    <tr>
+                      <td colSpan="9">No data found</td>
+                    </tr>
+                  ) : (
+                    userData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td className="profile-img">
+                          <img src={`./upload/${item.profile}`} />
+                        </td>
+                        <td>{item.first_name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.contact}</td>
+                        <td>{item.gender}</td>
+                        <td>{item.country}</td>
+                        <td>
+                          <label class="switch">
+                            <input type="checkbox" />
+                            <span class="slider"></span>
+                          </label>
+                        </td>
+                        {
+                          (adminEdit || adminDelete) ? (
+                            <td>
+                              <div
+                                className={`menu-container ${activeDropdown === index ? "active" : ""
+                                  }`}
+                              >
+                                <div
+                                  class="menu-button"
+                                  onClick={() => toggleDropdown(index)}
+                                >
+                                  {" "}
+                                  ⋮{" "}
+                                </div>
+                                {activeDropdown === index && (
+                                  <div className="menu-content">
+                                    {
+                                      adminEdit && (
+                                        <a
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                        </a>
+                                      )
+                                    }
+                                    {
+                                      adminDelete && (
+                                        <a
+                                          style={{ cursor: "pointer" }}
+                                        >
+                                          <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                        </a>
+                                      )
+                                    }
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                          ) : (null)
+                        }
+
+                      </tr>
+                    ))
+                  )
+                }
+              </tbody>
+            </table>
+          )}
+          {tab == "superAdmin" && (
+
             <table>
               <thead>
                 <tr>
@@ -143,69 +782,67 @@ const User = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td className="profile-img">
-                      <img src={item.profile} />
-                    </td>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.contact}</td>
-                    <td>{item.gender}</td>
-                    <td>{item.country}</td>
-                    <td>
-                      <label class="switch">
-                        <input type="checkbox" />
-                        <span class="slider"></span>
-                      </label>
-                    </td>
-                    <td>
-                      <div
-                        className={`menu-container ${
-                          activeDropdown === index ? "active" : ""
-                        }`}
-                      >
-                        <div
-                          class="menu-button"
-                          onClick={() => toggleDropdown(index)}
-                        >
-                          {" "}
-                          ⋮{" "}
-                        </div>
-                        {activeDropdown === index && (
-                          <div className="menu-content">
-                            <a
-                              // onClick={() => {
-                              //   editToggleModal();
-                              // }}
-                              style={{ cursor: "pointer" }}
+                {
+                  userData.length === 0 ? (
+                    <tr>
+                      <td colSpan="9">No data found</td>
+                    </tr>
+                  ) : (
+                    userData.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td className="profile-img">
+                          <img src={`./upload/${item.profile}`} />
+                        </td>
+                        <td>{item.first_name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.contact}</td>
+                        <td>{item.gender}</td>
+                        <td>{item.country}</td>
+                        <td>
+                          <label class="switch">
+                            <input type="checkbox" />
+                            <span class="slider"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <div
+                            className={`menu-container ${activeDropdown === index ? "active" : ""
+                              }`}
+                          >
+                            <div
+                              class="menu-button"
+                              onClick={() => toggleDropdown(index)}
                             >
-                              <p onClick={editUserToggleModal}>Edit</p>
-                            </a>
-                            <p
-                              // onClick={() => deleteToggleModal(index)} // Open delete modal
-                              style={{ cursor: "pointer" }}
-                            >
-                              Delete
-                            </p>
+                              {" "}
+                              ⋮{" "}
+                            </div>
+                            {activeDropdown === index && (
+                              <div className="menu-content">
+                                <a
+                                  // onClick={() => {
+                                  //   editToggleModal();
+                                  // }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                </a>
+                                <p
+                                  onClick={() => deleteToggleModal(item.id)}// Open delete modal
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  Delete
+                                </p>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        </td>
+                      </tr>
+                    ))
+                  )
+                }
               </tbody>
             </table>
-          )}
-          {tab=="instructure" && (
-            <h4>instructure Tab</h4>
-          )}
-          {tab=="admin" && (
-            <h4>admin Tab</h4>
-          )}
-          {tab=="super-admin" && (
-            <h4>super admin Tab</h4>
           )}
         </div>
 
@@ -221,6 +858,7 @@ const User = () => {
                   <button
                     class="primary-btn module-btn"
                     style={{ marginRight: "20px" }}
+                    onClick={handleSubmit}
                   >
                     Save
                   </button>
@@ -238,6 +876,9 @@ const User = () => {
                     </label>
                     <input
                       type="text"
+                      name="first_name"
+                      value={addUser.first_name}
+                      onChange={handleChange}
                       placeholder="Enter First Name"
                       className="col12input"
                     />
@@ -247,6 +888,9 @@ const User = () => {
                     <label>Middle Name</label>
                     <input
                       type="text"
+                      name="middle_name"
+                      value={addUser.middle_name}
+                      onChange={handleChange}
                       placeholder="Enter Middle Name"
                       className="col12input"
                     />
@@ -258,6 +902,9 @@ const User = () => {
                     </label>
                     <input
                       type="text"
+                      name="last_name"
+                      value={addUser.last_name}
+                      onChange={handleChange}
                       placeholder="Enter Last Name"
                       className="col12input"
                     />
@@ -272,6 +919,9 @@ const User = () => {
                     </label>
                     <input
                       type="email"
+                      name="email"
+                      value={addUser.email}
+                      onChange={handleChange}
                       placeholder="email"
                       className="col12input"
                     />
@@ -281,6 +931,9 @@ const User = () => {
                     <label>Password</label>
                     <input
                       type="password"
+                      name="password"
+                      value={addUser.password}
+                      onChange={handleChange}
                       placeholder="password"
                       className="col12input"
                     />
@@ -291,20 +944,42 @@ const User = () => {
                 <div className="flex-row flex-row80">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
                     <label>User Roll</label>
-                    <select className="col12input">
-                      <option value="upcoming">Upcoming</option>
-                      <option value="upcoming">Upcoming</option>
-                      <option value="upcoming">Upcoming</option>
+                    <select className="col12input" name="role_id" onChange={handleChange}>
+                      <option value="">Select Role</option>
+                      {roleName === "SuperAdmin" && (
+                        <>
+                          <option value="student">Student</option>
+                          <option value="admin">Admin</option>
+                          <option value="instructure">Instructor</option>
+                          <option value="superAdmin">Super Admin</option>
+                        </>
+                      )}
+                      {student && (
+                        <>
+                          <option value="student">Student</option>
+                        </>
+                      )}
+                      {instructure && (
+                        <>
+                          <option value="instructure">Instructor</option>
+                        </>
+                      )}
+                      {admin && (
+                        <>
+                          <option value="admin">Admin</option>
+                        </>
+                      )}
                     </select>
+
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
                     <label>Status</label>
-                    <input
-                      type="date"
-                      placeholder="Enter Course Title"
-                      className="col12input"
-                    />
+                    <select className="col12input" name="status" onChange={handleChange}>
+                      <option value="">Select Status</option>
+                      <option value="1">Active</option>
+                      <option value="0">Inactive</option>
+                    </select>
                   </div>
                 </div>
 
@@ -316,12 +991,16 @@ const User = () => {
                     </label>
                     <input
                       type="text"
+                      name="contact"
+                      value={addUser.contact}
+                      onChange={handleChange}
                       placeholder="9876543210"
                       className="col12input"
                     />
                   </div>
                   <div className="chekbox" style={{ width: "23%" }}>
-                    <input type="checkbox" />
+                    <input type="checkbox" checked={sameNumber}
+                      onChange={handleSameNumberChange} />
                     <label>Same WhatsApp</label>
                   </div>
 
@@ -334,8 +1013,12 @@ const User = () => {
                     </label>
                     <input
                       type="text"
+                      name="whatsapp_number"
+                      value={addUser.whatsapp_number}
+                      onChange={handleChange}
                       placeholder="9876543210"
                       className="col12input"
+                      disabled={sameNumber}
                     />
                   </div>
                 </div>
@@ -346,6 +1029,9 @@ const User = () => {
                     <label>Address</label>
                     <input
                       type="text"
+                      name="address"
+                      value={addUser.address}
+                      onChange={handleChange}
                       placeholder="Address"
                       className="col12input"
                     />
@@ -355,6 +1041,9 @@ const User = () => {
                     <label>Country</label>
                     <input
                       type="text"
+                      name="country"
+                      value={addUser.country}
+                      onChange={handleChange}
                       placeholder="Country"
                       className="col12input"
                     />
@@ -366,10 +1055,11 @@ const User = () => {
                   <div className="flex-row" style={{ width: "45%" }}>
                     <div className="form-group mb-0" style={{ width: "48%" }}>
                       <label>Gender</label>
-                      <select className="col12input">
-                        <option value="upcoming">Male</option>
-                        <option value="upcoming">Female</option>
-                        <option value="upcoming">Other</option>
+                      <select className="col12input" name="gender" onChange={handleChange}>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
                       </select>
                     </div>
 
@@ -377,6 +1067,9 @@ const User = () => {
                       <label>DOB</label>
                       <input
                         type="date"
+                        name="dob"
+                        value={addUser.dob}
+                        onChange={handleChange}
                         placeholder="Enter Course Title"
                         className="col12input"
                       />
@@ -402,7 +1095,7 @@ const User = () => {
                         type="text"
                         placeholder=""
                         className="col12input"
-                        value={fileName}
+                        value={filename || ""}
                         readOnly
                       />
                     </div>
@@ -418,17 +1111,25 @@ const User = () => {
                     <input
                       id="fileInput"
                       type="file"
+                      name="profile"
+                      onChange={handleImageChange}
                       style={{ display: "none" }}
                       accept="image/*"
-                      onChange={handleFileChange}
                     />
 
                     <div>
-                      <img
-                        src={imageSrc}
-                        style={{ width: "67px", maxHeight: "67px" }}
-                        alt="Selected Thumbnail"
-                      />
+                      {
+                        newImage ? (
+                          <img src={URL.createObjectURL(newImage)} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
+                        ) : (
+                          <img
+                            src={imageSrc}
+                            style={{ width: "67px", maxHeight: "67px" }}
+                            alt="Selected Thumbnail"
+                          />
+                        )
+                      }
+
                     </div>
                   </div>
                 </div>
@@ -439,6 +1140,9 @@ const User = () => {
                     <label>About User</label>
                     <textarea
                       type="text"
+                      name="description"
+                      value={addUser.description}
+                      onChange={handleChange}
                       placeholder="Enter Your About Details"
                       className="col12input"
                     />
@@ -455,14 +1159,15 @@ const User = () => {
             <div className="add-lesson-container" style={{ width: "60%" }}>
               <div class="quiz-top-header">
                 <div class="quiz-header">
-                  <h5>Edit User</h5>
+                  <h5>Edit New User</h5>
                 </div>
                 <div>
                   <button
                     class="primary-btn module-btn"
                     style={{ marginRight: "20px" }}
+                    onClick={editUserData}
                   >
-                    Update
+                    Save
                   </button>
                   <span onClick={editUserToggleModal}>
                     <i class="fa-solid fa-xmark"></i>
@@ -478,7 +1183,9 @@ const User = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Enter First Name"
+                      name="first_name"
+                      value={editData?.first_name}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -487,7 +1194,9 @@ const User = () => {
                     <label>Middle Name</label>
                     <input
                       type="text"
-                      placeholder="Enter Middle Name"
+                      name="middle_name"
+                      value={editData?.middle_name}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -498,7 +1207,9 @@ const User = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Enter Last Name"
+                      name="last_name"
+                      value={editData?.last_name}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -512,7 +1223,9 @@ const User = () => {
                     </label>
                     <input
                       type="email"
-                      placeholder="email"
+                      name="email"
+                      value={editData?.email}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -520,8 +1233,10 @@ const User = () => {
                   <div className="form-group mb-0" style={{ width: "48%" }}>
                     <label>Password</label>
                     <input
-                      type="password"
-                      placeholder="password"
+                      type="text"
+                      name="password"
+                      value={editData?.password}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -531,20 +1246,42 @@ const User = () => {
                 <div className="flex-row flex-row80">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
                     <label>User Roll</label>
-                    <select className="col12input">
-                      <option value="upcoming">Upcoming</option>
-                      <option value="upcoming">Upcoming</option>
-                      <option value="upcoming">Upcoming</option>
+                    <select className="col12input" name="role_id" value={editData?.role_id || ""} onChange={handleEditChange}>
+                      <option value="">Select Role</option>
+                      {roleName === "SuperAdmin" && (
+                        <>
+                          <option value="student">Student</option>
+                          <option value="admin">Admin</option>
+                          <option value="instructure">Instructor</option>
+                          <option value="superAdmin">Super Admin</option>
+                        </>
+                      )}
+                      {student && (
+                        <>
+                          <option value="student">Student</option>
+                        </>
+                      )}
+                      {instructure && (
+                        <>
+                          <option value="instructure">Instructor</option>
+                        </>
+                      )}
+                      {admin && (
+                        <>
+                          <option value="admin">Admin</option>
+                        </>
+                      )}
                     </select>
+
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
                     <label>Status</label>
-                    <input
-                      type="date"
-                      placeholder="Enter Course Title"
-                      className="col12input"
-                    />
+                    <select className="col12input" name="status" value={editData?.status ?? ""} onChange={handleEditChange}>
+                      <option value="">Select Status</option>
+                      <option value="1">Active</option>
+                      <option value="0">Inactive</option>
+                    </select>
                   </div>
                 </div>
 
@@ -556,12 +1293,16 @@ const User = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="9876543210"
+                      name="contact"
+                      value={editData?.contact}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
                   <div className="chekbox" style={{ width: "23%" }}>
-                    <input type="checkbox" />
+                    <input type="checkbox" checked={editData?.contact == editData?.whatsapp_number ? true : false}
+                      name="sameNumberForedit"
+                      onChange={handleEditSameNumberChange} />
                     <label>Same WhatsApp</label>
                   </div>
 
@@ -574,8 +1315,11 @@ const User = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="9876543210"
+                      name="whatsapp_number"
+                      value={editData?.whatsapp_number}
+                      onChange={handleEditChange}
                       className="col12input"
+                      disabled={sameNumberForedit}
                     />
                   </div>
                 </div>
@@ -586,7 +1330,9 @@ const User = () => {
                     <label>Address</label>
                     <input
                       type="text"
-                      placeholder="Address"
+                      name="address"
+                      value={editData?.address}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -595,7 +1341,9 @@ const User = () => {
                     <label>Country</label>
                     <input
                       type="text"
-                      placeholder="Country"
+                      name="country"
+                      value={editData?.country}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -606,10 +1354,11 @@ const User = () => {
                   <div className="flex-row" style={{ width: "45%" }}>
                     <div className="form-group mb-0" style={{ width: "48%" }}>
                       <label>Gender</label>
-                      <select className="col12input">
-                        <option value="upcoming">Male</option>
-                        <option value="upcoming">Female</option>
-                        <option value="upcoming">Other</option>
+                      <select className="col12input" name="gender" value={editData?.gender || ""} onChange={handleEditChange}>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
                       </select>
                     </div>
 
@@ -617,6 +1366,9 @@ const User = () => {
                       <label>DOB</label>
                       <input
                         type="date"
+                        name="dob"
+                        value={editData?.dob}
+                        onChange={handleEditChange}
                         placeholder="Enter Course Title"
                         className="col12input"
                       />
@@ -642,10 +1394,12 @@ const User = () => {
                         type="text"
                         placeholder=""
                         className="col12input"
-                        value={fileName}
+                        name="profile"
+                        value={editfilename || (editData.profile && editData.profile.name) || ""}
                         readOnly
                       />
                     </div>
+
 
                     <button
                       className="primary-btn module-btn"
@@ -658,17 +1412,28 @@ const User = () => {
                     <input
                       id="fileInput"
                       type="file"
+                      name="profile"
+                      onChange={handleEditImageChange}
                       style={{ display: "none" }}
                       accept="image/*"
-                      onChange={handleFileChange}
                     />
 
                     <div>
-                      <img
-                        src={imageSrc}
-                        style={{ width: "67px", maxHeight: "67px" }}
-                        alt="Selected Thumbnail"
-                      />
+                      {newEditImage ? (
+                        <img
+                          src={URL.createObjectURL(newEditImage)}
+                          style={{ width: "67px", maxHeight: "67px" }}
+                          alt="Selected Thumbnail"
+                        />
+                      ) : (
+                        editData?.profile && (
+                          <img
+                            src={`./upload/${editData?.profile}`}
+                            style={{ width: "67px", maxHeight: "67px" }}
+                            alt="Profile Thumbnail"
+                          />
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
@@ -679,7 +1444,9 @@ const User = () => {
                     <label>About User</label>
                     <textarea
                       type="text"
-                      placeholder="Enter Your About Details"
+                      name="description"
+                      value={editData?.description}
+                      onChange={handleEditChange}
                       className="col12input"
                     />
                   </div>
@@ -688,7 +1455,26 @@ const User = () => {
             </div>
           </div>
         )}
-      </div>
+
+
+        {/* Delete Confirmation Modal */}
+        {deleteOpen && (
+          <div className="modal">
+            <div className="modal-container">
+              <h5>Delete User</h5>
+              <p>Are you sure you want to delete the user ?</p>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button onClick={deleteUserData} className="primary-btn">
+                  Confirm
+                </button>
+                <button onClick={deleteToggleModal} className="secondary-btn">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div >
     </>
   );
 };

@@ -82,13 +82,14 @@ const getCourseCategoryWithId = async (req, res) => {
 
 const addCourseCategoryData = async (req, res) => {
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
+    console.log(req.file)
     const data = {
         cate_title: req.body.cate_title,
         cate_parent_id: req.body.cate_parent_id === 'null' || !req.body.cate_parent_id ? null : parseInt(req.body.cate_parent_id),
         cate_thumbnail: req?.file?.filename || null,
         status: 1,
-        created_by: req.body.created_by,
-        updated_by: req.body.updated_by,
+        created_by: req.body.created_by || 0,
+        updated_by: req.body.updated_by || 0,
         createdAt: createddate,
         updatedAt: createddate,
     }
@@ -127,7 +128,7 @@ const updateCourseCategoryData = async (req, res) => {
         cate_parent_id: req.body.cate_parent_id === 'null' || !req.body.cate_parent_id ? null : parseInt(req.body.cate_parent_id),
         cate_thumbnail: req.file ? req.file.filename : curentcoursecate.cate_thumbnail,
         status: 1,
-        updated_by: req.body.updated_by,
+        updated_by: req.body.updated_by || 0,
         updatedAt: updateddate,
     };
 

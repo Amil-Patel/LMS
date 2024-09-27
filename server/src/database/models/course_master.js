@@ -153,6 +153,12 @@ module.exports = (sequelize, DataTypes) => {
     title_tag: {
       type: DataTypes.STRING
     },
+    created_by: {
+      type: DataTypes.INTEGER
+    },
+    updated_by: {
+      type: DataTypes.INTEGER
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.INTEGER

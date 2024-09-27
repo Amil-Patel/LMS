@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/addcourse.css";
 import "../../../assets/css/main.css";
 import axios from "axios";
+import { userRolesContext } from "../layout/RoleContext";
 import { Form, NavLink, useNavigate } from "react-router-dom";
 const port = process.env.REACT_APP_URL
 
 const AddCourse = () => {
+  const { userRole, userId } = useContext(userRolesContext);
   const [tab, setTab] = useState("basic-info");
   const [isTax, setIsTax] = useState(false);
   const [isLimited, setIsLimited] = useState(false);
@@ -55,6 +57,8 @@ const AddCourse = () => {
     meta_desc: "",
     canonical_url: "",
     title_tag: "",
+    created_by: userId,
+    updated_by: userId
   });
 
   const handleChange = (e) => {
@@ -95,9 +99,6 @@ const AddCourse = () => {
 
   };
 
-
-
-
   const handleTax = () => {
     setIsTax(!isTax);
   }
@@ -113,6 +114,7 @@ const AddCourse = () => {
       setNewImage(file);
     }
   };
+  
 
 
   useEffect(() => {
@@ -268,7 +270,11 @@ const AddCourse = () => {
 
 
     try {
-      const res = await axios.post(`${port}/addingCourseMaster`, addCourse);
+      const res = await axios.post(`${port}/addingCourseMaster`, addCourse, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       navigate('/all-course');
     } catch (error) {
       console.log(error);
@@ -840,6 +846,9 @@ const AddCourse = () => {
                   <textarea
                     placeholder="Describe Your Meta Description over Here"
                     className="col12input"
+                    onChange={handleChange}
+                    name="meta_description"
+                    value={addCourse.meta_description}
                   ></textarea>
                 </div>
               </div>

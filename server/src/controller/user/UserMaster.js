@@ -1,5 +1,10 @@
 const { UserMaster } = require("../../database/models/index");
-const bcrypt = require('bcrypt');
+const EncryptPassword = require("../../middleware/EncryptPassword");
+const DecryptPassword = require("../../middleware/DecryptPassword");
+const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
+const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
+const path = require("path");
+const fs = require("fs");
 const getUserMasterData = async (req, res) => {
     try {
         const data = await UserMaster.findAll();
@@ -14,77 +19,99 @@ const getUserMasterDataWithId = async (req, res) => {
     try {
         const data = await UserMaster.findOne({
             where: {
-                id: 1
+                id: id
             }
         });
+        console.log(data.password)
+        const decryptedPassword = DecryptPassword(data.password)
+        data.dataValues.password = decryptedPassword;
+        const dobdate = UnixNumberToDate(data.dob, "America/Toronto");
+        data.dataValues.dob = dobdate;
         res.status(200).json(data);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: error.message });
     }
 }
 
 const addUserMasterData = async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const dobdate = DateToUnixNumber(req.body.dob, "America/Toronto");
+    const createdDate = DateToUnixNumber(new Date(), "America/Toronto");
+    const encryptedPassword = EncryptPassword(req.body.password)
     const data = {
         first_name: req.body.first_name,
         middle_name: req.body.middle_name,
         last_name: req.body.last_name,
         description: req.body.description,
         gender: req.body.gender,
-        dob: req.body.dob || null,
+        dob: dobdate || null,
         address: req.body.address,
-        profile: req?.body?.profile || null,
-        contact: req.body.contact,
+        profile: req?.file?.filename || null,
+        contact: parseInt(req.body.contact),
+        whatsapp_number: parseInt(req.body.whatsapp_number),
+        country: req.body.country,
         email: req.body.email,
-        password: hashedPassword,
-        facebook: req.body.facebook || null,
-        linkedin: req.body.linkedin || null,
-        role_id: req.body.role_id,
-        status: 1,
-        created_by: new Date(),
-        updated_by: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    };
-    try {
-        const usermasterdata = await UserMaster.create(data);
-        res.status(200).json(usermasterdata);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-
-
-const updateUserMasterData = async (req, res) => {
-    const id = req.params.id;
-    const currentUser = await User.findOne({ where: { id } });
-    if (!currentUser) {
-        return res.status(404).json({ message: 'User not found' });
-    }
-    if (currentUser && currentUser.profile) {
-        const imagePath = path.join(__dirname, '../../client/public/upload', currentUser.profile);
-        if (fs.existsSync(imagePath)) {
-            fs.unlinkSync(imagePath);
-        }
-    }
-    const data = {
-        first_name: req.body.first_name,
-        middle_name: req.body.middle_name,
-        last_name: req.body.last_name,
-        description: req.body.description,
-        gender: req.body.gender,
-        dob: req.body.dob || null,
-        address: req.body.address,
-        profile: req?.body?.profile || null,
-        contact: req.body.contact,
-        email: req.body.email,
+        password: encryptedPassword,
         facebook: req.body.facebook || null,
         linkedin: req.body.linkedin || null,
         role_id: req.body.role_id,
         status: req.body.status,
-        updated_by: req.body.updated_by,
-        updatedAt: new Date(),
+        created_by: req.body.created_by || 0,
+        updated_by: req.body.updated_by || 0,
+        createdAt: createdDate,
+        updatedAt: createdDate,
     };
+    console.log(data)
+    try {
+        const usermasterdata = await UserMaster.create(data);
+        res.status(200).json(usermasterdata);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const updateUserMasterData = async (req, res) => {
+    const id = req.params.id;
+    const currentUser = await UserMaster.findOne({ where: { id } });
+    if (!currentUser) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    console.log(req)
+    if (req.file) {
+        console.log("in if")
+        if (currentUser && currentUser.profile) {
+            const imagePath = path.join(__dirname, '../../../../client/public/upload', currentUser.profile);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        }
+    }
+    const dobdate = DateToUnixNumber(req.body.dob, "America/Toronto");
+    const updateddate = DateToUnixNumber(new Date(), "America/Toronto");
+    const encryptedPassword = EncryptPassword(req.body.password)
+    const data = {
+        first_name: req.body.first_name,
+        middle_name: req.body.middle_name,
+        last_name: req.body.last_name,
+        description: req.body.description,
+        gender: req.body.gender,
+        dob: dobdate || null,
+        address: req.body.address,
+        profile: req.file ? req.file.filename : currentUser.profile,
+        contact: parseInt(req.body.contact),
+        whatsapp_number: parseInt(req.body.whatsapp_number),
+        country: req.body.country,
+        email: req.body.email,
+        password: encryptedPassword,
+        facebook: req.body.facebook || null,
+        linkedin: req.body.linkedin || null,
+        role_id: req.body.role_id,
+        status: req.body.status,
+        updated_by: req.body.updated_by || 0,
+        updatedAt: updateddate,
+    };
+    console.log(data)
     try {
         const usermasterdata = await UserMaster.update(data, {
             where: {
@@ -99,12 +126,12 @@ const updateUserMasterData = async (req, res) => {
 
 const deleteUserMaster = async (req, res) => {
     const id = req.params.id;
-    const currentUser = await User.findOne({ where: { id } });
+    const currentUser = await UserMaster.findOne({ where: { id } });
     if (!currentUser) {
         return res.status(404).json({ message: 'User not found' });
     }
     if (currentUser && currentUser.profile) {
-        const imagePath = path.join(__dirname, '../../client/public/upload', currentUser.profile);
+        const imagePath = path.join(__dirname, '../../../../client/public/upload', currentUser.profile);
         if (fs.existsSync(imagePath)) {
             fs.unlinkSync(imagePath);
         }

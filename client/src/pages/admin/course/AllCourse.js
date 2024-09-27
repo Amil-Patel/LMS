@@ -1,13 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
 import { NavLink } from "react-router-dom";
+import { userRolesContext } from "../layout/RoleContext";
 import axios from "axios";
+import useCheckRolePermission from "../layout/CheckRolePermission";
 const port = process.env.REACT_APP_URL
 
 const AllCourse = () => {
+  const { userRole, userId } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   //getting course data
   const [courseData, setCourseData] = useState([]);
@@ -20,53 +24,29 @@ const AllCourse = () => {
     }
   }
 
+  const [deleteId, setDeleteId] = useState(null);
+  const deleteToggleModal = (index) => {
+    setDeleteOpen(!deleteOpen);
+    setDeleteId(index);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await axios.delete(`${port}/deletingCourseMaster/${deleteId}`);
+      getCourseData();
+      setDeleteOpen(false)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getCourseData();
   }, [])
-  const [user, setUser] = useState([
-    {
-      title: "Christine Brooks",
-      category: "Security",
-      price: "$49.99",
-      enrollment: "enrollment: 25",
-      lession: "lession: 25",
-      author: "Ramesh Chaudhry",
-      status: 0,
-    },
-    {
-      title: "Christine Brooks",
-      category: "Security",
-      price: "$37.12",
-      enrollment: "enrollment: 25",
-      lession: "lession: 25",
-      author: "Ramesh Chaudhry",
-      status: 1,
-    },
-    {
-      title: "Christine Brooks",
-      category: "Security",
-      price: "$89.23",
-      enrollment: "enrollment: 25",
-      lession: "lession: 25",
-      author: "Ramesh Chaudhry",
-      status: 0,
-    },
-    {
-      title: "Christine Brooks",
-      category: "Security",
-      price: "$56.99",
-      enrollment: "enrollment: 30",
-      lession: "lession: 30",
-      author: "Ramesh Chaudhry",
-      status: 1,
-    }
-  ]);
+  const perm = useCheckRolePermission("Course Master");
+  const editCoursePermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
+  const deleteCoursePermission = perm.length > 0 && perm[0].can_delete === 1 ? 1 : 0;
 
-  const handleStatusChange = (index) => {
-    const updatedUser = [...user];
-    updatedUser[index].status = updatedUser[index].status === 0 ? 1 : 0;
-    setUser(updatedUser);
-  };
 
 
   const toggleDropdown = (index) => {
@@ -138,7 +118,14 @@ const AllCourse = () => {
                 <th>Lessions <i class="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
                 <th>Author <i class="fa-solid fa-sort" onClick={() => handleSort('author')}></i></th>
                 <th>Status</th>
-                <th>Action</th>
+                {
+                  editCoursePermission == 1 || deleteCoursePermission == 1 ? (
+
+                    <th>Action</th>
+                  ) : (
+                    ""
+                  )
+                }
               </tr>
             </thead>
 
@@ -173,40 +160,58 @@ const AllCourse = () => {
                         <input
                           type="checkbox"
                           checked={i.status === 1}
-                          onChange={() => handleStatusChange(index)}
                         />
                         <span class="slider"></span>
                       </label>
                     </td>
-                    <td>
-                      <div
-                        className={`menu-container ${activeDropdown === index ? "active" : ""
-                          }`}
-                      >
-                        <div
-                          class="menu-button"
-                          onClick={() => toggleDropdown(index)}
-                        >
-                          {" "}
-                          ⋮{" "}
-                        </div>
-                        {activeDropdown === index && (
-                          <div className="menu-content">
-                            <a
-                              style={{ cursor: "pointer" }}
+                    {
+                      editCoursePermission == 1 || deleteCoursePermission == 1 ? (
+                        <td>
+                          <div
+                            className={`menu-container ${activeDropdown === index ? "active" : ""
+                              }`}
+                          >
+                            <div
+                              class="menu-button"
+                              onClick={() => toggleDropdown(index)}
                             >
-                              <p>Edit</p>
-                            </a>
-                            <p
-                              // onClick={() => deleteToggleModal(index)} // Open delete modal
-                              style={{ cursor: "pointer" }}
-                            >
-                              Delete
-                            </p>
+                              {" "}
+                              ⋮{" "}
+                            </div>
+                            {activeDropdown === index && (
+                              <div className="menu-content">
+                                {
+                                  editCoursePermission == 1 && (
+                                    <a
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <NavLink to={`/edit-course/${i.id}`}>
+                                        <p>
+
+                                          Edit
+                                        </p>
+                                      </NavLink>
+                                    </a>
+                                  )
+                                }
+                                {
+                                  deleteCoursePermission == 1 && (
+                                    <p
+                                      onClick={() => deleteToggleModal(i.id)}
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      Delete
+                                    </p>
+                                  )
+                                }
+
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </td>
+                        </td>
+                      ) : ("")
+                    }
+
                   </tr>
                 )
               })}
@@ -215,6 +220,25 @@ const AllCourse = () => {
         </div>
 
       </div>
+
+
+      {/* Delete Confirmation Modal */}
+      {deleteOpen && (
+        <div className="modal">
+          <div className="modal-container">
+            <h5>Delete Coupon</h5>
+            <p>Are you sure you want to delete this coupon?</p>
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+              <button className="primary-btn" onClick={handleDelete}>
+                Delete
+              </button>
+              <button onClick={deleteToggleModal} className="secondary-btn">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

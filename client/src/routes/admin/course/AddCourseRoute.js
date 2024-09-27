@@ -6,12 +6,12 @@ import AddCourse from '../../../pages/admin/course/AddCourse'
 const AddCourseRoute = () => {
   return (
     <Routes>
-                <Route path="/add-course" element={
-                    <>
-                        <AddCourse />
-                    </>
-                } />
-            </Routes>
+      <Route path="/add-course" element={
+        <>
+          <AddCourse />
+        </>
+      } />
+    </Routes>
   )
 }
 

@@ -82,6 +82,12 @@ module.exports = {
       meta_desc: {
         type: Sequelize.TEXT
       },
+      created_by: {
+        type: Sequelize.INTEGER
+      },
+      updated_by: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

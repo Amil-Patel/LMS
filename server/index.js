@@ -7,7 +7,11 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const routes = require("./src/routes/index")
 
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use(router);
 

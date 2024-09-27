@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       dob: {
-        type: Sequelize.DATE
+        type: Sequelize.INTEGER
       },
       address: {
         type: Sequelize.STRING
@@ -50,10 +50,6 @@ module.exports = {
       },
       role_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'userroles',
-          key: 'id' 
-        },
       },
       status: {
         type: Sequelize.INTEGER

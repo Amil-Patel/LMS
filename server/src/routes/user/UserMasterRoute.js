@@ -7,10 +7,13 @@ const upload = require("../../middleware/upload");
 UserMaster.get("/gettingUserMasterData", UserMasterController.getUserMasterData);
 UserMaster.get("/gettingUserMasterDataWithId/:id", UserMasterController.getUserMasterDataWithId);
 UserMaster.post("/addingUserMaster", upload.single('profile'), UserMasterController.addUserMasterData);
-UserMaster.put("/updatingUserMaster", upload.single('profile'), UserMasterController.updateUserMasterData);
-UserMaster.delete("/deletingUserMaster", UserMasterController.deleteUserMaster);
+UserMaster.put("/updatingUserMaster/:id", upload.single('profile'), UserMasterController.updateUserMasterData);
+UserMaster.delete("/deletingUserMaster/:id", UserMasterController.deleteUserMaster);
 
 module.exports = UserMaster
+
+
+
 
 
 

@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      UserMaster.belongsTo(models.UserRole, {
-        foreignKey: 'role_id',
-        as: 'role'
-      });
       UserMaster.hasMany(models.enrollment, {
         foreignKey: 'student_id',
         as: 'user_enrollment'
@@ -54,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     dob: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     address: {
@@ -67,6 +63,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     contact: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    whatsapp_number: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    country: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     email: {
@@ -86,7 +90,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     role_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     },
     status: {
@@ -101,9 +105,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    createdAt: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    updatedAt: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'UserMaster',
+    timestamps: false
   });
   return UserMaster;
 };

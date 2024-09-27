@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import AdminAuthGuard from "../../pages/admin/layout/auth/AdminAuthGuard";
+import CourseCategory from "../../pages/admin/course/CourseCategory";
 
 const DashboardRoute = () => {
   return (
@@ -8,6 +10,9 @@ const DashboardRoute = () => {
         path="/dashboard"
         element={
           <>
+            <AdminAuthGuard>
+              <CourseCategory />
+            </AdminAuthGuard>
           </>
         }
       />

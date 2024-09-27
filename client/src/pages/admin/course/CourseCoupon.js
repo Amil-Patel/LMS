@@ -1,12 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
 import axios from "axios";
 import "../../../assets/css/course/addcoupon.css";
 import "../../../assets/css/main.css";
+import { userRolesContext } from "../layout/RoleContext";
 import DeleteModal from "../layout/DeleteModal";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
+  const { userRole, userId } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -18,6 +20,8 @@ const CourseCoupon = () => {
     discount_in_percentage: "",
     discount_in_amount: "",
     expired_date: "",
+    created_by: userId,
+    updated_by: userId,
   });
 
   const [discountType, setDiscountType] = useState("percentage");
@@ -147,6 +151,7 @@ const CourseCoupon = () => {
     discount_in_percentage: "",
     discount_in_amount: "",
     expired_date: "",
+    updated_by: userId,
   });
   const getCouponDataForEdit = async (id) => {
     try {
