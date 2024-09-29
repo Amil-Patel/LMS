@@ -1,10 +1,17 @@
 const { Course_Section } = require("../../database/models/index");
-
+const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
+const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 
 
 const getCourseSectionData = async (req, res) => {
+    const id = req.params.id
     try {
-        const data = await Course_Section.findAll();
+        const data = await Course_Section.findAll({
+            where: {
+                course_id: id,
+                // status: 1
+            }
+        });
         res.send(data);
     } catch (error) {
         console.log(error);
@@ -15,7 +22,7 @@ const getCourseSectionData = async (req, res) => {
 const getCourseSectionDataWithId = async (req, res) => {
     const id = req.params.id;
     try {
-        const data = Course_Section.findeOne({
+        const data = await Course_Section.findOne({
             where: {
                 id: id
             }
@@ -28,15 +35,18 @@ const getCourseSectionDataWithId = async (req, res) => {
 }
 
 const addCourseSectionData = async (req, res) => {
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
-        status: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        course_id: parseInt(req.body.course_id),
+        order: 0,
+        status: req.body.status,
+        createdAt: date,
+        updatedAt: date,
     }
     try {
         const courseCoupondate = await Course_Section.create(data);
-        res.staus(200).json(courseCoupondate);
+        res.status(200).json(courseCoupondate);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -45,10 +55,11 @@ const addCourseSectionData = async (req, res) => {
 
 const updateCourseSectionData = async (req, res) => {
     const id = req.params.id;
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
         status: req.body.status,
-        updatedAt: new Date(),
+        updatedAt: date,
     }
     try {
         const courseCoupondate = await Course_Section.update(data, {

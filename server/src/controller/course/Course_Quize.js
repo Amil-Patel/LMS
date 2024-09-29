@@ -1,8 +1,15 @@
 const { Course_Quize } = require("../../database/models/index");
+const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
+const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 
 const getCourseQuizeData = async (req, res) => {
+    const id=req.params.id
     try {
-        const data = await Course_Quize.findAll();
+        const data = await Course_Quize.findAll({
+            where: {
+                section_id: id
+            }
+        });
         res.send(data);
     } catch (error) {
         console.log(error);
@@ -26,22 +33,32 @@ const getCourseQuizeDataWithId = async (req, res) => {
 }
 
 const addCourseQuizeData = async (req, res) => {
+    const sectionId = req.params.id;
+    console.log(req.params.id)
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
-        section_id: req.body.section_id,
+        section_id: sectionId,
         course_id: req.body.course_id,
         quize_duration: req.body.quize_duration,
+        expire_time: req.body.expire_time,
         total_marks: req.body.total_marks,
         passing__marks: req.body.passing__marks,
-        drip_content: req.body.drip_content,
+        drip_content: req.body.drip_content || null,
         no_of_q_retakes: req.body.no_of_q_retakes,
+        total_showing_questions: req.body.total_showing_questions,
+        random_questions: req.body.random_questions,
+        status: req.body.status,
+        is_count_time: req.body.is_count_time,
+        is_skipable: req.body.is_skipable,
         instruction: req.body.instruction,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
     }
+    console.log(data)
     try {
         const courseCoupondate = await Course_Quize.create(data);
-        res.staus(200).json(courseCoupondate);
+        res.status(200).json(courseCoupondate);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

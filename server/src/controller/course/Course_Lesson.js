@@ -1,8 +1,15 @@
 const { Course_Lesson } = require("../../database/models/index");
+const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
+const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 
 const getCourseLessonDataWithSectionId = async (req, res) => {
+    const id = req.params.id;
     try {
-        const data = await Course_Lesson.findAll();
+        const data = await Course_Lesson.findAll({
+            where: {
+                section_id: id
+            }
+        });
         res.send(data);
     } catch (error) {
         console.log(error);
@@ -26,30 +33,42 @@ const getCourseLessonDataWithId = async (req, res) => {
 }
 
 const addCourseLessonData = async (req, res) => {
+    const sectionId = req.params.id;
+    const date = DateToUnixNumber(new Date(), "America/Toronto");  
+   
+    var ThumnailImg = "";
+    if (req.files.thumbnail_preview_image_url != undefined) {
+        ThumnailImg = req.files.thumbnail_preview_image_url[0].filename;
+    }
+    
+    var attachment = "";
+    if (req.files.attachment != undefined) {
+        attachment = req.files.attachment[0].filename;
+    }
     const data = {
         title: req.body.title,
         duration: req.body.duration,
         course_id: req.body.course_id,
-        section_id: req.body.section_id,
+        section_id: sectionId,
         lesson_type: req.body.lesson_type,
         url: req.body.url,
-        attachment: req.body.attachment,
-        thumbnail_preview_image_url: req.body.thumbnail_preview_image_url,
+        attachment: attachment,
+        thumbnail_preview_image_url: ThumnailImg || null,
         text_content: req.body.text_content,
         is_preview: req.body.is_preview,
-        status: 1,
-        quize_id: req.body.quize_id,
+        status: req.body.status,
+        quize_id: req.body.quize_id || null,
         is_count_time: req.body.is_count_time,
         description: req.body.description,
         minimum_duration: null,
         drip_content: null,
         order: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
     }
     try {
         const courseCoupondate = await Course_Lesson.create(data);
-        res.staus(200).json(courseCoupondate);
+        res.status(200).json(courseCoupondate);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

@@ -45,17 +45,45 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    attachment: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    thumbnail_preview_image_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    text_content: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    is_preview: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    quiz_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    is_count_time: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: false
     },
     minimum_duration: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     drip_content: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     order: {
       type: DataTypes.INTEGER,

@@ -4,9 +4,9 @@ const CourseQuizeController = require("../../controller/course/Course_Quize");
 
 
 
-CourseQuize.get("/gettingCourseQuizeData", CourseQuizeController.getCourseQuizeData);
+CourseQuize.get("/gettingCourseQuizeData/:id", CourseQuizeController.getCourseQuizeData);
 CourseQuize.get("/gettingCourseQuizeDataWithId/:id", CourseQuizeController.getCourseQuizeDataWithId);
-CourseQuize.post("/addingCourseQuize", CourseQuizeController.addCourseQuizeData);
+CourseQuize.post("/addingCourseQuize/:id", CourseQuizeController.addCourseQuizeData);
 CourseQuize.put("/updatingCourseQuize/:id", CourseQuizeController.updateCourseQuizeData);
 CourseQuize.delete("/deletingCourseQuize/:id", CourseQuizeController.deleteCourseQuizeData);
 

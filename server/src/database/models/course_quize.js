@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    expire_time: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     total_marks: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -55,9 +59,29 @@ module.exports = (sequelize, DataTypes) => {
     },
     drip_content: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     no_of_q_retakes: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    total_showing_questions: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    random_questions: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    is_count_time: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    is_skipable: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
