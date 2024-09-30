@@ -1,4 +1,4 @@
-const { Course_Lesson } = require("../../database/models/index");
+const { Course_Lesson, Course_Quize } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 
@@ -8,19 +8,28 @@ const getCourseLessonDataWithSectionId = async (req, res) => {
         const data = await Course_Lesson.findAll({
             where: {
                 section_id: id
-            }
+            },
+            include: [
+                {
+                    model: Course_Quize,
+                    as: 'course_quize_lesson',
+                    attributes: ['id', 'title', 'instruction', 'quize_duration'],
+                    required: false
+                }
+            ]
         });
         res.send(data);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
     }
-}
+};
+
 
 const getCourseLessonDataWithId = async (req, res) => {
     const id = req.params.id;
     try {
-        const data = Course_Lesson.findeOne({
+        const data = await Course_Lesson.findOne({
             where: {
                 id: id
             }
@@ -34,13 +43,13 @@ const getCourseLessonDataWithId = async (req, res) => {
 
 const addCourseLessonData = async (req, res) => {
     const sectionId = req.params.id;
-    const date = DateToUnixNumber(new Date(), "America/Toronto");  
-   
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
+
     var ThumnailImg = "";
     if (req.files.thumbnail_preview_image_url != undefined) {
         ThumnailImg = req.files.thumbnail_preview_image_url[0].filename;
     }
-    
+
     var attachment = "";
     if (req.files.attachment != undefined) {
         attachment = req.files.attachment[0].filename;

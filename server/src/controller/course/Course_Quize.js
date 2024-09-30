@@ -1,9 +1,9 @@
-const { Course_Quize } = require("../../database/models/index");
+const { Course_Quize, Course_Lesson } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
-
+const {sequelize} = require("../../database/models/index");
 const getCourseQuizeData = async (req, res) => {
-    const id=req.params.id
+    const id = req.params.id
     try {
         const data = await Course_Quize.findAll({
             where: {
@@ -20,7 +20,7 @@ const getCourseQuizeData = async (req, res) => {
 const getCourseQuizeDataWithId = async (req, res) => {
     const id = req.params.id;
     try {
-        const data = Course_Quize.findeOne({
+        const data = await Course_Quize.findOne({
             where: {
                 id: id
             }
@@ -34,8 +34,8 @@ const getCourseQuizeDataWithId = async (req, res) => {
 
 const addCourseQuizeData = async (req, res) => {
     const sectionId = req.params.id;
-    console.log(req.params.id)
     const date = DateToUnixNumber(new Date(), "America/Toronto");
+
     const data = {
         title: req.body.title,
         section_id: sectionId,
@@ -54,16 +54,34 @@ const addCourseQuizeData = async (req, res) => {
         instruction: req.body.instruction,
         createdAt: date,
         updatedAt: date,
-    }
-    console.log(data)
+    };
+
+    const t = await sequelize.transaction();
+
     try {
-        const courseCoupondate = await Course_Quize.create(data);
-        res.status(200).json(courseCoupondate);
+        const courseQuiz = await Course_Quize.create(data, { transaction: t });
+        const quizeId = courseQuiz.id;
+        const courseId = req.body.course_id;
+
+        const lessonData = {
+            section_id: sectionId,
+            course_id: courseId,
+            quiz_id: quizeId,
+        };
+
+        await Course_Lesson.create(lessonData, { transaction: t });
+
+        await t.commit();
+
+        res.status(200).json(courseQuiz);
+
     } catch (error) {
+        await t.rollback();
         console.log(error);
         res.sendStatus(500);
     }
-}
+};
+
 
 const updateCourseQuizeData = async (req, res) => {
     const id = req.params.id;

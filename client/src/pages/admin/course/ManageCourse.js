@@ -25,6 +25,8 @@ const ManageCourse = () => {
   const [showQuiz, setShowQuiz] = useState(true);
   const [selectedLessonType, setSelectedLessonType] = useState("text");
   const [openQuizIndex, setOpenQuizIndex] = useState(0);
+  const [timeLimit, setTimeLimit] = useState(false);
+  const [maxAttempts, setMaxAttempts] = useState(false);
   const [sortedData, setSortedData] = useState([]); // acedemic student name
   const [openQuizResult, setopenQuizResult] = useState(false); // state for open quiz result modal
   const [quizDocumentOpen, setQuizDocumentOpen] = useState(false); // state for open quiz document modal
@@ -45,7 +47,6 @@ const ManageCourse = () => {
       )
     );
     getLessonData(id);
-    getQuizData(id);
   };
   useEffect(() => {
     if (moduleData.length > 0) {
@@ -60,7 +61,6 @@ const ManageCourse = () => {
 
   // Function to toggle visibility of edit module modal
   const editModuleToggleModal = async (id) => {
-    console.log(id)
     if (id) {
       await getModuleDataForEdit(id);
     }
@@ -201,6 +201,7 @@ const ManageCourse = () => {
     try {
       const res = await axios.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
       setLessonData(res.data);
+      console.log(res.data)
     } catch (error) {
       console.log(error);
     }
@@ -293,7 +294,7 @@ const ManageCourse = () => {
         },
       });
 
-      getLessonData();
+      getLessonData(sectionId);
       setLessonOpen(false);
 
       // Reset the form state after submission
@@ -316,18 +317,94 @@ const ManageCourse = () => {
       console.log(error);
     }
   };
-
-  //quize module
-  //get quize module
-  const [quizData, setQuizData] = useState([]);
-  const getQuizData = async (id) => {
+  //edit lesson data
+  const [editLessonId, setEditLessonId] = useState(null);
+  const [nullQuizeId, setNullQuizeId] = useState(null);
+  const [editLessonOpen, setEditLessonOpen] = useState(false);
+  const editLessonToggleModal = async (id, quizId, num) => {
+    if (num === 1) {
+      if (id) {
+        await getLessonDataForEdit(id);
+        await setEditLessonId(id);
+      }
+      if (quizId !== null) {
+        await getQuizeDataForEdit(quizId);
+      }
+    }
+    setNullQuizeId(quizId)
+    setEditLessonOpen(!editLessonOpen);
+  }
+  const [editLessonData, setEditLessonData] = useState({
+    title: "",
+    duration: "",
+    course_id: id,
+    lesson_type: "",
+    url: "",
+    attachment: "",
+    thumbnail_preview_image_url: null,
+    text_content: "",
+    is_preview: "",
+    status: "",
+    is_count_time: "",
+    description: "",
+  });
+  const getLessonDataForEdit = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingCourseQuizeData/${id}`);
-      setQuizData(res.data);
+      const res = await axios.get(`${port}/gettingCourseLessonDataWithId/${id}`);
+      setEditLessonData(res.data);
+      console.log(res.data)
     } catch (error) {
       console.log(error);
     }
   }
+  const handleEditLessonChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditLessonData({
+      ...editLessonData,
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : value
+    })
+  }
+  const handleEditLessonFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files.length === 0) {
+      return;
+    }
+    const file = files[0];
+    setEditLessonData({
+      ...editLessonData,
+      [name]: file
+    });
+  }
+
+  const handleEditLessonSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", editLessonData.title);
+    formData.append("duration", editLessonData.duration);
+    formData.append("course_id", editLessonData.course_id);
+    formData.append("lesson_type", editLessonData.lesson_type);
+    formData.append("url", editLessonData.url);
+    formData.append("text_content", editLessonData.text_content);
+    formData.append("is_preview", editLessonData.is_preview);
+    formData.append("status", editLessonData.status);
+    formData.append("is_count_time", editLessonData.is_count_time);
+    formData.append("description", editLessonData.description);
+    formData.append("order", editLessonData.order);
+    if (editLessonData.attachment) {
+      formData.append("attachment", editLessonData.attachment);
+    }
+    if (editLessonData.thumbnail_preview_image_url) {
+      formData.append("thumbnail_preview_image_url", editLessonData.thumbnail_preview_image_url);
+    }
+    try {
+      const res = await axios.put(`${port}/updatingCourseLesson/${editLessonId}`, formData);
+      getLessonData(sectionId);
+      setEditLessonOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //quize module 
   //add quize module
   const [addQuiz, setAddQuiz] = useState({
     title: "",
@@ -357,8 +434,10 @@ const ManageCourse = () => {
     e.preventDefault();
     try {
       const res = await axios.post(`${port}/addingCourseQuize/${sectionId}`, addQuiz);
-      getQuizData();
+      getLessonData(sectionId);
       setQuizOpen(false);
+      setMaxAttempts(false);
+      setTimeLimit(false);
       setAddQuiz({
         title: "",
         course_id: id,
@@ -378,47 +457,74 @@ const ManageCourse = () => {
       console.log(error);
     }
   }
+  //edit quize data
 
+  const [editQuizData, setEditQuizData] = useState({
+    title: "",
+    course_id: id,
+    quize_duration: "",
+    expire_time: "",
+    total_marks: "",
+    passing__marks: "",
+    no_of_q_retakes: "",
+    total_showing_questions: "",
+    random_questions: "",
+    status: "",
+    is_count_time: "",
+    is_skipable: "",
+    instruction: "",
+  })
+
+  const getQuizeDataForEdit = async (id) => {
+    try {
+      const res = await axios.get(`${port}/gettingCourseQuizeDataWithId/${id}`);
+      const quizData = res.data;
+      setEditQuizData(quizData);
+
+      if (quizData) {
+        if (quizData.no_of_q_retakes != null) {
+          console.log("in max");
+          setMaxAttempts(true);
+        }
+        if (quizData.expire_time != null) {
+          console.log("in duration");
+          setTimeLimit(true);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleEditQuizChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditQuizData({
+      ...editQuizData,
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : value
+    });
+  }
+
+  const handleEditQuizSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
+      getLessonData(sectionId);
+      setEditLessonOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     getModuleData();
   }, [])
-  const [timeLimit, setTimeLimit] = useState(false);
+
   const handleTimeLimit = () => {
     setTimeLimit(!timeLimit)
   }
-  const [maxAttempts, setMaxAttempts] = useState(false);
   const handleMaxAttempts = () => {
     setMaxAttempts(!maxAttempts)
   }
-
-  // Sample data for lessons
-  const lessons = [
-    {
-      title: "Introduction to Security Guard",
-      time: "5 Minute",
-      status: 0,
-      isQuiz: false,
-    },
-    {
-      title: "Introduction to Security Guard",
-      time: "5 Minute",
-      status: 1,
-      isQuiz: false,
-    },
-    {
-      title: "Quiz-1",
-      status: "red",
-      isQuiz: true,
-      addQuestions: true,
-    },
-    {
-      title: "Introduction to Security Guard",
-      time: "",
-      status: 1,
-      isQuiz: false,
-    },
-  ];
 
   // Example data for the quiz modal
   const quizeData = [
@@ -608,23 +714,29 @@ const ManageCourse = () => {
                   </div>
                   {isContentVisible[index] && (
                     <div className="module-content">
-                      {lessons.map((lesson, index) => (
+                      {lessonData.map((lesson, index) => (
                         <div className="module-lesson" key={index}>
                           <div className="lesson-title">
-                            {lesson.isQuiz ? (
+                            {lesson.quiz_id ? (
                               <span className="quiz-icon">?</span>
                             ) : (
                               <span className="lesson-icon">
                                 <i class="fa-solid fa-file-word"></i>
                               </span>
                             )}
-                            {lesson.title}
+                            {
+                              lesson.quiz_id != null ? (
+                                lesson.course_quize_lesson.title
+                              ) : (
+                                lesson.title
+                              )
+                            }
                           </div>
                           <div className="lesson-time">
-                            {lesson.time && <span>{lesson.time}</span>}
+                            {lesson.duration && <span>{lesson.duration} Minutes</span>}
                           </div>
                           <div className="lesson-actions">
-                            {lesson.addQuestions && (
+                            {lesson.quiz_id && (
                               <button
                                 className="add-questions-btn"
                                 onClick={questionToggleModal}
@@ -639,11 +751,11 @@ const ManageCourse = () => {
                               <input
                                 type="checkbox"
                                 checked={lesson.status === 1}
-                                // onChange={() => handleStatusChange(index)}
+                              // onChange={() => handleStatusChange(index)}
                               />
                               <span class="slider"></span>
                             </label>
-                            <span className="edit-btn">
+                            <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
                               <i className="fa fa-pencil"></i>
                             </span>
                             <button className="delete-btn">
@@ -988,6 +1100,336 @@ const ManageCourse = () => {
                     </button>
                   </div>
                 </form>
+              </div>
+            </div>
+          )
+        }
+
+        {/* lesson modal for edit  */}
+        {
+          editLessonOpen && (
+            <div className="modal">
+              <div className="add-lesson-container">
+                {
+                  nullQuizeId != null ? (
+                    <>
+                      <h5 style={{ marginBottom: "20px" }}>Add New Quiz</h5>
+                      <form onSubmit={handleEditQuizSubmit}>
+                        <div className="form-group">
+                          <label>Quiz Title</label>
+                          <input
+                            type="text"
+                            placeholder="Quiz Title"
+                            className="col12input"
+                            name="title"
+                            onChange={handleEditQuizChange}
+                            value={editQuizData.title}
+                          />
+                        </div>
+
+                        <div className="flex-row" style={{ display: "block" }}>
+                          <div
+                            className="flex-row"
+                            style={{
+                              alignItems: "end",
+                              gap: "10px",
+                              border: "none",
+                              padding: "0",
+                            }}
+                          >
+                            <div className="form-group mb-0">
+                              <label>Pasing Marks</label>
+                              <input
+                                type="number"
+                                placeholder="Passing Marks"
+                                className="col12input"
+                                name="passing__marks"
+                                onChange={handleEditQuizChange}
+                                value={editQuizData.passing__marks}
+                              />
+                            </div>
+
+                            <div className="form-group mb-0">
+                              <label>Total Marks</label>
+                              <input
+                                type="text"
+                                placeholder="Total Marks"
+                                className="col12input"
+                                name="total_marks"
+                                onChange={handleEditQuizChange}
+                                value={editQuizData.total_marks}
+                              />
+                            </div>
+                          </div>
+
+                          <div
+                            className="flex-row"
+                            style={{
+                              gap: "10px",
+                              border: "none",
+                              padding: "0",
+                              marginBottom: "0",
+                            }}
+                          >
+                            <div className="form-group mb-0" style={{ width: "50%" }}>
+                              <label>Duration</label>
+                              <input
+                                type="text"
+                                placeholder="in Minutes"
+                                className="col12input"
+                                name="quize_duration"
+                                onChange={handleEditQuizChange}
+                                value={editQuizData.quize_duration}
+                              />
+                            </div>
+
+                            <div
+                              className="chekbox2"
+                              style={{ alignContent: "end", marginRight: "30px" }}
+                            >
+                              <input type="checkbox" name="is_count_time" onChange={handleEditQuizChange} checked={!!editQuizData.is_count_time} />
+                              <label>do you want to count time ?</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex-row">
+                          <div className="chekbox2">
+                            <input type="checkbox" onClick={handleTimeLimit} checked={timeLimit} />
+                            <label>Time Limit ?</label>
+                          </div>
+                          {
+                            timeLimit && (
+                              <div className="form-group mb-0" style={{ width: "50%" }}>
+                                <label>Expire Time</label>
+                                <input type="text" placeholder="Time Limit" className="col12input" name="expire_time" onChange={handleEditQuizChange} value={editQuizData.expire_time || ""} />
+                              </div>
+                            )
+                          }
+
+                        </div>
+
+                        <div className="flex-row" style={{ marginBottom: "0px" }}>
+                          <div className="chekbox2">
+                            <input type="checkbox" onClick={handleMaxAttempts} checked={maxAttempts} />
+                            <label>Max Attampts</label>
+                          </div>
+                          {
+                            maxAttempts && (
+                              <div className="form-group mb-0" style={{ width: "50%" }}>
+                                <label>Enter No Of Attempts</label>
+                                <input type="text" placeholder="NO of Attempts" className="col12input" name="no_of_q_retakes" onChange={handleEditQuizChange} value={editQuizData.no_of_q_retakes || ""} />
+                              </div>
+                            )
+                          }
+
+                        </div>
+
+                        <div className="flex-row" style={{ border: "none" }}>
+                          <div className="form-group mb-0" style={{ width: "100%" }}>
+                            <label>Summery</label>
+                            <input
+                              type="text"
+                              placeholder="Enter Summery"
+                              className="col12input"
+                              name="instruction"
+                              onChange={handleEditQuizChange}
+                              value={editQuizData.instruction}
+                            />
+                            <label>Total Showing Question</label>
+                            <input
+                              type="text"
+                              placeholder="Enter Total Showing Question"
+                              className="col12input"
+                              name="total_showing_questions"
+                              onChange={handleEditQuizChange}
+                              value={editQuizData.total_showing_questions}
+                            />
+                            <div style={{ display: "flex", marginTop: "10px" }}>
+                              <div className="chekbox2">
+                                <input type="checkbox" name="is_skipable" onChange={handleEditQuizChange} checked={!!editQuizData.is_skipable} />
+                                <label>Student Can Skip This Quiz ?</label>
+                              </div>
+                              <div className="chekbox2">
+                                <input type="checkbox" name="random_questions" onChange={handleEditQuizChange} checked={!!editQuizData.random_questions} />
+                                <label>Random Questions</label>
+                              </div>
+                              <div className="chekbox2">
+                                <input type="checkbox" name="status" onChange={handleEditQuizChange} checked={!!editQuizData.status} />
+                                <label>Active</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          <button type="submit" className="primary-btn">
+                            Save
+                          </button>
+                          <button
+                            type="button"
+                            onClick={editLessonToggleModal}
+                            className="secondary-btn"
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </form>
+                    </>
+                  ) : (
+                    <>
+                      <h5 style={{ marginBottom: "10px" }}>Add Lesson</h5>
+                      <form onSubmit={handleEditLessonFileChange}>
+                        <div className="form-group">
+                          <label>Lesson Type</label>
+                          <select
+                            className="col12input"
+                            onChange={handleEditLessonChange}
+                            name="lesson_type"
+                          >
+                            <option value="">Select Lesson Type</option>
+                            <option value="text">Text</option>
+                            <option value="pdf">PDF</option>
+                            <option value="youtube-video">YouTube video</option>
+                            <option value="video">Video</option>
+                          </select>
+                        </div>
+
+                        <div className="form-group">
+                          <label>
+                            Lesson Title <span className="required">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Lesson Title"
+                            name="title"
+                            onChange={handleEditLessonChange}
+                            value={editLessonData.title}
+                            className="col12input"
+                          />
+                        </div>
+                        {(editLessonData.lesson_type === "pdf" ||
+                          editLessonData.lesson_type === "video") && (
+                            <div className="form-group">
+                              <label>Attachment</label>
+                              <input type="file" className="col12input" name="attachment" onChange={handleEditLessonFileChange} />
+                            </div>
+                          )}
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          {editLessonData.lesson_type === "youtube-video" && (
+                            <div className="form-group">
+                              <label>Video URL</label>
+                              <input
+                                type="text"
+                                placeholder="Video URL"
+                                className="col12input"
+                                name="url"
+                                onChange={handleEditLessonChange}
+                                value={editLessonData.url}
+                              />
+                            </div>
+                          )}
+                          {editLessonData.lesson_type === "pdf" && (
+                            <div className="form-group">
+                              <label>Document Path URL</label>
+                              <input
+                                type="text"
+                                placeholder="File Path URL"
+                                name="url"
+                                onChange={handleEditLessonChange}
+                                value={editLessonData.url}
+                                className="col12input"
+                              />
+                            </div>
+                          )}
+                        </div>
+                        {(editLessonData.lesson_type === "youtube-video" ||
+                          editLessonData.lesson_type === "video") && (
+                            <div className="form-group">
+                              <label>Thumbnail Preview Image</label>
+                              <input type="file" className="col12input" name="thumbnail_preview_image_url" onChange={handleEditLessonFileChange} />
+                            </div>
+                          )}
+
+                        <div style={{ display: "flex" }}>
+                          <div
+                            className="flex-row"
+                            style={{
+                              alignItems: "end",
+                              padding: "0px",
+                              border: "none",
+                            }}
+                          >
+                            <div className="form-group mb-0" style={{ width: "50%" }}>
+                              <label>Duration</label>
+                              <input
+                                type="text"
+                                placeholder="Lesson Type"
+                                className="col12input"
+                                name="duration"
+                                onChange={handleEditLessonChange}
+                                value={editLessonData.duration}
+                              />
+                            </div>
+                            <div className="chekbox2">
+                              <input type="checkbox" name="is_count_time" onChange={handleEditLessonChange} checked={!!editLessonData.is_count_time} />
+                              <label>do yo want to count time?</label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="form-group">
+                          <label>Text</label>
+                          <textarea
+                            placeholder="Text Description rich text Box"
+                            className="col12input"
+                            name="text_content"
+                            onChange={handleEditLessonChange}
+                            value={editLessonData.text_content}
+                          ></textarea>
+                        </div>
+
+                        <div className="form-group">
+                          <label>Summery</label>
+                          <input
+                            type="text"
+                            placeholder="Summery"
+                            name="description"
+                            onChange={handleEditLessonChange}
+                            value={editLessonData.description}
+                            className="col12input"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <div style={{ display: "flex", gap: "20px" }}>
+                            <div>
+                              <label>
+                                <input type="checkbox" name="is_preview" onChange={handleEditLessonChange} checked={!!editLessonData.is_preview} /> is Free Lesson
+                              </label>
+                            </div>
+                            <div>
+                              <label>
+                                <input type="checkbox" name="status" onChange={handleEditLessonChange} checked={!!editLessonData.status} /> Active
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                          <button type="submit" className="primary-btn">
+                            Save
+                          </button>
+                          <button onClick={editLessonToggleModal} className="secondary-btn">
+                            Close
+                          </button>
+                        </div>
+                      </form>
+                    </>
+                  )
+                }
+
               </div>
             </div>
           )

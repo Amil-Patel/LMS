@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'quize_id',
         as: 'course_section_quize_result'
       });
+      Course_Quize.hasMany(models.Course_Lesson, {
+        foreignKey: 'quiz_id',
+        as: 'course_quize_lesson'
+      });
     }
   }
   Course_Quize.init({
