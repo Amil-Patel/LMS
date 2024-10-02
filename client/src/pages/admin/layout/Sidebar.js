@@ -1,12 +1,24 @@
 import React, { useState } from "react";
 import "../../../assets/css/sidebar.css";
-import { NavLink, useLocation } from "react-router-dom";
+import useCheckRolePermission from "./CheckRolePermission";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+import LogOutModal from "./LogOutModal";
 
 const Sidebar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
-
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const courseMaster = useCheckRolePermission("Course Master");
+  const viewCourse = courseMaster.length > 0 && courseMaster[0].can_view === 1 ? 1 : 0;
+  const addCourse = courseMaster.length > 0 && courseMaster[0].can_add === 1 ? 1 : 0;
 
+  const courseCategory = useCheckRolePermission("Course Category");
+  const viewCourseCate = courseCategory.length > 0 && courseCategory[0].can_view === 1 ? 1 : 0;
+
+  const courseCoupon = useCheckRolePermission("Course Coupon");
+  const viewCourseCoupon = courseCoupon.length > 0 && courseCoupon[0].can_view === 1 ? 1 : 0;
   // List of paths where "Course" should be highlighted
   const coursePaths = [
     "/all-course",
@@ -23,6 +35,26 @@ const Sidebar = () => {
   const toggleDropdown = (menu, event) => {
     event.preventDefault(); // Prevent default anchor behavior
     setActiveDropdown((prevMenu) => (prevMenu === menu ? null : menu));
+  };
+
+  // Function to open the logout modal
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  // Function to close the logout modal
+  const handleCloseModal = () => {
+    setShowLogoutModal(false);
+  };
+
+  // Function to confirm logout
+  const handleConfirmLogout = () => {
+    Cookies.remove('token');
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userRole");
+
+    setShowLogoutModal(false);
+    navigate("/admin");
   };
 
   return (
@@ -46,34 +78,41 @@ const Sidebar = () => {
                 <i className="fa-solid fa-border-all"></i>
                 <span>Course</span>
                 <i
-                  className={`fa-solid ${
-                    activeDropdown === "course"
-                      ? "fa-angle-up"
-                      : "fa-angle-down"
-                  }`}
+                  className={`fa-solid ${activeDropdown === "course"
+                    ? "fa-angle-up"
+                    : "fa-angle-down"
+                    }`}
                 ></i>
               </a>
               {activeDropdown === "course" && (
                 <ul className="dropdown-menu">
                   <li>
-                    <NavLink to={"/all-course"}>
-                      <i className="fa-solid fa-caret-right"></i>All Course
-                    </NavLink>
+                    {viewCourse === 1 && (
+                      <NavLink to={"/all-course"}>
+                        <i className="fa-solid fa-caret-right"></i>All Course
+                      </NavLink>
+                    )}
                   </li>
                   <li>
-                    <NavLink to={"/add-course"}>
-                      <i className="fa-solid fa-caret-right"></i>Add New Course
-                    </NavLink>
+                    {addCourse === 1 && (
+                      <NavLink to={"/add-course"}>
+                        <i className="fa-solid fa-caret-right"></i>Add New Course
+                      </NavLink>
+                    )}
                   </li>
                   <li>
-                    <NavLink to={"/course-category"}>
-                      <i className="fa-solid fa-caret-right"></i>Course Category
-                    </NavLink>
+                    {viewCourseCate === 1 && (
+                      <NavLink to={"/course-category"}>
+                        <i className="fa-solid fa-caret-right"></i>Course Category
+                      </NavLink>
+                    )}
                   </li>
                   <li>
-                    <NavLink to={"/course-coupon"}>
-                      <i className="fa-solid fa-caret-right"></i>Coupons
-                    </NavLink>
+                    {viewCourseCoupon === 1 && (
+                      <NavLink to={"/course-coupon"}>
+                        <i className="fa-solid fa-caret-right"></i>Coupons
+                      </NavLink>
+                    )}
                   </li>
                 </ul>
               )}
@@ -132,11 +171,10 @@ const Sidebar = () => {
                 <i className="fa-solid fa-gear"></i>
                 <span>Setting</span>
                 <i
-                  className={`fa-solid ${
-                    activeDropdown === "setting"
-                      ? "fa-angle-up"
-                      : "fa-angle-down"
-                  }`}
+                  className={`fa-solid ${activeDropdown === "setting"
+                    ? "fa-angle-up"
+                    : "fa-angle-down"
+                    }`}
                 ></i>
               </a>
               {activeDropdown === "setting" && (
@@ -157,7 +195,7 @@ const Sidebar = () => {
             </li>
 
             <li className="main-li">
-              <a href="#">
+              <a href="#" onClick={handleLogoutClick}>
                 <i className="fa-solid fa-power-off"></i>
                 <span>Logout</span>
               </a>
@@ -165,6 +203,11 @@ const Sidebar = () => {
           </ul>
         </div>
       </aside>
+      <LogOutModal
+        showModal={showLogoutModal}
+        handleClose={handleCloseModal}
+        handleConfirmLogout={handleConfirmLogout}
+      />
     </>
   );
 };

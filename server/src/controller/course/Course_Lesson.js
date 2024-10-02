@@ -1,10 +1,14 @@
 const { Course_Lesson, Course_Quize } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
-const path = require("path");
+const path = require("path")
+const AuthMiddleware = require("../../auth/AuthMiddleware");
 const fs = require("fs");
 
 const getCourseLessonDataWithSectionId = async (req, res) => {
+
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Lesson.findAll({
@@ -29,6 +33,8 @@ const getCourseLessonDataWithSectionId = async (req, res) => {
 
 
 const getCourseLessonDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Lesson.findOne({
@@ -44,6 +50,8 @@ const getCourseLessonDataWithId = async (req, res) => {
 }
 
 const addCourseLessonData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const sectionId = req.params.id;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
 
@@ -87,6 +95,8 @@ const addCourseLessonData = async (req, res) => {
 }
 
 const updateCourseLessonData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
 
     const currentLesson = await Course_Lesson.findOne({ where: { id } });
@@ -154,6 +164,8 @@ const updateCourseLessonData = async (req, res) => {
 
 
 const deleteCourseLessonData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const currentcourselesson = await Course_Lesson.findOne({ where: { id } });
     if (!currentcourselesson) {

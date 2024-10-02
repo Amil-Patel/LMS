@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import "../../../assets/css/setting.css";
 import Hoc from "../layout/Hoc";
-import axios from "axios";
+import { notifySuccess, notifyError ,notifyWarning} from "../layout/ToastMessage";
+import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
-import { userRolesContext } from "../layout/RoleContext";
 const port = process.env.REACT_APP_URL;
 function PaymentSetting() {
-  const { userRole, userId } = useContext(userRolesContext);
   const [formData, setFormData] = useState({
     identifier: "stripe",
     currency: "USD",
@@ -33,7 +32,7 @@ function PaymentSetting() {
   const handleGetPaymentGetwayData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingPaymentGetwayData`);
+      const res = await axiosInstance.get(`${port}/gettingPaymentGetwayData`);
       setGetPaymentGetwayData(res.data);
       if (res.data.length > 0) {
         const paymentData = res.data[0];
@@ -103,14 +102,14 @@ function PaymentSetting() {
 
       if (isEdit) {
         // Update existing SMTP setting
-        await axios.put(`${port}/updatingPaymentGetway/${getPaymentGetwayData[0].id}`, formData);
-        alert("SMTP setting edited successfully");
+        await axiosInstance.put(`${port}/updatingPaymentGetway/${getPaymentGetwayData[0].id}`, formData);
+        notifySuccess("SMTP setting edited successfully");
       } else if (isAdd) {
         // Add new SMTP setting
-        await axios.post(`${port}/addPaymentGetwayData`, formData);
-        alert("SMTP setting saved successfully");
+        await axiosInstance.post(`${port}/addPaymentGetwayData`, formData);
+        notifySuccess("SMTP setting saved successfully");
       } else {
-        alert(hasData ? "Edit not permitted" : "Add not permitted");
+        notifyWarning(hasData ? "Edit not permitted" : "Add not permitted");
         resetForm();
       }
 

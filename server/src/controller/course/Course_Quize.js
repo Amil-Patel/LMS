@@ -2,7 +2,11 @@ const { Course_Quize, Course_Lesson } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const { sequelize } = require("../../database/models/index");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
+
 const getCourseQuizeData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id
     try {
         const data = await Course_Quize.findAll({
@@ -18,6 +22,8 @@ const getCourseQuizeData = async (req, res) => {
 }
 
 const getCourseQuizeDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Quize.findOne({
@@ -33,6 +39,8 @@ const getCourseQuizeDataWithId = async (req, res) => {
 }
 
 const addCourseQuizeData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const sectionId = req.params.id;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
 
@@ -84,6 +92,8 @@ const addCourseQuizeData = async (req, res) => {
 
 
 const updateCourseQuizeData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const updatedate = DateToUnixNumber(new Date(), "America/Toronto");
     const id = req.params.id;
     const data = {
@@ -118,6 +128,8 @@ const updateCourseQuizeData = async (req, res) => {
 }
 
 const deleteCourseQuizeData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
 
     const t = await sequelize.transaction();

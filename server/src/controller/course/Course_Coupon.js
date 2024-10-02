@@ -2,8 +2,11 @@ const { Course_Coupon } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const moment = require('moment-timezone');
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getCourseCouponData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await Course_Coupon.findAll();
         for (let i = 0; i < data.length; i++) {
@@ -18,6 +21,8 @@ const getCourseCouponData = async (req, res) => {
 }
 
 const getCourseCouponDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Coupon.findOne({
@@ -35,6 +40,8 @@ const getCourseCouponDataWithId = async (req, res) => {
 }
 
 const addCourseCouponData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const expiredate = DateToUnixNumber(req.body.expired_date, 'America/Toronto');
     const createdate = DateToUnixNumber(new Date(), 'America/Toronto');
     const data = {
@@ -59,6 +66,8 @@ const addCourseCouponData = async (req, res) => {
 }
 
 const updateCourseCouponData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const expiredate = DateToUnixNumber(req.body.expired_date, 'America/Toronto');
     const updatedat = DateToUnixNumber(new Date(), 'America/Toronto');
@@ -84,6 +93,8 @@ const updateCourseCouponData = async (req, res) => {
 }
 
 const updateCourseCouponStatus = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const status = req.body.status;
     const newStatus = status === 1 ? 0 : 1;
@@ -100,6 +111,8 @@ const updateCourseCouponStatus = async (req, res) => {
 }
 
 const deleteCourseCouponData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Coupon.destroy({

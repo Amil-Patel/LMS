@@ -2,8 +2,12 @@ const { Course_Category } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const path = require("path");
 const fs = require("fs");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
+const { Op } = require('sequelize');
 
 const getNullCourseCategoryData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await Course_Category.findAll({
             where: {
@@ -17,10 +21,14 @@ const getNullCourseCategoryData = async (req, res) => {
     }
 }
 const getNotNullCourseCategory = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await Course_Category.findAll({
             where: {
-                cate_parent_id: !null
+                cate_parent_id: {
+                    [Op.ne]: null // This will return records where cate_parent_id is not null
+                }
             }
         });
         res.send(data);
@@ -30,6 +38,8 @@ const getNotNullCourseCategory = async (req, res) => {
     }
 }
 const getNullCourseCategoryWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id
     try {
         const data = await Course_Category.findOne({
@@ -51,6 +61,8 @@ const getNullCourseCategoryWithId = async (req, res) => {
     }
 }
 const getCourseCategoryWithParentId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id
     try {
         const data = await Course_Category.findAll({
@@ -66,6 +78,8 @@ const getCourseCategoryWithParentId = async (req, res) => {
 }
 
 const getCourseCategoryWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Category.findOne({
@@ -81,6 +95,8 @@ const getCourseCategoryWithId = async (req, res) => {
 }
 
 const addCourseCategoryData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const data = {
         cate_title: req.body.cate_title,
@@ -103,6 +119,8 @@ const addCourseCategoryData = async (req, res) => {
 
 
 const updateCourseCategoryData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const updateddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const id = req.params.id;
 
@@ -141,6 +159,8 @@ const updateCourseCategoryData = async (req, res) => {
 };
 
 const updateCourseCategoryStatusData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const status = req.body.status;
     const newStatus = status === 1 ? 0 : 1;
@@ -156,6 +176,8 @@ const updateCourseCategoryStatusData = async (req, res) => {
     }
 }
 const deleteCourseCategoryData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const curentcoursecate = await Course_Category.findOne({ where: { id } });
     if (!curentcoursecate) {

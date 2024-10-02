@@ -1,22 +1,15 @@
+// axiosInstance.js
 import axios from 'axios';
+import { Api_keys } from './Key';
 
+const API_KEY = Api_keys;
+// Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_URL,
-  withCredentials: true, 
+  baseURL: process.env.REACT_APP_URL,  // Set your base URL
+  headers: {
+    'lms-api-key': API_KEY,  // Include the API key in headers
+  },
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-    if (token) {
-      const tokenValue = token.split('=')[1];
-      config.headers['Authorization'] = `Bearer ${tokenValue}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 export default axiosInstance;

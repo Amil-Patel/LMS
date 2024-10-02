@@ -1,7 +1,10 @@
 const { smtp_setting } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const addSmtpSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const data = {
         protocol: req.body.protocol,
@@ -24,6 +27,8 @@ const addSmtpSettingData = async (req, res) => {
 }
 
 const getSmtpSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await smtp_setting.findAll();
         res.send(data);
@@ -34,6 +39,8 @@ const getSmtpSettingData = async (req, res) => {
 }
 
 const updateSmtpSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const data = {
         protocol: req.body.protocol,

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
+import { notifySuccess, notifyError, notifyWarning } from "../layout/ToastMessage";
 import "../../../assets/css/setting.css";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import useCheckRolePermission from "../layout/CheckRolePermission";
 import Loading from "../layout/Loading";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 const port = process.env.REACT_APP_URL;
 
@@ -22,11 +24,17 @@ function NotificationSetting() {
     smtp_username: "",
     smtp_password: "",
   });
+
+  const perm = useCheckRolePermission("Notification Setting");
+  const addNotificationPermission = perm.length > 0 && perm[0].can_add === 1 ? 1 : 0;
+  const editNotificationPermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
+
+
   //get smtp data
   const getSmtpData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingSmtpSettingData`);
+      const res = await axiosInstance.get(`${port}/gettingSmtpSettingData`);
       setGetSmtp(res.data);
       if (res.data.length > 0) {
         setAddSmtp(res.data[0]); // Assuming you want to edit the first entry
@@ -60,39 +68,48 @@ function NotificationSetting() {
 
     // Validate required fields
     if (!protocol || !smtp_crypto || !smtp_host || !smtp_port || !smtp_from_email || !smtp_username || !smtp_password) {
-      alert("All fields are required.");
+      notifyWarning("All fields are required.");
       setLoading(false);
       return;
     }
 
     // Validate email format
     if (!validateEmail(smtp_from_email)) {
-      alert("Invalid form email format.");
+      notifyWarning("Invalid form email format.");
       setLoading(false);
       return;
     }
 
     // Validate port is a number
     if (isNaN(smtp_port) || smtp_port <= 0 || smtp_port > 65535) {
-      alert("Invalid port number. Port must be a number between 1 and 65535.");
+      notifyWarning("Invalid port number. Port must be between 1 and 65535.");
       setLoading(false);
       return;
     }
 
     // Uncomment this block once validation is successful
     try {
-      if (getSmtp.length > 0) {
+      const hasSmtpData = getSmtp.length > 0;
+      const canEdit = hasSmtpData && editNotificationPermission == 1;
+      const canAdd = !hasSmtpData && addNotificationPermission == 1;
+
+      if (canEdit) {
         // Update existing SMTP setting
-        const res = await axios.put(`${port}/updatingSmtpSettingData/${getSmtp[0].id}`, addSmtp);
-      } else {
+        await axiosInstance.put(`${port}/updatingSmtpSettingData/${getSmtp[0].id}`, addSmtp);
+        notifySuccess("SMTP setting updated successfully.");
+      } else if (canAdd) {
         // Add new SMTP setting
-        const res = await axios.post(`${port}/addSmtpSettingData`, addSmtp);
+        await axiosInstance.post(`${port}/addSmtpSettingData`, addSmtp);
+        notifySuccess("SMTP setting added successfully.");
+      } else {
+        notifyWarning(hasSmtpData ? "Edit not permitted." : "Add not permitted.");
       }
-      setLoading(false);
+
       getSmtpData();
-      alert("SMTP setting saved successfully.");
     } catch (error) {
+      notifyError("An error occurred while saving SMTP settings.");
       console.log(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -116,10 +133,16 @@ function NotificationSetting() {
             <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
+          {
+            addNotificationPermission == 1 || editNotificationPermission == 1 ? (
+              <a>
+                <button className="primary-btn module-btn" disabled={tab === "email"} onClick={saveSmtp}>Save</button>
+              </a>
+            ) : (
+              ""
+            )
+          }
 
-          <a>
-            <button className="primary-btn module-btn" onClick={saveSmtp}>Save</button>
-          </a>
         </div>
 
         <div className="admin-panel-tab-bar">

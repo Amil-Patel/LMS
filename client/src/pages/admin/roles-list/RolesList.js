@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import "../../../assets/css/roles-list/roles-list.css";
 import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL
@@ -25,7 +25,7 @@ function RolesList() {
   const getPermissionData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingRolePermissionData`);
+      const res = await axiosInstance.get(`${port}/gettingRolePermissionData`);
       setPermissionData(res.data);
       const initialPermissions = res.data.reduce((acc, item) => {
         acc[item.id] = {
@@ -82,7 +82,7 @@ function RolesList() {
       enable_delete: fields.enable_delete ? 1 : 0,
     }));
     try {
-      const res = await axios.post(`${port}/addingRolePermission`, dataToUpdate);
+      const res = await axiosInstance.post(`${port}/addingRolePermission`, dataToUpdate);
       setAssignRoll(false);
       setLoading(false);
     } catch (error) {
@@ -97,7 +97,7 @@ function RolesList() {
     setLoading(true);
     const name = itemName;
     try {
-      const res = await axios.get(`${port}/gettingRolePermissionDataForEdit`, {
+      const res = await axiosInstance.get(`${port}/gettingRolePermissionDataForEdit`, {
         params: { name }
       });
       setRolePermissionData(res.data);
@@ -127,7 +127,7 @@ function RolesList() {
       enable_delete: permission.can_delete ? 1 : 0,
     }));
     try {
-      const res = await axios.put(`${port}/editRolePermission/${rollName}`, dataToUpdate);
+      const res = await axiosInstance.put(`${port}/editRolePermission/${rollName}`, dataToUpdate);
       setAssignRoll(false);
       setLoading(false);
     } catch (error) {

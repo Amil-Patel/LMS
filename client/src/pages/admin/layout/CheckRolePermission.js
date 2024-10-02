@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { userRolesContext } from "../layout/RoleContext";
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
+import Cookies from 'js-cookie';
 const port = process.env.REACT_APP_URL;
 
 const useCheckRolePermission = (permcate) => {
     const { userRole } = useContext(userRolesContext);
     const [checkPerm, setCheckPerm] = useState([]);
-
+    const savedToken = Cookies.get('token');
     const checkPermission = async () => {
         try {
-            const res = await axios.get(`${port}/checkRolePermission`, {
+            const res = await axiosInstance.get(`${port}/checkRolePermission`, {
                 params: { name: userRole, permName: permcate }
             });
             setCheckPerm(res.data);
@@ -19,8 +20,10 @@ const useCheckRolePermission = (permcate) => {
     };
 
     useEffect(() => {
-        checkPermission();
-    }, [userRole, permcate]);
+        if (savedToken) {  // Only call checkPermission if token is defined
+            checkPermission();
+        }
+    }, [userRole, permcate, savedToken]);
 
     return checkPerm;
 };

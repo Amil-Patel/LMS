@@ -1,7 +1,10 @@
 
 const { Permission_Group, Permission_Category, Role_Permission } = require("../../database/models/index");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getRolePermissionData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const permissionCateData = await Permission_Category.findAll({
             include: [
@@ -21,6 +24,8 @@ const getRolePermissionData = async (req, res) => {
     }
 }
 const getRolePermissionDataForEdit = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const { name } = req.query;
     try {
         const rolePermissionData = await Role_Permission.findAll({
@@ -34,6 +39,8 @@ const getRolePermissionDataForEdit = async (req, res) => {
     }
 }
 const addRolePermissionData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const permissionData = req.body;
     try {
         for (let permission of permissionData) {
@@ -67,6 +74,8 @@ const addRolePermissionData = async (req, res) => {
 }
 
 const editRolePermissionData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const permissionData = req.body;
     const name = req.params.name
     try {

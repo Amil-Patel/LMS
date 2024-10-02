@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { userRolesContext } from "../layout/RoleContext";
 import Hoc from "../layout/Hoc";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL;
 
@@ -17,12 +17,11 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [sameNumber, setSameNumber] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   //get user data
   const getUserData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingUserMasterDataWithId/${userId}`);
+      const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
       setUserData(res.data);
       setOldPassword(res.data.password);
       setImageSrc(res.data.profile);
@@ -104,7 +103,7 @@ const Profile = () => {
 
     try {
       // Make the API request using updatedUserData with the new password
-      await axios.put(`${port}/updatingUserMaster/${userId}`, updatedUserData);
+      await axiosInstance.put(`${port}/updatingUserMaster/${userId}`, updatedUserData);
       getUserData();
       setNewPassword("");
       setConfirmPassword("");

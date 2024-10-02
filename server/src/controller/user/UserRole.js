@@ -1,6 +1,9 @@
 const { UserRole } = require("../../database/models/index");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getUserRoleData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await UserRole.findAll();
         res.send(data);
@@ -11,6 +14,8 @@ const getUserRoleData = async (req, res) => {
 }
 
 const getUserRoleDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = UserRole.findeOne({
@@ -26,6 +31,8 @@ const getUserRoleDataWithId = async (req, res) => {
 }
 
 const addUserRoleData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const data = {
         roll_name: req.body.roll_name,
         status: 1,
@@ -43,6 +50,8 @@ const addUserRoleData = async (req, res) => {
 
 
 const updateUserROleData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const data = {
         roll_name: req.body.roll_name,
@@ -63,6 +72,8 @@ const updateUserROleData = async (req, res) => {
 }
 
 const deleteUserRoleData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const userroledata = await UserRole.destroy({

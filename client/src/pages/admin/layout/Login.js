@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import axios from 'axios';
+import React, { useContext, useState, useEffect } from 'react';
+import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { userRolesContext } from '../layout/RoleContext';
 import Cookies from 'js-cookie';
@@ -13,8 +13,9 @@ const Login = () => {
     });
     const [consentGiven, setConsentGiven] = useState(false); // Track if consent is given
     const { setUserRole, setUserId } = useContext(userRolesContext);
+    const savedToken = Cookies.get('cookieConsent');
     const navigate = useNavigate();
-    axios.defaults.withCredentials = true;
+    axiosInstance.defaults.withCredentials = true;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,11 +27,12 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(consentGiven)
         if (!consentGiven) {
             alert("Please accept cookies to log in.");
             return;
         }
-        axios.post(`${port}/login`, data)
+        axiosInstance.post(`${port}/login`, data)
             .then((res) => {
                 if (res.status === 200) {
                     setUserRole(res.data.role);
@@ -45,6 +47,12 @@ const Login = () => {
                 console.log(err + " error in login");
             });
     };
+
+    useEffect(() => {
+        if (savedToken) {  // Only call checkPermission if token is defined
+            setConsentGiven(true);
+        }
+    }, [savedToken]);
 
     return (
         <>

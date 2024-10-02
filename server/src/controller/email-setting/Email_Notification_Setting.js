@@ -1,6 +1,8 @@
 const { Email_Notifiacation_Setting } = require('../../database/models/index');
-
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 const getEmailNotificationSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await Email_Notifiacation_Setting.findAll();
         res.send(data);
@@ -11,6 +13,8 @@ const getEmailNotificationSettingData = async (req, res) => {
 }
 
 const getEmailNotificationSettingDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Email_Notifiacation_Setting.findeOne({
@@ -26,6 +30,8 @@ const getEmailNotificationSettingDataWithId = async (req, res) => {
 }
 
 const updateEmailNotificationSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const data = {
         type: req.body.type,

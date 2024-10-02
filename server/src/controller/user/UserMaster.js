@@ -5,7 +5,11 @@ const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const path = require("path");
 const fs = require("fs");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
+
 const getUserMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await UserMaster.findAll();
         res.status(200).json(data);
@@ -15,6 +19,10 @@ const getUserMasterData = async (req, res) => {
 }
 
 const getUserMasterDataWithId = async (req, res) => {
+    console.log("object")
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    console.log(isAuthenticated)
     const id = req.params.id;
     try {
         const data = await UserMaster.findOne({
@@ -34,6 +42,8 @@ const getUserMasterDataWithId = async (req, res) => {
 }
 
 const addUserMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const dobdate = DateToUnixNumber(req.body.dob, "America/Toronto");
     const createdDate = DateToUnixNumber(new Date(), "America/Toronto");
     const encryptedPassword = EncryptPassword(req.body.password)
@@ -70,6 +80,8 @@ const addUserMasterData = async (req, res) => {
 }
 
 const updateUserMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const currentUser = await UserMaster.findOne({ where: { id } });
     if (!currentUser) {
@@ -120,6 +132,8 @@ const updateUserMasterData = async (req, res) => {
 }
 
 const deleteUserMaster = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const currentUser = await UserMaster.findOne({ where: { id } });
     if (!currentUser) {
