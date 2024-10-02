@@ -4,7 +4,8 @@ import "../../../assets/css/course/addcourse.css";
 import "../../../assets/css/main.css";
 import axios from "axios";
 import { userRolesContext } from "../layout/RoleContext";
-import { Form, NavLink, useNavigate } from "react-router-dom";
+import Loading from "../layout/Loading";
+import { NavLink, useNavigate } from "react-router-dom";
 const port = process.env.REACT_APP_URL
 
 const AddCourse = () => {
@@ -13,14 +14,18 @@ const AddCourse = () => {
   const [isTax, setIsTax] = useState(false);
   const [isLimited, setIsLimited] = useState(false);
   const [imageSrc] = useState("https://via.placeholder.com/150");
+  const [loading, setLoading] = useState(false);
   //get not null category data
   const [notNullCourseCategory, setNotNullCourseCategory] = useState([]);
   const getNullCourseCategoryData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingNotNullCourseCategory`);
       setNotNullCourseCategory(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
@@ -63,8 +68,6 @@ const AddCourse = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
-    console.log(name, value, type, checked);
 
     let updatedFields = { ...addCourse };
 
@@ -114,7 +117,7 @@ const AddCourse = () => {
       setNewImage(file);
     }
   };
-  
+
 
 
   useEffect(() => {
@@ -234,6 +237,7 @@ const AddCourse = () => {
   const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
     formData.append("course_title", addCourse.course_title);
     formData.append('short_desc', addCourse.short_desc);
@@ -275,9 +279,11 @@ const AddCourse = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      setLoading(false);
       navigate('/all-course');
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -286,12 +292,13 @@ const AddCourse = () => {
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Courses</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo">
@@ -312,19 +319,19 @@ const AddCourse = () => {
         <div className="admin-panel-tab-bar">
           <ul className="tab">
             <li onClick={() => handleChangeTab("basic-info")}>
-              <NavLink>BASIC INFO</NavLink>
+              <NavLink className={tab === "basic-info" ? "active-tab" : ""}>BASIC INFO</NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("course")}>
-              <NavLink>COURSE DESCRIPTIONS</NavLink>
+              <NavLink className={tab === "course" ? "active-tab" : ""}>COURSE DESCRIPTIONS</NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("additional")}>
-              <NavLink>ADDITIONAL INFO</NavLink>
+              <NavLink className={tab === "additional" ? "active-tab" : ""}>ADDITIONAL INFO</NavLink>
             </li>
             |
             <li onClick={() => handleChangeTab("seo")}>
-              <NavLink>SEO</NavLink>
+              <NavLink className={tab === "seo" ? "active-tab" : ""}>SEO</NavLink>
             </li>
           </ul>
         </div>
@@ -335,11 +342,12 @@ const AddCourse = () => {
             <form>
               {/* course title / desc */}
               <div className="form-group">
-                <label>
+                <label htmlFor="course_title">
                   Course Title<span className="required">*</span>
                 </label>
                 <input
                   type="text"
+                  id="course_title"
                   name="course_title"
                   value={addCourse.course_title}
                   onChange={handleChange}
@@ -348,9 +356,10 @@ const AddCourse = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Short Description</label>
+                <label htmlFor="short_desc">Short Description</label>
                 <textarea
                   type="text"
+                  id="short_desc"
                   name="short_desc"
                   value={addCourse.short_desc}
                   onChange={handleChange}
@@ -362,10 +371,10 @@ const AddCourse = () => {
               {/* course category / level / language */}
               <div className="flex-row flex-row80">
                 <div className="form-group mb-0" style={{ width: "32%" }}>
-                  <label>
+                  <label htmlFor="course_cate">
                     Course Category<span className="required">*</span>
                   </label>
-                  <select className="col12input" name="course_cate" value={addCourse.course_cate} onChange={handleChange}>
+                  <select id="course_cate" className="col12input" name="course_cate" value={addCourse.course_cate} onChange={handleChange}>
                     <option value="">Select Category</option>
                     {
                       notNullCourseCategory.map((category, index) => (
@@ -378,8 +387,8 @@ const AddCourse = () => {
                 </div>
 
                 <div className="form-group mb-0" style={{ width: "32%" }}>
-                  <label>Course Level</label>
-                  <select className="col12input" name="course_level" value={addCourse.course_level} onChange={handleChange}>
+                  <label htmlFor="course_level">Course Level</label>
+                  <select id="course_level" className="col12input" name="course_level" value={addCourse.course_level} onChange={handleChange}>
                     <option value="">Select Level</option>
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
@@ -388,10 +397,10 @@ const AddCourse = () => {
                 </div>
 
                 <div className="form-group mb-0" style={{ width: "32%" }}>
-                  <label>
+                  <label htmlFor="course_language">
                     Course Language<span className="required">*</span>
                   </label>
-                  <select className="col12input" name="course_language" value={addCourse.course_language} onChange={handleChange}>
+                  <select id="course_language" className="col12input" name="course_language" value={addCourse.course_language} onChange={handleChange}>
                     <option value="">Select Language</option>
                     <option value="english">English</option>
                     <option value="hindi">Hindi</option>
@@ -409,15 +418,15 @@ const AddCourse = () => {
                 {/* course price / discount */}
                 <div className="flex-row flex-row40">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>
+                    <label htmlFor="course_price">
                       Course Price<span className="required">*</span>
                     </label>
-                    <input type="number" placeholder="0" className="col12input" name="course_price" onChange={handleChange} value={addCourse.course_price} />
+                    <input id="course_price" type="number" placeholder="0" className="col12input" name="course_price" onChange={handleChange} value={addCourse.course_price} />
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Course Discount %</label>
-                    <input type="text" placeholder="0" className="col12input" name="course_discount" onChange={handleChange} value={addCourse.course_discount} />
+                    <label htmlFor="course_discount">Course Discount %</label>
+                    <input id="course_discount" type="text" placeholder="0" className="col12input" name="course_discount" onChange={handleChange} value={addCourse.course_discount} />
                   </div>
                 </div>
 
@@ -425,8 +434,8 @@ const AddCourse = () => {
                 <div className="flex-row flex-row40">
                   <div className="form-group mb-0" style={{ width: addCourse.course_status === "upcoming" ? "48%" : "96%" }}
                   >
-                    <label>Status</label>
-                    <select className="col12input" name="course_status" value={addCourse.course_status} onChange={handleChange}>
+                    <label htmlFor="course_status">Status</label>
+                    <select id="course_status" className="col12input" name="course_status" value={addCourse.course_status} onChange={handleChange}>
                       <option value="">Select Status</option>
                       <option value="active">Active</option>
                       <option value="private">Private</option>
@@ -437,9 +446,10 @@ const AddCourse = () => {
                   {
                     addCourse.course_status == "upcoming" && (
                       <div className="form-group mb-0" style={{ width: "48%" }}>
-                        <label>Publish Date</label>
+                        <label htmlFor="course_publish_date">Publish Date</label>
                         <input
                           type="date"
+                          id="course_publish_date"
                           name="course_publish_date"
                           onChange={handleChange}
                           value={addCourse.course_publish_date}
@@ -458,34 +468,34 @@ const AddCourse = () => {
                 style={{ width: "85%", gap: "20px" }}
               >
                 <div className="chekbox">
-                  <input type="checkbox" name="is_tax" checked={addCourse.is_tax} onClick={handleTax} onChange={handleChange} />
-                  <label>Tax</label>
+                  <input id="is_tax" type="checkbox" name="is_tax" checked={addCourse.is_tax} onClick={handleTax} onChange={handleChange} />
+                  <label htmlFor="is_tax">Tax</label>
                 </div>
                 {
                   isTax && (
                     <>
                       <div className="form-group mb-0" style={{ width: "32%" }}>
-                        <label>
+                        <label htmlFor="tax_name">
                           Tax Name<span className="required">*</span>
                         </label>
-                        <input type="text" placeholder="Tax Name" className="col12input" name="tax_name" onChange={handleChange} value={addCourse.tax_name} />
+                        <input id="tax_name" type="text" placeholder="Tax Name" className="col12input" name="tax_name" onChange={handleChange} value={addCourse.tax_name} />
                       </div>
 
                       <div className="form-group mb-0" style={{ width: "32%" }}>
-                        <label>
+                        <label htmlFor="tax_rate">
                           Tax Rate
-                          <label>
+                          <label htmlFor="tax_rate" className="required">
                             <span className="required">*</span>
                           </label>
                         </label>
-                        <input type="text" placeholder="Tax Rate" className="col12input" name="tax_rate" onChange={handleChange} value={addCourse.tax_rate} />
+                        <input id="tax_rate" type="text" placeholder="Tax Rate" className="col12input" name="tax_rate" onChange={handleChange} value={addCourse.tax_rate} />
                       </div>
 
                       <div className="form-group mb-0" style={{ width: "32%" }}>
-                        <label>
+                        <label htmlFor="tax_type">
                           Type <span className="required">*</span>
                         </label>
-                        <select className="col12input" value={addCourse.tax_type} name="tax_type" onChange={handleChange}>
+                        <select id="tax_type" className="col12input" value={addCourse.tax_type} name="tax_type" onChange={handleChange}>
                           <option value="">Select Tax Type</option>
                           <option value="inclusive">Is Inclusive</option>
                           <option value="exclusive">Is Exclusive</option>
@@ -510,20 +520,20 @@ const AddCourse = () => {
               <div style={{ display: "flex" }}>
                 <div className="flex-row" style={{ width: isLimited ? "43%" : "26%" }}>
                   <div className="chekbox2">
-                    <input type="checkbox" name="is_life_time" checked={addCourse.is_life_time} onChange={handleChange} />
-                    <label>Life Time</label>
+                    <input id="is_life_time" type="checkbox" name="is_life_time" checked={addCourse.is_life_time} onChange={handleChange} />
+                    <label htmlFor="is_life_time">Life Time</label>
                   </div>
                   <div className="chekbox2">
-                    <input type="checkbox" name="is_limited" onClick={handleLimited} checked={addCourse.is_limited} onChange={handleChange} />
-                    <label>Limited Time</label>
+                    <input id="is_limited" type="checkbox" name="is_limited" onClick={handleLimited} checked={addCourse.is_limited} onChange={handleChange} />
+                    <label htmlFor="is_limited">Limited Time</label>
                   </div>
                   {
                     isLimited && (
                       <div className="form-group mb-0" style={{ width: "32%" }}>
-                        <label>
+                        <label htmlFor="no_of_month">
                           Limited Time <span className="required">*</span>
                         </label>
-                        <input type="text" placeholder="No Of Month" className="col12input" name="no_of_month" onChange={handleChange} value={addCourse.no_of_month} />
+                        <input id="no_of_month" type="text" placeholder="No Of Month" className="col12input" name="no_of_month" onChange={handleChange} value={addCourse.no_of_month} />
                       </div>
                     )
                   }
@@ -541,10 +551,10 @@ const AddCourse = () => {
                   }}
                 >
                   <div className="form-group mb-0" style={{ width: "50%" }}>
-                    <label>
+                    <label htmlFor="course_thumbnail">
                       Course Thumbnail <span className="required">*</span>
                     </label>
-                    <input type="text" placeholder="" className="col12input" value={addCourse.course_thumbnail}
+                    <input id="course_thumbnail" type="text" placeholder="" className="col12input" value={addCourse.course_thumbnail}
                       readOnly />
                   </div>
 
@@ -582,10 +592,11 @@ const AddCourse = () => {
               <div style={{ display: "flex" }}>
                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
-                    <label>Course OverView Link</label>
+                    <label htmlFor="course_overview_link">Course OverView Link</label>
                     <input
                       type="text"
                       name="course_overview_link"
+                      id="course_overview_link"
                       onChange={handleChange}
                       value={addCourse.course_overview_link}
                       placeholder="Enter Course Overview Link"
@@ -593,16 +604,16 @@ const AddCourse = () => {
                     />
                     <div style={{ display: "flex", marginTop: "10px" }}>
                       <div className="chekbox2">
-                        <input type="checkbox" name="drip_content" checked={addCourse.drip_content || false} onChange={handleChange} />
-                        <label>Drip Content</label>
+                        <input id="drip_content" type="checkbox" name="drip_content" checked={addCourse.drip_content || false} onChange={handleChange} />
+                        <label htmlFor="drip_content">Drip Content</label>
                       </div>
                       <div className="chekbox2">
-                        <input type="checkbox" name="featured_course" checked={addCourse.featured_course || false} onChange={handleChange} />
-                        <label>Featured Course</label>
+                        <input id="featured_course" type="checkbox" name="featured_course" checked={addCourse.featured_course || false} onChange={handleChange} />
+                        <label htmlFor="featured_course">Featured Course</label>
                       </div>
                       <div className="chekbox2">
-                        <input type="checkbox" name="is_top_course" checked={addCourse.is_top_course || false} onChange={handleChange} />
-                        <label>Top Course</label>
+                        <input id="is_top_course" type="checkbox" name="is_top_course" checked={addCourse.is_top_course || false} onChange={handleChange} />
+                        <label htmlFor="is_top_course">Top Course</label>
                       </div>
                     </div>
                   </div>
@@ -610,9 +621,10 @@ const AddCourse = () => {
 
                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
-                    <label>auther</label>
+                    <label htmlFor="auther">auther</label>
                     <input
                       type="text"
+                      id="auther"
                       name="auther"
                       placeholder="Enter One Or More auther"
                       className="col12input"
@@ -645,6 +657,7 @@ const AddCourse = () => {
               </label>
               <textarea
                 className="description-textarea col12input"
+                id="courseDescription"
                 placeholder="Enter Course Title"
                 name="long_desc"
                 onChange={handleChange}
@@ -657,7 +670,7 @@ const AddCourse = () => {
           {tab == "additional" && (
             <div className="faq-section">
               <div className="section">
-                <label htmlFor="courseDescription" className="description-label">
+                <label htmlFor="question" className="description-label">
                   FAQS
                 </label>
                 {addCourse.course_faqs.map((faq, index) => (
@@ -666,6 +679,7 @@ const AddCourse = () => {
                     <div className="input-button">
                       <input
                         type="text"
+                        id="question"
                         name="question"
                         value={faq.question}
                         onChange={(event) => handleFaqChange(index, event)}
@@ -704,13 +718,14 @@ const AddCourse = () => {
               </div>
 
               <div className="section">
-                <label htmlFor="courseDescription" className="description-label">
+                <label htmlFor="willLearn" className="description-label">
                   What You Will Learn ?
                 </label>
                 {
                   addCourse.course_topics.map((point, index) => (
                     <div key={index} className="learning-item">
                       <input
+                        id="willLearn"
                         type="text"
                         value={point}
                         onChange={(event) => handleLearningChange(index, event)}
@@ -733,13 +748,14 @@ const AddCourse = () => {
               </div>
 
               <div className="section">
-                <label htmlFor="courseDescription" className="description-label">
+                <label htmlFor="prerequisites" className="description-label">
                   Prerequisites
                 </label>
                 {addCourse.course_requirenment.map((point, index) => (
                   <div key={index} className="learning-item">
                     <input
                       type="text"
+                      id="prerequisites"
                       name="course_requirenment"
                       value={point}
                       onChange={(event) =>
@@ -769,9 +785,10 @@ const AddCourse = () => {
           {tab == "seo" && (
             <div className="meta-form">
               <div className="form-group">
-                <label>Meta Title</label>
+                <label htmlFor="meta_title">Meta Title</label>
                 <input
                   type="text"
+                  id="meta_title"
                   name="title_tag"
                   onChange={handleChange}
                   value={addCourse.title_tag}
@@ -781,9 +798,10 @@ const AddCourse = () => {
               </div>
 
               <div className="form-group">
-                <label>Canonical URL</label>
+                <label htmlFor="canonical_url">Canonical URL</label>
                 <input
                   type="text"
+                  id="canonical_url"
                   name="canonical_url"
                   onChange={handleChange}
                   value={addCourse.canonical_url}
@@ -793,9 +811,10 @@ const AddCourse = () => {
               </div>
 
               <div className="form-group">
-                <label>Meta Keywords</label>
+                <label htmlFor="meta_keywords">Meta Keywords</label>
                 <input
                   type="text"
+                  id="meta_keywords"
                   name="meta_keywords"
                   className="col12input"
                   placeholder="Enter Your Keywords here, separated by commas"
@@ -817,9 +836,10 @@ const AddCourse = () => {
               </div>
 
               <div className="form-group">
-                <label>Meta Tags</label>
+                <label htmlFor="meta_tag">Meta Tags</label>
                 <input
                   type="text"
+                  id="meta_tag"
                   name="meta_tag"
                   className="col12input"
                   placeholder="Enter Your Tags here, separated by commas"
@@ -842,10 +862,11 @@ const AddCourse = () => {
 
               <div className="meta-description">
                 <div className="form-group">
-                  <label>Meta Description</label>
+                  <label htmlFor="meta_description">Meta Description</label>
                   <textarea
                     placeholder="Describe Your Meta Description over Here"
                     className="col12input"
+                    id="meta_description"
                     onChange={handleChange}
                     name="meta_description"
                     value={addCourse.meta_description}

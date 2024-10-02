@@ -30,14 +30,12 @@ const Login = () => {
             alert("Please accept cookies to log in.");
             return;
         }
-
         axios.post(`${port}/login`, data)
             .then((res) => {
                 if (res.status === 200) {
                     setUserRole(res.data.role);
                     setUserId(res.data.id);
                     Cookies.set('token', res.data.token, { expires: 1 });
-                    console.log('object')
                     navigate("/dashboard");
                 } else {
                     alert("Invalid email or password");

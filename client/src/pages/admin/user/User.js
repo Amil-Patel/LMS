@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/user/user.css";
-import { Form, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
+import Loading from "../layout/Loading";
 import { userRolesContext } from "../layout/RoleContext";
 const port = process.env.REACT_APP_URL
 
@@ -10,6 +11,7 @@ const User = () => {
   const { userRole, userId } = useContext(userRolesContext);
   const [tab, setTab] = useState("student");
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [addUserOpen, setAddUserOpen] = useState(false);
   const [editUserOpen, setEditUserOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
@@ -45,13 +47,16 @@ const User = () => {
   const [checkUserPerm, setCheckUserPerm] = useState([]);
   useEffect(() => {
     const fetchPermissions = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(`${port}/checkingUserPermission`, {
           params: { name: roleName }
         });
         setCheckUserPerm(res.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching permissions:", error);
+        setLoading(false);
       }
     };
 
@@ -182,8 +187,6 @@ const User = () => {
 
     checkPermissions();
   }, [checkUserPerm]);
-  console.log(checkUserPerm.length)
-
   //add user section start
   const [addUser, setAddUser] = useState({
     first_name: "",
@@ -224,7 +227,7 @@ const User = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(addUser)
+    setLoading(true);
     const formData = new FormData();
     formData.append("first_name", addUser.first_name);
     formData.append("middle_name", addUser.middle_name);
@@ -267,8 +270,10 @@ const User = () => {
       setNewImage(null);
       setSameNumber(false);
       setFilename("")
+      setLoading(false);
     } catch (error) {
       console.error("Error adding user:", error);
+      setLoading(false);
     }
   }
 
@@ -278,6 +283,7 @@ const User = () => {
   const [allUserData, setAllUserData] = useState([]);
 
   const getAllUserData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingUserMasterData`);
       setAllUserData(res.data);
@@ -290,8 +296,10 @@ const User = () => {
       } else {
         setUserData([]);
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setLoading(false);
     }
   };
 
@@ -312,12 +320,15 @@ const User = () => {
     setActiveDropdown(false)
   };
   const deleteUserData = async () => {
+    setLoading(true);
     try {
       const res = await axios.delete(`${port}/deletingUserMaster/${deleteId}`);
       getAllUserData();
       setDeleteOpen(false);
+      setLoading(false);
     } catch (error) {
       console.error("Error deleting user:", error);
+      setLoading(false);
     }
   }
 
@@ -341,12 +352,14 @@ const User = () => {
     updated_by: userId,
   });
   const getDataForEdit = async (id) => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingUserMasterDataWithId/${id}`);
       setEditData(res.data);
-      console.log(res.data)
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setLoading(false);
     }
   }
 
@@ -371,6 +384,7 @@ const User = () => {
 
 
   const editUserData = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("first_name", editData.first_name);
     formData.append("middle_name", editData.middle_name);
@@ -398,8 +412,10 @@ const User = () => {
       });
       getAllUserData();
       setEditUserOpen(false);
+      setLoading(false);
     } catch (error) {
       console.error("Error updating user:", error);
+      setLoading(false);
     }
   }
 
@@ -407,19 +423,18 @@ const User = () => {
     getAllUserData();
   }, [studentView, adminView, instructureView]);
 
-
-
   //delete data code start
   return (
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Users</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-bar" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -530,9 +545,9 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label class="switch">
-                            <input type="checkbox" />
-                            <span class="slider"></span>
+                          <label htmlFor="switch" className="switch">
+                            <input id="switch" type="checkbox" />
+                            <span className="slider"></span>
                           </label>
                         </td>
                         {
@@ -543,7 +558,7 @@ const User = () => {
                                   }`}
                               >
                                 <div
-                                  class="menu-button"
+                                  className="menu-button"
                                   onClick={() => toggleDropdown(index)}
                                 >
                                   {" "}
@@ -621,9 +636,9 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label class="switch">
-                            <input type="checkbox" />
-                            <span class="slider"></span>
+                          <label htmlFor="switch" className="switch">
+                            <input id="switch" type="checkbox" />
+                            <span className="slider"></span>
                           </label>
                         </td>
                         {
@@ -634,7 +649,7 @@ const User = () => {
                                   }`}
                               >
                                 <div
-                                  class="menu-button"
+                                  className="menu-button"
                                   onClick={() => toggleDropdown(index)}
                                 >
                                   {" "}
@@ -712,9 +727,9 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label class="switch">
-                            <input type="checkbox" />
-                            <span class="slider"></span>
+                          <label htmlFor="switch" className="switch">
+                            <input id="switch" type="checkbox" />
+                            <span className="slider"></span>
                           </label>
                         </td>
                         {
@@ -725,7 +740,7 @@ const User = () => {
                                   }`}
                               >
                                 <div
-                                  class="menu-button"
+                                  className="menu-button"
                                   onClick={() => toggleDropdown(index)}
                                 >
                                   {" "}
@@ -800,9 +815,9 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label class="switch">
-                            <input type="checkbox" />
-                            <span class="slider"></span>
+                          <label htmlFor="switch" className="switch">
+                            <input id="switch" type="checkbox" />
+                            <span className="slider"></span>
                           </label>
                         </td>
                         <td>
@@ -811,7 +826,7 @@ const User = () => {
                               }`}
                           >
                             <div
-                              class="menu-button"
+                              className="menu-button"
                               onClick={() => toggleDropdown(index)}
                             >
                               {" "}
@@ -850,20 +865,20 @@ const User = () => {
         {addUserOpen && (
           <div className="modal">
             <div className="add-lesson-container" style={{ width: "60%" }}>
-              <div class="quiz-top-header">
-                <div class="quiz-header">
+              <div className="quiz-top-header">
+                <div className="quiz-header">
                   <h5>Add New User</h5>
                 </div>
                 <div>
                   <button
-                    class="primary-btn module-btn"
+                    className="primary-btn module-btn"
                     style={{ marginRight: "20px" }}
                     onClick={handleSubmit}
                   >
                     Save
                   </button>
                   <span onClick={userToggleModal}>
-                    <i class="fa-solid fa-xmark"></i>
+                    <i className="fa-solid fa-xmark"></i>
                   </span>
                 </div>
               </div>
@@ -871,12 +886,13 @@ const User = () => {
                 {/* first / middle / last  name */}
                 <div className="flex-row">
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="first_name">
                       First Name<span className="required">*</span>
                     </label>
                     <input
                       type="text"
                       name="first_name"
+                      id="first_name"
                       value={addUser.first_name}
                       onChange={handleChange}
                       placeholder="Enter First Name"
@@ -885,10 +901,11 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>Middle Name</label>
+                    <label htmlFor="middle_name">Middle Name</label>
                     <input
                       type="text"
                       name="middle_name"
+                      id="middle_name"
                       value={addUser.middle_name}
                       onChange={handleChange}
                       placeholder="Enter Middle Name"
@@ -897,11 +914,12 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="last_name">
                       Last Name<span className="required">*</span>
                     </label>
                     <input
                       type="text"
+                      id="last_name"
                       name="last_name"
                       value={addUser.last_name}
                       onChange={handleChange}
@@ -914,10 +932,11 @@ const User = () => {
                 {/* email / password */}
                 <div className="flex-row">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>
+                    <label htmlFor="email">
                       Email<span className="required">*</span>
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       value={addUser.email}
@@ -928,9 +947,10 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Password</label>
+                    <label htmlFor="password">Password</label>
                     <input
                       type="password"
+                      id="password"
                       name="password"
                       value={addUser.password}
                       onChange={handleChange}
@@ -943,10 +963,10 @@ const User = () => {
                 {/* status / publish date */}
                 <div className="flex-row flex-row80">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>User Roll</label>
-                    <select className="col12input" name="role_id" onChange={handleChange}>
+                    <label htmlFor="role_id">User Roll</label>
+                    <select id="role_id" className="col12input" name="role_id" onChange={handleChange}>
                       <option value="">Select Role</option>
-                      {roleName === "SuperAdmin" && (
+                      {roleName === "superAdmin" && (
                         <>
                           <option value="student">Student</option>
                           <option value="admin">Admin</option>
@@ -974,8 +994,8 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Status</label>
-                    <select className="col12input" name="status" onChange={handleChange}>
+                    <label htmlFor="status">Status</label>
+                    <select id="status" className="col12input" name="status" onChange={handleChange}>
                       <option value="">Select Status</option>
                       <option value="1">Active</option>
                       <option value="0">Inactive</option>
@@ -986,10 +1006,11 @@ const User = () => {
                 {/* contact / whatsapp number */}
                 <div className="flex-row " style={{ gap: "20px" }}>
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="contact">
                       Contact Number<span className="required">*</span>
                     </label>
                     <input
+                      id="contact"
                       type="text"
                       name="contact"
                       value={addUser.contact}
@@ -999,20 +1020,21 @@ const User = () => {
                     />
                   </div>
                   <div className="chekbox" style={{ width: "23%" }}>
-                    <input type="checkbox" checked={sameNumber}
+                    <input id="same_whatsapp" type="checkbox" checked={sameNumber}
                       onChange={handleSameNumberChange} />
-                    <label>Same WhatsApp</label>
+                    <label htmlFor="same_whatsapp">Same WhatsApp</label>
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="whatsapp_number">
                       WhatsApp
-                      <label>
+                      <label htmlFor="whatsapp_number">
                         <span className="required">*</span>
                       </label>
                     </label>
                     <input
                       type="text"
+                      id="whatsapp_number"
                       name="whatsapp_number"
                       value={addUser.whatsapp_number}
                       onChange={handleChange}
@@ -1026,8 +1048,9 @@ const User = () => {
                 {/* address / country */}
                 <div className="flex-row">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Address</label>
+                    <label htmlFor="address">Address</label>
                     <input
+                      id="address"
                       type="text"
                       name="address"
                       value={addUser.address}
@@ -1038,8 +1061,9 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Country</label>
+                    <label htmlFor="country">Country</label>
                     <input
+                      id="country"
                       type="text"
                       name="country"
                       value={addUser.country}
@@ -1054,8 +1078,8 @@ const User = () => {
                 <div style={{ display: "flex" }}>
                   <div className="flex-row" style={{ width: "45%" }}>
                     <div className="form-group mb-0" style={{ width: "48%" }}>
-                      <label>Gender</label>
-                      <select className="col12input" name="gender" onChange={handleChange}>
+                      <label htmlFor="gender">Gender</label>
+                      <select id="gender" className="col12input" name="gender" onChange={handleChange}>
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -1064,8 +1088,9 @@ const User = () => {
                     </div>
 
                     <div className="form-group mb-0" style={{ width: "48%" }}>
-                      <label>DOB</label>
+                      <label htmlFor="dob">DOB</label>
                       <input
+                        id="dob"
                         type="date"
                         name="dob"
                         value={addUser.dob}
@@ -1088,10 +1113,11 @@ const User = () => {
                     }}
                   >
                     <div className="form-group mb-0" style={{ width: "50%" }}>
-                      <label>
+                      <label htmlFor="profile">
                         Profile Picture <span className="required">*</span>
                       </label>
                       <input
+                        id="profile"
                         type="text"
                         placeholder=""
                         className="col12input"
@@ -1137,8 +1163,9 @@ const User = () => {
                 {/* user about details */}
                 <div className="flex-row" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "100%" }}>
-                    <label>About User</label>
+                    <label htmlFor="description">About User</label>
                     <textarea
+                      id="description"
                       type="text"
                       name="description"
                       value={addUser.description}
@@ -1157,20 +1184,20 @@ const User = () => {
         {editUserOpen && (
           <div className="modal">
             <div className="add-lesson-container" style={{ width: "60%" }}>
-              <div class="quiz-top-header">
-                <div class="quiz-header">
+              <div className="quiz-top-header">
+                <div className="quiz-header">
                   <h5>Edit New User</h5>
                 </div>
                 <div>
                   <button
-                    class="primary-btn module-btn"
+                    className="primary-btn module-btn"
                     style={{ marginRight: "20px" }}
                     onClick={editUserData}
                   >
                     Save
                   </button>
                   <span onClick={editUserToggleModal}>
-                    <i class="fa-solid fa-xmark"></i>
+                    <i className="fa-solid fa-xmark"></i>
                   </span>
                 </div>
               </div>
@@ -1178,10 +1205,11 @@ const User = () => {
                 {/* first / middle / last  name */}
                 <div className="flex-row">
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="first_name">
                       First Name<span className="required">*</span>
                     </label>
                     <input
+                      id="first_name"
                       type="text"
                       name="first_name"
                       value={editData?.first_name}
@@ -1191,8 +1219,9 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>Middle Name</label>
+                    <label htmlFor="middle_name">Middle Name</label>
                     <input
+                      id="middle_name"
                       type="text"
                       name="middle_name"
                       value={editData?.middle_name}
@@ -1202,12 +1231,13 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="last_name">
                       Last Name<span className="required">*</span>
                     </label>
                     <input
                       type="text"
                       name="last_name"
+                      id="last_name"
                       value={editData?.last_name}
                       onChange={handleEditChange}
                       className="col12input"
@@ -1218,11 +1248,12 @@ const User = () => {
                 {/* email / password */}
                 <div className="flex-row">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>
+                    <label htmlFor="email">
                       Email<span className="required">*</span>
                     </label>
                     <input
                       type="email"
+                      id="email"
                       name="email"
                       value={editData?.email}
                       onChange={handleEditChange}
@@ -1231,8 +1262,9 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Password</label>
+                    <label htmlFor="password">Password</label>
                     <input
+                      id="password"
                       type="text"
                       name="password"
                       value={editData?.password}
@@ -1245,8 +1277,8 @@ const User = () => {
                 {/* status / publish date */}
                 <div className="flex-row flex-row80">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>User Roll</label>
-                    <select className="col12input" name="role_id" value={editData?.role_id || ""} onChange={handleEditChange}>
+                    <label htmlFor="role_id">User Roll</label>
+                    <select id="role_id" className="col12input" name="role_id" value={editData?.role_id || ""} onChange={handleEditChange}>
                       <option value="">Select Role</option>
                       {roleName === "SuperAdmin" && (
                         <>
@@ -1276,8 +1308,8 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Status</label>
-                    <select className="col12input" name="status" value={editData?.status ?? ""} onChange={handleEditChange}>
+                    <label htmlFor="status">Status</label>
+                    <select id="status" className="col12input" name="status" value={editData?.status ?? ""} onChange={handleEditChange}>
                       <option value="">Select Status</option>
                       <option value="1">Active</option>
                       <option value="0">Inactive</option>
@@ -1288,10 +1320,11 @@ const User = () => {
                 {/* contact / whatsapp number */}
                 <div className="flex-row " style={{ gap: "20px" }}>
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="contact">
                       Contact Number<span className="required">*</span>
                     </label>
                     <input
+                      id="contact"
                       type="text"
                       name="contact"
                       value={editData?.contact}
@@ -1300,20 +1333,21 @@ const User = () => {
                     />
                   </div>
                   <div className="chekbox" style={{ width: "23%" }}>
-                    <input type="checkbox" checked={editData?.contact == editData?.whatsapp_number ? true : false}
+                    <input id="sameNumberForedit" type="checkbox" checked={editData?.contact == editData?.whatsapp_number ? true : false}
                       name="sameNumberForedit"
                       onChange={handleEditSameNumberChange} />
-                    <label>Same WhatsApp</label>
+                    <label htmlFor="sameNumberForedit">Same WhatsApp</label>
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "32%" }}>
-                    <label>
+                    <label htmlFor="whatsapp_number">
                       WhatsApp
-                      <label>
+                      <label htmlFor="whatsapp_number">
                         <span className="required">*</span>
                       </label>
                     </label>
                     <input
+                      id="whatsapp_number"
                       type="text"
                       name="whatsapp_number"
                       value={editData?.whatsapp_number}
@@ -1327,8 +1361,9 @@ const User = () => {
                 {/* address / country */}
                 <div className="flex-row">
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Address</label>
+                    <label htmlFor="address">Address</label>
                     <input
+                      id="address"
                       type="text"
                       name="address"
                       value={editData?.address}
@@ -1338,9 +1373,10 @@ const User = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label>Country</label>
+                    <label htmlFor="country">Country</label>
                     <input
                       type="text"
+                      id="country"
                       name="country"
                       value={editData?.country}
                       onChange={handleEditChange}
@@ -1353,8 +1389,8 @@ const User = () => {
                 <div style={{ display: "flex" }}>
                   <div className="flex-row" style={{ width: "45%" }}>
                     <div className="form-group mb-0" style={{ width: "48%" }}>
-                      <label>Gender</label>
-                      <select className="col12input" name="gender" value={editData?.gender || ""} onChange={handleEditChange}>
+                      <label htmlFor="gender">Gender</label>
+                      <select className="col12input" id="gender" name="gender" value={editData?.gender || ""} onChange={handleEditChange}>
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -1363,9 +1399,10 @@ const User = () => {
                     </div>
 
                     <div className="form-group mb-0" style={{ width: "48%" }}>
-                      <label>DOB</label>
+                      <label htmlFor="dob">DOB</label>
                       <input
                         type="date"
+                        id="dob"
                         name="dob"
                         value={editData?.dob}
                         onChange={handleEditChange}
@@ -1387,11 +1424,12 @@ const User = () => {
                     }}
                   >
                     <div className="form-group mb-0" style={{ width: "50%" }}>
-                      <label>
+                      <label htmlFor="profile">
                         Profile Picture <span className="required">*</span>
                       </label>
                       <input
                         type="text"
+                        id="profile"
                         placeholder=""
                         className="col12input"
                         name="profile"
@@ -1441,9 +1479,10 @@ const User = () => {
                 {/* user about details */}
                 <div className="flex-row" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "100%" }}>
-                    <label>About User</label>
+                    <label htmlFor="description">About User</label>
                     <textarea
                       type="text"
+                      id="description"
                       name="description"
                       value={editData?.description}
                       onChange={handleEditChange}

@@ -42,7 +42,6 @@ const addRolePermissionData = async (req, res) => {
             const permissionCategory = await Permission_Category.findOne({ where: { name: itemName } });
 
             if (!permissionCategory) {
-                console.log(`No permission category found for ${itemName}`);
                 return res.status(400).send(`No permission category found for ${itemName}`);
             }
 

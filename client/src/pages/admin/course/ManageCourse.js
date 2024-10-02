@@ -212,7 +212,7 @@ const ManageCourse = () => {
   return (
     <>
       <Hoc />
-      <div class="main">
+      <div className="main">
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Courses</h5>
@@ -276,7 +276,7 @@ const ManageCourse = () => {
                 <span className="module-status green-dot"></span>
                 <div className="module-controls">
                   <button className="arrow-btn">
-                    <i class="fa-solid fa-sort"></i>{" "}
+                    <i className="fa-solid fa-sort"></i>{" "}
                   </button>
                   <button className="edit-btn">
                     <i className="fa fa-pencil"></i>
@@ -285,7 +285,7 @@ const ManageCourse = () => {
                     <i className="fa fa-trash"></i>
                   </button>
                   <button className="check-btn" onClick={toggleContent}>
-                    <i class="fa-solid fa-angle-down"></i>
+                    <i className="fa-solid fa-angle-down"></i>
                   </button>
                 </div>
               </div>
@@ -299,7 +299,7 @@ const ManageCourse = () => {
                           <span className="quiz-icon">?</span>
                         ) : (
                           <span className="lesson-icon">
-                            <i class="fa-solid fa-file-word"></i>
+                            <i className="fa-solid fa-file-word"></i>
                           </span>
                         )}
                         {lesson.title}
@@ -317,15 +317,15 @@ const ManageCourse = () => {
                           </button>
                         )}
                         <button className="resource-btn">
-                          <i class="fa-solid fa-folder-open"></i>Resource
+                          <i className="fa-solid fa-folder-open"></i>Resource
                         </button>
-                        <label class="switch">
+                        <label className="switch">
                           <input
                             type="checkbox"
                             checked={lesson.status === 1}
                             // onChange={() => handleStatusChange(index)}
                           />
-                          <span class="slider"></span>
+                          <span className="slider"></span>
                         </label>
                         <span className="edit-btn">
                           <i className="fa fa-pencil"></i>
@@ -742,7 +742,7 @@ const ManageCourse = () => {
                     Add New
                   </button>
                   <span onClick={questionToggleModal}>
-                    <i class="fa-solid fa-xmark"></i>
+                    <i className="fa-solid fa-xmark"></i>
                   </span>
                 </div>
               </div>
@@ -1138,9 +1138,9 @@ const ManageCourse = () => {
                       <td>{item.date_upload}</td>
                       <td>{item.description}</td>
                       <td>
-                        <label class="switch">
+                        <label className="switch">
                           <input type="checkbox" />
-                          <span class="slider"></span>
+                          <span className="slider"></span>
                         </label>
                       </td>
                       <td style={{ textAlign: "center" }}>

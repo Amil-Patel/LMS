@@ -1,32 +1,124 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/setting.css";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import Loading from "../layout/Loading";
+import axios from "axios";
+
+const port = process.env.REACT_APP_URL;
 
 function NotificationSetting() {
   const [tab, setTab] = useState("smtp");
+  const [getSmtp, setGetSmtp] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [addSmtp, setAddSmtp] = useState({
+    protocol: "",
+    smtp_crypto: "",
+    smtp_host: "",
+    smtp_port: "",
+    smtp_from_email: "",
+    smtp_username: "",
+    smtp_password: "",
+  });
+  //get smtp data
+  const getSmtpData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${port}/gettingSmtpSettingData`);
+      setGetSmtp(res.data);
+      if (res.data.length > 0) {
+        setAddSmtp(res.data[0]); // Assuming you want to edit the first entry
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAddSmtp({ ...addSmtp, [name]: value });
+  }
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const saveSmtp = async () => {
+    setLoading(true);
+    const {
+      protocol,
+      smtp_crypto,
+      smtp_host,
+      smtp_port,
+      smtp_from_email,
+      smtp_username,
+      smtp_password
+    } = addSmtp;
+
+    // Validate required fields
+    if (!protocol || !smtp_crypto || !smtp_host || !smtp_port || !smtp_from_email || !smtp_username || !smtp_password) {
+      alert("All fields are required.");
+      setLoading(false);
+      return;
+    }
+
+    // Validate email format
+    if (!validateEmail(smtp_from_email)) {
+      alert("Invalid form email format.");
+      setLoading(false);
+      return;
+    }
+
+    // Validate port is a number
+    if (isNaN(smtp_port) || smtp_port <= 0 || smtp_port > 65535) {
+      alert("Invalid port number. Port must be a number between 1 and 65535.");
+      setLoading(false);
+      return;
+    }
+
+    // Uncomment this block once validation is successful
+    try {
+      if (getSmtp.length > 0) {
+        // Update existing SMTP setting
+        const res = await axios.put(`${port}/updatingSmtpSettingData/${getSmtp[0].id}`, addSmtp);
+      } else {
+        // Add new SMTP setting
+        const res = await axios.post(`${port}/addSmtpSettingData`, addSmtp);
+      }
+      setLoading(false);
+      getSmtpData();
+      alert("SMTP setting saved successfully.");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   const handleChangeTab = (tabName) => {
     setTab(tabName);
   };
+  useEffect(() => {
+    getSmtpData();
+  }, [])
   return (
     <>
       <Hoc />
-
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h4>Notification Setting</h4>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 
           <a>
-            <button className="primary-btn module-btn">Save</button>
+            <button className="primary-btn module-btn" onClick={saveSmtp}>Save</button>
           </a>
         </div>
 
@@ -49,17 +141,18 @@ function NotificationSetting() {
         {tab == "smtp" && (
           <div className="main_pay_sec" id="smp">
             <div className="protocol">
-              <span>Protocol</span>
+              <label htmlFor="protocol">Protocol</label>
               <span id="etc">(smtp, ssmtp, mail)*</span>
               <p>
-                <input type="text" placeholder="smtp" className="col6input" />
+                <input id="protocol" name="protocol" type="text" placeholder="smtp" value={addSmtp.protocol}
+                  onChange={handleChange} className="col6input" />
               </p>
             </div>
 
             <div className="protocol" id="pro_2">
-              <span>Currency</span>
+              <label htmlFor="currency">Currency</label>
               <p>
-                <select name="currency" id="currency" className="col12input" form="currencyform">
+                <select name="smtp_crypto" id="currency" value={addSmtp.smtp_crypto} className="col12input" onChange={handleChange} form="currencyform">
                   <option value="USD">US Dollar (USD)</option>
                   <option value="EUR">Euro (EUR)</option>
                   <option value="JPY">Japanese Yen (JPY)</option>
@@ -71,28 +164,36 @@ function NotificationSetting() {
             </div>
 
             <div className="protocol" id="pro_2">
-              <span>SMTP Host</span>
+              <label htmlFor="smtp_host">SMTP Host</label>
               <p>
                 <input
                   type="text"
+                  name="smtp_host"
+                  id="smtp_host"
+                  value={addSmtp.smtp_host}
                   placeholder="admire.herosite.pro"
                   className="col8input"
+                  onChange={handleChange}
                 />
               </p>
             </div>
 
             <div className="protocol" id="pro_2">
-              <span>Port</span>
+              <label htmlFor="smtp_port">Port</label>
               <p>
-                <input type="number" placeholder="465" className="col3input" />
+                <input type="number" name="smtp_port" value={addSmtp.smtp_port} id="smtp_port" onChange={handleChange} placeholder="465" className="col3input" />
               </p>
             </div>
 
             <div className="protocol" id="pro_2">
-              <span>Email Form</span>
+              <label htmlFor="smtp_from_email">Email Form</label>
               <p>
                 <input
                   type="email"
+                  name="smtp_from_email"
+                  id="smtp_from_email"
+                  value={addSmtp.smtp_from_email}
+                  onChange={handleChange}
                   placeholder="support@example.com"
                   className="col8input"
                 />
@@ -100,10 +201,14 @@ function NotificationSetting() {
             </div>
 
             <div className="protocol" id="pro_2">
-              <span>Username</span>
+              <label htmlFor="smtp_username">Username</label>
               <p>
                 <input
+                  name="smtp_username"
+                  id="smtp_username"
                   type="text"
+                  value={addSmtp.smtp_username}
+                  onChange={handleChange}
                   placeholder="support@example.com"
                   className="col8input"
                 />
@@ -111,10 +216,14 @@ function NotificationSetting() {
             </div>
 
             <div className="protocol" id="pro_2">
-              <span>Password</span>
+              <label htmlFor="smtp_password">Password</label>
               <p>
                 <input
+                  name="smtp_password"
+                  id="smtp_password"
                   type="password"
+                  value={addSmtp.smtp_password}
+                  onChange={handleChange}
                   placeholder="****"
                   className="col8input"
                 />

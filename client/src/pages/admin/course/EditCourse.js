@@ -3,10 +3,12 @@ import Hoc from '../layout/Hoc';
 import { userRolesContext } from "../layout/RoleContext";
 import axios from 'axios';
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
+import Loading from '../layout/Loading';
 const port = process.env.REACT_APP_URL
 
 const EditCourse = () => {
     const { userRole, userId } = useContext(userRolesContext);
+    const [loading, setLoading] = useState(false)
     const { id } = useParams()
     const [tab, setTab] = useState("basic-info");
     const [isTax, setIsTax] = useState(false);
@@ -14,11 +16,14 @@ const EditCourse = () => {
     const [imageSrc] = useState("https://via.placeholder.com/150");
     const [notNullCourseCategory, setNotNullCourseCategory] = useState([]);
     const getNullCourseCategoryData = async () => {
+        setLoading(true)
         try {
             const res = await axios.get(`${port}/gettingNotNullCourseCategory`);
             setNotNullCourseCategory(res.data);
+            setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     }
     //get data for edit
@@ -59,6 +64,7 @@ const EditCourse = () => {
     })
 
     const getCourseData = async () => {
+        setLoading(true)
         try {
             const res = await axios.get(`${port}/gettingCourseMasterDataWithId/${id}`);
             setCourseData(res.data);
@@ -69,7 +75,6 @@ const EditCourse = () => {
             if (res.data.is_tax === 1) {
                 setIsTax(true);
             }
-            console.log(res.data)
             // setup for auther
             let auther = res.data.auther;
             try {
@@ -141,8 +146,11 @@ const EditCourse = () => {
             res.data.meta_keyword = Array.isArray(meta_keyword) ? meta_keyword : [];
 
             setCourseData(res.data);
+
+            setLoading(false)
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
     };
 
@@ -196,7 +204,6 @@ const EditCourse = () => {
             setNewImage(file);
         }
     };
-    console.log(courseData)
 
     const handleFaqChange = (index, event) => {
         const values = [...courseData.course_faqs];
@@ -304,6 +311,7 @@ const EditCourse = () => {
     const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const formData = new FormData();
         formData.append("course_title", courseData.course_title);
         formData.append('short_desc', courseData.short_desc);
@@ -346,8 +354,10 @@ const EditCourse = () => {
                 }
             });
             navigate('/all-course');
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     };
 
@@ -371,6 +381,7 @@ const EditCourse = () => {
         <>
             <Hoc />
             <div className="main">
+                {loading && <Loading />}
                 <div className="main-top-bar">
                     <div id="user-tag">
                         <h5>Courses</h5>

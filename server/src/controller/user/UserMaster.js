@@ -22,7 +22,6 @@ const getUserMasterDataWithId = async (req, res) => {
                 id: id
             }
         });
-        console.log(data.password)
         const decryptedPassword = DecryptPassword(data.password)
         data.dataValues.password = decryptedPassword;
         const dobdate = UnixNumberToDate(data.dob, "America/Toronto");
@@ -61,7 +60,6 @@ const addUserMasterData = async (req, res) => {
         createdAt: createdDate,
         updatedAt: createdDate,
     };
-    console.log(data)
     try {
         const usermasterdata = await UserMaster.create(data);
         res.status(200).json(usermasterdata);
@@ -77,9 +75,7 @@ const updateUserMasterData = async (req, res) => {
     if (!currentUser) {
         return res.status(404).json({ message: 'User not found' });
     }
-    console.log(req)
     if (req.file) {
-        console.log("in if")
         if (currentUser && currentUser.profile) {
             const imagePath = path.join(__dirname, '../../../../client/public/upload', currentUser.profile);
             if (fs.existsSync(imagePath)) {
@@ -111,7 +107,6 @@ const updateUserMasterData = async (req, res) => {
         updated_by: req.body.updated_by || 0,
         updatedAt: updateddate,
     };
-    console.log(data)
     try {
         const usermasterdata = await UserMaster.update(data, {
             where: {

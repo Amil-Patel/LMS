@@ -3,6 +3,7 @@ import Hoc from "../layout/Hoc";
 import axios from "axios";
 import { userRolesContext } from "../layout/RoleContext";
 import "../../../assets/css/course/coursecategory.css";
+import Loading from "../layout/Loading";
 import "../../../assets/css/main.css";
 const port = process.env.REACT_APP_URL;
 
@@ -13,10 +14,12 @@ const CourseCategory = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [nullCourseCategory, setNullCourseCategory] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [firstNullParentData, setFirstNullParentData] = useState([]);
 
   //get course category data
   const getNullCourseCategoryData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingNullCourseCategory`);
       setNullCourseCategory(res.data);
@@ -25,8 +28,10 @@ const CourseCategory = () => {
         setFirstNullParentData(firstCategory);
         await handleGetCourseDetail(firstCategory.id);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -56,7 +61,7 @@ const CourseCategory = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(addCourseCategoryData);
+    setLoading(true);
     const formData = new FormData();
     formData.append("cate_title", addCourseCategoryData.cate_title);
     formData.append("cate_parent_id", addCourseCategoryData.cate_parent_id);
@@ -74,14 +79,17 @@ const CourseCategory = () => {
         cate_thumbnail: null,
       });
       setAddNewImage(null);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   //get course data with id and clicking on null
   const [nullCourseDataWithId, setNullCourseDataWithId] = useState([]);
   const [courseDataWithParentId, setCourseDataWithParentId] = useState([]);
   const handleGetCourseDetail = async (id) => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${port}/gettingNullCourseCategoryWithId/${id}`
@@ -91,20 +99,25 @@ const CourseCategory = () => {
       );
       setCourseDataWithParentId(res2.data);
       setNullCourseDataWithId(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   //delete data code
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const res = await axios.delete(
         `${port}/deletingCourseCategory/${deleteId}`
       );
       getNullCourseCategoryData();
       setDeleteOpen(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -120,11 +133,14 @@ const CourseCategory = () => {
     updated_by: userId,
   });
   const getDataForEdit = async (id) => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingCoureseCategoryWithId/${id}`);
       setEditData(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -146,6 +162,7 @@ const CourseCategory = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
     formData.append("cate_title", editData.cate_title);
     formData.append("cate_parent_id", editData.cate_parent_id);
@@ -160,22 +177,27 @@ const CourseCategory = () => {
       );
       getNullCourseCategoryData();
       setEditOpen(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   //status change
 
   const handleStatusChange = async (id, status) => {
+    setLoading(true);
     try {
       const res = await axios.put(
         `${port}/updatingCourseCategoryStatus/${id}`,
         { status: status }
       );
       getNullCourseCategoryData();
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -204,16 +226,17 @@ const CourseCategory = () => {
   return (
     <>
       <Hoc />
-      <div class="main">
-        <div class="main-top-bar">
+      <div className="main">
+        {loading && <Loading />}
+        <div className="main-top-bar">
           <div id="user-tag">
             <h5>Course Category</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="search-input" type="text" placeholder="Search" />
+            <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          <div class="hero-inner-logo">
+          <div className="hero-inner-logo">
             <img src={require("../../../assets/image/pdf-logo.png")} />
             <img src={require("../../../assets/image/x-logo.png")} />
           </div>
@@ -226,6 +249,7 @@ const CourseCategory = () => {
           <div className="security-btn">
             {nullCourseCategory.map((course) => (
               <a
+                key={course.id}
                 className=""
                 style={{ cursor: "pointer" }}
                 onClick={() => handleGetCourseDetail(course.id)}
@@ -250,9 +274,10 @@ const CourseCategory = () => {
                         <p>Sub Course: {nullCourseDataWithId.subcoursecount}</p>
                       </div>
                       <div className="card-actions">
-                        <label className="switch" style={{ marginTop: "4px" }}>
+                        <label htmlFor="subcoursestatus" className="switch" style={{ marginTop: "4px" }}>
                           <input
                             type="checkbox"
+                            id="subcoursestatus"
                             checked={nullCourseDataWithId.data.status}
                             onClick={() =>
                               handleStatusChange(
@@ -295,9 +320,10 @@ const CourseCategory = () => {
                         <p>Sub Course: {firstNullParentData.subcoursecount}</p>
                       </div>
                       <div className="card-actions">
-                        <label className="switch" style={{ marginTop: "4px" }}>
+                        <label htmlFor="statussubcourse" className="switch" style={{ marginTop: "4px" }}>
                           <input
                             type="checkbox"
+                            id="statussubcourse"
                             checked={firstNullParentData.status}
                             onClick={() =>
                               handleStatusChange(
@@ -348,9 +374,10 @@ const CourseCategory = () => {
                   <div className="card-content">
                     <h5>{course.cate_title}</h5>
                     <div className="card-actions">
-                      <label className="switch">
+                      <label htmlFor="coursestatus" or="status" className="switch">
                         <input
                           type="checkbox"
+                          id="coursestatus"
                           checked={course.status}
                           onClick={() =>
                             handleStatusChange(course.id, course.status)
@@ -390,12 +417,13 @@ const CourseCategory = () => {
                 <h5>Add Course Category</h5>
                 <form className="coupon-form" onSubmit={handleSubmit}>
                   <div className="form-group">
-                    <label>
+                    <label htmlFor="cate_title">
                       Category Title<span className="required">*</span>
                     </label>
                     <div>
                       <input
                         type="text"
+                        id="cate_title"
                         className="col12input"
                         placeholder="Enter Category Title"
                         name="cate_title"
@@ -405,11 +433,12 @@ const CourseCategory = () => {
                       />
                     </div>
 
-                    <label>
+                    <label htmlFor="cate_parent_id">
                       Category Parent ID<span className="required">*</span>
                     </label>
                     <div>
                       <select
+                        id="cate_parent_id"
                         name="cate_parent_id"
                         className="col12input"
                         onChange={handleChange}
@@ -424,11 +453,12 @@ const CourseCategory = () => {
                       </select>
                     </div>
 
-                    <label>
+                    <label htmlFor="cate_thumbnail">
                       Category Thumbnail<span className="required">*</span>
                     </label>
                     <input
                       type="file"
+                      id="cate_thumbnail"
                       name="cate_thumbnail"
                       className="col12input"
                       style={{ marginBottom: "20px" }}
@@ -468,11 +498,12 @@ const CourseCategory = () => {
                 <h5>Edit Course Category</h5>
                 <form className="coupon-form" onSubmit={handleEditSubmit}>
                   <div className="form-group">
-                    <label>
+                    <label htmlFor="cate_title">
                       Category Title<span className="required">*</span>
                     </label>
                     <div>
                       <input
+                        id="cate_title"
                         type="text"
                         name="cate_title"
                         value={editData.cate_title}
@@ -483,11 +514,12 @@ const CourseCategory = () => {
                       />
                     </div>
 
-                    <label>
+                    <label htmlFor="cate_parent_id">
                       Category Parent ID<span className="required">*</span>
                     </label>
                     <div>
                       <select
+                        id="cate_parent_id"
                         name="cate_parent_id"
                         onChange={handleEditChange}
                         value={editData.cate_parent_id}
@@ -502,10 +534,11 @@ const CourseCategory = () => {
                         ))}
                       </select>
                     </div>
-                    <label>
+                    <label htmlFor="cate_thumbnail">
                       Category Thumbnail<span className="required">*</span>
                     </label>
                     <input
+                      id="cate_thumbnail"
                       type="file"
                       name="cate_thumbnail"
                       onChange={handleEditImageChange}

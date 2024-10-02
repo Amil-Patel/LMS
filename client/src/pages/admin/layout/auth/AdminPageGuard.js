@@ -10,7 +10,6 @@ const AdminPageGuard = ({ children }) => {
         const token = Cookies.get('token');
 
         if (token) {
-            console.log("token", token);
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);

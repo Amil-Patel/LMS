@@ -71,7 +71,6 @@ const updateCourseCouponData = async (req, res) => {
         updated_by: req.body.updated_by || 0,
         updatedAt: updatedat,
     }
-    console.log(data)
     try {
         const courseCoupondate = await Course_Coupon.update(data, {
             where: {

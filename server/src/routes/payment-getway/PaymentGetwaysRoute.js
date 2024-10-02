@@ -5,6 +5,7 @@ const paymentGetwayController = require("../../controller/payment-getways/Paymen
 
 paymentGetway.get("/gettingPaymentGetwayData", paymentGetwayController.getPaymentGetwayData);
 paymentGetway.put("/updatingPaymentGetway/:id", paymentGetwayController.updatePaymentGetwayData);
+paymentGetway.post("/addPaymentGetwayData", paymentGetwayController.addPaymentGetwayData);
 
 
 

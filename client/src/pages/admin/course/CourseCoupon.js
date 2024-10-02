@@ -5,6 +5,7 @@ import "../../../assets/css/course/addcoupon.css";
 import "../../../assets/css/main.css";
 import { userRolesContext } from "../layout/RoleContext";
 import DeleteModal from "../layout/DeleteModal";
+import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
@@ -14,6 +15,7 @@ const CourseCoupon = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [couponData, setCouponData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [addCouponData, setAddCouponData] = useState({
     coupon_code: "",
     course_name: [],
@@ -48,20 +50,26 @@ const CourseCoupon = () => {
   //get course data
   const [courseData, setCourseData] = useState([]);
   const getCourseData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   //get coupon data
   const getCouponData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingCourseCouponData`);
       setCouponData(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   //add coupon data
@@ -114,6 +122,7 @@ const CourseCoupon = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await axios.post(`${port}/addingCourseCoupon`, addCouponData);
       getCouponData();
@@ -125,22 +134,27 @@ const CourseCoupon = () => {
         expired_date: "",
       });
       setAddOpen(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   //delete code
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const res = await axios.delete(
         `${port}/deletingCourseCoupon/${deleteId}`
       );
       getCouponData();
       setDeleteOpen(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -154,6 +168,7 @@ const CourseCoupon = () => {
     updated_by: userId,
   });
   const getCouponDataForEdit = async (id) => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${port}/gettingCourseCouponDataWithId/${id}`
@@ -172,10 +187,10 @@ const CourseCoupon = () => {
       setDiscountType(
         res.data.discount_in_percentage ? "percentage" : "amount"
       );
-
-      console.log(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const handleEditChange = (e) => {
@@ -203,6 +218,7 @@ const CourseCoupon = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (discountType === "percentage") {
       setEditCouponData({
         ...editCouponData,
@@ -222,8 +238,10 @@ const CourseCoupon = () => {
       );
       getCouponData();
       setEditOpen(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -233,13 +251,16 @@ const CourseCoupon = () => {
   }, []);
   //status change code
   const handleStatusChange = async (id, status) => {
+    setLoading(true);
     try {
       const res = await axios.put(`${port}/updatingCourseCouponStatus/${id}`, {
         status: status,
       });
       getCouponData();
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -307,16 +328,17 @@ const CourseCoupon = () => {
   return (
     <>
       <Hoc />
-      <div class="main">
-        <div class="main-top-bar">
+      <div className="main">
+        {loading && <Loading />}
+        <div className="main-top-bar">
           <div id="user-tag">
             <h5>Course Coupons</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="search-input" type="text" placeholder="Search" />
+            <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          <div class="hero-inner-logo">
+          <div className="hero-inner-logo">
             <img src={require("../../../assets/image/pdf-logo.png")} />
             <img src={require("../../../assets/image/x-logo.png")} />
           </div>
@@ -325,7 +347,7 @@ const CourseCoupon = () => {
           </button>
         </div>
 
-        <div class="table-wrapper">
+        <div className="table-wrapper">
           <table>
             <thead>
               <tr>
@@ -333,21 +355,21 @@ const CourseCoupon = () => {
                 <th style={{ width: "15%" }}>
                   Coupon code{" "}
                   <i
-                    class="fa-solid fa-sort"
+                    className="fa-solid fa-sort"
                     onClick={() => handleSort("coupon_code")}
                   ></i>
                 </th>
                 <th style={{ width: "25%" }}>
                   Course Name{" "}
                   <i
-                    class="fa-solid fa-sort"
+                    className="fa-solid fa-sort"
                     onClick={() => handleSort("course_name")}
                   ></i>
                 </th>
                 <th style={{ width: "15%" }}>
                   Discount{" "}
                   <i
-                    class="fa-solid fa-sort"
+                    className="fa-solid fa-sort"
                     onClick={() =>
                       handleSort(
                         "discount_in_persentage" || "discount_in_amount"
@@ -358,7 +380,7 @@ const CourseCoupon = () => {
                 <th style={{ width: "15%" }}>
                   Validity till{" "}
                   <i
-                    class="fa-solid fa-sort"
+                    className="fa-solid fa-sort"
                     onClick={() => handleSort("expired_date")}
                   ></i>
                 </th>
@@ -392,23 +414,22 @@ const CourseCoupon = () => {
                     </td>
                     <td>{i.expired_date}</td>
                     <td>
-                      <label class="switch">
+                      <label className="switch">
                         <input
                           type="checkbox"
                           checked={i.status === 1}
                           onChange={() => handleStatusChange(i.id, i.status)}
                         />
-                        <span class="slider"></span>
+                        <span className="slider"></span>
                       </label>
                     </td>
                     <td>
                       <div
-                        className={`menu-container ${
-                          activeDropdown === index ? "active" : ""
-                        }`}
+                        className={`menu-container ${activeDropdown === index ? "active" : ""
+                          }`}
                       >
                         <div
-                          class="menu-button"
+                          className="menu-button"
                           onClick={() => toggleDropdown(index)}
                         >
                           {" "}
@@ -440,11 +461,11 @@ const CourseCoupon = () => {
           </table>
         </div>
 
-        <div class="footer-text">
+        <div className="footer-text">
           <p>Showing 1-09 of 78</p>
-          <span class="next-page-icon">
-            <i class="fa-solid fa-angle-left"></i>
-            <i class="fa-solid fa-angle-right"></i>
+          <span className="next-page-icon">
+            <i className="fa-solid fa-angle-left"></i>
+            <i className="fa-solid fa-angle-right"></i>
           </span>
         </div>
 

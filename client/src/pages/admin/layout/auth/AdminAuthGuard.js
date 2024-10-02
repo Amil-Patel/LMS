@@ -10,9 +10,7 @@ const AdminAuthGuard = ({ children }) => {
         const token = Cookies.get('token');
 
         if (token) {
-            console.log("token", token);
             setIsAuthenticated(true);
-            console.log("object2")
         } else {
             setIsAuthenticated(false);
         }
