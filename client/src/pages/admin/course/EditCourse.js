@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Hoc from '../layout/Hoc';
 import { userRolesContext } from "../layout/RoleContext";
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import Loading from '../layout/Loading';
 const port = process.env.REACT_APP_URL
@@ -18,7 +18,7 @@ const EditCourse = () => {
     const getNullCourseCategoryData = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(`${port}/gettingNotNullCourseCategory`);
+            const res = await axiosInstance.get(`${port}/gettingNotNullCourseCategory`);
             setNotNullCourseCategory(res.data);
             setLoading(false)
         } catch (error) {
@@ -66,7 +66,7 @@ const EditCourse = () => {
     const getCourseData = async () => {
         setLoading(true)
         try {
-            const res = await axios.get(`${port}/gettingCourseMasterDataWithId/${id}`);
+            const res = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
             setCourseData(res.data);
 
             if (res.data.expiring_time === "limited_time") {
@@ -348,7 +348,7 @@ const EditCourse = () => {
         formData.append('updated_by', courseData.updated_by)
 
         try {
-            const res = await axios.put(`${port}/updatingCourseMaster/${id}`, courseData, {
+            const res = await axiosInstance.put(`${port}/updatingCourseMaster/${id}`, courseData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -400,8 +400,8 @@ const EditCourse = () => {
                             alt="X Logo"
                         />
                     </div>
-                    <a className="primary-btn module-btn" style={{ cursor: "pointer" }}>
-                        <span className="text" onClick={handleSubmit}>Save</span>
+                    <a className="primary-btn module-btn" onClick={handleSubmit} style={{ cursor: "pointer" }}>
+                        <span className="text">Save</span>
                     </a>
                 </div>
 

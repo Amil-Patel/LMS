@@ -3,8 +3,11 @@ const jwt = require("jsonwebtoken");
 const EncryptPassword = require("../../middleware/EncryptPassword");
 const DecryptPassword = require("../../middleware/DecryptPassword");
 const secret_key = process.env.JWT_SECRET_KEY;
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getLogin = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     let { email, password } = req.body;
     email = email.trim();
 

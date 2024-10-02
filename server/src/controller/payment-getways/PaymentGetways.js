@@ -1,7 +1,9 @@
 const { Payment_Getway } = require("../../database/models/index");
-
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getPaymentGetwayData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await Payment_Getway.findAll();
         res.send(data);
@@ -12,6 +14,8 @@ const getPaymentGetwayData = async (req, res) => {
 }
 
 const updatePaymentGetwayData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const data = {
         identifier: req.body.identifier,
@@ -24,9 +28,6 @@ const updatePaymentGetwayData = async (req, res) => {
         status: req.body.status,
         updatedAt: new Date(),
     }
-    console.log("data")
-    console.log(data);
-    console.log("data")
     try {
         const userroledata = await Payment_Getway.update(data, {
             where: {
@@ -44,6 +45,8 @@ const updatePaymentGetwayData = async (req, res) => {
 }
 
 const addPaymentGetwayData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const data = {
         identifier: req.body.identifier,
         currency: req.body.currency,

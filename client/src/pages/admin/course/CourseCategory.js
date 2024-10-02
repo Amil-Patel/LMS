@@ -1,27 +1,31 @@
 import React, { useState, useEffect, useContext } from "react";
 import Hoc from "../layout/Hoc";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
 import "../../../assets/css/course/coursecategory.css";
 import Loading from "../layout/Loading";
+import useCheckRolePermission from "../layout/CheckRolePermission";
 import "../../../assets/css/main.css";
 const port = process.env.REACT_APP_URL;
 
 const CourseCategory = () => {
   // Sample data for the cards
-  const { userRole, userId } = useContext(userRolesContext);
+  const { userId } = useContext(userRolesContext);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [nullCourseCategory, setNullCourseCategory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [firstNullParentData, setFirstNullParentData] = useState([]);
-
+  const perm = useCheckRolePermission("Course Category");
+  const addCourseCatePermission = perm.length > 0 && perm[0].can_add === 1 ? 1 : 0;
+  const editCourseCatePermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
+  const deleteCourseCatePermission = perm.length > 0 && perm[0].can_delete === 1 ? 1 : 0;
   //get course category data
   const getNullCourseCategoryData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingNullCourseCategory`);
+      const res = await axiosInstance.get(`${port}/gettingNullCourseCategory`);
       setNullCourseCategory(res.data);
       if (res.data.length > 0) {
         const firstCategory = res.data[0];
@@ -70,7 +74,7 @@ const CourseCategory = () => {
     formData.append("created_by", addCourseCategoryData.created_by);
     formData.append("updated_by", addCourseCategoryData.updated_by);
     try {
-      const res = await axios.post(`${port}/addingCourseCategory`, formData);
+      const res = await axiosInstance.post(`${port}/addingCourseCategory`, formData);
       getNullCourseCategoryData();
       setAddOpen(false);
       setAddCourseCategoryData({
@@ -91,10 +95,10 @@ const CourseCategory = () => {
   const handleGetCourseDetail = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.get(
+      const res = await axiosInstance.get(
         `${port}/gettingNullCourseCategoryWithId/${id}`
       );
-      const res2 = await axios.get(
+      const res2 = await axiosInstance.get(
         `${port}/gettingCourseCategoryWithParentId/${id}`
       );
       setCourseDataWithParentId(res2.data);
@@ -109,7 +113,7 @@ const CourseCategory = () => {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const res = await axios.delete(
+      const res = await axiosInstance.delete(
         `${port}/deletingCourseCategory/${deleteId}`
       );
       getNullCourseCategoryData();
@@ -135,7 +139,7 @@ const CourseCategory = () => {
   const getDataForEdit = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingCoureseCategoryWithId/${id}`);
+      const res = await axiosInstance.get(`${port}/gettingCoureseCategoryWithId/${id}`);
       setEditData(res.data);
       setLoading(false);
     } catch (error) {
@@ -171,7 +175,7 @@ const CourseCategory = () => {
     }
     formData.append("updated_by", editData.updated_by);
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${port}/updatingCourseCategory/${editData.id}`,
         formData
       );
@@ -189,7 +193,7 @@ const CourseCategory = () => {
   const handleStatusChange = async (id, status) => {
     setLoading(true);
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${port}/updatingCourseCategoryStatus/${id}`,
         { status: status }
       );
@@ -222,7 +226,7 @@ const CourseCategory = () => {
     setDeleteId(id);
     setDeleteOpen(!deleteOpen);
   };
-
+  
   return (
     <>
       <Hoc />
@@ -240,9 +244,11 @@ const CourseCategory = () => {
             <img src={require("../../../assets/image/pdf-logo.png")} />
             <img src={require("../../../assets/image/x-logo.png")} />
           </div>
-          <a style={{ cursor: "pointer" }} onClick={addToggleModal}>
-            <span className="primary-btn module-btn">+ Add</span>
-          </a>
+          {addCourseCatePermission == 1 && (
+            <a style={{ cursor: "pointer" }} onClick={addToggleModal}>
+              <span className="primary-btn module-btn">+ Add</span>
+            </a>
+          )}
         </div>
 
         <div className="services-section">
@@ -260,104 +266,121 @@ const CourseCategory = () => {
           </div>
           <div className="horizontal-card">
             <div className="card">
-              {nullCourseDataWithId?.data || firstNullParentData ? (
-                <>
-                  {nullCourseDataWithId?.data ? (
-                    <>
-                      <img
-                        src={`./upload/${nullCourseDataWithId.data.cate_thumbnail}`}
-                        alt={nullCourseDataWithId.data.cate_title}
-                        className="card-image"
-                      />
-                      <div className="content">
-                        <h5>{nullCourseDataWithId.data.cate_title}</h5>
-                        <p>Sub Course: {nullCourseDataWithId.subcoursecount}</p>
-                      </div>
-                      <div className="card-actions">
-                        <label htmlFor="subcoursestatus" className="switch" style={{ marginTop: "4px" }}>
-                          <input
-                            type="checkbox"
-                            id="subcoursestatus"
-                            checked={nullCourseDataWithId.data.status}
-                            onClick={() =>
-                              handleStatusChange(
-                                nullCourseDataWithId.data.id,
-                                nullCourseDataWithId.data.status
-                              )
-                            }
-                          />
-                          <span className="slider"></span>
-                        </label>
-                        <div className="action-btn">
-                          <span
-                            onClick={() => {
-                              editToggleModal(nullCourseDataWithId.data.id);
-                            }}
-                            className="edit"
-                          >
-                            <i className="fa fa-pencil"></i>
-                          </span>
-                          <span
-                            onClick={() =>
-                              deleteToggleModal(nullCourseDataWithId.data.id)
-                            }
-                            className="delete"
-                          >
-                            <i className="fa fa-trash"></i>
-                          </span>
+              {nullCourseDataWithId && nullCourseDataWithId.data ? (
+                nullCourseDataWithId?.data ? (
+                  <>
+                    {nullCourseDataWithId?.data ? (
+                      <>
+                        <img
+                          src={`./upload/${nullCourseDataWithId.data.cate_thumbnail}`}
+                          alt={nullCourseDataWithId.data.cate_title}
+                          className="card-image"
+                        />
+                        <div className="content">
+                          <h5>{nullCourseDataWithId.data.cate_title}</h5>
+                          <p>Sub Course: {nullCourseDataWithId.subcoursecount}</p>
                         </div>
-                      </div>
-                    </>
-                  ) : firstNullParentData ? (
-                    <>
-                      <img
-                        src={`./upload/${firstNullParentData.cate_thumbnail}`}
-                        alt={firstNullParentData.cate_title}
-                        className="card-image"
-                      />
-                      <div className="content">
-                        <h5>{firstNullParentData.cate_title}</h5>
-                        <p>Sub Course: {firstNullParentData.subcoursecount}</p>
-                      </div>
-                      <div className="card-actions">
-                        <label htmlFor="statussubcourse" className="switch" style={{ marginTop: "4px" }}>
-                          <input
-                            type="checkbox"
-                            id="statussubcourse"
-                            checked={firstNullParentData.status}
-                            onClick={() =>
-                              handleStatusChange(
-                                firstNullParentData.id,
-                                firstNullParentData.status
-                              )
-                            }
-                          />
-                          <span className="slider"></span>
-                        </label>
-                        <div className="action-btn">
-                          <span
-                            onClick={() => {
-                              editToggleModal(firstNullParentData.id);
-                            }}
-                            className="edit"
-                          >
-                            <i className="fa fa-pencil"></i>
-                          </span>
-                          <span
-                            onClick={() =>
-                              deleteToggleModal(firstNullParentData.id)
-                            }
-                            className="delete"
-                          >
-                            <i className="fa fa-trash"></i>
-                          </span>
+                        <div className="card-actions">
+                          {
+                            editCourseCatePermission == 1 && (
+                              <label htmlFor="subcoursestatus" className="switch" style={{ marginTop: "4px" }}>
+                                <input
+                                  type="checkbox"
+                                  id="subcoursestatus"
+                                  checked={nullCourseDataWithId.data.status}
+                                  onClick={() =>
+                                    handleStatusChange(
+                                      nullCourseDataWithId.data.id,
+                                      nullCourseDataWithId.data.status
+                                    )
+                                  }
+                                />
+                                <span className="slider"></span>
+                              </label>
+                            )}
+                          <div className="action-btn">
+                            {editCourseCatePermission == 1 && (
+                              <span
+                                onClick={() => {
+                                  editToggleModal(nullCourseDataWithId.data.id);
+                                }}
+                                className="edit"
+                              >
+                                <i className="fa fa-pencil"></i>
+                              </span>
+                            )}
+                            {deleteCourseCatePermission == 1 && (
+                              <span
+                                onClick={() =>
+                                  deleteToggleModal(nullCourseDataWithId.data.id)
+                                }
+                                className="delete"
+                              >
+                                <i className="fa fa-trash"></i>
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  ) : null}
-                </>
+                      </>
+                    ) : firstNullParentData ? (
+                      <>
+                        <img
+                          src={`./upload/${firstNullParentData.cate_thumbnail}`}
+                          alt={firstNullParentData.cate_title}
+                          className="card-image"
+                        />
+                        <div className="content">
+                          <h5>{firstNullParentData.cate_title}</h5>
+                          <p>Sub Course: {firstNullParentData.subcoursecount}</p>
+                        </div>
+                        <div className="card-actions">
+                          {editCourseCatePermission == 1 && (
+                            <label htmlFor="statussubcourse" className="switch" style={{ marginTop: "4px" }}>
+                              <input
+                                type="checkbox"
+                                id="statussubcourse"
+                                checked={firstNullParentData.status}
+                                onClick={() =>
+                                  handleStatusChange(
+                                    firstNullParentData.id,
+                                    firstNullParentData.status
+                                  )
+                                }
+                              />
+                              <span className="slider"></span>
+                            </label>
+                          )}
+                          <div className="action-btn">
+                            {editCourseCatePermission == 1 && (
+                              <span
+                                onClick={() => {
+                                  editToggleModal(firstNullParentData.id);
+                                }}
+                                className="edit"
+                              >
+                                <i className="fa fa-pencil"></i>
+                              </span>
+                            )}
+                            {deleteCourseCatePermission == 1 && (
+                              <span
+                                onClick={() =>
+                                  deleteToggleModal(firstNullParentData.id)
+                                }
+                                className="delete"
+                              >
+                                <i className="fa fa-trash"></i>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                  </>
+                ) : (
+                  <p>No data found</p>
+                )
               ) : (
-                <p>No data found</p>
+                <p>Course Category not found</p>
               )}
             </div>
           </div>
@@ -374,39 +397,45 @@ const CourseCategory = () => {
                   <div className="card-content">
                     <h5>{course.cate_title}</h5>
                     <div className="card-actions">
-                      <label htmlFor="coursestatus" or="status" className="switch">
-                        <input
-                          type="checkbox"
-                          id="coursestatus"
-                          checked={course.status}
-                          onClick={() =>
-                            handleStatusChange(course.id, course.status)
-                          }
-                        />
-                        <span className="slider"></span>
-                      </label>
+                      {editCourseCatePermission == 1 && (
+                        <label htmlFor="coursestatus" or="status" className="switch">
+                          <input
+                            type="checkbox"
+                            id="coursestatus"
+                            checked={course.status}
+                            onClick={() =>
+                              handleStatusChange(course.id, course.status)
+                            }
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      )}
                       <div className="action-btn">
-                        <span
-                          onClick={() => {
-                            editToggleModal(course.id);
-                          }}
-                          className="edit"
-                        >
-                          <i className="fa fa-pencil"></i>
-                        </span>
-                        <span
-                          onClick={() => deleteToggleModal(course.id)}
-                          className="delete"
-                        >
-                          <i className="fa fa-trash"></i>
-                        </span>
+                        {editCourseCatePermission == 1 && (
+                          <span
+                            onClick={() => {
+                              editToggleModal(course.id);
+                            }}
+                            className="edit"
+                          >
+                            <i className="fa fa-pencil"></i>
+                          </span>
+                        )}
+                        {deleteCourseCatePermission == 1 && (
+                          <span
+                            onClick={() => deleteToggleModal(course.id)}
+                            className="delete"
+                          >
+                            <i className="fa fa-trash"></i>
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
               ))
             ) : (
-              <p>Course Not Found</p>
+              <p>Course Sub Category Not Found</p>
             )}
           </div>
 

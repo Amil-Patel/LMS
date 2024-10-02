@@ -1,7 +1,9 @@
 const { System_Setting } = require("../../database/models/index");
-
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getSystemSettingDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = System_Setting.findeOne({
@@ -18,6 +20,8 @@ const getSystemSettingDataWithId = async (req, res) => {
 
 
 const addSystemSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const data = {
         timezone: req.body.timezone,
         currency: req.body.currency,
@@ -38,6 +42,8 @@ const addSystemSettingData = async (req, res) => {
 
 
 const updateSystemSettingData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const data = {
         timezone: req.body.timezone,

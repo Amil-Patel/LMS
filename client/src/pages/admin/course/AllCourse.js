@@ -4,7 +4,7 @@ import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
 import { NavLink } from "react-router-dom";
 import { userRolesContext } from "../layout/RoleContext";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
 const port = process.env.REACT_APP_URL
@@ -20,7 +20,7 @@ const AllCourse = () => {
   const getCourseData = async () => {
     setLoading(true)
     try {
-      const res = await axios.get(`${port}/gettingCourseMasterData`);
+      const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
       setLoading(false)
     } catch (error) {
@@ -38,7 +38,7 @@ const AllCourse = () => {
   const handleDelete = async () => {
     setLoading(true)
     try {
-      const res = await axios.delete(`${port}/deletingCourseMaster/${deleteId}`);
+      const res = await axiosInstance.delete(`${port}/deletingCourseMaster/${deleteId}`);
       getCourseData();
       setDeleteOpen(false)
       setLoading(false)
@@ -94,6 +94,7 @@ const AllCourse = () => {
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Courses</h5>

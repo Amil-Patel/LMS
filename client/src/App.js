@@ -1,5 +1,5 @@
 import React from "react";
-import "./assets/css/main.css";
+import ToastMessage from "./pages/admin/layout/ToastMessage";
 import DashboardRoute from "./routes/admin/DashboardRoute";
 import CourseCouponRoute from "./routes/admin/course/CourseCouponRoute";
 import CourseCategoryRoute from "./routes/admin/course/CourseCategoryRoute";
@@ -22,6 +22,7 @@ import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
 const App = () => {
   return (
     <>
+      <ToastMessage />
       <RoleContext>
         <DashboardRoute />
         <CourseCouponRoute />

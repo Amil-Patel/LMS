@@ -1,6 +1,9 @@
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 const { academic_progress, enrollment, Course_Lesson, UserMaster, Course_Quize, quize_result } = require("../../database/models/index");
 
 const getAcademicProgressData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         // Fetch academic progress data for student_id 1
         const academicData = await academic_progress.findAll({

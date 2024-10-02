@@ -3,8 +3,11 @@ const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const path = require("path");
 const fs = require("fs");
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getCourseMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await Course_Master.findAll();
         res.send(data);
@@ -15,6 +18,8 @@ const getCourseMasterData = async (req, res) => {
 }
 
 const getCourseMasterDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await Course_Master.findOne({
@@ -32,6 +37,8 @@ const getCourseMasterDataWithId = async (req, res) => {
 }
 
 const addCourseMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const publishDate = DateToUnixNumber(req.body.course_publish_date, 'America/Toronto');
     const data = {
@@ -82,6 +89,8 @@ const addCourseMasterData = async (req, res) => {
 }
 
 const updateCourseMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const updateddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const publishDate = DateToUnixNumber(req.body.course_publish_date, 'America/Toronto');
@@ -153,6 +162,8 @@ const updateCourseMasterData = async (req, res) => {
 }
 
 const deleteCourseMaster = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const curentcoursemaster = await Course_Master.findOne({ where: { id } });
     if (!curentcoursemaster) {

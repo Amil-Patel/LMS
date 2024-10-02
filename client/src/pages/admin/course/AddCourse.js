@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/addcourse.css";
 import "../../../assets/css/main.css";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
 import Loading from "../layout/Loading";
 import { NavLink, useNavigate } from "react-router-dom";
 const port = process.env.REACT_APP_URL
 
 const AddCourse = () => {
-  const { userRole, userId } = useContext(userRolesContext);
+  const { userId } = useContext(userRolesContext);
   const [tab, setTab] = useState("basic-info");
   const [isTax, setIsTax] = useState(false);
   const [isLimited, setIsLimited] = useState(false);
@@ -20,7 +20,7 @@ const AddCourse = () => {
   const getNullCourseCategoryData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingNotNullCourseCategory`);
+      const res = await axiosInstance.get(`${port}/gettingNotNullCourseCategory`);
       setNotNullCourseCategory(res.data);
       setLoading(false);
     } catch (error) {
@@ -274,7 +274,7 @@ const AddCourse = () => {
 
 
     try {
-      const res = await axios.post(`${port}/addingCourseMaster`, addCourse, {
+      const res = await axiosInstance.post(`${port}/addingCourseMaster`, addCourse, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -311,8 +311,8 @@ const AddCourse = () => {
               alt="X Logo"
             />
           </div>
-          <a className="primary-btn module-btn" style={{ cursor: "pointer" }}>
-            <span className="text" onClick={handleSubmit}>Save</span>
+          <a className="primary-btn module-btn" onClick={handleSubmit} style={{ cursor: "pointer" }}>
+            <span className="text" >Save</span>
           </a>
         </div>
 

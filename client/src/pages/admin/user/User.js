@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/user/user.css";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 import { userRolesContext } from "../layout/RoleContext";
 const port = process.env.REACT_APP_URL
@@ -49,7 +49,7 @@ const User = () => {
     const fetchPermissions = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${port}/checkingUserPermission`, {
+        const res = await axiosInstance.get(`${port}/checkingUserPermission`, {
           params: { name: roleName }
         });
         setCheckUserPerm(res.data);
@@ -247,7 +247,7 @@ const User = () => {
     formData.append("created_by", addUser.created_by);
     formData.append("updated_by", addUser.updated_by);
     try {
-      const res = await axios.post(`${port}/addingUserMaster`, formData);
+      const res = await axiosInstance.post(`${port}/addingUserMaster`, formData);
       setAddUserOpen(false);
       getAllUserData();
       setAddUser({
@@ -285,7 +285,7 @@ const User = () => {
   const getAllUserData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingUserMasterData`);
+      const res = await axiosInstance.get(`${port}/gettingUserMasterData`);
       setAllUserData(res.data);
       if (studentView) {
         filterUserData("student", res.data);
@@ -322,7 +322,7 @@ const User = () => {
   const deleteUserData = async () => {
     setLoading(true);
     try {
-      const res = await axios.delete(`${port}/deletingUserMaster/${deleteId}`);
+      const res = await axiosInstance.delete(`${port}/deletingUserMaster/${deleteId}`);
       getAllUserData();
       setDeleteOpen(false);
       setLoading(false);
@@ -354,7 +354,7 @@ const User = () => {
   const getDataForEdit = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingUserMasterDataWithId/${id}`);
+      const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${id}`);
       setEditData(res.data);
       setLoading(false);
     } catch (error) {
@@ -405,7 +405,7 @@ const User = () => {
     formData.append("status", editData.status);
     formData.append("updated_by", editData.updated_by);
     try {
-      const res = await axios.put(`${port}/updatingUserMaster/${editData.id}`, formData, {
+      const res = await axiosInstance.put(`${port}/updatingUserMaster/${editData.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

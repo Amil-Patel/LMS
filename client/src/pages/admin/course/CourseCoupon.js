@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import "../../../assets/css/course/addcoupon.css";
 import "../../../assets/css/main.css";
 import { userRolesContext } from "../layout/RoleContext";
 import DeleteModal from "../layout/DeleteModal";
 import Loading from "../layout/Loading";
+import useCheckRolePermission from "../layout/CheckRolePermission";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
-  const { userRole, userId } = useContext(userRolesContext);
+  const { userId } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -25,6 +26,10 @@ const CourseCoupon = () => {
     created_by: userId,
     updated_by: userId,
   });
+  const perm = useCheckRolePermission("Course Coupon");
+  const addCourseCoupon = perm.length > 0 && perm[0].can_add === 1 ? 1 : 0;
+  const editCourseCoupon = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
+  const deleteCourseCoupon = perm.length > 0 && perm[0].can_delete === 1 ? 1 : 0;
 
   const [discountType, setDiscountType] = useState("percentage");
 
@@ -52,7 +57,7 @@ const CourseCoupon = () => {
   const getCourseData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingCourseMasterData`);
+      const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
       setLoading(false);
     } catch (error) {
@@ -64,7 +69,7 @@ const CourseCoupon = () => {
   const getCouponData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${port}/gettingCourseCouponData`);
+      const res = await axiosInstance.get(`${port}/gettingCourseCouponData`);
       setCouponData(res.data);
       setLoading(false);
     } catch (error) {
@@ -124,7 +129,7 @@ const CourseCoupon = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${port}/addingCourseCoupon`, addCouponData);
+      const res = await axiosInstance.post(`${port}/addingCourseCoupon`, addCouponData);
       getCouponData();
       setAddCouponData({
         coupon_code: "",
@@ -146,7 +151,7 @@ const CourseCoupon = () => {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const res = await axios.delete(
+      const res = await axiosInstance.delete(
         `${port}/deletingCourseCoupon/${deleteId}`
       );
       getCouponData();
@@ -170,7 +175,7 @@ const CourseCoupon = () => {
   const getCouponDataForEdit = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.get(
+      const res = await axiosInstance.get(
         `${port}/gettingCourseCouponDataWithId/${id}`
       );
       let courseName = res.data.course_name;
@@ -232,7 +237,7 @@ const CourseCoupon = () => {
       });
     }
     try {
-      const res = await axios.put(
+      const res = await axiosInstance.put(
         `${port}/updatingCourseCoupon/${editCouponData.id}`,
         editCouponData
       );
@@ -253,7 +258,7 @@ const CourseCoupon = () => {
   const handleStatusChange = async (id, status) => {
     setLoading(true);
     try {
-      const res = await axios.put(`${port}/updatingCourseCouponStatus/${id}`, {
+      const res = await axiosInstance.put(`${port}/updatingCourseCouponStatus/${id}`, {
         status: status,
       });
       getCouponData();
@@ -342,9 +347,11 @@ const CourseCoupon = () => {
             <img src={require("../../../assets/image/pdf-logo.png")} />
             <img src={require("../../../assets/image/x-logo.png")} />
           </div>
-          <button onClick={addToggleModal} className="primary-btn module-btn">
-            + Add
-          </button>
+          {addCourseCoupon == 1 && (
+            <button onClick={addToggleModal} className="primary-btn module-btn">
+              + Add
+            </button>
+          )}
         </div>
 
         <div className="table-wrapper">
@@ -384,8 +391,12 @@ const CourseCoupon = () => {
                     onClick={() => handleSort("expired_date")}
                   ></i>
                 </th>
-                <th style={{ width: "10%" }}>Status</th>
-                <th style={{ width: "10%" }}>Action</th>
+                {editCourseCoupon == 1 && (
+                  <th style={{ width: "10%" }}>Status</th>
+                )}
+                {editCourseCoupon == 1 && deleteCourseCoupon == 1 && (
+                  <th style={{ width: "10%" }}>Action</th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -413,47 +424,55 @@ const CourseCoupon = () => {
                         : i.discount_in_amount}
                     </td>
                     <td>{i.expired_date}</td>
-                    <td>
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={i.status === 1}
-                          onChange={() => handleStatusChange(i.id, i.status)}
-                        />
-                        <span className="slider"></span>
-                      </label>
-                    </td>
-                    <td>
-                      <div
-                        className={`menu-container ${activeDropdown === index ? "active" : ""
-                          }`}
-                      >
+                    {editCourseCoupon == 1 && (
+                      <td>
+                        <label className="switch">
+                          <input
+                            type="checkbox"
+                            checked={i.status === 1}
+                            onChange={() => handleStatusChange(i.id, i.status)}
+                          />
+                          <span className="slider"></span>
+                        </label>
+                      </td>
+                    )}
+                    {editCourseCoupon == 1 && deleteCourseCoupon == 1 && (
+                      <td>
                         <div
-                          className="menu-button"
-                          onClick={() => toggleDropdown(index)}
+                          className={`menu-container ${activeDropdown === index ? "active" : ""
+                            }`}
                         >
-                          {" "}
-                          ⋮{" "}
-                        </div>
-                        {activeDropdown === index && (
-                          <div className="menu-content">
-                            <a
-                              onClick={() => {
-                                editToggleModal(i.id);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <p>Edit</p>
-                            </a>
-                            <p>
-                              <DeleteModal
-                                onDelete={() => handleDelete(i.id)}
-                              />
-                            </p>
+                          <div
+                            className="menu-button"
+                            onClick={() => toggleDropdown(index)}
+                          >
+                            {" "}
+                            ⋮{" "}
                           </div>
-                        )}
-                      </div>
-                    </td>
+                          {activeDropdown === index && (
+                            <div className="menu-content">
+                              {editCourseCoupon == 1 && (
+                                <a
+                                  onClick={() => {
+                                    editToggleModal(i.id);
+                                  }}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <p>Edit</p>
+                                </a>
+                              )}
+                              {deleteCourseCoupon == 1 && (
+                                <p>
+                                  <DeleteModal
+                                    onDelete={() => handleDelete(i.id)}
+                                  />
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 );
               })}

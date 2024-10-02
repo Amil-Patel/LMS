@@ -1,7 +1,10 @@
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 const { Role_Permission, Permission_Category } = require("../../database/models/index");
 const { Op } = require("sequelize");
 
 const getRolePermissionData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const { name } = req.query;
     try {
         const data = await Role_Permission.findAll({
@@ -14,6 +17,8 @@ const getRolePermissionData = async (req, res) => {
     }
 }
 const checkRolePermissionData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const { name, permName } = req.query;
     const permCateId = await Permission_Category.findOne({ where: { name: permName } });
     try {

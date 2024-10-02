@@ -1,6 +1,8 @@
 const { enrollment, Course_Master, UserMaster } = require("../../database/models/index");
-
+const AuthMiddleware = require("../../auth/AuthMiddleware")
 const getEnrollmentData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const data = await enrollment.findAll({
             include: [
@@ -24,6 +26,8 @@ const getEnrollmentData = async (req, res) => {
 }
 
 const addEnrollmentData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const data = {
         student_id: req.body.student_id,
         course_id: req.body.course_id,
@@ -42,6 +46,8 @@ const addEnrollmentData = async (req, res) => {
 }
 
 const deleteEnrollmentData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     try {
         const data = await enrollment.destroy({
