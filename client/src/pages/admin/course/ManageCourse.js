@@ -461,6 +461,7 @@ const ManageCourse = () => {
 
   const [editQuizData, setEditQuizData] = useState({
     title: "",
+    section_id: sectionId,
     course_id: id,
     quize_duration: "",
     expire_time: "",
@@ -483,11 +484,9 @@ const ManageCourse = () => {
 
       if (quizData) {
         if (quizData.no_of_q_retakes != null) {
-          console.log("in max");
           setMaxAttempts(true);
         }
         if (quizData.expire_time != null) {
-          console.log("in duration");
           setTimeLimit(true);
         }
       }
@@ -510,6 +509,35 @@ const ManageCourse = () => {
       const res = await axios.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
       getLessonData(sectionId);
       setEditLessonOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //delete quize
+  const [deleteQuizeOpen, setDeleteQuizeOpen] = useState(false);
+  const [deleteQuizId, setDeleteQuizId] = useState(null);
+  const [deleteLessonId, setDeleteLessonId] = useState(null);
+  const handleDeleteQuizeOpen = (id, quizId) => {
+    setDeleteQuizId(quizId);
+    setDeleteLessonId(id);
+    setDeleteQuizeOpen(!deleteQuizeOpen);
+  }
+
+  const handleDeleteLesson = async () => {
+    try {
+      const res = await axios.delete(`${port}/deletingCourseLesson/${deleteLessonId}`);
+      getLessonData(sectionId);
+      setDeleteQuizeOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleDeleteQuize = async () => {
+    try {
+      const res = await axios.delete(`${port}/deletingCourseQuize/${deleteQuizId}`);
+      getLessonData(sectionId);
+      setDeleteQuizeOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -758,7 +786,7 @@ const ManageCourse = () => {
                             <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
                               <i className="fa fa-pencil"></i>
                             </span>
-                            <button className="delete-btn">
+                            <button className="delete-btn" onClick={() => handleDeleteQuizeOpen(lesson.id, lesson.quiz_id, 1)}>
                               <i className="fa fa-trash"></i>
                             </button>
                           </div>
@@ -940,6 +968,23 @@ const ManageCourse = () => {
                   Delete
                 </button>
                 <button onClick={deleteToggleModal} className="secondary-btn">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Delete Confirmation Modal */}
+        {deleteQuizeOpen && (
+          <div className="modal">
+            <div className="modal-container">
+              <h5>Delete</h5>
+              <p>Are you sure you want to delete this module?</p>
+              <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <button className="primary-btn" onClick={deleteQuizId != null ? handleDeleteQuize : handleDeleteLesson}>
+                  Delete
+                </button>
+                <button onClick={handleDeleteQuizeOpen} className="secondary-btn">
                   Cancel
                 </button>
               </div>
@@ -1278,14 +1323,15 @@ const ManageCourse = () => {
                     </>
                   ) : (
                     <>
-                      <h5 style={{ marginBottom: "10px" }}>Add Lesson</h5>
-                      <form onSubmit={handleEditLessonFileChange}>
+                      <h5 style={{ marginBottom: "10px" }}>Edit Lesson</h5>
+                      <form onSubmit={handleEditLessonSubmit}>
                         <div className="form-group">
                           <label>Lesson Type</label>
                           <select
                             className="col12input"
                             onChange={handleEditLessonChange}
                             name="lesson_type"
+                            value={editLessonData.lesson_type}
                           >
                             <option value="">Select Lesson Type</option>
                             <option value="text">Text</option>

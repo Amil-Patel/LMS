@@ -12,7 +12,7 @@ const uploadFields = upload.fields([
 CourseLesson.get("/gettingCourseLessonDataWithSectionId/:id", CourseLessonController.getCourseLessonDataWithSectionId);
 CourseLesson.get("/gettingCourseLessonDataWithId/:id", CourseLessonController.getCourseLessonDataWithId);
 CourseLesson.post("/addingCourseLesson/:id", uploadFields, CourseLessonController.addCourseLessonData);
-CourseLesson.put("/updatingCourseLesson/:id", CourseLessonController.updateCourseLessonData);
+CourseLesson.put("/updatingCourseLesson/:id", uploadFields, CourseLessonController.updateCourseLessonData);
 CourseLesson.delete("/deletingCourseLesson/:id", CourseLessonController.deleteCourseLessonData);
 
 

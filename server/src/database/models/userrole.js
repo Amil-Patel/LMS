@@ -15,7 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   UserRole.init({
     roll_name: DataTypes.STRING,
-    status: DataTypes.INTEGER
+    status: DataTypes.INTEGER,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'UserRole',

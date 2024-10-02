@@ -16,13 +16,21 @@ module.exports = (sequelize, DataTypes) => {
   inquiry.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,
-    mobile_number: DataTypes.INTEGER,
-    whatsapp_number: DataTypes.INTEGER,
+    mobile_number: DataTypes.BIGINT,
+    whatsapp_number: DataTypes.BIGINT,
     country: DataTypes.STRING,
     message: DataTypes.STRING,
     is_registreted: DataTypes.INTEGER,
     summery: DataTypes.STRING,
-    status: DataTypes.INTEGER
+    status: DataTypes.INTEGER,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'inquiry',

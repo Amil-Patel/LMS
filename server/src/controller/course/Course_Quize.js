@@ -1,7 +1,7 @@
 const { Course_Quize, Course_Lesson } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
-const {sequelize} = require("../../database/models/index");
+const { sequelize } = require("../../database/models/index");
 const getCourseQuizeData = async (req, res) => {
     const id = req.params.id
     try {
@@ -84,25 +84,33 @@ const addCourseQuizeData = async (req, res) => {
 
 
 const updateCourseQuizeData = async (req, res) => {
+    const updatedate = DateToUnixNumber(new Date(), "America/Toronto");
     const id = req.params.id;
     const data = {
         title: req.body.title,
         section_id: req.body.section_id,
         course_id: req.body.course_id,
         quize_duration: req.body.quize_duration,
+        expire_time: req.body.expire_time,
         total_marks: req.body.total_marks,
         passing__marks: req.body.passing__marks,
-        drip_content: req.body.drip_content,
+        drip_content: req.body.drip_content || null,
         no_of_q_retakes: req.body.no_of_q_retakes,
+        total_showing_questions: req.body.total_showing_questions,
+        random_questions: req.body.random_questions,
+        status: req.body.status,
+        is_count_time: req.body.is_count_time,
+        is_skipable: req.body.is_skipable,
         instruction: req.body.instruction,
-        updatedAt: new Date(),
-    }
+        updatedAt: updatedate,
+    };
     try {
         const courseCoupondate = await Course_Quize.update(data, {
             where: {
                 id: id
             }
         });
+        console.log(courseCoupondate)
         res.status(200).json(courseCoupondate);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -111,17 +119,33 @@ const updateCourseQuizeData = async (req, res) => {
 
 const deleteCourseQuizeData = async (req, res) => {
     const id = req.params.id;
+
+    const t = await sequelize.transaction();
+
     try {
+        await Course_Lesson.destroy({
+            where: {
+                quiz_id: id 
+            }
+        }, { transaction: t });
+
         const data = await Course_Quize.destroy({
             where: {
                 id: id
             }
-        });
+        }, { transaction: t });
+
+        await t.commit();
+
         res.status(200).json(data);
+
     } catch (error) {
+        await t.rollback();
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 }
+
 
 
 module.exports = {

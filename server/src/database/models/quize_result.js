@@ -44,6 +44,14 @@ module.exports = (sequelize, DataTypes) => {
     correct_answers: {
       type: DataTypes.TEXT,
       allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,

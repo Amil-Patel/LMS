@@ -33,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
     max_authorized_device: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
