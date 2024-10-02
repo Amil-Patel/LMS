@@ -154,7 +154,7 @@ const AllCourse = () => {
                   <tr key={index}>
                     <td className="id">{index + 1}</td>
                     <td>
-                      <h6><NavLink to={"/manage-course"}>{i.course_title}</NavLink></h6>
+                      <h6><NavLink to={`/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
                     </td>
                     <td>{i.course_cate}</td>
                     <td>{i.course_price}</td>

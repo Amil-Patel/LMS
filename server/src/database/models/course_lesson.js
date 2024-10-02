@@ -18,16 +18,20 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'section_id',
         as: 'course_section_lesson'
       });
+      Course_Lesson.belongsTo(models.Course_Quize, {
+        foreignKey: 'quiz_id',
+        as: 'course_quize_lesson'
+      });
     }
   }
   Course_Lesson.init({
     title: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     duration: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     course_id: {
       type: DataTypes.INTEGER,
@@ -39,27 +43,55 @@ module.exports = (sequelize, DataTypes) => {
     },
     lesson_type: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     url: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
+    },
+    attachment: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    thumbnail_preview_image_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    text_content: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    is_preview: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    quiz_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    is_count_time: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     minimum_duration: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     drip_content: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     order: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     createdAt: {
       allowNull: false,

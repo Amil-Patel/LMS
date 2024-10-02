@@ -14,7 +14,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   timezone.init({
-    time_zone_name: DataTypes.STRING
+    time_zone_name: DataTypes.STRING,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'timezone',

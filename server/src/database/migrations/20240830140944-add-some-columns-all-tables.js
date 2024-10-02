@@ -55,7 +55,11 @@ module.exports = {
           'quiz_id',
           {
             type: Sequelize.DataTypes.INTEGER,
-            after: 'status'
+            after: 'status',
+            references: {
+              model: 'course_quizes',
+              key: 'id'
+            }
           },
           { transaction: t },
         ),

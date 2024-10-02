@@ -26,7 +26,15 @@ module.exports = (sequelize, DataTypes) => {
     bill_name: DataTypes.STRING,
     bill_address: DataTypes.STRING,
     bill_gst: DataTypes.STRING,
-    bill_pan: DataTypes.STRING
+    bill_pan: DataTypes.STRING,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'payment',

@@ -27,7 +27,15 @@ module.exports = (sequelize, DataTypes) => {
     enable_view: DataTypes.INTEGER,
     enable_add: DataTypes.INTEGER,
     enable_edit: DataTypes.INTEGER,
-    enable_delete: DataTypes.INTEGER
+    enable_delete: DataTypes.INTEGER,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'Permission_Category',

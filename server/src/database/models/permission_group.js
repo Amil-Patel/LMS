@@ -18,7 +18,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   Permission_Group.init({
     name: DataTypes.STRING,
-    short_desc: DataTypes.TEXT
+    short_desc: DataTypes.TEXT,
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'Permission_Group',

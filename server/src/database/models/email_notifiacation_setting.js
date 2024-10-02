@@ -53,6 +53,14 @@ module.exports = (sequelize, DataTypes) => {
     setting_sub_title: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     }
   }, {
     sequelize,
