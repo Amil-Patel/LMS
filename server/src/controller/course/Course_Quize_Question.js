@@ -4,8 +4,15 @@ const AuthMiddleware = require("../../auth/AuthMiddleware")
 const getCourseQuizeQuestionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
+
+const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
+    const id = req.params.id
     try {
-        const data = await Course_Quize_Question.findAll();
+        const data = await Course_Quize_Question.findAll({
+            where: {
+                quize_id: id
+            }
+        });
         res.send(data);
     } catch (error) {
         console.log(error);
@@ -33,22 +40,24 @@ const getCourseQuizeQuestionDataWithId = async (req, res) => {
 const addCourseQuizeQuestionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
+    const quizId = req.params.id;
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
-        question_type: req.body.question_type || null,
-        no_of_option: req.body.no_of_option || null,
+        question_type: null,
+        no_of_option: null,
         options: JSON.stringify(req.body.options),
         correct_answer: JSON.stringify(req.body.correct_answer),
         order: 0,
-        quize_id: req.body.quize_id,
+        quize_id: quizId,
         section_id: req.body.section_id,
         course_id: req.body.course_id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
     }
     try {
         const courseCoupondate = await Course_Quize_Question.create(data);
-        res.staus(200).json(courseCoupondate);
+        res.status(200).json(courseCoupondate);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

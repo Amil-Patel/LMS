@@ -127,6 +127,27 @@ const updateCourseQuizeData = async (req, res) => {
     }
 }
 
+const updateCourseQuizStatusData = async (req, res) => {
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
+    const id = req.params.id;
+    const data = {
+        status: req.body.status === 1 ? 0 : 1,
+        updatedAt: date
+    };
+    console.log(req.body)
+    try {
+        const courseCoupondate = await Course_Quize.update(data, {
+            where: {
+                id: id
+            }
+        });
+        res.status(200).json(courseCoupondate);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message });
+    }
+}
+
 const deleteCourseQuizeData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -137,7 +158,7 @@ const deleteCourseQuizeData = async (req, res) => {
     try {
         await Course_Lesson.destroy({
             where: {
-                quiz_id: id 
+                quiz_id: id
             }
         }, { transaction: t });
 
@@ -165,5 +186,6 @@ module.exports = {
     getCourseQuizeDataWithId,
     addCourseQuizeData,
     updateCourseQuizeData,
+    updateCourseQuizStatusData,
     deleteCourseQuizeData
 }

@@ -8,6 +8,7 @@ CourseQuize.get("/gettingCourseQuizeData/:id", CourseQuizeController.getCourseQu
 CourseQuize.get("/gettingCourseQuizeDataWithId/:id", CourseQuizeController.getCourseQuizeDataWithId);
 CourseQuize.post("/addingCourseQuize/:id", CourseQuizeController.addCourseQuizeData);
 CourseQuize.put("/updatingCourseQuize/:id", CourseQuizeController.updateCourseQuizeData);
+CourseQuize.put("/updatingCourseQuizeStatus/:id", CourseQuizeController.updateCourseQuizStatusData);
 CourseQuize.delete("/deletingCourseQuize/:id", CourseQuizeController.deleteCourseQuizeData);
 
 

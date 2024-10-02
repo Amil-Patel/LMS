@@ -40,7 +40,9 @@ const ManageCourse = () => {
     setTab(tabName);
   };
   // Function to toggle visibility of content
+  const [moduleId, setModuleId] = useState(null)
   const toggleContent = (index, id) => {
+    setModuleId(id)
     setIsContentVisible((prevVisibleModules) =>
       prevVisibleModules.map((isVisible, i) =>
         i === index ? !isVisible : isVisible
@@ -80,9 +82,12 @@ const ManageCourse = () => {
     setSectionId(id);
   };
 
-  // Function to toggle visibility of question modal
-  const questionToggleModal = () => {
+  // Function to toggle visibility of question modal  
+  const [quizQuestionId, setQuizQuestionId] = useState(null)
+  const questionToggleModal = (id) => {
     setQuestionOpen(!questionOpen);
+    getQuizQuestionData(id);
+    setQuizQuestionId(id);
   };
 
   // Function to toggle visibility of add question modal
@@ -398,7 +403,7 @@ const ManageCourse = () => {
     }
     try {
       const res = await axios.put(`${port}/updatingCourseLesson/${editLessonId}`, formData);
-      getLessonData(sectionId);
+      getLessonData(moduleId);
       setEditLessonOpen(false);
     } catch (error) {
       console.log(error);
@@ -507,7 +512,7 @@ const ManageCourse = () => {
     e.preventDefault();
     try {
       const res = await axios.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
-      getLessonData(sectionId);
+      getLessonData(moduleId);
       setEditLessonOpen(false);
     } catch (error) {
       console.log(error);
@@ -526,7 +531,7 @@ const ManageCourse = () => {
   const handleDeleteLesson = async () => {
     try {
       const res = await axios.delete(`${port}/deletingCourseLesson/${deleteLessonId}`);
-      getLessonData(sectionId);
+      getLessonData(moduleId);
       setDeleteQuizeOpen(false);
     } catch (error) {
       console.log(error);
@@ -536,8 +541,87 @@ const ManageCourse = () => {
   const handleDeleteQuize = async () => {
     try {
       const res = await axios.delete(`${port}/deletingCourseQuize/${deleteQuizId}`);
-      getLessonData(sectionId);
+      getLessonData(moduleId);
       setDeleteQuizeOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //change status
+  const handleStatusChange = async (id, quizId, status) => {
+    try {
+      if (quizId != null) {
+        const res = await axios.put(`${port}/updatingCourseQuizeStatus/${quizId}`, { status: status });
+        getLessonData(moduleId);
+      } else {
+        const res = await axios.put(`${port}/updatingCourseLessonStatus/${id}`, { status: status });
+        getLessonData(moduleId);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //quiz quistion module start
+  //get quiz quistion
+  const [quizQuestionData, setQuizQuestionData] = useState([]);
+  const getQuizQuestionData = async (id) => {
+    try {
+      const res = await axios.get(`${port}/gettingCourseQuizeQuestionData/${id}`);
+      setQuizQuestionData(res.data);
+      console.log(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //add quiz quistion
+  const [addQuizeQuestion, setAddQuizeQuestion] = useState({
+    title: "",
+    options: ["", "", "", "", "", ""],
+    correct_answer: [],
+    section_id: moduleId,
+    course_id: id,
+  });
+
+  // Handle title change
+  const handleTitleChange = (e) => {
+    setAddQuizeQuestion((prevState) => ({
+      ...prevState,
+      title: e.target.value,
+    }));
+  };
+
+  // Handle options change for fixed inputs
+  const handleOptionChange = (index, e) => {
+    const newOptions = [...addQuizeQuestion.options];
+    newOptions[index] = e.target.value;
+    setAddQuizeQuestion((prevState) => ({
+      ...prevState,
+      options: newOptions,
+    }));
+  };
+
+  // Handle correct answer checkbox change
+  const handleCorrectAnswerChange = (index) => {
+    let newCorrectAnswers = [...addQuizeQuestion.correct_answer];
+    if (newCorrectAnswers.includes(index)) {
+      newCorrectAnswers = newCorrectAnswers.filter((i) => i !== index);
+    } else {
+      newCorrectAnswers.push(index);
+    }
+
+    setAddQuizeQuestion((prevState) => ({
+      ...prevState,
+      correct_answer: newCorrectAnswers,
+    }));
+  };
+
+  const addQuizQuestionSubmit = async (e) => {
+    e.preventDefault();
+    console.log(addQuizeQuestion)
+    try {
+      const res = await axios.post(`${port}/addingCourseQuizeQuestion/${quizQuestionId}`, addQuizeQuestion);
+      setAddQuestionOpen(false);
+      getQuizQuestionData(quizQuestionId);
     } catch (error) {
       console.log(error);
     }
@@ -550,6 +634,7 @@ const ManageCourse = () => {
   const handleTimeLimit = () => {
     setTimeLimit(!timeLimit)
   }
+
   const handleMaxAttempts = () => {
     setMaxAttempts(!maxAttempts)
   }
@@ -661,7 +746,7 @@ const ManageCourse = () => {
   return (
     <>
       <Hoc />
-      <div class="main">
+      <div className="main">
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Courses</h5>
@@ -718,7 +803,7 @@ const ManageCourse = () => {
           {tab == "course" && (
             moduleData.length > 0 ? (
               moduleData.map((module, index) => (
-                <div div className="module">
+                <div div className="module" key={index}>
                   <div className="module-header">
                     <span className="module-title">
                       MODULE-{index + 1} : {module.title}
@@ -727,7 +812,7 @@ const ManageCourse = () => {
                     <span className="module-status green-dot"></span>
                     <div className="module-controls">
                       <button className="arrow-btn">
-                        <i class="fa-solid fa-sort"></i>{" "}
+                        <i className="fa-solid fa-sort"></i>{" "}
                       </button>
                       <button className="edit-btn" onClick={() => editModuleToggleModal(module.id)}>
                         <i className="fa fa-pencil"></i>
@@ -736,7 +821,7 @@ const ManageCourse = () => {
                         <i className="fa fa-trash"></i>
                       </button>
                       <button className="check-btn" onClick={() => toggleContent(index, module.id)}>
-                        <i class="fa-solid fa-angle-down"></i>
+                        <i className="fa-solid fa-angle-down"></i>
                       </button>
                     </div>
                   </div>
@@ -749,7 +834,7 @@ const ManageCourse = () => {
                               <span className="quiz-icon">?</span>
                             ) : (
                               <span className="lesson-icon">
-                                <i class="fa-solid fa-file-word"></i>
+                                <i className="fa-solid fa-file-word"></i>
                               </span>
                             )}
                             {
@@ -767,21 +852,21 @@ const ManageCourse = () => {
                             {lesson.quiz_id && (
                               <button
                                 className="add-questions-btn"
-                                onClick={questionToggleModal}
+                                onClick={() => questionToggleModal(lesson.quiz_id)}
                               >
                                 + Add Questions
                               </button>
                             )}
                             <button className="resource-btn">
-                              <i class="fa-solid fa-folder-open"></i>Resource
+                              <i className="fa-solid fa-folder-open"></i>Resource
                             </button>
-                            <label class="switch">
+                            <label className="switch">
                               <input
                                 type="checkbox"
-                                checked={lesson.status === 1}
-                              // onChange={() => handleStatusChange(index)}
+                                checked={lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status}
+                                onClick={() => handleStatusChange(lesson.id, lesson.quiz_id, lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status)}
                               />
-                              <span class="slider"></span>
+                              <span className="slider"></span>
                             </label>
                             <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
                               <i className="fa fa-pencil"></i>
@@ -801,7 +886,7 @@ const ManageCourse = () => {
                 </div>
               ))
             ) : (
-              <p>No data avalible</p>
+              <p>No Module data avalible</p>
             )
           )}
 
@@ -1568,7 +1653,7 @@ const ManageCourse = () => {
 
                   <div className="flex-row">
                     <div className="chekbox2">
-                      <input type="checkbox" onClick={handleTimeLimit} />
+                      <input type="checkbox" onClick={handleTimeLimit} checked={timeLimit} />
                       <label>Time Limit ?</label>
                     </div>
                     {
@@ -1584,7 +1669,7 @@ const ManageCourse = () => {
 
                   <div className="flex-row" style={{ marginBottom: "0px" }}>
                     <div className="chekbox2">
-                      <input type="checkbox" onClick={handleMaxAttempts} />
+                      <input type="checkbox" onClick={handleMaxAttempts} checked={maxAttempts} />
                       <label>Max Attampts</label>
                     </div>
                     {
@@ -1674,62 +1759,69 @@ const ManageCourse = () => {
                       Add New
                     </button>
                     <span onClick={questionToggleModal}>
-                      <i class="fa-solid fa-xmark"></i>
+                      <i className="fa-solid fa-xmark"></i>
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  {quizeData.map((quiz, index) => (
-                    <div className="container" key={index}>
-                      <div className="module-header quiz-module">
-                        <span className="module-title">{quiz.question}</span>
-                        <div className="module-controls">
-                          <button
-                            className="edit-btn"
-                            onClick={editQuestionToggleModal}
-                          >
-                            <i className="fa fa-pencil"></i>
-                          </button>
-                          <button className="delete-btn">
-                            <i className="fa fa-trash"></i>
-                          </button>
-                          <button
-                            className="check-btn"
-                            onClick={() => toggleQuizModule(index)}
-                          >
-                            <i
-                              className={`fa-solid ${openQuizIndex === index
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                                }`}
-                            ></i>
-                          </button>
-                        </div>
-                      </div>
+                  {quizQuestionData.map((quiz, index) => {
+                    const options = quiz.options ? JSON.parse(quiz.options) : [];
+                    const correctAnswerIndices = quiz.correct_answer ? JSON.parse(quiz.correct_answer) : [];
 
-                      {openQuizIndex === index && (
-                        <div className="module-content">
-                          {quiz.answers.map((answer, answerIndex) => (
-                            <div
-                              className="module-lesson quiz-list"
-                              key={answerIndex}
+                    return (
+                      <div className="container" key={index}>
+                        <div className="module-header quiz-module">
+                          <span className="module-title">{quiz.title}</span>
+                          <div className="module-controls">
+                            <button
+                              className="edit-btn"
+                              onClick={editQuestionToggleModal}
                             >
-                              <div>
-                                <strong className="quiz-letter">
-                                  {answer.letter}
-                                </strong>
-                                <label style={{ paddingLeft: "10px" }}>
-                                  {answer.text}
-                                </label>
-                              </div>
-                              <input type="checkbox" />
-                            </div>
-                          ))}
+                              <i className="fa fa-pencil"></i>
+                            </button>
+                            <button className="delete-btn">
+                              <i className="fa fa-trash"></i>
+                            </button>
+                            <button
+                              className="check-btn"
+                              onClick={() => toggleQuizModule(index)}
+                            >
+                              <i
+                                className={`fa-solid ${openQuizIndex === index ? "fa-angle-up" : "fa-angle-down"
+                                  }`}
+                              ></i>
+                            </button>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {openQuizIndex === index && (
+                          <div className="module-content">
+                            {options.map((option, answerIndex) => (
+                              <div
+                                className="module-lesson quiz-list"
+                                key={answerIndex}
+                              >
+                                <div>
+                                  <strong className="quiz-letter">
+                                    {String.fromCharCode(65 + answerIndex)}
+                                  </strong>
+                                  <label style={{ paddingLeft: "10px" }}>
+                                    {option}
+                                  </label>
+                                </div>
+                                <input
+                                  type="checkbox"
+                                  readOnly
+                                  checked={correctAnswerIndices.includes(answerIndex)}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -1742,88 +1834,46 @@ const ManageCourse = () => {
             <div className="modal">
               <div className="add-lesson-container">
                 <h5 style={{ marginBottom: "20px" }}>Add Quiz Question</h5>
-                <form>
+                <form onSubmit={addQuizQuestionSubmit}>
                   <div className="form-group">
                     <label>Question:</label>
                     <input
                       type="text"
-                      placeholder="Lesson Type"
+                      placeholder="Enter Question"
                       className="col12input"
+                      name="title"
+                      value={addQuizeQuestion.title}
+                      onChange={handleTitleChange}
                     />
                   </div>
 
-                  <div className="quiz-answer">
-                    <label>A</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>B</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>C</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>D</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>E</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>F</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" />
-                  </div>
+                  {/* Fixed six inputs for options */}
+                  {["A", "B", "C", "D", "E", "F"].map((label, index) => (
+                    <div className="quiz-answer" key={index}>
+                      <label>{label}</label>
+                      <input
+                        type="text"
+                        placeholder="Enter Option"
+                        className="col8input"
+                        style={{ margin: "0px 10px", width: "90%" }}
+                        value={addQuizeQuestion.options[index]}
+                        onChange={(e) => handleOptionChange(index, e)}
+                      />
+                      <input
+                        type="checkbox"
+                        className="quiz-checkbox"
+                        checked={addQuizeQuestion.correct_answer.includes(index)}
+                        onChange={() => handleCorrectAnswerChange(index)}
+                      />
+                    </div>
+                  ))}
 
                   <div style={{ display: "flex", gap: "10px" }}>
                     <button type="submit" className="primary-btn">
                       Save
                     </button>
                     <button
-                      type=""
+                      type="button"
                       onClick={addQuestionToggleModal}
                       className="secondary-btn"
                     >
@@ -1860,7 +1910,7 @@ const ManageCourse = () => {
                       className="col8input"
                       style={{ margin: "0px 10px", width: "90%" }}
                     />
-                    <input type="checkbox" className="quiz-checkbox" />
+                    <input type="checkbox" className="quiz-checkbox" readOnly />
                   </div>
 
                   <div className="quiz-answer">
@@ -1871,7 +1921,7 @@ const ManageCourse = () => {
                       className="col8input"
                       style={{ margin: "0px 10px", width: "90%" }}
                     />
-                    <input type="checkbox" className="quiz-checkbox" />
+                    <input type="checkbox" className="quiz-checkbox" readOnly />
                   </div>
 
                   <div className="quiz-answer">
@@ -1882,7 +1932,7 @@ const ManageCourse = () => {
                       className="col8input"
                       style={{ margin: "0px 10px", width: "90%" }}
                     />
-                    <input type="checkbox" className="quiz-checkbox" />
+                    <input type="checkbox" className="quiz-checkbox" readOnly />
                   </div>
 
                   <div className="quiz-answer">
@@ -1893,7 +1943,7 @@ const ManageCourse = () => {
                       className="col8input"
                       style={{ margin: "0px 10px", width: "90%" }}
                     />
-                    <input type="checkbox" className="quiz-checkbox" />
+                    <input type="checkbox" className="quiz-checkbox" readOnly />
                   </div>
 
                   <div className="quiz-answer">
@@ -1904,7 +1954,7 @@ const ManageCourse = () => {
                       className="col8input"
                       style={{ margin: "0px 10px", width: "90%" }}
                     />
-                    <input type="checkbox" className="quiz-checkbox" />
+                    <input type="checkbox" className="quiz-checkbox" readOnly />
                   </div>
 
                   <div className="quiz-answer">
@@ -1915,7 +1965,7 @@ const ManageCourse = () => {
                       className="col8input"
                       style={{ margin: "0px 10px", width: "90%" }}
                     />
-                    <input type="checkbox" className="quiz-checkbox" />
+                    <input type="checkbox" className="quiz-checkbox" readOnly />
                   </div>
 
                   <div style={{ display: "flex", gap: "10px" }}>
@@ -2077,9 +2127,9 @@ const ManageCourse = () => {
                         <td>{item.date_upload}</td>
                         <td>{item.description}</td>
                         <td>
-                          <label class="switch">
-                            <input type="checkbox" />
-                            <span class="slider"></span>
+                          <label className="switch">
+                            <input type="checkbox" readOnly />
+                            <span className="slider"></span>
                           </label>
                         </td>
                         <td style={{ textAlign: "center" }}>

@@ -13,6 +13,7 @@ CourseLesson.get("/gettingCourseLessonDataWithSectionId/:id", CourseLessonContro
 CourseLesson.get("/gettingCourseLessonDataWithId/:id", CourseLessonController.getCourseLessonDataWithId);
 CourseLesson.post("/addingCourseLesson/:id", uploadFields, CourseLessonController.addCourseLessonData);
 CourseLesson.put("/updatingCourseLesson/:id", uploadFields, CourseLessonController.updateCourseLessonData);
+CourseLesson.put("/updatingCourseLessonStatus/:id", CourseLessonController.updateCourseLessonStatus);
 CourseLesson.delete("/deletingCourseLesson/:id", CourseLessonController.deleteCourseLessonData);
 
 
