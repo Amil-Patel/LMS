@@ -57,22 +57,22 @@ const Sidebar = () => {
                 <ul className="dropdown-menu">
                   <li>
                     <NavLink to={"/all-course"}>
-                      <i class="fa-solid fa-caret-right"></i>All Course
+                      <i className="fa-solid fa-caret-right"></i>All Course
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to={"/add-course"}>
-                      <i class="fa-solid fa-caret-right"></i>Add New Course
+                      <i className="fa-solid fa-caret-right"></i>Add New Course
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to={"/course-category"}>
-                      <i class="fa-solid fa-caret-right"></i>Course Category
+                      <i className="fa-solid fa-caret-right"></i>Course Category
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to={"/course-coupon"}>
-                      <i class="fa-solid fa-caret-right"></i>Coupons
+                      <i className="fa-solid fa-caret-right"></i>Coupons
                     </NavLink>
                   </li>
                 </ul>
@@ -80,33 +80,33 @@ const Sidebar = () => {
             </li>
             <li className="main-li">
               <NavLink to={"/enrollements"}>
-                <i class="fa-solid fa-registered"></i>
+                <i className="fa-solid fa-registered"></i>
                 <span>Enrollements</span>
               </NavLink>
             </li>
 
             <li className="main-li">
               <NavLink to={"/inquiry"}>
-                <i class="fa fa-question-circle"></i>
+                <i className="fa fa-question-circle"></i>
                 <span>Inquiry</span>
               </NavLink>
             </li>
 
             <li className="main-li">
               <NavLink to={"/payment"}>
-                <i class="fa fa-inr" aria-hidden="true"></i>
+                <i className="fa fa-inr" aria-hidden="true"></i>
                 <span>Payment</span>
               </NavLink>
             </li>
             <li className="main-li">
               <NavLink to={"/roles-list"}>
-                <i class="fa fa-indent" aria-hidden="true"></i>
+                <i className="fa fa-indent" aria-hidden="true"></i>
                 <span>Roles List</span>
               </NavLink>
             </li>
             <li className="main-li">
               <NavLink to={"/user"}>
-                <i class="fa-regular fa-user"></i>
+                <i className="fa-regular fa-user"></i>
                 <span>User</span>
               </NavLink>
             </li>
@@ -119,7 +119,7 @@ const Sidebar = () => {
           <ul>
             <li className="main-li">
               <NavLink to={"/profile"}>
-                <i class="fa-regular fa-user"></i>
+                <i className="fa-regular fa-user"></i>
                 <span>Profile</span>
               </NavLink>
             </li>
@@ -143,12 +143,12 @@ const Sidebar = () => {
                 <ul className="dropdown-menu">
                   <li>
                     <NavLink to={"/payment-setting"}>
-                      <i class="fa-solid fa-caret-right"></i>Payment Setting
+                      <i className="fa-solid fa-caret-right"></i>Payment Setting
                     </NavLink>
                   </li>
                   <li>
                     <NavLink to={"/notification-setting"}>
-                      <i class="fa-solid fa-caret-right"></i>Notification
+                      <i className="fa-solid fa-caret-right"></i>Notification
                       Setting
                     </NavLink>
                   </li>

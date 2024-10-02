@@ -3,7 +3,6 @@ const { Email_Notifiacation_Setting } = require('../../database/models/index');
 const getEmailNotificationSettingData = async (req, res) => {
     try {
         const data = await Email_Notifiacation_Setting.findAll();
-        console.log(data)
         res.send(data);
     } catch (error) {
         console.log(error);

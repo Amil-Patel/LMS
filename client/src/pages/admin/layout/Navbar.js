@@ -11,12 +11,12 @@ const Navbar = () => {
         <div className="nav-top-section">
           <div className="nav-left-section">
             <input type="checkbox" id="btn" />
-            <span for="btn" className="menu-btn">
+            <span htmlFor="btn" className="menu-btn">
               <i className="fa-solid fa-bars"></i>
             </span>
 
             <div className="search-container">
-              <input type="text" placeholder="Search" />
+              <input id="search" type="text" placeholder="Search" />
               <i className="fa-solid fa-magnifying-glass"></i>
             </div>
           </div>

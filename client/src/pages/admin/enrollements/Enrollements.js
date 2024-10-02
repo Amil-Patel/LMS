@@ -21,7 +21,7 @@ function Enrollements() {
       )
     );
   };
-  
+
   return (
     <>
       <Hoc />
@@ -31,7 +31,7 @@ function Enrollements() {
             <h5>Enrollements</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
 
@@ -56,9 +56,9 @@ function Enrollements() {
 
           <tbody className="email_tbody">
             {courses.map((course) => (
-              <tr>
+              <tr key={course.id}>
                 <td>1</td>
-            <td className="profile-img"><img src={require("../../../assets/image/user_img.jpeg")} alt="User" /></td>
+                <td className="profile-img"><img src={require("../../../assets/image/user_img.jpeg")} alt="User" /></td>
                 <td>
                   <h6>Christine Brooks</h6>
                   <p>example@gmail.com</p>
@@ -67,9 +67,11 @@ function Enrollements() {
                 <td>LifeTime</td>
                 <td>Online / Manual</td>
                 <td>
-                  <label className="switch">
+                  <label htmlFor="coursestatus" className="switch">
                     <input
                       type="checkbox"
+                      name="status"
+                      id="coursestatus"
                       checked={course.status}
                       onChange={() => handleToggle(course.id)}
                     />
@@ -78,10 +80,10 @@ function Enrollements() {
                 </td>
                 <td className="del_icon">
                   <span className="delete">
-                    <i class="fa-regular fa-trash-can"></i>
+                    <i className="fa-regular fa-trash-can"></i>
                   </span>
                   <span className="edit">
-                    <i class="fa-solid fa-pencil"></i>
+                    <i className="fa-solid fa-pencil"></i>
                   </span>
                 </td>
               </tr>
@@ -97,18 +99,20 @@ function Enrollements() {
             <h5>Add Enrollements</h5>
             <form className="coupon-form">
               <div className="form-group">
-                <label>
+                <label htmlFor="studentname">
                   Student Name<span className="required">*</span>
                 </label>
                 <input
                   type="text"
+                  name="studentname"
+                  id="studentname"
                   className="col12input"
                   placeholder="Enter Student Name"
                 />
               </div>
 
               <div className="form-group">
-                <label>Select Course</label>
+                <label htmlFor="currency">Select Currentcy</label>
                 <select
                   name="currency"
                   id="currency"

@@ -4,9 +4,10 @@ const smtpSettingController = require("../../controller/email-setting/Smtp_Setti
 
 
 smtpSetting.get("/gettingSmtpSettingData", smtpSettingController.getSmtpSettingData);
+smtpSetting.post("/addSmtpSettingData", smtpSettingController.addSmtpSettingData);
 smtpSetting.put("/updatingSmtpSettingData/:id", smtpSettingController.updateSmtpSettingData);
 
 
-module.exports = smtpSetting    
+module.exports = smtpSetting
 
 

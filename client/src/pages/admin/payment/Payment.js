@@ -58,7 +58,7 @@ function Payment() {
             <h5>Payment</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>

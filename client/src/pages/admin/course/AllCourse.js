@@ -5,6 +5,7 @@ import "../../../assets/css/main.css";
 import { NavLink } from "react-router-dom";
 import { userRolesContext } from "../layout/RoleContext";
 import axios from "axios";
+import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
 const port = process.env.REACT_APP_URL
 
@@ -12,15 +13,19 @@ const AllCourse = () => {
   const { userRole, userId } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   //getting course data
   const [courseData, setCourseData] = useState([]);
   const getCourseData = async () => {
+    setLoading(true)
     try {
       const res = await axios.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   }
 
@@ -31,12 +36,15 @@ const AllCourse = () => {
   };
 
   const handleDelete = async () => {
+    setLoading(true)
     try {
       const res = await axios.delete(`${port}/deletingCourseMaster/${deleteId}`);
       getCourseData();
       setDeleteOpen(false)
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   }
 
@@ -85,13 +93,13 @@ const AllCourse = () => {
   return (
     <>
       <Hoc />
-      <div class="main">
+      <div className="main">
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Courses</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           {/* <div className="hero-inner-logo">
@@ -111,12 +119,12 @@ const AllCourse = () => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Title <i class="fa-solid fa-sort" onClick={() => handleSort('course_title')}></i></th>
-                <th>Category <i class="fa-solid fa-sort" onClick={() => handleSort('course_cate')}></i></th>
-                <th>Price <i class="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
-                <th>Enrollments <i class="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
-                <th>Lessions <i class="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
-                <th>Author <i class="fa-solid fa-sort" onClick={() => handleSort('author')}></i></th>
+                <th>Title <i className="fa-solid fa-sort" onClick={() => handleSort('course_title')}></i></th>
+                <th>Category <i className="fa-solid fa-sort" onClick={() => handleSort('course_cate')}></i></th>
+                <th>Price <i className="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
+                <th>Enrollments <i className="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
+                <th>Lessions <i className="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
+                <th>Author <i className="fa-solid fa-sort" onClick={() => handleSort('author')}></i></th>
                 <th>Status</th>
                 {
                   editCoursePermission == 1 || deleteCoursePermission == 1 ? (
@@ -156,12 +164,13 @@ const AllCourse = () => {
                       {formattedData}
                     </td>
                     <td>
-                      <label class="switch">
+                      <label className="switch">
                         <input
                           type="checkbox"
+                          id="status"
                           checked={i.status === 1}
                         />
-                        <span class="slider"></span>
+                        <span className="slider"></span>
                       </label>
                     </td>
                     {
@@ -172,7 +181,7 @@ const AllCourse = () => {
                               }`}
                           >
                             <div
-                              class="menu-button"
+                              className="menu-button"
                               onClick={() => toggleDropdown(index)}
                             >
                               {" "}

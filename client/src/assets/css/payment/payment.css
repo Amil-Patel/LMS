@@ -8,9 +8,14 @@
   color: var(--font-color);
 }
 
+.priv {
+  margin-bottom: 7px;
+}
+
 .pay_modulhead {
   display: flex;
 }
+
 .pay_modulhead div {
   border-right: 1px solid var(--border-color);
   padding: 0 16px;
@@ -19,9 +24,11 @@
 .pay_modulhead :nth-child(1) {
   padding-left: 0;
 }
+
 .pay_modulhead :nth-child(6) {
   border: none;
 }
+
 .head_text {
   font-size: 12px;
   font-weight: 500;
@@ -44,6 +51,7 @@
   background-color: var(--white);
   border-bottom: 2px dotted var(--border-color);
 }
+
 .payment_view_table tbody td {
   padding: 5px;
   font-size: 13px;
@@ -83,13 +91,16 @@
   border-collapse: collapse;
   margin: 0;
 }
+
 .amount-details-table th {
   border-right: 1px solid var(--border-color);
 }
+
 .amount-details-table td {
   border: 1px solid var(--border-color);
   padding: 8px;
 }
+
 .net-amount-row {
   background-color: var(--net-amount-row-color);
 }

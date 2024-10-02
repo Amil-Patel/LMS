@@ -82,7 +82,6 @@ const getCourseCategoryWithId = async (req, res) => {
 
 const addCourseCategoryData = async (req, res) => {
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
-    console.log(req.file)
     const data = {
         cate_title: req.body.cate_title,
         cate_parent_id: req.body.cate_parent_id === 'null' || !req.body.cate_parent_id ? null : parseInt(req.body.cate_parent_id),
@@ -93,7 +92,6 @@ const addCourseCategoryData = async (req, res) => {
         createdAt: createddate,
         updatedAt: createddate,
     }
-    console.log(data)
     try {
         const courseCatedate = await Course_Category.create(data);
         res.status(200).json(courseCatedate);

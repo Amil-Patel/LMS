@@ -45,7 +45,7 @@ function Inquiry() {
             <h5>Inquiry</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-bar" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -81,22 +81,23 @@ function Inquiry() {
                   <p>Message Submitted By User will Appear Here</p>
                 </td>
                 <td>
-                  <label class="switch">
+                  <label htmlFor="switch" className="switch">
                     <input
+                      id="switch"
                       type="checkbox"
                     />
-                    <span class="slider"></span>
+                    <span className="slider"></span>
                   </label>
                 </td>
                 <td className="del_icon">
                   <span className="view">
-                    <i class="fa-regular fa-eye"></i>
+                    <i className="fa-regular fa-eye"></i>
                   </span>
                   <span
                     className="edit"
                     onClick={() => handleEditClick(course)}
                   >
-                    <i class="fa-solid fa-pencil"></i>
+                    <i className="fa-solid fa-pencil"></i>
                   </span>
                 </td>
               </tr>
@@ -112,18 +113,19 @@ function Inquiry() {
             <h3>Edit Status</h3>
             <form className="coupon-form">
               <div className="form-group">
-                <label>
+                <label htmlFor="inquirystatus">
                   Inquiry Status<span className="required">*</span>
                 </label>
                 <input
+                  id="inquirystatus"
                   type="radio"
                   name="fav_language"
                   value="CSS"
                   className="cur_sel"
                 />
-                <span for="right" className="text1">
+                <label htmlFor="right" className="text1">
                   Succes
-                </span>
+                </label>
 
                 <input
                   type="radio"
@@ -132,20 +134,20 @@ function Inquiry() {
                   className="cur_sel"
                   id="right"
                 />
-                <span for="right" className="text1">
+                <label htmlFor="pending" className="text1">
                   Panding
-                </span>
+                </label>
 
                 <input
                   type="radio"
                   name="fav_language"
                   value="CSS"
                   className="cur_sel"
-                  id="right"
+                  id="pending"
                 />
-                <span for="right" className="text1">
+                <label htmlFor="reject" className="text1">
                   Rejectd
-                </span>
+                </label>
               </div>
 
               <div style={{ display: "flex", gap: "10px" }}>

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import axios from "axios";
 import "../../../assets/css/roles-list/roles-list.css";
+import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL
 
 function RolesList() {
   const [assignRoll, setAssignRoll] = useState(false);
   const [rollName, setRollName] = useState("");
+  const [loading, setLoading] = useState(false);
   const assignRoles = (itemName) => {
     setAssignRoll(!assignRoll);
     setRollName(itemName);
@@ -21,6 +23,7 @@ function RolesList() {
   //get pemssion group and permission category data 
   const [permissionData, setPermissionData] = useState([]);
   const getPermissionData = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${port}/gettingRolePermissionData`);
       setPermissionData(res.data);
@@ -36,8 +39,10 @@ function RolesList() {
         return acc;
       }, {});
       setUpdatedPermissions(initialPermissions);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const groupedPermissions = permissionData.reduce((acc, permission) => {
@@ -65,6 +70,7 @@ function RolesList() {
   };
 
   const handleSave = async () => {
+    setLoading(true);
     const dataToUpdate = Object.entries(updatedPermissions).map(([id, fields]) => ({
       id: Number(id),
       pgname: fields.pgname,
@@ -78,26 +84,30 @@ function RolesList() {
     try {
       const res = await axios.post(`${port}/addingRolePermission`, dataToUpdate);
       setAssignRoll(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   //get role permission data for update
   const [rolePermissionData, setRolePermissionData] = useState([]);
   const getRolePermissionData = async (itemName) => {
+    setLoading(true);
     const name = itemName;
     try {
       const res = await axios.get(`${port}/gettingRolePermissionDataForEdit`, {
         params: { name }
       });
       setRolePermissionData(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const handleEditCheckBox = (itemId, field, value) => {
-    console.log(itemId, field, value);
     setRolePermissionData(prev =>
       prev.map(permission =>
         permission.perm_cate_id === itemId ? { ...permission, [field]: value } : permission
@@ -108,6 +118,7 @@ function RolesList() {
 
   //edit code start
   const handleEdit = async () => {
+    setLoading(true);
     const dataToUpdate = rolePermissionData.map(permission => ({
       permid: permission.perm_cate_id,
       enable_view: permission.can_view ? 1 : 0,
@@ -118,8 +129,10 @@ function RolesList() {
     try {
       const res = await axios.put(`${port}/editRolePermission/${rollName}`, dataToUpdate);
       setAssignRoll(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
@@ -132,12 +145,13 @@ function RolesList() {
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Roles List</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-bar" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -163,13 +177,13 @@ function RolesList() {
                     <td>{item.count}</td>
                     <td>
                       <span className="list" onClick={() => assignRoles(item.name)}>
-                        <i class="fa-solid fa-list-check"></i>
+                        <i className="fa-solid fa-list-check"></i>
                       </span>
                       {/* <span className="edit">
-                        <i class="fa-solid fa-pencil"></i>
+                        <i className="fa-solid fa-pencil"></i>
                       </span>
                       <span className="xmark edit">
-                        <i class="fa-solid fa-xmark"></i>
+                        <i className="fa-solid fa-xmark"></i>
                       </span> */}
                     </td>
                   </tr>
