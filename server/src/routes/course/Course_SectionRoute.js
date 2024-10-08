@@ -7,6 +7,7 @@ CourseSection.get("/gettingCourseSectionData/:id", CourseSectionController.getCo
 CourseSection.get("/gettingCourseSectionDataWithId/:id", CourseSectionController.getCourseSectionDataWithId);
 CourseSection.post("/addingCourseSection", CourseSectionController.addCourseSectionData);
 CourseSection.put("/updatingCourseSection/:id", CourseSectionController.updateCourseSectionData);
+CourseSection.put("/updatingCourseSectionOrder/:id", CourseSectionController.updateCourseSectionOrderData);
 CourseSection.delete("/deletingCourseSection/:id", CourseSectionController.deleteCourseSectionData);
 
 

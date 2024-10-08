@@ -5,7 +5,8 @@ import "../../../assets/css/main.css";
 import "../../../assets/css/sidebar.css";
 import { userRolesContext } from "../layout/RoleContext";
 import { NavLink, useParams } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
+import SortTable from "../layout/SortTable";
 const port = process.env.REACT_APP_URL
 
 const ManageCourse = () => {
@@ -96,8 +97,11 @@ const ManageCourse = () => {
   };
 
   // Function to toggle visibility of edit question modal
-  const editQuestionToggleModal = () => {
+  const [editQuestionId, setEditQuestionId] = useState(null)
+  const editQuestionToggleModal = (id) => {
     setEditQuestionOpen(!editquestionOpen);
+    getEditQuestionData(id);
+    setEditQuestionId(id);
   };
 
   // Function to toggle visibility of quiz result module
@@ -109,13 +113,16 @@ const ManageCourse = () => {
   const quizDocumentToggleModal = () => {
     setQuizDocumentOpen(!quizDocumentOpen); // Fixed the state variable name
   };
+
   //module section start
   //get module data
 
   const getModuleData = async () => {
     try {
-      const res = await axios.get(`${port}/gettingCourseSectionData/${id}`);
-      setModuleData(res.data);
+      const res = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
+      const sectionData = res.data;
+      const sortedData = sectionData.sort((a, b) => a.order - b.order);
+      setModuleData(sortedData);
     } catch (error) {
       console.log(error);
     }
@@ -135,9 +142,8 @@ const ManageCourse = () => {
   };
   const handleAddModuleSubmit = async (e) => {
     e.preventDefault();
-    console.log(addModule)
     try {
-      const res = await axios.post(`${port}/addingCourseSection`, addModule);
+      const res = await axiosInstance.post(`${port}/addingCourseSection`, addModule);
       getModuleData();
       setModuleOpen(false);
       setAddModule({
@@ -159,9 +165,8 @@ const ManageCourse = () => {
   const getModuleDataForEdit = async (id) => {
     setEditId(id)
     try {
-      const res = await axios.get(`${port}/gettingCourseSectionDataWithId/${id}`);
+      const res = await axiosInstance.get(`${port}/gettingCourseSectionDataWithId/${id}`);
       setEditModule(res.data);
-      console.log(res.data)
     } catch (error) {
       console.log(error);
     }
@@ -176,7 +181,7 @@ const ManageCourse = () => {
   const handleEditModuleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`${port}/updatingCourseSection/${editId}`, editModule);
+      const res = await axiosInstance.put(`${port}/updatingCourseSection/${editId}`, editModule);
       getModuleData();
       setEditModuleOpen(false);
     } catch (error) {
@@ -192,7 +197,7 @@ const ManageCourse = () => {
   }
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(`${port}/deletingCourseSection/${deleteId}`);
+      const res = await axiosInstance.delete(`${port}/deletingCourseSection/${deleteId}`);
       getModuleData();
       setDeleteOpen(false);
     } catch (error) {
@@ -204,9 +209,11 @@ const ManageCourse = () => {
   const [lessonData, setLessonData] = useState([]);
   const getLessonData = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
-      setLessonData(res.data);
-      console.log(res.data)
+      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
+      const lessonquizdata = res.data
+      // const filterOrderData = lessonquizdata.filter((item) => item.order !== 0);
+      const sortedData = lessonquizdata.sort((a, b) => a.order - b.order);
+      setLessonData(sortedData);
     } catch (error) {
       console.log(error);
     }
@@ -293,7 +300,7 @@ const ManageCourse = () => {
       formData.append("thumbnail_preview_image_url", addLesson.thumbnail_preview_image_url);
     }
     try {
-      const res = await axios.post(`${port}/addingCourseLesson/${sectionId}`, formData, {
+      const res = await axiosInstance.post(`${port}/addingCourseLesson/${sectionId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -355,9 +362,8 @@ const ManageCourse = () => {
   });
   const getLessonDataForEdit = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingCourseLessonDataWithId/${id}`);
+      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setEditLessonData(res.data);
-      console.log(res.data)
     } catch (error) {
       console.log(error);
     }
@@ -402,7 +408,7 @@ const ManageCourse = () => {
       formData.append("thumbnail_preview_image_url", editLessonData.thumbnail_preview_image_url);
     }
     try {
-      const res = await axios.put(`${port}/updatingCourseLesson/${editLessonId}`, formData);
+      const res = await axiosInstance.put(`${port}/updatingCourseLesson/${editLessonId}`, formData);
       getLessonData(moduleId);
       setEditLessonOpen(false);
     } catch (error) {
@@ -438,7 +444,7 @@ const ManageCourse = () => {
   const handleAddQuizSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${port}/addingCourseQuize/${sectionId}`, addQuiz);
+      const res = await axiosInstance.post(`${port}/addingCourseQuize/${sectionId}`, addQuiz);
       getLessonData(sectionId);
       setQuizOpen(false);
       setMaxAttempts(false);
@@ -483,7 +489,7 @@ const ManageCourse = () => {
 
   const getQuizeDataForEdit = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingCourseQuizeDataWithId/${id}`);
+      const res = await axiosInstance.get(`${port}/gettingCourseQuizeDataWithId/${id}`);
       const quizData = res.data;
       setEditQuizData(quizData);
 
@@ -511,7 +517,7 @@ const ManageCourse = () => {
   const handleEditQuizSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
+      const res = await axiosInstance.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
       getLessonData(moduleId);
       setEditLessonOpen(false);
     } catch (error) {
@@ -530,7 +536,7 @@ const ManageCourse = () => {
 
   const handleDeleteLesson = async () => {
     try {
-      const res = await axios.delete(`${port}/deletingCourseLesson/${deleteLessonId}`);
+      const res = await axiosInstance.delete(`${port}/deletingCourseLesson/${deleteLessonId}`);
       getLessonData(moduleId);
       setDeleteQuizeOpen(false);
     } catch (error) {
@@ -540,7 +546,7 @@ const ManageCourse = () => {
 
   const handleDeleteQuize = async () => {
     try {
-      const res = await axios.delete(`${port}/deletingCourseQuize/${deleteQuizId}`);
+      const res = await axiosInstance.delete(`${port}/deletingCourseQuize/${deleteQuizId}`);
       getLessonData(moduleId);
       setDeleteQuizeOpen(false);
     } catch (error) {
@@ -551,10 +557,10 @@ const ManageCourse = () => {
   const handleStatusChange = async (id, quizId, status) => {
     try {
       if (quizId != null) {
-        const res = await axios.put(`${port}/updatingCourseQuizeStatus/${quizId}`, { status: status });
+        const res = await axiosInstance.put(`${port}/updatingCourseQuizeStatus/${quizId}`, { status: status });
         getLessonData(moduleId);
       } else {
-        const res = await axios.put(`${port}/updatingCourseLessonStatus/${id}`, { status: status });
+        const res = await axiosInstance.put(`${port}/updatingCourseLessonStatus/${id}`, { status: status });
         getLessonData(moduleId);
       }
     } catch (error) {
@@ -566,9 +572,11 @@ const ManageCourse = () => {
   const [quizQuestionData, setQuizQuestionData] = useState([]);
   const getQuizQuestionData = async (id) => {
     try {
-      const res = await axios.get(`${port}/gettingCourseQuizeQuestionData/${id}`);
-      setQuizQuestionData(res.data);
-      console.log(res.data)
+      const res = await axiosInstance.get(`${port}/gettingCourseQuizeQuestionData/${id}`);
+      const quizeQuestiondata = res.data;
+      const sortdata = quizeQuestiondata.sort((a, b) => a.order - b.order);
+      console.log(sortdata)
+      setQuizQuestionData(sortdata);
     } catch (error) {
       console.log(error);
     }
@@ -582,11 +590,17 @@ const ManageCourse = () => {
     course_id: id,
   });
 
+
   // Handle title change
   const handleTitleChange = (e) => {
+    const { name, value } = e.target;
     setAddQuizeQuestion((prevState) => ({
       ...prevState,
-      title: e.target.value,
+      [name]: value,
+    }));
+    setAddQuizeQuestion((prevState) => ({
+      ...prevState,
+      section_id: moduleId,
     }));
   };
 
@@ -598,6 +612,7 @@ const ManageCourse = () => {
       ...prevState,
       options: newOptions,
     }));
+    console.log(addQuizeQuestion)
   };
 
   // Handle correct answer checkbox change
@@ -613,19 +628,125 @@ const ManageCourse = () => {
       ...prevState,
       correct_answer: newCorrectAnswers,
     }));
+    console.log(addQuizeQuestion)
   };
 
   const addQuizQuestionSubmit = async (e) => {
     e.preventDefault();
-    console.log(addQuizeQuestion)
     try {
-      const res = await axios.post(`${port}/addingCourseQuizeQuestion/${quizQuestionId}`, addQuizeQuestion);
+      const res = await axiosInstance.post(`${port}/addingCourseQuizeQuestion/${quizQuestionId}`, addQuizeQuestion);
       setAddQuestionOpen(false);
       getQuizQuestionData(quizQuestionId);
     } catch (error) {
       console.log(error);
     }
   }
+  //edit question data
+  const [editQuestionData, setEditQuestionData] = useState({
+    title: "",
+    options: ["", "", "", "", "", ""],
+    correct_answer: [],
+    section_id: moduleId,
+    course_id: id,
+  });
+
+  const getEditQuestionData = async (id) => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCourseQuizeQuestionDataWithId/${id}`);
+      const questionData = res.data;
+      setEditQuestionData({
+        ...questionData,
+        options: questionData.options ? JSON.parse(questionData.options) : ["", "", "", "", "", ""],
+        correct_answer: questionData.correct_answer ? JSON.parse(questionData.correct_answer) : []
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleEditQuestionChange = (e) => {
+    setEditQuestionData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // Handle options change for fixed inputs
+  const handleEditOptionChange = (index, e) => {
+    const newOptions = [...editQuestionData.options];
+    newOptions[index] = e.target.value;
+    setEditQuestionData((prevState) => ({
+      ...prevState,
+      options: newOptions,
+    }));
+  };
+
+  // Handle correct answer checkbox change
+  const handleEditCorrectAnswerChange = (index) => {
+    let newCorrectAnswers = [...editQuestionData.correct_answer];
+    if (newCorrectAnswers.includes(index)) {
+      newCorrectAnswers = newCorrectAnswers.filter((i) => i !== index);
+    } else {
+      newCorrectAnswers.push(index);
+    }
+
+    setEditQuestionData((prevState) => ({
+      ...prevState,
+      correct_answer: newCorrectAnswers,
+    }));
+  };
+
+  const editQuestionSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInstance.put(`${port}/updatingCourseQuizeQuestion/${quizQuestionId}/${editQuestionId}`, editQuestionData);
+      setEditQuestionOpen(false);
+      getQuizQuestionData(quizQuestionId);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //handle quiz question delete
+  const [deleteQuestionOpen, setDeleteQuestionOpen] = useState(false);
+  const [deleteQuestionId, setDeleteQuestionId] = useState(null);
+  const handleDeleteQuestionOpen = async (id) => {
+    setDeleteQuestionOpen(true);
+    if (id) {
+      await setDeleteQuestionId(id)
+    }
+  }
+  const handleDeleteQuestion = async () => {
+    try {
+      const res = await axiosInstance.delete(`${port}/deletingCourseQuizeQuestion/${deleteQuestionId}`);
+      getQuizQuestionData(quizQuestionId);
+      setDeleteQuestionOpen(false)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //sorting section module data
+  const [sortSectionOpen, setSortSectionOpen] = useState(false);
+  const handleOpenSortSection = () => {
+    setSortSectionOpen(!sortSectionOpen);
+    getModuleData();
+  }
+  //sorting lesson and quiz data
+  const [sortLessonOpen, setSortLessonOpen] = useState(false);
+  const [sortLessonId, setSortLessonId] = useState(null);
+  const handleOpenSortLesson = (id) => {
+    setSortLessonOpen(!sortLessonOpen);
+    getLessonData(id);
+    setSortLessonId(id);
+  }
+  //sortin quiz data
+  const [sortQuizQuestionOpen, setSortQuizQuestionOpen] = useState(false);
+  const handleOpenSortQuizQuestion = () => {
+    setSortQuizQuestionOpen(!sortQuizQuestionOpen);
+    getQuizQuestionData(quizQuestionId);
+  }
+
 
   useEffect(() => {
     getModuleData();
@@ -639,36 +760,6 @@ const ManageCourse = () => {
     setMaxAttempts(!maxAttempts)
   }
 
-  // Example data for the quiz modal
-  const quizeData = [
-    {
-      question: "1. Your First Question Will Appear Here ?",
-      answers: [
-        { letter: "A", text: "Introduction to Security Guard" },
-        { letter: "B", text: "Introduction to Security Guard" },
-        { letter: "C", text: "Introduction to Security Guard" },
-        { letter: "D", text: "Introduction to Security Guard" },
-      ],
-    },
-    {
-      question: "2. Your Second Question Will Appear Here ?",
-      answers: [
-        { letter: "A", text: "Lesson A" },
-        { letter: "B", text: "Lesson B" },
-        { letter: "C", text: "Lesson C" },
-        { letter: "D", text: "Lesson D" },
-      ],
-    },
-    {
-      question: "3. Your Third Question Will Appear Here ?",
-      answers: [
-        { letter: "A", text: "Module A" },
-        { letter: "B", text: "Module B" },
-        { letter: "C", text: "Module C" },
-        { letter: "D", text: "Module D" },
-      ],
-    },
-  ];
 
   // Function to toggle which quiz module is open based on index
   const toggleQuizModule = (index) => {
@@ -793,7 +884,7 @@ const ManageCourse = () => {
               >
                 + Add Module
               </button>
-              <button className="primary-btn module-btn">Sort</button>
+              <button className="primary-btn module-btn" onClick={handleOpenSortSection}>Sort</button>
             </div>
           )}
         </div>
@@ -811,7 +902,7 @@ const ManageCourse = () => {
                     <span className="module-duration">15 Hours</span>
                     <span className="module-status green-dot"></span>
                     <div className="module-controls">
-                      <button className="arrow-btn">
+                      <button className="arrow-btn" onClick={() => handleOpenSortLesson(module.id)}>
                         <i className="fa-solid fa-sort"></i>{" "}
                       </button>
                       <button className="edit-btn" onClick={() => editModuleToggleModal(module.id)}>
@@ -1751,7 +1842,7 @@ const ManageCourse = () => {
                   </div>
 
                   <div className="two-btn">
-                    <button className="primary-btn module-btn">Sorting</button>
+                    <button className="primary-btn module-btn" onClick={handleOpenSortQuizQuestion}>Sorting</button>
                     <button
                       className="primary-btn module-btn"
                       onClick={addQuestionToggleModal}
@@ -1776,11 +1867,11 @@ const ManageCourse = () => {
                           <div className="module-controls">
                             <button
                               className="edit-btn"
-                              onClick={editQuestionToggleModal}
+                              onClick={() => editQuestionToggleModal(quiz.id)}
                             >
                               <i className="fa fa-pencil"></i>
                             </button>
-                            <button className="delete-btn">
+                            <button className="delete-btn" onClick={() => handleDeleteQuestionOpen(quiz.id)}>
                               <i className="fa fa-trash"></i>
                             </button>
                             <button
@@ -1892,89 +1983,46 @@ const ManageCourse = () => {
             <div className="modal">
               <div className="add-lesson-container">
                 <h5 style={{ marginBottom: "20px" }}>Edit Quiz Question</h5>
-                <form>
+                <form onSubmit={editQuestionSubmit}>
                   <div className="form-group">
                     <label>Question:</label>
                     <input
                       type="text"
-                      placeholder="Lesson Type"
+                      placeholder="Enter Question"
                       className="col12input"
+                      name="title"
+                      value={editQuestionData.title}
+                      onChange={handleEditQuestionChange}
                     />
                   </div>
 
-                  <div className="quiz-answer">
-                    <label>A</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" readOnly />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>B</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" readOnly />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>C</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" readOnly />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>D</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" readOnly />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>E</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" readOnly />
-                  </div>
-
-                  <div className="quiz-answer">
-                    <label>F</label>
-                    <input
-                      type="text"
-                      placeholder="Lesson Type"
-                      className="col8input"
-                      style={{ margin: "0px 10px", width: "90%" }}
-                    />
-                    <input type="checkbox" className="quiz-checkbox" readOnly />
-                  </div>
+                  {Array.isArray(editQuestionData.options) && editQuestionData.options.map((option, index) => (
+                    <div className="quiz-answer" key={index}>
+                      <label>{String.fromCharCode(65 + index)}</label>
+                      <input
+                        type="text"
+                        placeholder={`Option ${String.fromCharCode(65 + index)}`}
+                        className="col8input"
+                        style={{ margin: "0px 10px", width: "90%" }}
+                        value={option}
+                        onChange={(e) => handleEditOptionChange(index, e)}
+                      />
+                      <input
+                        type="checkbox"
+                        className="quiz-checkbox"
+                        checked={editQuestionData.correct_answer.includes(index)}
+                        onChange={() => handleEditCorrectAnswerChange(index)}
+                      />
+                    </div>
+                  ))}
 
                   <div style={{ display: "flex", gap: "10px" }}>
                     <button type="submit" className="primary-btn">
                       Save
                     </button>
                     <button
-                      type=""
-                      onClick={addQuestionToggleModal}
+                      type="button"
+                      onClick={editQuestionToggleModal}
                       className="secondary-btn"
                     >
                       Close
@@ -1985,6 +2033,71 @@ const ManageCourse = () => {
             </div>
           )
         }
+
+        {/* Delete Confirmation Modal */}
+        {deleteQuestionOpen && (
+          <div className="modal">
+            <div className="modal-container">
+              <h5>Delete</h5>
+              <p>Are you sure you want to delete this module?</p>
+              <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <button className="primary-btn" onClick={handleDeleteQuestion}>
+                  Delete
+                </button>
+                <button onClick={handleDeleteQuestionOpen} className="secondary-btn">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* sorting section module open */}
+        {
+          sortSectionOpen && (
+            <SortTable
+              data={moduleData}
+              sortTableOpen={sortSectionOpen}
+              handleOpenSortTable={handleOpenSortSection}
+              tableName="course_sections"
+              updateRoute="updatingCourseSectionOrder"
+              Id={id}
+              orderKey="order"
+              titleKey="title"
+            />
+          )
+        }
+        {/* sorting lesson and quiz module open */}
+        {
+          sortLessonOpen && (
+            <SortTable
+              data={lessonData}
+              sortTableOpen={sortLessonOpen}
+              handleOpenSortTable={handleOpenSortLesson}
+              tableName="course_lessons"
+              updateRoute="updatingCourseLessonOrder"
+              Id={sortLessonId}
+              orderKey="order"
+              titleKey="title"
+            />
+          )
+        }
+        {/* sorting quiz question module open */}
+        {
+          sortQuizQuestionOpen && (
+            <SortTable
+              data={quizQuestionData}
+              sortTableOpen={sortQuizQuestionOpen}
+              handleOpenSortTable={handleOpenSortQuizQuestion}
+              tableName="course_quize_questions"
+              updateRoute="updatingCourseQuizeQuestionOrder"
+              Id={moduleId}
+              orderKey="order"
+              titleKey="title"
+            />
+          )
+        }
+
 
         {/* Quiz Result Modal  */}
         {

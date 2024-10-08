@@ -7,7 +7,8 @@ const CourseQuizeQuestionController = require("../../controller/course/Course_Qu
 CourseQuizeQuestion.get("/gettingCourseQuizeQuestionData/:id", CourseQuizeQuestionController.getCourseQuizeQuestionData);
 CourseQuizeQuestion.get("/gettingCourseQuizeQuestionDataWithId/:id", CourseQuizeQuestionController.getCourseQuizeQuestionDataWithId);
 CourseQuizeQuestion.post("/addingCourseQuizeQuestion/:id", CourseQuizeQuestionController.addCourseQuizeQuestionData);
-CourseQuizeQuestion.put("/updatingCourseQuizeQuestion/:id", CourseQuizeQuestionController.updateCourseQuizeQuestionData);
+CourseQuizeQuestion.put("/updatingCourseQuizeQuestion/:id/:questionId", CourseQuizeQuestionController.updateCourseQuizeQuestionData);
+CourseQuizeQuestion.put("/updatingCourseQuizeQuestionOrder/:id", CourseQuizeQuestionController.updateCourseQuizeQuestionOrderData);
 CourseQuizeQuestion.delete("/deletingCourseQuizeQuestion/:id", CourseQuizeQuestionController.deleteCourseQuizeQuestionData);
 
 

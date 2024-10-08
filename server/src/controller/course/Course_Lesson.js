@@ -19,7 +19,7 @@ const getCourseLessonDataWithSectionId = async (req, res) => {
                 {
                     model: Course_Quize,
                     as: 'course_quize_lesson',
-                    attributes: ['id', 'title', 'instruction', 'quize_duration','status'],
+                    attributes: ['id', 'title', 'instruction', 'quize_duration', 'status'],
                     required: false
                 }
             ]
@@ -181,6 +181,30 @@ const updateCourseLessonStatus = async (req, res) => {
     }
 }
 
+const updateCourseLessonOrderData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const sectionId = req.params.id;
+    const { items } = req.body;
+    try {
+        for (const item of items) {
+            await Course_Lesson.update(
+                { order: item.order },
+                {
+                    where: {
+                        id: item.id,
+                        section_id: sectionId
+                    }
+                }
+            );
+        }
+        res.status(200).send('Order updated successfully');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error updating order');
+    }
+}
+
 
 const deleteCourseLessonData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -222,5 +246,6 @@ module.exports = {
     addCourseLessonData,
     updateCourseLessonData,
     updateCourseLessonStatus,
+    updateCourseLessonOrderData,
     deleteCourseLessonData
 }

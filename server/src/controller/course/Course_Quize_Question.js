@@ -1,11 +1,12 @@
 const { Course_Quize_Question } = require('../../database/models/index');
-const AuthMiddleware = require("../../auth/AuthMiddleware")
+const AuthMiddleware = require("../../auth/AuthMiddleware");
+const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
 
 const getCourseQuizeQuestionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
 
-const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
+    const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
     const id = req.params.id
     try {
         const data = await Course_Quize_Question.findAll({
@@ -25,7 +26,7 @@ const getCourseQuizeQuestionDataWithId = async (req, res) => {
     if (!isAuthenticated) return;
     const id = req.params.id;
     try {
-        const data = Course_Quize_Question.findeOne({
+        const data = await Course_Quize_Question.findOne({
             where: {
                 id: id
             }
@@ -68,26 +69,54 @@ const updateCourseQuizeQuestionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const id = req.params.id;
+    const questionId = req.params.questionId;
+    const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
-        question_type: req.body.question_type,
-        no_of_option: req.body.no_of_option,
+        question_type: null,
+        no_of_option: null,
         options: JSON.stringify(req.body.options),
         correct_answer: JSON.stringify(req.body.correct_answer),
-        quize_id: req.body.quize_id,
+        order: 0,
+        quize_id: id,
         section_id: req.body.section_id,
         course_id: req.body.course_id,
-        updatedAt: new Date(),
+        createdAt: date,
+        updatedAt: date,
     }
     try {
         const courseCoupondate = await Course_Quize_Question.update(data, {
             where: {
-                id: id
+                id: questionId
             }
         });
         res.status(200).json(courseCoupondate);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+}
+
+const updateCourseQuizeQuestionOrderData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const sectionId = req.params.id;
+    const { items } = req.body;
+    try {
+        for (const item of items) {
+            await Course_Quize_Question.update(
+                { order: item.order },
+                {
+                    where: {
+                        id: item.id,
+                        section_id: sectionId
+                    }
+                }
+            );
+        }
+        res.status(200).send('Order updated successfully');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error updating order');
     }
 }
 
@@ -114,6 +143,7 @@ module.exports = {
     getCourseQuizeQuestionDataWithId,
     addCourseQuizeQuestionData,
     updateCourseQuizeQuestionData,
+    updateCourseQuizeQuestionOrderData,
     deleteCourseQuizeQuestionData
 }
 

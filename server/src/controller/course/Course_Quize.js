@@ -75,6 +75,7 @@ const addCourseQuizeData = async (req, res) => {
             section_id: sectionId,
             course_id: courseId,
             quiz_id: quizeId,
+            order: 0,
         };
 
         await Course_Lesson.create(lessonData, { transaction: t });

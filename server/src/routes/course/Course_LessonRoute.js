@@ -14,6 +14,7 @@ CourseLesson.get("/gettingCourseLessonDataWithId/:id", CourseLessonController.ge
 CourseLesson.post("/addingCourseLesson/:id", uploadFields, CourseLessonController.addCourseLessonData);
 CourseLesson.put("/updatingCourseLesson/:id", uploadFields, CourseLessonController.updateCourseLessonData);
 CourseLesson.put("/updatingCourseLessonStatus/:id", CourseLessonController.updateCourseLessonStatus);
+CourseLesson.put("/updatingCourseLessonOrder/:id", CourseLessonController.updateCourseLessonOrderData);
 CourseLesson.delete("/deletingCourseLesson/:id", CourseLessonController.deleteCourseLessonData);
 
 
