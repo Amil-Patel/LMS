@@ -666,7 +666,6 @@ const EditCourse = () => {
                                                 alt="Selected Thumbnail"
                                             />
                                         ) : courseData.course_thumbnail ? (
-
                                             <img
                                                 src={`../upload/${courseData.course_thumbnail}`}
                                                 style={{ width: "67px", maxHeight: "67px" }}

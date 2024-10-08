@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import { userRolesContext } from '../layout/RoleContext';
+import { notifyInfo, notifyWarning } from "../layout/ToastMessage";
 import Cookies from 'js-cookie';
 import CookieConsent from './CookieConsent';  // Import CookieConsent
 const port = process.env.REACT_APP_URL;
@@ -27,9 +28,12 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(consentGiven)
         if (!consentGiven) {
-            alert("Please accept cookies to log in.");
+            notifyWarning("Please accept cookies to log in.");
+            return;
+        }
+        if (!data.email || !data.password) {
+            notifyInfo("Please enter email and password");
             return;
         }
         axiosInstance.post(`${port}/login`, data)
@@ -40,11 +44,11 @@ const Login = () => {
                     Cookies.set('token', res.data.token, { expires: 1 });
                     navigate("/dashboard");
                 } else {
-                    alert("Invalid email or password");
+                    notifyInfo("Invalid email or password");
                 }
             })
             .catch((err) => {
-                console.log(err + " error in login");
+                console.error(err);
             });
     };
 
@@ -60,13 +64,9 @@ const Login = () => {
             <form className="login" onSubmit={handleSubmit}>
                 <h2>Welcome, User!</h2>
                 <p>Please log in</p>
-                <input type="text" placeholder="Email" name='email' value={data.email} onChange={handleChange} />
+                <input type="text" placeholder="Email" name='email' value={data.email} autoComplete='off' onChange={handleChange} />
                 <input type="password" placeholder="Password" name='password' value={data.password} onChange={handleChange} />
                 <input type="submit" value="Log In" />
-                <div className="links">
-                    <a href="#">Forgot password</a>
-                    <a href="#">Register</a>
-                </div>
             </form>
         </>
     );

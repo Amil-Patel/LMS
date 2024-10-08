@@ -344,8 +344,8 @@ const CourseCoupon = () => {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo">
-            <img src={require("../../../assets/image/pdf-logo.png")} />
-            <img src={require("../../../assets/image/x-logo.png")} />
+            <img src={require("../../../assets/image/pdf-logo.png")} alt="pdf" />
+            <img src={require("../../../assets/image/x-logo.png")} alt="excel" />
           </div>
           {addCourseCoupon == 1 && (
             <button onClick={addToggleModal} className="primary-btn module-btn">

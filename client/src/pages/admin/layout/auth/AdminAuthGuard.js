@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Hoc from '../Hoc';
 
 const AdminAuthGuard = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,7 +20,7 @@ const AdminAuthGuard = ({ children }) => {
     }, []);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Hoc />;
     }
 
     if (!isAuthenticated) {

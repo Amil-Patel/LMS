@@ -5,7 +5,7 @@ const Navbar = () => {
     <>
       <nav className="navbar">
         <div className="nav-logo">
-          <img src={require("../../../assets/image/Logo.png")} />
+          <img src={require("../../../assets/image/Logo.png")} alt="logo" />
         </div>
 
         <div className="nav-top-section">
@@ -24,12 +24,12 @@ const Navbar = () => {
           <div className="nav-right-section">
             <i className="fa-solid fa-bell"></i>
             <span className="nav-right-section language-dropdown">
-              <img src={require("../../../assets/image/Flag.png")} />
+              <img src={require("../../../assets/image/Flag.png")} alt="flag" />
               <p>English</p>
               <i className="fa-solid fa-angle-down"></i>
             </span>
             <span className="nav-right-section profile-box">
-              <img src={require("../../../assets/image/profile-logo.png")} />
+              <img src={require("../../../assets/image/profile-logo.png")} alt="profile" />
               <p>
                 <b>Moni Roy</b>
                 <br />

@@ -23,7 +23,11 @@ const getLogin = async (req, res) => {
         const decryptedPassword = DecryptPassword(user.password);
 
         if (decryptedPassword !== password) {
-            return res.status(404).json({ message: "Invalid email or password", status: 404 });
+            // Return an error if the password doesn't match
+            return res.status(401).json({
+                message: "Incorrect email or password. Please try again.",
+                status: 401,
+            });
         }
 
         const token = jwt.sign({ id: user.id, email: user.email }, secret_key, {

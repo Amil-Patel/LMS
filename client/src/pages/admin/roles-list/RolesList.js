@@ -128,8 +128,7 @@ function RolesList() {
     }));
     try {
       const res = await axiosInstance.put(`${port}/editRolePermission/${rollName}`, dataToUpdate);
-      setAssignRoll(false);
-      setLoading(false);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       setLoading(false);

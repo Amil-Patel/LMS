@@ -63,10 +63,10 @@ const Sidebar = () => {
         <div className="sidebar-top">
           <ul>
             <li className="main-li">
-              <a href="#" onClick={(e) => toggleDropdown("dropdown1", e)}>
+              <NavLink to="/dashboard">
                 <i className="fa-solid fa-gauge-high"></i>{" "}
                 <span>Dashboard</span>
-              </a>
+              </NavLink>
             </li>
 
             <li className="main-li">

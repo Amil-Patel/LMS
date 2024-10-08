@@ -18,7 +18,6 @@ import { RoleContext } from "./pages/admin/layout/RoleContext";
 import LoginRoute from "./routes/admin/LoginRoute";
 import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
 
-
 const App = () => {
   return (
     <>

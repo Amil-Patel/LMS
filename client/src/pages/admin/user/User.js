@@ -476,19 +476,19 @@ const User = () => {
                 {studentView && (
                   <li onClick={() => handleChangeTab("student")}>
                     <NavLink className={tab === "student" ? "active-tab" : ""}>
-                      USER |
+                      USER
                     </NavLink>
                   </li>
                 )}
-
+                |
                 {instructureView && (
                   <li onClick={() => handleChangeTab("instructure")}>
                     <NavLink className={tab === "instructure" ? "active-tab" : ""}>
-                      INSTRUCTOR |
+                      INSTRUCTOR
                     </NavLink>
                   </li>
                 )}
-
+                |
                 {adminView && (
                   <li onClick={() => handleChangeTab("admin")}>
                     <NavLink className={tab === "admin" ? "active-tab" : ""}>
