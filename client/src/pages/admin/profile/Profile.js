@@ -207,7 +207,7 @@ const Profile = () => {
                   name="contact"
                   value={userData.contact}
                   onChange={handleChange}
-                  placeholder="9876543210"
+                  placeholder="Enter Contact No."
                   className="col12input"
                 />
               </div>
@@ -229,7 +229,7 @@ const Profile = () => {
                   name="whatsapp_number"
                   value={userData.whatsapp_number}
                   onChange={handleChange}
-                  placeholder="9876543210"
+                  placeholder="Enter Contact No."
                   className="col12input"
                 />
               </div>

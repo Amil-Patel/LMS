@@ -241,8 +241,8 @@ const CourseCategory = () => {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo">
-            <img src={require("../../../assets/image/pdf-logo.png")} />
-            <img src={require("../../../assets/image/x-logo.png")} />
+            <img src={require("../../../assets/image/pdf-logo.png")} alt="pdf"/>
+            <img src={require("../../../assets/image/x-logo.png")} alt="x-logo" />
           </div>
           {addCourseCatePermission == 1 && (
             <a style={{ cursor: "pointer" }} onClick={addToggleModal}>
@@ -575,10 +575,11 @@ const CourseCategory = () => {
                       style={{ marginBottom: "20px" }}
                     />
                     {newImage ? (
-                      <img src={URL.createObjectURL(newImage)} width="30%" />
+                      <img src={URL.createObjectURL(newImage)} width="30%" alt="Thumbnail" />
                     ) : (
                       <img
                         src={`upload/${editData.cate_thumbnail}`}
+                        alt="Thumbnail"
                         width="30%"
                       />
                     )}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import AdminAuthGuard from "../../pages/admin/layout/auth/AdminAuthGuard";
-import CourseCategory from "../../pages/admin/course/CourseCategory";
+import Dashboard from "../../pages/admin/dashboard/Dashboard";
 
 const DashboardRoute = () => {
   return (
@@ -11,7 +11,7 @@ const DashboardRoute = () => {
         element={
           <>
             <AdminAuthGuard>
-              <CourseCategory />
+              <Dashboard />
             </AdminAuthGuard>
           </>
         }

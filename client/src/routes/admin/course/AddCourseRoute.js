@@ -2,7 +2,8 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import AddCourse from '../../../pages/admin/course/AddCourse';
 import useCheckRolePermission from '../../../pages/admin/layout/CheckRolePermission';
-import NotFound from '../../../pages/admin/notfound/NotFound'
+import NotAuthor from '../../../pages/admin/notfound/NotAuthor'
+import AdminAuthGuard from '../../../pages/admin/layout/auth/AdminAuthGuard';
 
 const AddCourseRoute = () => {
   const courseMaster = useCheckRolePermission("Course Master");
@@ -11,7 +12,9 @@ const AddCourseRoute = () => {
     <Routes>
       <Route path="/add-course" element={
         <>
-          {addCourse ? <AddCourse /> : <NotFound />}
+          <AdminAuthGuard>
+            {addCourse ? <AddCourse /> : <NotAuthor />}
+          </AdminAuthGuard>
         </>
       } />
     </Routes>

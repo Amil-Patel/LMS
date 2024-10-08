@@ -5,7 +5,7 @@ const getCourseQuizeQuestionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
 
-const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
+    const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
     const id = req.params.id
     try {
         const data = await Course_Quize_Question.findAll({
