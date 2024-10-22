@@ -19,10 +19,8 @@ const getUserMasterData = async (req, res) => {
 }
 
 const getUserMasterDataWithId = async (req, res) => {
-    console.log("object")
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    console.log(isAuthenticated)
     const id = req.params.id;
     try {
         const data = await UserMaster.findOne({

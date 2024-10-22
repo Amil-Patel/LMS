@@ -1,237 +1,241 @@
 /* module style */
 
 .module {
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    margin: 20px;
-    background-color: var(--module-list-bg);
-    margin: 0 auto;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .module-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .module-title {
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .module-duration {
-    font-size: 14px;
-  }
-  
-  
-  .module-controls {
-    display: flex;
-    /* gap: 10px; */
-  }
-  
-  .module-controls button {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .module-lesson {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background-color: var(--module-list-bg);
-    border-bottom: 1px solid var(--border-color);
-  }
-  
-  .lesson:last-child {
-    border-bottom: none;
-  }
-  
-  .lesson-title {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    flex: 1;
-  }
-  
-  .lesson-icon,
-  .quiz-icon {
-    margin-right: 10px;
-    font-size: 16px;
-  }
-  
-  .lesson-time {
-    display: flex;
-    align-items: center;
-  }
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  margin: 20px;
+  background-color: var(--module-list-bg);
+  margin: 0 auto;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 14px;
+}
 
-  .lesson-time span{
-    font-size: 14px;
-    padding-right: 20px;
-  }
-  
+.module:nth-last-child(1) {
+  margin-bottom: 0px;
+}
 
-  i.fa-solid.fa-folder-open {
-    padding-right: 10px;
-  }
-  
-  .resource-btn {
-    border: 1px dashed #4880FF;
-    border-radius: 5px;
-  }
-  
-  .lesson-actions {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .lesson-actions button {
-    background: none;
-    cursor: pointer;
-    color: #555;
-    font-size: 14px;
-    padding: 5px;
-  }
-  
-  .add-questions-btn {
-    background-color: #f0f0f0;
-    border: 1px dashed #ccc;
-    padding: 5px 8px;
-    font-size: 8px;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-  
-  button.add-questions-btn {
-    border: 1px dashed #4880FF;
-    border-radius: 5px;
-  }
-  
-  
-  .module-actions {
-    margin-top: 35px;
-  }
-  
-  .module-actions button {
-    margin-right: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-  
-  .quiz-options {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .quiz-options select {
-    padding: 5px;
-    font-size: 14px;
-  }
-  
-  .module-content {
-    transition: max-height 0.3s ease-out;
-    overflow: hidden;
-    background-color: #fff;
-    padding: 20px;
-  }
-  
-  
-  
-  /* lesson module */
-  
-  .add-lesson-container {
-    width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-  }
-  
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
 
-  
-  button {
-    padding: 10px 20px;
-    /* background-color: #4CAF50; */
-    color: #565656;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+.module-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.module-duration {
+  font-size: 14px;
+}
 
 
-  /* quiz style */
+.module-controls {
+  display: flex;
+  /* gap: 10px; */
+}
 
-  .quiz-checkbox{
-    width: 18px;
-    height: 40px;
-    position: absolute;
-    margin-top: -3px;
-    border-color: var(--border-color);
-  }
+.module-controls button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
-  .quiz-answer{
-    margin-bottom: 10px;
-  }
+.module-lesson {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: var(--module-list-bg);
+  border-bottom: 1px solid var(--border-color);
+}
 
-  .quiz-header{
-    display: flex;
-    gap: 10px;
-  }
+.lesson:last-child {
+  border-bottom: none;
+}
 
-  .two-btn{
-    display: flex;
-    width: 35%;
-    justify-content: space-between;
-    align-items: center;
-  }
+.lesson-title {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  flex: 1;
+}
 
-  .quiz-top-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-  }
+.lesson-icon,
+.quiz-icon {
+  margin-right: 10px;
+  font-size: 16px;
+}
 
-  .container{
-    border: 1px solid var(--border-color);
-    margin-bottom: 10px;
-  }
+.lesson-time {
+  display: flex;
+  align-items: center;
+}
 
-  .quiz-module{
-    padding: 0 0 0 10px;
-    background-color: var(--module-list-bg);
-  }
+.lesson-time span {
+  font-size: 14px;
+  padding-right: 20px;
+}
 
-  .quiz-letter{
-    border-right: 2px solid  var(--border-color);
-    padding-right: 10px;
-  }
 
-  .quiz-list{
-    margin-bottom: 5px;
-    display: flex;
-  }
+i.fa-solid.fa-folder-open {
+  padding-right: 10px;
+}
 
-  .academic-table th{
-    font-size: 12px;
-  }
+.resource-btn {
+  border: 1px dashed #4880FF;
+  border-radius: 5px;
+}
 
-  .student-details{
-    display: flex;
-    font-size: 12px;
-    gap: 20px;
-  }
+.lesson-actions {
+  display: flex;
+  gap: 10px;
+}
 
+.lesson-actions button {
+  background: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.add-questions-btn {
+  background-color: #f0f0f0;
+  border: 1px dashed #ccc;
+  padding: 5px 8px;
+  font-size: 8px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button.add-questions-btn {
+  border: 1px dashed #4880FF;
+  border-radius: 5px;
+}
+
+
+.module-actions {
+  margin-top: 35px;
+}
+
+.module-actions button {
+  margin-right: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.quiz-options {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz-options select {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.module-content {
+  transition: max-height 0.3s ease-out;
+  overflow: hidden;
+  background-color: #fff;
+  padding: 20px;
+}
+
+
+
+/* lesson module */
+
+.add-lesson-container {
+  width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+
+
+button {
+  padding: 10px 20px;
+  /* background-color: #4CAF50; */
+  color: #565656;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+/* quiz style */
+
+.quiz-checkbox {
+  width: 18px;
+  height: 40px;
+  position: absolute;
+  margin-top: -3px;
+  border-color: var(--border-color);
+}
+
+.quiz-answer {
+  margin-bottom: 10px;
+}
+
+.quiz-header {
+  display: flex;
+  gap: 10px;
+}
+
+.two-btn {
+  display: flex;
+  width: 35%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quiz-top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.container {
+  border: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+
+.quiz-module {
+  padding: 0 0 0 10px;
+  background-color: var(--module-list-bg);
+}
+
+.quiz-letter {
+  border-right: 2px solid var(--border-color);
+  padding-right: 10px;
+}
+
+.quiz-list {
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.academic-table th {
+  font-size: 12px;
+}
+
+.student-details {
+  display: flex;
+  font-size: 12px;
+  gap: 20px;
+}

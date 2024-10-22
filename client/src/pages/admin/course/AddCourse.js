@@ -425,7 +425,7 @@ const AddCourse = () => {
                   </div>
 
                   <div className="form-group mb-0" style={{ width: "48%" }}>
-                    <label htmlFor="course_discount">Course Discount %</label>
+                    <label htmlFor="course_discount">Course Discount (in %)</label>
                     <input id="course_discount" type="text" placeholder="0" className="col12input" name="course_discount" onChange={handleChange} value={addCourse.course_discount} />
                   </div>
                 </div>
@@ -495,7 +495,7 @@ const AddCourse = () => {
                         <label htmlFor="tax_type">
                           Type <span className="required">*</span>
                         </label>
-                        <select id="tax_type" className="col12input" value={addCourse.tax_type} name="tax_type" onChange={handleChange}>
+                        <select id="tax_type" placeholder="Tax Type" className="col12input" value={addCourse.tax_type} name="tax_type" onChange={handleChange}>
                           <option value="">Select Tax Type</option>
                           <option value="inclusive">Is Inclusive</option>
                           <option value="exclusive">Is Exclusive</option>

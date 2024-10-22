@@ -169,7 +169,6 @@ const updateCourseLessonStatus = async (req, res) => {
         status: req.body.status === 1 ? 0 : 1,
         updatedAt: date
     };
-    console.log(req.body)
     try {
         const updatedCourse = await Course_Lesson.update(data, {
             where: { id: id }

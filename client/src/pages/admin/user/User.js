@@ -441,58 +441,42 @@ const User = () => {
 
         <div className="admin-panel-tab-bar">
           <ul className="tab">
-            {
-              roleName === "SuperAdmin" && (
-                <>
-                  <li onClick={() => handleChangeTab("student")}>
-                    <NavLink className={tab === "student" ? "active-tab" : ""}>
-                      USER
-                    </NavLink>
-                  </li>
-                  |
-                  <li onClick={() => handleChangeTab("instructure")}>
-                    <NavLink className={tab === "instructure" ? "active-tab" : ""}>
-                      instructure
-                    </NavLink>
-                  </li>
-                  |
-                  <li onClick={() => handleChangeTab("admin")}>
-                    <NavLink className={tab === "admin" ? "active-tab" : ""}>
-                      admin
-                    </NavLink>
-                  </li>
-                  |
-                  <li onClick={() => handleChangeTab("superAdmin")}>
-                    <NavLink className={tab === "superAdmin" ? "active-tab" : ""}>
-                      super admin
-                    </NavLink>
-                  </li>
-                </>
-
-              )
-            }
             {roleName !== "SuperAdmin" && (
               <>
-                {studentView && (
+                {(userRole === "superAdmin" || studentView) && (
                   <li onClick={() => handleChangeTab("student")}>
                     <NavLink className={tab === "student" ? "active-tab" : ""}>
                       USER
                     </NavLink>
                   </li>
                 )}
-                |
-                {instructureView && (
+                {(userRole === "superAdmin" || instructureView) && (
+                  "|"
+                )}
+                {(userRole === "superAdmin" || instructureView) && (
                   <li onClick={() => handleChangeTab("instructure")}>
                     <NavLink className={tab === "instructure" ? "active-tab" : ""}>
                       INSTRUCTOR
                     </NavLink>
                   </li>
                 )}
-                |
-                {adminView && (
+                {(userRole === "superAdmin" || adminView) && (
+                  "|"
+                )}
+                {(userRole === "superAdmin" || adminView) && (
                   <li onClick={() => handleChangeTab("admin")}>
                     <NavLink className={tab === "admin" ? "active-tab" : ""}>
                       ADMIN
+                    </NavLink>
+                  </li>
+                )}
+                {userRole === "superAdmin" && (
+                  "|"
+                )}
+                {userRole === "superAdmin" && (
+                  <li onClick={() => handleChangeTab("superAdmin")}>
+                    <NavLink className={tab === "superAdmin" ? "active-tab" : ""}>
+                      super Admin
                     </NavLink>
                   </li>
                 )}
@@ -518,19 +502,18 @@ const User = () => {
                   <th>Gender</th>
                   <th>Country</th>
                   <th>Status</th>
-                  {
-                    (studentEdit || studentDelete) ? (
-                      <th>Action</th>
-                    ) : null
+                  {(userRole === "superAdmin" ||
+                    (studentEdit || studentDelete)) ? (
+                    <th>Action</th>
+                  ) : null
                   }
-
                 </tr>
               </thead>
               <tbody>
                 {
                   userData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No data found</td>
+                      <td colSpan="9">No user data found</td>
                     </tr>
                   ) : (
                     userData.map((item, index) => (
@@ -550,45 +533,45 @@ const User = () => {
                             <span className="slider"></span>
                           </label>
                         </td>
-                        {
-                          (studentEdit || studentDelete) ? (
-                            <td>
+                        {(userRole === "superAdmin" ||
+                          (studentEdit || studentDelete)) ? (
+                          <td>
+                            <div
+                              className={`menu-container ${activeDropdown === index ? "active" : ""
+                                }`}
+                            >
                               <div
-                                className={`menu-container ${activeDropdown === index ? "active" : ""
-                                  }`}
+                                className="menu-button"
+                                onClick={() => toggleDropdown(index)}
                               >
-                                <div
-                                  className="menu-button"
-                                  onClick={() => toggleDropdown(index)}
-                                >
-                                  {" "}
-                                  ⋮{" "}
-                                </div>
-                                {activeDropdown === index && (
-                                  <div className="menu-content">
-                                    {
-                                      studentEdit && (
-                                        <a
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
-                                        </a>
-                                      )
-                                    }
-                                    {
-                                      studentDelete && (
-                                        <a
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
-                                        </a>
-                                      )
-                                    }
-                                  </div>
-                                )}
+                                {" "}
+                                ⋮{" "}
                               </div>
-                            </td>
-                          ) : (null)
+                              {activeDropdown === index && (
+                                <div className="menu-content">
+                                  {(userRole === "superAdmin" ||
+                                    studentEdit) && (
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                      </a>
+                                    )
+                                  }
+                                  {(userRole === "superAdmin" ||
+                                    studentDelete) && (
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                      </a>
+                                    )
+                                  }
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        ) : (null)
                         }
 
                       </tr>
@@ -610,10 +593,10 @@ const User = () => {
                   <th>Gender</th>
                   <th>Country</th>
                   <th>Status</th>
-                  {
-                    (instructureEdit || instructureDelete) ? (
-                      <th>Action</th>
-                    ) : null
+                  {(userRole === "superAdmin" ||
+                    (instructureEdit || instructureDelete)) ? (
+                    <th>Action</th>
+                  ) : null
                   }
                 </tr>
               </thead>
@@ -621,7 +604,7 @@ const User = () => {
                 {
                   userData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No data found</td>
+                      <td colSpan="9">No instructure data found</td>
                     </tr>
                   ) : (
                     userData.map((item, index) => (
@@ -641,45 +624,45 @@ const User = () => {
                             <span className="slider"></span>
                           </label>
                         </td>
-                        {
-                          (instructureEdit || instructureDelete) ? (
-                            <td>
+                        {(userRole === "superAdmin" ||
+                          (instructureEdit || instructureDelete)) ? (
+                          <td>
+                            <div
+                              className={`menu-container ${activeDropdown === index ? "active" : ""
+                                }`}
+                            >
                               <div
-                                className={`menu-container ${activeDropdown === index ? "active" : ""
-                                  }`}
+                                className="menu-button"
+                                onClick={() => toggleDropdown(index)}
                               >
-                                <div
-                                  className="menu-button"
-                                  onClick={() => toggleDropdown(index)}
-                                >
-                                  {" "}
-                                  ⋮{" "}
-                                </div>
-                                {activeDropdown === index && (
-                                  <div className="menu-content">
-                                    {
-                                      instructureEdit && (
-                                        <a
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
-                                        </a>
-                                      )
-                                    }
-                                    {
-                                      instructureDelete && (
-                                        <a
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
-                                        </a>
-                                      )
-                                    }
-                                  </div>
-                                )}
+                                {" "}
+                                ⋮{" "}
                               </div>
-                            </td>
-                          ) : (null)
+                              {activeDropdown === index && (
+                                <div className="menu-content">
+                                  {(userRole === "superAdmin" ||
+                                    instructureEdit) && (
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                      </a>
+                                    )
+                                  }
+                                  {(userRole === "superAdmin" ||
+                                    instructureDelete) && (
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                      </a>
+                                    )
+                                  }
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        ) : (null)
                         }
 
                       </tr>
@@ -701,10 +684,10 @@ const User = () => {
                   <th>Gender</th>
                   <th>Country</th>
                   <th>Status</th>
-                  {
-                    (adminEdit || adminDelete) ? (
-                      <th>Action</th>
-                    ) : null
+                  {(userRole === "superAdmin" ||
+                    (adminEdit || adminDelete)) ? (
+                    <th>Action</th>
+                  ) : null
                   }
                 </tr>
               </thead>
@@ -712,7 +695,7 @@ const User = () => {
                 {
                   userData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No data found</td>
+                      <td colSpan="9">No admin data found</td>
                     </tr>
                   ) : (
                     userData.map((item, index) => (
@@ -732,45 +715,45 @@ const User = () => {
                             <span className="slider"></span>
                           </label>
                         </td>
-                        {
-                          (adminEdit || adminDelete) ? (
-                            <td>
+                        {(userRole === "superAdmin" ||
+                          (adminEdit || adminDelete)) ? (
+                          <td>
+                            <div
+                              className={`menu-container ${activeDropdown === index ? "active" : ""
+                                }`}
+                            >
                               <div
-                                className={`menu-container ${activeDropdown === index ? "active" : ""
-                                  }`}
+                                className="menu-button"
+                                onClick={() => toggleDropdown(index)}
                               >
-                                <div
-                                  className="menu-button"
-                                  onClick={() => toggleDropdown(index)}
-                                >
-                                  {" "}
-                                  ⋮{" "}
-                                </div>
-                                {activeDropdown === index && (
-                                  <div className="menu-content">
-                                    {
-                                      adminEdit && (
-                                        <a
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
-                                        </a>
-                                      )
-                                    }
-                                    {
-                                      adminDelete && (
-                                        <a
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
-                                        </a>
-                                      )
-                                    }
-                                  </div>
-                                )}
+                                {" "}
+                                ⋮{" "}
                               </div>
-                            </td>
-                          ) : (null)
+                              {activeDropdown === index && (
+                                <div className="menu-content">
+                                  {(userRole === "superAdmin" ||
+                                    adminEdit) && (
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                      </a>
+                                    )
+                                  }
+                                  {(userRole === "superAdmin" ||
+                                    adminDelete) && (
+                                      <a
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                      </a>
+                                    )
+                                  }
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        ) : (null)
                         }
 
                       </tr>
@@ -781,7 +764,6 @@ const User = () => {
             </table>
           )}
           {tab == "superAdmin" && (
-
             <table>
               <thead>
                 <tr>
@@ -800,7 +782,7 @@ const User = () => {
                 {
                   userData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No data found</td>
+                      <td colSpan="9">No super admin data found</td>
                     </tr>
                   ) : (
                     userData.map((item, index) => (
@@ -1502,7 +1484,7 @@ const User = () => {
             <div className="modal-container">
               <h5>Delete User</h5>
               <p>Are you sure you want to delete the user ?</p>
-              <div style={{ display: "flex", gap: "10px" }}>
+              <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                 <button onClick={deleteUserData} className="primary-btn">
                   Confirm
                 </button>

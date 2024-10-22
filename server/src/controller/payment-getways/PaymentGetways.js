@@ -34,9 +34,6 @@ const updatePaymentGetwayData = async (req, res) => {
                 id: id
             }
         })
-        console.log("userroledata")
-        console.log(userroledata)
-        console.log("userroledata")
         res.status(200).json(userroledata);
     } catch (error) {
         console.log(error);

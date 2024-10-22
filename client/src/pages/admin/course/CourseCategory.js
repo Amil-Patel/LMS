@@ -10,7 +10,7 @@ const port = process.env.REACT_APP_URL;
 
 const CourseCategory = () => {
   // Sample data for the cards
-  const { userId } = useContext(userRolesContext);
+  const { userId, userRole } = useContext(userRolesContext);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -226,7 +226,7 @@ const CourseCategory = () => {
     setDeleteId(id);
     setDeleteOpen(!deleteOpen);
   };
-  
+
   return (
     <>
       <Hoc />
@@ -241,10 +241,10 @@ const CourseCategory = () => {
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo">
-            <img src={require("../../../assets/image/pdf-logo.png")} alt="pdf"/>
+            <img src={require("../../../assets/image/pdf-logo.png")} alt="pdf" />
             <img src={require("../../../assets/image/x-logo.png")} alt="x-logo" />
           </div>
-          {addCourseCatePermission == 1 && (
+          {(userRole === "superAdmin" || addCourseCatePermission == 1) && (
             <a style={{ cursor: "pointer" }} onClick={addToggleModal}>
               <span className="primary-btn module-btn">+ Add</span>
             </a>
@@ -281,25 +281,24 @@ const CourseCategory = () => {
                           <p>Sub Course: {nullCourseDataWithId.subcoursecount}</p>
                         </div>
                         <div className="card-actions">
-                          {
-                            editCourseCatePermission == 1 && (
-                              <label htmlFor="subcoursestatus" className="switch" style={{ marginTop: "4px" }}>
-                                <input
-                                  type="checkbox"
-                                  id="subcoursestatus"
-                                  checked={nullCourseDataWithId.data.status}
-                                  onClick={() =>
-                                    handleStatusChange(
-                                      nullCourseDataWithId.data.id,
-                                      nullCourseDataWithId.data.status
-                                    )
-                                  }
-                                />
-                                <span className="slider"></span>
-                              </label>
-                            )}
+                          {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
+                            <label htmlFor="subcoursestatus" className="switch" style={{ marginTop: "4px" }}>
+                              <input
+                                type="checkbox"
+                                id="subcoursestatus"
+                                checked={nullCourseDataWithId.data.status}
+                                onClick={() =>
+                                  handleStatusChange(
+                                    nullCourseDataWithId.data.id,
+                                    nullCourseDataWithId.data.status
+                                  )
+                                }
+                              />
+                              <span className="slider"></span>
+                            </label>
+                          )}
                           <div className="action-btn">
-                            {editCourseCatePermission == 1 && (
+                            {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                               <span
                                 onClick={() => {
                                   editToggleModal(nullCourseDataWithId.data.id);
@@ -309,7 +308,7 @@ const CourseCategory = () => {
                                 <i className="fa fa-pencil"></i>
                               </span>
                             )}
-                            {deleteCourseCatePermission == 1 && (
+                            {(userRole === "superAdmin" || deleteCourseCatePermission == 1) && (
                               <span
                                 onClick={() =>
                                   deleteToggleModal(nullCourseDataWithId.data.id)
@@ -334,7 +333,7 @@ const CourseCategory = () => {
                           <p>Sub Course: {firstNullParentData.subcoursecount}</p>
                         </div>
                         <div className="card-actions">
-                          {editCourseCatePermission == 1 && (
+                          {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                             <label htmlFor="statussubcourse" className="switch" style={{ marginTop: "4px" }}>
                               <input
                                 type="checkbox"
@@ -351,7 +350,7 @@ const CourseCategory = () => {
                             </label>
                           )}
                           <div className="action-btn">
-                            {editCourseCatePermission == 1 && (
+                            {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                               <span
                                 onClick={() => {
                                   editToggleModal(firstNullParentData.id);
@@ -361,7 +360,7 @@ const CourseCategory = () => {
                                 <i className="fa fa-pencil"></i>
                               </span>
                             )}
-                            {deleteCourseCatePermission == 1 && (
+                            {(userRole === "superAdmin" || deleteCourseCatePermission == 1) && (
                               <span
                                 onClick={() =>
                                   deleteToggleModal(firstNullParentData.id)
@@ -397,7 +396,7 @@ const CourseCategory = () => {
                   <div className="card-content">
                     <h5>{course.cate_title}</h5>
                     <div className="card-actions">
-                      {editCourseCatePermission == 1 && (
+                      {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                         <label htmlFor="coursestatus" or="status" className="switch">
                           <input
                             type="checkbox"
@@ -407,11 +406,12 @@ const CourseCategory = () => {
                               handleStatusChange(course.id, course.status)
                             }
                           />
+                          
                           <span className="slider"></span>
                         </label>
                       )}
                       <div className="action-btn">
-                        {editCourseCatePermission == 1 && (
+                        {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                           <span
                             onClick={() => {
                               editToggleModal(course.id);
@@ -421,7 +421,7 @@ const CourseCategory = () => {
                             <i className="fa fa-pencil"></i>
                           </span>
                         )}
-                        {deleteCourseCatePermission == 1 && (
+                        {(userRole === "superAdmin" || deleteCourseCatePermission == 1) && (
                           <span
                             onClick={() => deleteToggleModal(course.id)}
                             className="delete"
@@ -608,7 +608,7 @@ const CourseCategory = () => {
               <div className="modal-container">
                 <h5>Delete Course Category</h5>
                 <p>Are you sure you want to delete the course category ?</p>
-                <div style={{ display: "flex", gap: "10px" }}>
+                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                   <button onClick={handleDelete} className="primary-btn">
                     Confirm
                   </button>

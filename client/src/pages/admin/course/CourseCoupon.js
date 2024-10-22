@@ -10,7 +10,7 @@ import useCheckRolePermission from "../layout/CheckRolePermission";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
-  const { userId } = useContext(userRolesContext);
+  const { userId, userRole } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -347,7 +347,7 @@ const CourseCoupon = () => {
             <img src={require("../../../assets/image/pdf-logo.png")} alt="pdf" />
             <img src={require("../../../assets/image/x-logo.png")} alt="excel" />
           </div>
-          {addCourseCoupon == 1 && (
+          {(userRole === "superAdmin" || addCourseCoupon == 1) && (
             <button onClick={addToggleModal} className="primary-btn module-btn">
               + Add
             </button>
@@ -391,10 +391,10 @@ const CourseCoupon = () => {
                     onClick={() => handleSort("expired_date")}
                   ></i>
                 </th>
-                {editCourseCoupon == 1 && (
+                {(userRole === "superAdmin" || editCourseCoupon == 1) && (
                   <th style={{ width: "10%" }}>Status</th>
                 )}
-                {editCourseCoupon == 1 && deleteCourseCoupon == 1 && (
+                {(userRole === "superAdmin" || editCourseCoupon == 1 && deleteCourseCoupon == 1) && (
                   <th style={{ width: "10%" }}>Action</th>
                 )}
               </tr>
@@ -424,7 +424,7 @@ const CourseCoupon = () => {
                         : i.discount_in_amount}
                     </td>
                     <td>{i.expired_date}</td>
-                    {editCourseCoupon == 1 && (
+                    {(userRole === "superAdmin" || editCourseCoupon == 1) && (
                       <td>
                         <label className="switch">
                           <input
@@ -436,7 +436,7 @@ const CourseCoupon = () => {
                         </label>
                       </td>
                     )}
-                    {editCourseCoupon == 1 && deleteCourseCoupon == 1 && (
+                    {(userRole === "superAdmin" || editCourseCoupon == 1 && deleteCourseCoupon == 1) && (
                       <td>
                         <div
                           className={`menu-container ${activeDropdown === index ? "active" : ""
@@ -451,7 +451,7 @@ const CourseCoupon = () => {
                           </div>
                           {activeDropdown === index && (
                             <div className="menu-content">
-                              {editCourseCoupon == 1 && (
+                              {(userRole === "superAdmin" || editCourseCoupon == 1) && (
                                 <a
                                   onClick={() => {
                                     editToggleModal(i.id);
@@ -461,7 +461,7 @@ const CourseCoupon = () => {
                                   <p>Edit</p>
                                 </a>
                               )}
-                              {deleteCourseCoupon == 1 && (
+                              {(userRole === "superAdmin" || deleteCourseCoupon == 1) && (
                                 <p>
                                   <DeleteModal
                                     onDelete={() => handleDelete(i.id)}
