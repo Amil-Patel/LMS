@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../../../assets/css/sidebar.css";
 import useCheckRolePermission from "./CheckRolePermission";
+import { userRolesContext } from "./RoleContext";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import LogOutModal from "./LogOutModal";
 
 const Sidebar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const { userRole } = useContext(userRolesContext);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -19,6 +21,12 @@ const Sidebar = () => {
 
   const courseCoupon = useCheckRolePermission("Course Coupon");
   const viewCourseCoupon = courseCoupon.length > 0 && courseCoupon[0].can_view === 1 ? 1 : 0;
+  const userData = useCheckRolePermission("Student");
+  const viewUserData = userData.length > 0 && userData[0].can_view === 1 ? 1 : 0;
+  const instrucatureData = useCheckRolePermission("Instructor");
+  const viewInstrucatureData = instrucatureData.length > 0 && instrucatureData[0].can_view === 1 ? 1 : 0;
+  const adminData = useCheckRolePermission("Admin");
+  const viewAdminData = adminData.length > 0 && adminData[0].can_view === 1 ? 1 : 0;
   // List of paths where "Course" should be highlighted
   const coursePaths = [
     "/all-course",
@@ -70,45 +78,48 @@ const Sidebar = () => {
             </li>
 
             <li className="main-li">
-              <a
-                href="#"
-                onClick={(e) => toggleDropdown("course", e)}
-                className={isCourseActive ? "active" : ""}
-              >
-                <i className="fa-solid fa-border-all"></i>
-                <span>Course</span>
-                <i
-                  className={`fa-solid ${activeDropdown === "course"
-                    ? "fa-angle-up"
-                    : "fa-angle-down"
-                    }`}
-                ></i>
-              </a>
+              {(userRole === "superAdmin" || (addCourse === 1 || viewCourse === 1 || viewCourseCate === 1 || viewCourseCoupon === 1)) && (
+                <a
+                  href="#"
+                  onClick={(e) => toggleDropdown("course", e)}
+                  className={isCourseActive ? "active" : ""}
+                >
+                  <i className="fa-solid fa-border-all"></i>
+                  <span>Course</span>
+                  <i
+                    className={`fa-solid ${activeDropdown === "course"
+                      ? "fa-angle-up"
+                      : "fa-angle-down"
+                      }`}
+                  ></i>
+                </a>
+              )}
+
               {activeDropdown === "course" && (
                 <ul className="dropdown-menu">
                   <li>
-                    {viewCourse === 1 && (
+                    {(userRole === "superAdmin" || viewCourse === 1) && (
                       <NavLink to={"/all-course"}>
                         <i className="fa-solid fa-caret-right"></i>All Course
                       </NavLink>
                     )}
                   </li>
                   <li>
-                    {addCourse === 1 && (
+                    {(userRole === "superAdmin" || addCourse === 1) && (
                       <NavLink to={"/add-course"}>
                         <i className="fa-solid fa-caret-right"></i>Add New Course
                       </NavLink>
                     )}
                   </li>
                   <li>
-                    {viewCourseCate === 1 && (
+                    {(userRole === "superAdmin" || viewCourseCate === 1) && (
                       <NavLink to={"/course-category"}>
                         <i className="fa-solid fa-caret-right"></i>Course Category
                       </NavLink>
                     )}
                   </li>
                   <li>
-                    {viewCourseCoupon === 1 && (
+                    {(userRole === "superAdmin" || viewCourseCoupon === 1) && (
                       <NavLink to={"/course-coupon"}>
                         <i className="fa-solid fa-caret-right"></i>Coupons
                       </NavLink>
@@ -137,17 +148,21 @@ const Sidebar = () => {
                 <span>Payment</span>
               </NavLink>
             </li>
+            {userRole === "superAdmin" && (
+              <li className="main-li">
+                <NavLink to={"/roles-list"}>
+                  <i className="fa fa-indent" aria-hidden="true"></i>
+                  <span>Roles List</span>
+                </NavLink>
+              </li>
+            )}
             <li className="main-li">
-              <NavLink to={"/roles-list"}>
-                <i className="fa fa-indent" aria-hidden="true"></i>
-                <span>Roles List</span>
-              </NavLink>
-            </li>
-            <li className="main-li">
-              <NavLink to={"/user"}>
-                <i className="fa-regular fa-user"></i>
-                <span>User</span>
-              </NavLink>
+              {(userRole === "superAdmin" || viewUserData === 1 && viewAdminData === 1 && viewInstrucatureData === 1) && (
+                <NavLink to={"/user"}>
+                  <i className="fa-regular fa-user"></i>
+                  <span>User</span>
+                </NavLink>
+              )}
             </li>
           </ul>
         </div>
@@ -162,37 +177,40 @@ const Sidebar = () => {
                 <span>Profile</span>
               </NavLink>
             </li>
-            <li className="main-li">
-              <a
-                href="#"
-                onClick={(e) => toggleDropdown("setting", e)}
-                className={isSettingActive ? "active" : ""}
-              >
-                <i className="fa-solid fa-gear"></i>
-                <span>Setting</span>
-                <i
-                  className={`fa-solid ${activeDropdown === "setting"
-                    ? "fa-angle-up"
-                    : "fa-angle-down"
-                    }`}
-                ></i>
-              </a>
-              {activeDropdown === "setting" && (
-                <ul className="dropdown-menu">
-                  <li>
-                    <NavLink to={"/payment-setting"}>
-                      <i className="fa-solid fa-caret-right"></i>Payment Setting
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={"/notification-setting"}>
-                      <i className="fa-solid fa-caret-right"></i>Notification
-                      Setting
-                    </NavLink>
-                  </li>
-                </ul>
-              )}
-            </li>
+            {userRole === "superAdmin" && (
+              <li className="main-li">
+                <a
+                  href="#"
+                  onClick={(e) => toggleDropdown("setting", e)}
+                  className={isSettingActive ? "active" : ""}
+                >
+                  <i className="fa-solid fa-gear"></i>
+                  <span>Setting</span>
+                  <i
+                    className={`fa-solid ${activeDropdown === "setting"
+                      ? "fa-angle-up"
+                      : "fa-angle-down"
+                      }`}
+                  ></i>
+                </a>
+                {activeDropdown === "setting" && (
+                  <ul className="dropdown-menu">
+                    <li>
+                      <NavLink to={"/payment-setting"}>
+                        <i className="fa-solid fa-caret-right"></i>Payment Setting
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to={"/notification-setting"}>
+                        <i className="fa-solid fa-caret-right"></i>Notification
+                        Setting
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            )}
+
 
             <li className="main-li">
               <a href="#" onClick={handleLogoutClick}>

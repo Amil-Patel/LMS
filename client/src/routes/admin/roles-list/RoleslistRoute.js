@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import RolesList from '../../../pages/admin/roles-list/RolesList'
 import AdminAuthGuard from '../../../pages/admin/layout/auth/AdminAuthGuard'
+import { userRolesContext } from "../../../pages/admin/layout/RoleContext";
+import NotAuthor from "../../../pages/admin/notfound/NotAuthor";
 
 const RoleslistRoute = () => {
+  const { userRole } = useContext(userRolesContext);
+
   return (
     <>
       <Routes>
         <Route path="/roles-list" element={
           <AdminAuthGuard>
-            <RolesList />
+            {userRole === "superAdmin" ? (
+              <RolesList />
+            ) : (
+              <NotAuthor />
+            )}
           </AdminAuthGuard>
         } />
       </Routes>

@@ -9,6 +9,7 @@ const useCheckRolePermission = (permcate) => {
     const [checkPerm, setCheckPerm] = useState([]);
     const savedToken = Cookies.get('token');
     const checkPermission = async () => {
+        console.log(userRole, permcate);
         try {
             const res = await axiosInstance.get(`${port}/checkRolePermission`, {
                 params: { name: userRole, permName: permcate }

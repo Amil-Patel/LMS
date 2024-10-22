@@ -121,7 +121,6 @@ const updateCourseQuizeData = async (req, res) => {
                 id: id
             }
         });
-        console.log(courseCoupondate)
         res.status(200).json(courseCoupondate);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -135,7 +134,6 @@ const updateCourseQuizStatusData = async (req, res) => {
         status: req.body.status === 1 ? 0 : 1,
         updatedAt: date
     };
-    console.log(req.body)
     try {
         const courseCoupondate = await Course_Quize.update(data, {
             where: {
