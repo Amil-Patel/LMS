@@ -42,7 +42,7 @@ const SortTable = ({ data, sortTableOpen, handleOpenSortTable, tableName, update
             if (updatedOrder.length > 0) {
                 await axiosInstance.put(`${port}/${updateRoute}/${Id}`, { items: updatedOrder });
             }
-            handleOpenSortTable();
+            handleOpenSortTable(Id);
         } catch (error) {
             console.error('Error updating order:', error);
         }
@@ -95,7 +95,7 @@ const SortTable = ({ data, sortTableOpen, handleOpenSortTable, tableName, update
                             <button onClick={handleSaveSorting} className="primary-btn">
                                 Save Sorting
                             </button>
-                            <button onClick={handleOpenSortTable} className="secondary-btn">
+                            <button onClick={() => handleOpenSortTable(Id)} className="secondary-btn">
                                 Close
                             </button>
                         </div>

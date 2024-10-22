@@ -735,10 +735,10 @@ const ManageCourse = () => {
   //sorting lesson and quiz data
   const [sortLessonOpen, setSortLessonOpen] = useState(false);
   const [sortLessonId, setSortLessonId] = useState(null);
-  const handleOpenSortLesson = (id) => {
+  const handleOpenSortLesson = async (id) => {
     setSortLessonOpen(!sortLessonOpen);
-    getLessonData(id);
     setSortLessonId(id);
+    getLessonData(id);
   }
   //sortin quiz data
   const [sortQuizQuestionOpen, setSortQuizQuestionOpen] = useState(false);
@@ -922,10 +922,10 @@ const ManageCourse = () => {
                         <div className="module-lesson" key={index}>
                           <div className="lesson-title">
                             {lesson.quiz_id ? (
-                              <span className="quiz-icon">?</span>
+                              <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
                             ) : (
                               <span className="lesson-icon">
-                                <i className="fa-solid fa-file-word"></i>
+                                <i className="fa-solid fa-file-lines"></i>
                               </span>
                             )}
                             {
