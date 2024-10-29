@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import { notifySuccess, notifyError, notifyWarning } from "../layout/ToastMessage";
 import "../../../assets/css/setting.css";
@@ -8,11 +8,13 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import useCheckRolePermission from "../layout/CheckRolePermission";
 import Loading from "../layout/Loading";
 import axiosInstance from "../utils/axiosInstance";
+import { userRolesContext } from "../layout/RoleContext";
 
 const port = process.env.REACT_APP_URL;
 
 function NotificationSetting() {
   const [tab, setTab] = useState("smtp");
+  const { userRole } = useContext(userRolesContext);
   const [getSmtp, setGetSmtp] = useState([]);
   const [loading, setLoading] = useState(false);
   const [addSmtp, setAddSmtp] = useState({
@@ -90,8 +92,8 @@ function NotificationSetting() {
     // Uncomment this block once validation is successful
     try {
       const hasSmtpData = getSmtp.length > 0;
-      const canEdit = hasSmtpData && editNotificationPermission == 1;
-      const canAdd = !hasSmtpData && addNotificationPermission == 1;
+      const canEdit = hasSmtpData && userRole === "superAdmin" || editNotificationPermission == 1;
+      const canAdd = !hasSmtpData && userRole === "superAdmin" || addNotificationPermission == 1;
 
       if (canEdit) {
         // Update existing SMTP setting
@@ -133,15 +135,11 @@ function NotificationSetting() {
             <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          {
-            addNotificationPermission == 1 || editNotificationPermission == 1 ? (
-              <a>
-                <button className="primary-btn module-btn" disabled={tab === "email"} onClick={saveSmtp}>Save</button>
-              </a>
-            ) : (
-              ""
-            )
-          }
+          {(userRole === "superAdmin" || addNotificationPermission == 1 || editNotificationPermission == 1) && (
+            <a>
+              <button className="primary-btn module-btn" disabled={tab === "email"} onClick={saveSmtp}>Save</button>
+            </a>
+          )}
 
         </div>
 

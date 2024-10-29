@@ -191,6 +191,7 @@ const CourseCategory = () => {
   //status change
 
   const handleStatusChange = async (id, status) => {
+    console.log(status, id);
     setLoading(true);
     try {
       const res = await axiosInstance.put(
@@ -394,7 +395,7 @@ const CourseCategory = () => {
                     className="card-image"
                   />
                   <div className="card-content">
-                    <h5>{course.cate_title}</h5>
+                    <h5>{course.cate_title}-{course.id}</h5>
                     <div className="card-actions">
                       {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                         <label htmlFor="coursestatus" or="status" className="switch">
@@ -406,7 +407,6 @@ const CourseCategory = () => {
                               handleStatusChange(course.id, course.status)
                             }
                           />
-                          
                           <span className="slider"></span>
                         </label>
                       )}

@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import "../../../assets/css/setting.css";
 import Hoc from "../layout/Hoc";
-import { notifySuccess, notifyError ,notifyWarning} from "../layout/ToastMessage";
+import { notifySuccess, notifyError, notifyWarning } from "../layout/ToastMessage";
 import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
+import { userRolesContext } from "../layout/RoleContext";
 const port = process.env.REACT_APP_URL;
 function PaymentSetting() {
+  const { userRole } = useContext(userRolesContext);
   const [formData, setFormData] = useState({
     identifier: "stripe",
     currency: "USD",
@@ -97,8 +99,8 @@ function PaymentSetting() {
 
     try {
       const hasData = getPaymentGetwayData.length > 0;
-      const isEdit = hasData && editPaymentPermission == 1;
-      const isAdd = !hasData && addPaymentPermission == 1;
+      const isEdit = hasData && userRole === "superAdmin" || editPaymentPermission == 1;
+      const isAdd = !hasData && userRole === "superAdmin" || addPaymentPermission == 1;
 
       if (isEdit) {
         // Update existing SMTP setting
@@ -291,13 +293,9 @@ function PaymentSetting() {
                 <label htmlFor="disable" className="s_icon">Disable</label>
               </div>
             </div>
-            {
-              addPaymentPermission == 1 || editPaymentPermission == 1 ? (
-                <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
-              ) : (
-                ""
-              )
-            }
+            {(userRole === "superAdmin" || addPaymentPermission == 1 || editPaymentPermission == 1) && (
+              <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
+            )}
           </div>
         </div>
       </div>

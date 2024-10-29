@@ -1,31 +1,38 @@
 import React, { createContext, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 const userRolesContext = createContext();
 
 const RoleContext = ({ children }) => {
-    const [userRole, setUserRole] = useState(() => {
-        const storedUserRole = localStorage.getItem('userRole');
-        return storedUserRole ? JSON.parse(storedUserRole) : null;
-    });
-
-    const [userId, setUserId] = useState(() => {
-        const storedUserId = localStorage.getItem('userId');
-        return storedUserId ? JSON.parse(storedUserId) : null;
-    });
-
+    const savedToken = Cookies.get('token');
+    const [userRole, setUserRole] = useState(null);
+    const [userId, setUserId] = useState(null);
     useEffect(() => {
-        if (userRole) {
-            localStorage.setItem('userRole', JSON.stringify(userRole));
-        } else {
-            localStorage.removeItem('userRole');
+        if (savedToken) {
+            try {
+                const payload = savedToken.split('.')[1];
+                const decodedPayload = JSON.parse(atob(payload));
+                setUserRole(decodedPayload.role);
+                setUserId(decodedPayload.id);
+            } catch (error) {
+                console.error("Failed to decode token:", error);
+            }
         }
-    }, [userRole]);
-    useEffect(() => {
-        if (userId) {
-            localStorage.setItem('userId', JSON.stringify(userId));
-        } else {
-            localStorage.removeItem('userId');
-        }
-    }, [userId]);
+    }, [savedToken]);
+    
+    // useEffect(() => {
+    //     if (userRole) {
+    //         localStorage.setItem('userRole', JSON.stringify(userRole));
+    //     } else {
+    //         localStorage.removeItem('userRole');
+    //     }
+    // }, [userRole]);
+    // useEffect(() => {
+    //     if (userId) {
+    //         localStorage.setItem('userId', JSON.stringify(userId));
+    //     } else {
+    //         localStorage.removeItem('userId');
+    //     }
+    // }, [userId]);
 
     return (
         <>

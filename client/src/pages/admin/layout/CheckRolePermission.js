@@ -9,7 +9,6 @@ const useCheckRolePermission = (permcate) => {
     const [checkPerm, setCheckPerm] = useState([]);
     const savedToken = Cookies.get('token');
     const checkPermission = async () => {
-        console.log(userRole, permcate);
         try {
             const res = await axiosInstance.get(`${port}/checkRolePermission`, {
                 params: { name: userRole, permName: permcate }
@@ -21,7 +20,7 @@ const useCheckRolePermission = (permcate) => {
     };
 
     useEffect(() => {
-        if (savedToken) {  // Only call checkPermission if token is defined
+        if (savedToken && userRole) {  // Only call checkPermission if token is defined
             checkPermission();
         }
     }, [userRole, permcate, savedToken]);
