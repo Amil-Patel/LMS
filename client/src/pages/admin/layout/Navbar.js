@@ -1,11 +1,14 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <>
       <nav className="navbar">
         <div className="nav-logo">
-          <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+          <NavLink to="/dashboard">
+            <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+          </NavLink>
         </div>
 
         <div className="nav-top-section">

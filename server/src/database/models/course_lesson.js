@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'quiz_id',
         as: 'course_quize_lesson'
       });
+      Course_Lesson.hasMany(models.resource, {
+        foreignKey: 'lesson_id',
+        as: 'course_lesson_resource'
+      });
     }
   }
   Course_Lesson.init({

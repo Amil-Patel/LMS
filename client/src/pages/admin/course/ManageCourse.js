@@ -22,9 +22,6 @@ const ManageCourse = () => {
   const [addquestionOpen, setAddQuestionOpen] = useState(false); // state for open add question modal
   const [editquestionOpen, setEditQuestionOpen] = useState(false); // state for open edit question modal
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [isContentVisible, setIsContentVisible] = useState([]); // state for module dropdown icon
-  const [showQuiz, setShowQuiz] = useState(true);
-  const [selectedLessonType, setSelectedLessonType] = useState("text");
   const [openQuizIndex, setOpenQuizIndex] = useState(0);
   const [timeLimit, setTimeLimit] = useState(false);
   const [maxAttempts, setMaxAttempts] = useState(false);
@@ -42,20 +39,12 @@ const ManageCourse = () => {
   };
   // Function to toggle visibility of content
   const [moduleId, setModuleId] = useState(null)
+  const [activeModuleIndex, setActiveModuleIndex] = useState(null);
   const toggleContent = (index, id) => {
     setModuleId(id)
-    setIsContentVisible((prevVisibleModules) =>
-      prevVisibleModules.map((isVisible, i) =>
-        i === index ? !isVisible : isVisible
-      )
-    );
+    setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
     getLessonData(id);
   };
-  useEffect(() => {
-    if (moduleData.length > 0) {
-      setIsContentVisible(Array(moduleData.length).fill(false));
-    }
-  }, [moduleData]); // This will run whenever moduleData changes
 
   // Function to toggle visibility of module modal
   const moduleToggleModal = () => {
@@ -89,6 +78,25 @@ const ManageCourse = () => {
     setQuestionOpen(!questionOpen);
     getQuizQuestionData(id);
     setQuizQuestionId(id);
+  };
+
+  // resource model open-close function
+  const [resourceOpen, setResourceOpen] = useState(false);
+  const [resouceData, setResouceData] = useState([]);
+  const getResouceAllData = async (moduleId, lessonId) => {
+    try {
+      const res = await axiosInstance.get(`/resource/${moduleId}/${lessonId}`);
+      setResouceData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const resourceToggleModal = async (moduleId, lessonId) => {
+    console.log(moduleId, lessonId)
+    if (moduleId && lessonId) {
+      await getResouceAllData(moduleId, lessonId)
+    }
+    setResourceOpen(!resourceOpen);
   };
 
   // Function to toggle visibility of add question modal
@@ -711,7 +719,7 @@ const ManageCourse = () => {
   const [deleteQuestionOpen, setDeleteQuestionOpen] = useState(false);
   const [deleteQuestionId, setDeleteQuestionId] = useState(null);
   const handleDeleteQuestionOpen = async (id) => {
-    setDeleteQuestionOpen(true);
+    setDeleteQuestionOpen(!deleteQuestionOpen);
     if (id) {
       await setDeleteQuestionId(id)
     }
@@ -916,58 +924,62 @@ const ManageCourse = () => {
                       </button>
                     </div>
                   </div>
-                  {isContentVisible[index] && (
+                  {activeModuleIndex === index && (
                     <div className="module-content">
-                      {lessonData.map((lesson, index) => (
-                        <div className="module-lesson" key={index}>
-                          <div className="lesson-title">
-                            {lesson.quiz_id ? (
-                              <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
-                            ) : (
-                              <span className="lesson-icon">
-                                <i className="fa-solid fa-file-lines"></i>
-                              </span>
-                            )}
-                            {
-                              lesson.quiz_id != null ? (
-                                lesson.course_quize_lesson.title
+                      {lessonData.length > 0 ? (
+                        lessonData.map((lesson, index) => (
+                          <div className="module-lesson" key={index}>
+                            <div className="lesson-title">
+                              {lesson.quiz_id ? (
+                                <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
                               ) : (
-                                lesson.title
-                              )
-                            }
-                          </div>
-                          <div className="lesson-time">
-                            {lesson.duration && <span>{lesson.duration} Minutes</span>}
-                          </div>
-                          <div className="lesson-actions">
-                            {lesson.quiz_id && (
-                              <button
-                                className="add-questions-btn"
-                                onClick={() => questionToggleModal(lesson.quiz_id)}
-                              >
-                                + Add Questions
+                                <span className="lesson-icon">
+                                  <i className="fa-solid fa-file-lines"></i>
+                                </span>
+                              )}
+                              {
+                                lesson.quiz_id != null ? (
+                                  lesson.course_quize_lesson.title
+                                ) : (
+                                  lesson.title
+                                )
+                              }
+                            </div>
+                            <div className="lesson-time">
+                              {lesson.duration && <span>{lesson.duration} Minutes</span>}
+                            </div>
+                            <div className="lesson-actions">
+                              {lesson.quiz_id && (
+                                <button
+                                  className="add-questions-btn"
+                                  onClick={() => questionToggleModal(lesson.quiz_id)}
+                                >
+                                  + Add Questions
+                                </button>
+                              )}
+                              <button className="resource-btn" onClick={() => resourceToggleModal(module.id, lesson.id)}>
+                                <i className="fa-solid fa-folder-open"></i>Resource
                               </button>
-                            )}
-                            <button className="resource-btn">
-                              <i className="fa-solid fa-folder-open"></i>Resource
-                            </button>
-                            <label className="switch">
-                              <input
-                                type="checkbox"
-                                checked={lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status}
-                                onClick={() => handleStatusChange(lesson.id, lesson.quiz_id, lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status)}
-                              />
-                              <span className="slider"></span>
-                            </label>
-                            <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
-                              <i className="fa fa-pencil"></i>
-                            </span>
-                            <button className="delete-btn" onClick={() => handleDeleteQuizeOpen(lesson.id, lesson.quiz_id, 1)}>
-                              <i className="fa fa-trash"></i>
-                            </button>
+                              <label className="switch">
+                                <input
+                                  type="checkbox"
+                                  checked={lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status}
+                                  onClick={() => handleStatusChange(lesson.id, lesson.quiz_id, lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status)}
+                                />
+                                <span className="slider"></span>
+                              </label>
+                              <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
+                                <i className="fa fa-pencil"></i>
+                              </span>
+                              <button className="delete-btn" onClick={() => handleDeleteQuizeOpen(lesson.id, lesson.quiz_id, 1)}>
+                                <i className="fa fa-trash"></i>
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <h6>No data available 😂</h6> // Display this if lessonData is empty
+                      )}
                       <div className="module-actions">
                         <button onClick={() => lessonToggleModal(module.id)}>+ Lesson</button>
                         <button onClick={() => quizToggleModal(module.id)}>+ Add Quiz</button>
@@ -2252,6 +2264,95 @@ const ManageCourse = () => {
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )
+        }
+        {/* resource model */}
+        {
+          resourceOpen && (
+            <div className="modal">
+              <div className="add-lesson-container" style={{ width: "65%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    borderBottom: "2px solid #dfdfe1",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <h5 style={{ paddingBottom: "5px" }}>Resource</h5>
+                  <div
+                    onClick={resourceToggleModal}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
+                </div>
+                <form onSubmit={editQuestionSubmit}>
+                  <div
+                    className="form-group"
+                    style={{ display: "flex", alignItems: "center", gap: "15px" }}
+                  >
+                    <div style={{ width: "50%" }} className="form-group">
+                      <label htmlFor="title">Title:</label>
+                      <input
+                        type="text"
+                        placeholder="Enter Title"
+                        className="col12input"
+                        name="title"
+                      />
+                    </div>
+                    <div style={{ width: "50%" }} className="form-group">
+                      <label htmlFor="link">Link:</label>
+                      <input
+                        type="text"
+                        placeholder="Enter Link"
+                        className="col12input"
+                        name="link"
+                      />
+                    </div>
+                  </div>
+                  <button type="submit" className="primary-btn module-btn">
+                    Save
+                  </button>
+                </form>
+                <table style={{ margin: "10px 0" }}>
+                  <thead className="academic-table">
+                    <tr>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Link</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {resouceData.length > 0 ? (
+                      resouceData.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.id}</td>
+                          <td>{item.title}</td>
+                          <td>{item.link}</td>
+                          <td>
+                            <label className="switch">
+                              <input type="checkbox" readOnly />
+                              <span className="slider"></span>
+                            </label>
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            <span className="view">
+                              <i className="fa-regular fa-eye"></i>
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )
+                      : (
+                        "No Resouce Data Found"
+                      )}
                   </tbody>
                 </table>
               </div>

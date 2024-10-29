@@ -30,7 +30,7 @@ const getLogin = async (req, res) => {
             });
         }
 
-        const token = jwt.sign({ id: user.id, email: user.email }, secret_key, {
+        const token = jwt.sign({ id: user.id, email: user.email, role: user.role_id }, secret_key, {
             expiresIn: "1m",
         });
         // Secure cookies with expiration

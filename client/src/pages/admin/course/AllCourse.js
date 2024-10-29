@@ -103,16 +103,6 @@ const AllCourse = () => {
             <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          {/* <div className="hero-inner-logo">
-            <img
-              src={require("../../../assets/image/pdf-logo.png")}
-              alt="PDF Logo"
-            />
-            <img
-              src={require("../../../assets/image/x-logo.png")}
-              alt="X Logo"
-            />
-          </div> */}
         </div>
 
         <div className="course-form-container">

@@ -177,39 +177,37 @@ const Sidebar = () => {
                 <span>Profile</span>
               </NavLink>
             </li>
-            {userRole === "superAdmin" && (
-              <li className="main-li">
-                <a
-                  href="#"
-                  onClick={(e) => toggleDropdown("setting", e)}
-                  className={isSettingActive ? "active" : ""}
-                >
-                  <i className="fa-solid fa-gear"></i>
-                  <span>Setting</span>
-                  <i
-                    className={`fa-solid ${activeDropdown === "setting"
-                      ? "fa-angle-up"
-                      : "fa-angle-down"
-                      }`}
-                  ></i>
-                </a>
-                {activeDropdown === "setting" && (
-                  <ul className="dropdown-menu">
-                    <li>
-                      <NavLink to={"/payment-setting"}>
-                        <i className="fa-solid fa-caret-right"></i>Payment Setting
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink to={"/notification-setting"}>
-                        <i className="fa-solid fa-caret-right"></i>Notification
-                        Setting
-                      </NavLink>
-                    </li>
-                  </ul>
-                )}
-              </li>
-            )}
+            <li className="main-li">
+              <a
+                href="#"
+                onClick={(e) => toggleDropdown("setting", e)}
+                className={isSettingActive ? "active" : ""}
+              >
+                <i className="fa-solid fa-gear"></i>
+                <span>Setting</span>
+                <i
+                  className={`fa-solid ${activeDropdown === "setting"
+                    ? "fa-angle-up"
+                    : "fa-angle-down"
+                    }`}
+                ></i>
+              </a>
+              {activeDropdown === "setting" && (
+                <ul className="dropdown-menu">
+                  <li>
+                    <NavLink to={"/payment-setting"}>
+                      <i className="fa-solid fa-caret-right"></i>Payment Setting
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"/notification-setting"}>
+                      <i className="fa-solid fa-caret-right"></i>Notification
+                      Setting
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
+            </li>
 
 
             <li className="main-li">
