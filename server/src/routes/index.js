@@ -20,7 +20,8 @@ const EnrollmentRoute = require("./enrollments/EnrollmentRoute");
 const AcademicProgressRoute = require("./academic_progress/Academic_ProgressRoute");
 const RolePermissionRoute = require("./role/RolePermissionRoute");
 const CheckRolePermissionRoute = require("./check_role_permission/CheckRolePermissionRoute");
-const LoginRoute = require('./login/LoginRoute')
+const LoginRoute = require('./login/LoginRoute');
+const CourseResourceRoute = require('./course/Course_ResourceRoute');
 
 
 router.use("/", UserRoleRoute);
@@ -43,6 +44,7 @@ router.use("/", AcademicProgressRoute);
 router.use("/", RolePermissionRoute);
 router.use("/", CheckRolePermissionRoute);
 router.use('/', LoginRoute)
+router.use('/', CourseResourceRoute)
 
 
 

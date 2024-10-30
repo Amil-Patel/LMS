@@ -85,19 +85,97 @@ const ManageCourse = () => {
   const [resouceData, setResouceData] = useState([]);
   const getResouceAllData = async (moduleId, lessonId) => {
     try {
-      const res = await axiosInstance.get(`/resource/${moduleId}/${lessonId}`);
-      setResouceData(res.data);
+      const res = await axiosInstance.get(`/gettingCourseResourceData/${moduleId}/${lessonId}`);
+      setResouceData(res.data.data);
     } catch (err) {
       console.log(err);
     }
   }
+  const [resourceModuleId, setResourceModuleId] = useState(null)
+  const [resourceLessonId, setResourceLessonId] = useState(null)
   const resourceToggleModal = async (moduleId, lessonId) => {
-    console.log(moduleId, lessonId)
     if (moduleId && lessonId) {
-      await getResouceAllData(moduleId, lessonId)
+      await getResouceAllData(moduleId, lessonId);
+      setResourceModuleId(moduleId);
+      setResourceLessonId(lessonId);
+      setAddResource((prevState) => ({
+        ...prevState,
+        module_id: moduleId,
+        lesson_id: lessonId
+      }));
     }
     setResourceOpen(!resourceOpen);
   };
+  //add resource data code
+  const [addResource, setAddResource] = useState({
+    module_id: resourceModuleId,
+    lesson_id: resourceLessonId,
+    title: "",
+    link: "",
+    status: 1,
+    created_by: userId,
+    updated_by: userId
+  });
+  const handleAddResourceChange = (e) => {
+    const { name, value } = e.target;
+    setAddResource((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+  const handleAddResourceSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInstance.post('/addingCourseResource', addResource);
+      if (res.status === 200) {
+        setAddResource({
+          module_id: resourceModuleId,
+          lesson_id: resourceLessonId,
+          title: "",
+          link: "",
+          status: 1,
+          created_by: userId,
+          updated_by: userId
+        });
+        getResouceAllData(resourceModuleId, resourceLessonId);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //delete data section code start
+  const [deleteResourceOpen, setDeleteResourceOpen] = useState(false);
+  const [deleteResourceId, setDeleteResourceId] = useState(null);
+  const handleDeleteResourceOpen = async (id) => {
+    if (id) {
+      await setDeleteResourceId(id);
+    }
+    setDeleteResourceOpen(!deleteResourceOpen);
+  }
+  const handleResourceDelete = async () => {
+    try {
+      const res = await axiosInstance.delete(`/deletingCourseResource/${deleteResourceId}`);
+      if (res.status === 200) {
+        setDeleteResourceId(null);
+        setDeleteResourceOpen(false);
+        getResouceAllData(resourceModuleId, resourceLessonId);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  //resource status change code start
+  const handleResourceStatusChange = async (id, status) => {
+    try {
+      const res = await axiosInstance.put(`/updatingCourseResourceStatus/${id}`, { status: status });
+      if (res.status === 200) {
+        getResouceAllData(resourceModuleId, resourceLessonId);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   // Function to toggle visibility of add question modal
   const addQuestionToggleModal = () => {
@@ -2291,7 +2369,7 @@ const ManageCourse = () => {
                     <i className="fa-solid fa-xmark"></i>
                   </div>
                 </div>
-                <form onSubmit={editQuestionSubmit}>
+                <form onSubmit={handleAddResourceSubmit}>
                   <div
                     className="form-group"
                     style={{ display: "flex", alignItems: "center", gap: "15px" }}
@@ -2303,6 +2381,8 @@ const ManageCourse = () => {
                         placeholder="Enter Title"
                         className="col12input"
                         name="title"
+                        value={addResource.title}
+                        onChange={handleAddResourceChange}
                       />
                     </div>
                     <div style={{ width: "50%" }} className="form-group">
@@ -2312,6 +2392,8 @@ const ManageCourse = () => {
                         placeholder="Enter Link"
                         className="col12input"
                         name="link"
+                        value={addResource.link}
+                        onChange={handleAddResourceChange}
                       />
                     </div>
                   </div>
@@ -2338,14 +2420,25 @@ const ManageCourse = () => {
                           <td>{item.link}</td>
                           <td>
                             <label className="switch">
-                              <input type="checkbox" readOnly />
+                              <input type="checkbox" checked={item.status}
+                                onClick={() => handleResourceStatusChange(item.id, item.status)} />
                               <span className="slider"></span>
                             </label>
                           </td>
                           <td style={{ textAlign: "center" }}>
-                            <span className="view">
-                              <i className="fa-regular fa-eye"></i>
-                            </span>
+                            <div className="action-btn">
+                              <span
+                                className="edit"
+                              >
+                                <i className="fa fa-pencil"></i>
+                              </span>
+                              <span
+                                className="delete"
+                                onClick={() => handleDeleteResourceOpen(item.id)}
+                              >
+                                <i className="fa fa-trash"></i>
+                              </span>
+                            </div>
                           </td>
                         </tr>
                       ))
@@ -2360,6 +2453,23 @@ const ManageCourse = () => {
           )
         }
       </div >
+      {/* delete course resource model */}
+      {deleteResourceOpen && (
+        <div className="modal">
+          <div className="modal-container">
+            <h5>Delete</h5>
+            <p>Are you sure you want to delete this Resource?</p>
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+              <button className="primary-btn" onClick={handleResourceDelete}>
+                Delete
+              </button>
+              <button onClick={handleDeleteResourceOpen} className="secondary-btn">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
