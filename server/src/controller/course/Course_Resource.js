@@ -78,8 +78,6 @@ const updateCourseResourceData = async (req, res) => {
     const id = req.params.id;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
-        module_id: req.body.module_id,
-        lesson_id: req.body.lesson_id,
         title: req.body.title,
         link: req.body.link,
         updatedAt: date

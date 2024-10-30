@@ -24,7 +24,9 @@ body i {
   width: 13%;
   padding-left: 2%;
 }
-
+.nav-logo img {
+  width: 50px;
+}
 .nav-top-section {
   display: flex;
   width: 87%;
