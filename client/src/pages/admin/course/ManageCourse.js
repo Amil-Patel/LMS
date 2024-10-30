@@ -116,6 +116,12 @@ const ManageCourse = () => {
     created_by: userId,
     updated_by: userId
   });
+  const [isEditResource, setIsEditResource] = useState(false);
+  const [editResource, setEditResource] = useState({
+    title: "",
+    link: "",
+    updated_by: userId
+  });
   const handleAddResourceChange = (e) => {
     const { name, value } = e.target;
     setAddResource((prevState) => ({
@@ -143,7 +149,36 @@ const ManageCourse = () => {
       console.log(err);
     }
   };
-
+  //get with id resource data code
+  const handleEditResourceChange = (e) => {
+    const { name, value } = e.target;
+    setEditResource((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+  const handleGetResourceDataForEdit = async (id) => {
+    setIsEditResource(true);
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCourseResourceDataWithId/${id}`);
+      const resourceData = res.data.data;
+      setEditResource(resourceData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const handleEditResourceSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInstance.put(`/updatingCourseResource/${editResource.id}`, editResource);
+      if (res.status === 200) {
+        setIsEditResource(false);
+        getResouceAllData(resourceModuleId, resourceLessonId);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   //delete data section code start
   const [deleteResourceOpen, setDeleteResourceOpen] = useState(false);
   const [deleteResourceId, setDeleteResourceId] = useState(null);
@@ -2369,38 +2404,76 @@ const ManageCourse = () => {
                     <i className="fa-solid fa-xmark"></i>
                   </div>
                 </div>
-                <form onSubmit={handleAddResourceSubmit}>
-                  <div
-                    className="form-group"
-                    style={{ display: "flex", alignItems: "center", gap: "15px" }}
-                  >
-                    <div style={{ width: "50%" }} className="form-group">
-                      <label htmlFor="title">Title:</label>
-                      <input
-                        type="text"
-                        placeholder="Enter Title"
-                        className="col12input"
-                        name="title"
-                        value={addResource.title}
-                        onChange={handleAddResourceChange}
-                      />
+                {isEditResource ? (
+                  <form>
+                    <div
+                      className="form-group"
+                      style={{ display: "flex", alignItems: "center", gap: "15px" }}
+                    >
+                      <div style={{ width: "50%" }} className="form-group">
+                        <label htmlFor="title">Title:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter Title"
+                          className="col12input"
+                          name="title"
+                          value={editResource.title}
+                          onChange={handleEditResourceChange}
+                        />
+                      </div>
+                      <div style={{ width: "50%" }} className="form-group">
+                        <label htmlFor="link">Link:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter Link"
+                          className="col12input"
+                          name="link"
+                          value={editResource.link}
+                          onChange={handleEditResourceChange}
+                        />
+                      </div>
                     </div>
-                    <div style={{ width: "50%" }} className="form-group">
-                      <label htmlFor="link">Link:</label>
-                      <input
-                        type="text"
-                        placeholder="Enter Link"
-                        className="col12input"
-                        name="link"
-                        value={addResource.link}
-                        onChange={handleAddResourceChange}
-                      />
+                    <button type="button" onClick={handleEditResourceSubmit} className="primary-btn module-btn">
+                      Update
+                    </button>
+                    <button type="button" onClick={(e) => setIsEditResource(false)} style={{ marginLeft: "10px" }} className="secondary-btn module-btn">
+                      Cancel
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleAddResourceSubmit}>
+                    <div
+                      className="form-group"
+                      style={{ display: "flex", alignItems: "center", gap: "15px" }}
+                    >
+                      <div style={{ width: "50%" }} className="form-group">
+                        <label htmlFor="title">Title:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter Title"
+                          className="col12input"
+                          name="title"
+                          value={addResource.title}
+                          onChange={handleAddResourceChange}
+                        />
+                      </div>
+                      <div style={{ width: "50%" }} className="form-group">
+                        <label htmlFor="link">Link:</label>
+                        <input
+                          type="text"
+                          placeholder="Enter Link"
+                          className="col12input"
+                          name="link"
+                          value={addResource.link}
+                          onChange={handleAddResourceChange}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <button type="submit" className="primary-btn module-btn">
-                    Save
-                  </button>
-                </form>
+                    <button type="submit" className="primary-btn module-btn">
+                      Save
+                    </button>
+                  </form>
+                )}
                 <table style={{ margin: "10px 0" }}>
                   <thead className="academic-table">
                     <tr>
@@ -2415,7 +2488,7 @@ const ManageCourse = () => {
                     {resouceData.length > 0 ? (
                       resouceData.map((item, index) => (
                         <tr key={index}>
-                          <td>{item.id}</td>
+                          <td>{index + 1}</td>
                           <td>{item.title}</td>
                           <td>{item.link}</td>
                           <td>
@@ -2429,6 +2502,7 @@ const ManageCourse = () => {
                             <div className="action-btn">
                               <span
                                 className="edit"
+                                onClick={() => handleGetResourceDataForEdit(item.id)}
                               >
                                 <i className="fa fa-pencil"></i>
                               </span>

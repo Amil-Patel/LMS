@@ -84,7 +84,7 @@ function RolesList() {
     try {
       const res = await axiosInstance.post(`${port}/addingRolePermission`, dataToUpdate);
       setAssignRoll(false);
-      setLoading(false);
+      getPermissionData()
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -128,7 +128,8 @@ function RolesList() {
     }));
     try {
       const res = await axiosInstance.put(`${port}/editRolePermission/${rollName}`, dataToUpdate);
-      window.location.reload();
+      setAssignRoll(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);

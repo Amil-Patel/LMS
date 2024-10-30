@@ -134,7 +134,6 @@ td {
   position: relative;
   left: 230px;
   width: calc(100% - 230px);
-  height: 100vh;
   background-color: #f7f7fa;
   padding: 0.5% 0.8%;
 }
