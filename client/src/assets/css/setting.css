@@ -177,16 +177,13 @@
   margin-right: 35px;
 }
 
-.protocol {
-  /* font-size: 14px; */
-}
 #etc {
   margin-left: 10px;
   color: var(--sidebar-pages-color);
 }
 
 #pro_2 {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 /* Email template css  */

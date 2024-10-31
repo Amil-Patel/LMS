@@ -135,7 +135,7 @@ function NotificationSetting() {
             <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          {(userRole === "superAdmin" || addNotificationPermission == 1 || editNotificationPermission == 1) && (
+          {(tab === "smtp" && userRole === "superAdmin" || addNotificationPermission == 1 || editNotificationPermission == 1) && (
             <a>
               <button className="primary-btn module-btn" disabled={tab === "email"} onClick={saveSmtp}>Save</button>
             </a>

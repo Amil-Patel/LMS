@@ -3,8 +3,10 @@ import Hoc from "../layout/Hoc";
 import "../../../assets/css/user/user.css";
 import { NavLink } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
+import {notifyError, notifySuccess, notifyWarning} from "../layout/ToastMessage";
 import Loading from "../layout/Loading";
 import { userRolesContext } from "../layout/RoleContext";
+import { validationEmail,validationName } from "../../../utils/validation";
 const port = process.env.REACT_APP_URL
 
 const User = () => {
@@ -226,6 +228,14 @@ const User = () => {
   }
 
   const handleSubmit = async (e) => {
+    if (!validationEmail(addUser.email)) {
+      notifyWarning("Please enter a valid email address.");
+      return;
+    }
+    if(!validationName(addUser.first_name)){
+      notifyWarning("Please enter a valid first name.");
+      return;
+    }
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
