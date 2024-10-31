@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Hoc from "../layout/Hoc";
 import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
+import { notifySuccess } from "../layout/ToastMessage";
 import "../../../assets/css/course/coursecategory.css";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
@@ -82,6 +83,7 @@ const CourseCategory = () => {
         cate_parent_id: null,
         cate_thumbnail: null,
       });
+      notifySuccess("Category added successfully");
       setAddNewImage(null);
       setLoading(false);
     } catch (error) {
@@ -118,6 +120,7 @@ const CourseCategory = () => {
       );
       getNullCourseCategoryData();
       setDeleteOpen(false);
+      notifySuccess("Category deleted successfully");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -181,6 +184,7 @@ const CourseCategory = () => {
       );
       getNullCourseCategoryData();
       setEditOpen(false);
+      notifySuccess("Category updated successfully");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -191,7 +195,6 @@ const CourseCategory = () => {
   //status change
 
   const handleStatusChange = async (id, status) => {
-    console.log(status, id);
     setLoading(true);
     try {
       const res = await axiosInstance.put(
@@ -199,6 +202,7 @@ const CourseCategory = () => {
         { status: status }
       );
       getNullCourseCategoryData();
+      notifySuccess("Status updated successfully");
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -398,14 +402,13 @@ const CourseCategory = () => {
                     <h5>{course.cate_title}-{course.id}</h5>
                     <div className="card-actions">
                       {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
-                        <label htmlFor="coursestatus" or="status" className="switch">
+                        <label htmlFor={`coursestatus-${course.id}`} className="switch">
                           <input
                             type="checkbox"
-                            id="coursestatus"
+                            id={`coursestatus-${course.id}`} // Unique ID for each checkbox
+                            name={`coursestatus-${course.id}`}
                             checked={course.status}
-                            onClick={() =>
-                              handleStatusChange(course.id, course.status)
-                            }
+                            onClick={() => handleStatusChange(course.id, course.status)} // Use onChange instead of onClick
                           />
                           <span className="slider"></span>
                         </label>

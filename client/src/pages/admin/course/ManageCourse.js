@@ -4,6 +4,7 @@ import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
 import "../../../assets/css/sidebar.css";
 import { userRolesContext } from "../layout/RoleContext";
+import { notifySuccess } from "../layout/ToastMessage";
 import { NavLink, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import SortTable from "../layout/SortTable";
@@ -11,7 +12,7 @@ const port = process.env.REACT_APP_URL
 
 const ManageCourse = () => {
   const { id } = useParams();
-  const { userRole, userId } = useContext(userRolesContext);
+  const { userId } = useContext(userRolesContext);
   const [moduleData, setModuleData] = useState([]);//state for getting module data
   const [tab, setTab] = useState("course"); // state for tab
   const [lessonOpen, setLessonOpen] = useState(false); // state for open lesson modal
@@ -28,11 +29,6 @@ const ManageCourse = () => {
   const [sortedData, setSortedData] = useState([]); // acedemic student name
   const [openQuizResult, setopenQuizResult] = useState(false); // state for open quiz result modal
   const [quizDocumentOpen, setQuizDocumentOpen] = useState(false); // state for open quiz document modal
-
-  // Function to toggle dropdown visibility based on index
-  const toggleDropdown = (index) => {
-    setActiveDropdown(activeDropdown === index ? null : index);
-  };
   // Function to change the currently active tab
   const handleChangeTab = (tabName) => {
     setTab(tabName);
@@ -145,6 +141,7 @@ const ManageCourse = () => {
         });
         getResouceAllData(resourceModuleId, resourceLessonId);
       }
+      notifySuccess("Resource added successfully");
     } catch (err) {
       console.log(err);
     }
@@ -174,6 +171,7 @@ const ManageCourse = () => {
       if (res.status === 200) {
         setIsEditResource(false);
         getResouceAllData(resourceModuleId, resourceLessonId);
+        notifySuccess("Resource updated successfully");
       }
     } catch (err) {
       console.log(err);
@@ -195,6 +193,7 @@ const ManageCourse = () => {
         setDeleteResourceId(null);
         setDeleteResourceOpen(false);
         getResouceAllData(resourceModuleId, resourceLessonId);
+        notifySuccess("Resource deleted successfully");
       }
     } catch (err) {
       console.log(err);
@@ -207,6 +206,7 @@ const ManageCourse = () => {
       if (res.status === 200) {
         getResouceAllData(resourceModuleId, resourceLessonId);
       }
+      notifySuccess("Resource status updated successfully");
     } catch (err) {
       console.log(err);
     }
@@ -252,7 +252,7 @@ const ManageCourse = () => {
   const [addModule, setAddModule] = useState({
     title: "",
     course_id: id,
-    status: '',
+    status: 1,
   });
   const hadnleAddMouleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -272,6 +272,7 @@ const ManageCourse = () => {
         course_id: id,
         status: '',
       });
+      notifySuccess("Module added successfully");
     } catch (error) {
       console.log(error);
     }
@@ -305,6 +306,7 @@ const ManageCourse = () => {
       const res = await axiosInstance.put(`${port}/updatingCourseSection/${editId}`, editModule);
       getModuleData();
       setEditModuleOpen(false);
+      notifySuccess("Module updated successfully");
     } catch (error) {
       console.log(error);
     }
@@ -321,6 +323,7 @@ const ManageCourse = () => {
       const res = await axiosInstance.delete(`${port}/deletingCourseSection/${deleteId}`);
       getModuleData();
       setDeleteOpen(false);
+      notifySuccess("Module deleted successfully");
     } catch (error) {
       console.log(error);
     }
@@ -426,7 +429,7 @@ const ManageCourse = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      notifySuccess("Lesson added successfully");
       getLessonData(sectionId);
       setLessonOpen(false);
 
@@ -446,6 +449,7 @@ const ManageCourse = () => {
         description: "",
         order: 0,
       });
+
     } catch (error) {
       console.log(error);
     }
@@ -530,6 +534,7 @@ const ManageCourse = () => {
     }
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseLesson/${editLessonId}`, formData);
+      notifySuccess("Lesson updated successfully");
       getLessonData(moduleId);
       setEditLessonOpen(false);
     } catch (error) {
@@ -567,6 +572,7 @@ const ManageCourse = () => {
     try {
       const res = await axiosInstance.post(`${port}/addingCourseQuize/${sectionId}`, addQuiz);
       getLessonData(sectionId);
+      notifySuccess("Quiz added successfully");
       setQuizOpen(false);
       setMaxAttempts(false);
       setTimeLimit(false);
@@ -639,6 +645,7 @@ const ManageCourse = () => {
     e.preventDefault();
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
+      notifySuccess("Quiz updated successfully");
       getLessonData(moduleId);
       setEditLessonOpen(false);
     } catch (error) {
@@ -658,6 +665,7 @@ const ManageCourse = () => {
   const handleDeleteLesson = async () => {
     try {
       const res = await axiosInstance.delete(`${port}/deletingCourseLesson/${deleteLessonId}`);
+      notifySuccess("Lesson deleted successfully");
       getLessonData(moduleId);
       setDeleteQuizeOpen(false);
     } catch (error) {
@@ -668,6 +676,7 @@ const ManageCourse = () => {
   const handleDeleteQuize = async () => {
     try {
       const res = await axiosInstance.delete(`${port}/deletingCourseQuize/${deleteQuizId}`);
+      notifySuccess("Quiz deleted successfully");
       getLessonData(moduleId);
       setDeleteQuizeOpen(false);
     } catch (error) {
@@ -679,9 +688,11 @@ const ManageCourse = () => {
     try {
       if (quizId != null) {
         const res = await axiosInstance.put(`${port}/updatingCourseQuizeStatus/${quizId}`, { status: status });
+        notifySuccess("Quize Status updated successfully");
         getLessonData(moduleId);
       } else {
         const res = await axiosInstance.put(`${port}/updatingCourseLessonStatus/${id}`, { status: status });
+        notifySuccess("Lesson Status updated successfully");
         getLessonData(moduleId);
       }
     } catch (error) {
@@ -757,6 +768,7 @@ const ManageCourse = () => {
     try {
       const res = await axiosInstance.post(`${port}/addingCourseQuizeQuestion/${quizQuestionId}`, addQuizeQuestion);
       setAddQuestionOpen(false);
+      notifySuccess("Question added successfully");
       getQuizQuestionData(quizQuestionId);
     } catch (error) {
       console.log(error);
@@ -822,6 +834,7 @@ const ManageCourse = () => {
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseQuizeQuestion/${quizQuestionId}/${editQuestionId}`, editQuestionData);
       setEditQuestionOpen(false);
+      notifySuccess("Question updated successfully");
       getQuizQuestionData(quizQuestionId);
     } catch (error) {
       console.log(error);
@@ -841,6 +854,7 @@ const ManageCourse = () => {
     try {
       const res = await axiosInstance.delete(`${port}/deletingCourseQuizeQuestion/${deleteQuestionId}`);
       getQuizQuestionData(quizQuestionId);
+      notifySuccess("Question deleted successfully");
       setDeleteQuestionOpen(false)
     } catch (error) {
       console.log(error);
