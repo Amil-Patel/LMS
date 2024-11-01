@@ -277,7 +277,7 @@ const CourseCategory = () => {
                     {nullCourseDataWithId?.data ? (
                       <>
                         <img
-                          src={`./upload/${nullCourseDataWithId.data.cate_thumbnail}`}
+                          src={`../upload/${nullCourseDataWithId.data.cate_thumbnail}`}
                           alt={nullCourseDataWithId.data.cate_title}
                           className="card-image"
                         />
@@ -329,7 +329,7 @@ const CourseCategory = () => {
                     ) : firstNullParentData ? (
                       <>
                         <img
-                          src={`./upload/${firstNullParentData.cate_thumbnail}`}
+                          src={`../upload/${firstNullParentData.cate_thumbnail}`}
                           alt={firstNullParentData.cate_title}
                           className="card-image"
                         />
@@ -394,7 +394,7 @@ const CourseCategory = () => {
               courseDataWithParentId.map((course) => (
                 <div key={course.id} className="card">
                   <img
-                    src={`./upload/${course.cate_thumbnail}`}
+                    src={`../upload/${course.cate_thumbnail}`}
                     alt={course.cate_title}
                     className="card-image"
                   />
@@ -581,7 +581,7 @@ const CourseCategory = () => {
                       <img src={URL.createObjectURL(newImage)} width="30%" alt="Thumbnail" />
                     ) : (
                       <img
-                        src={`upload/${editData.cate_thumbnail}`}
+                        src={`../upload/${editData.cate_thumbnail}`}
                         alt="Thumbnail"
                         width="30%"
                       />

@@ -13,7 +13,7 @@ const ManageCourseRoute = () => {
   const viewCourse = userRole === "superAdmin" || (courseMaster.length > 0 && courseMaster[0].can_view === 1 ? 1 : 0);
   return (
     <Routes>
-      <Route path="/manage-course/:id" element={
+      <Route path="/admin/manage-course/:id" element={
         <AdminAuthGuard>
           {viewCourse ? <ManageCourse /> : <NotAuthor />}
         </AdminAuthGuard>

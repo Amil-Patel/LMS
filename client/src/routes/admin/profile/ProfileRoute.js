@@ -6,7 +6,7 @@ const ProfileRoute = () => {
   return (
     <Routes>
       <Route
-        path="/profile"
+        path="/admin/profile"
         element={
           <AdminAuthGuard>
             <Profile />

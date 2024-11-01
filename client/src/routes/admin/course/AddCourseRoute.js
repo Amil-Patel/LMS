@@ -13,7 +13,7 @@ const AddCourseRoute = () => {
   const addCourse = userRole === "superAdmin" || (courseMaster.length > 0 && courseMaster[0].can_add === 1 ? 1 : 0);
   return (
     <Routes>
-      <Route path="/add-course" element={
+      <Route path="/admin/add-course" element={
         <>
           <AdminAuthGuard>
             {addCourse ? <AddCourse /> : <NotAuthor />}

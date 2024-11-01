@@ -23,7 +23,7 @@ const AdminPageGuard = ({ children }) => {
     }
 
     if (isAuthenticated) {
-        return <Navigate to={"/dashboard"} replace />; 
+        return <Navigate to={"/admin/dashboard"} replace />; 
     }
 
     return <div>{children}</div>

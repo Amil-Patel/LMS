@@ -71,7 +71,7 @@ const Sidebar = () => {
         <div className="sidebar-top">
           <ul>
             <li className="main-li">
-              <NavLink to="/dashboard">
+              <NavLink to="/admin/dashboard">
                 <i className="fa-solid fa-gauge-high"></i>{" "}
                 <span>Dashboard</span>
               </NavLink>
@@ -99,28 +99,28 @@ const Sidebar = () => {
                 <ul className="dropdown-menu">
                   <li>
                     {(userRole === "superAdmin" || viewCourse === 1) && (
-                      <NavLink to={"/all-course"}>
+                      <NavLink to={"/admin/all-course"}>
                         <i className="fa-solid fa-caret-right"></i>All Course
                       </NavLink>
                     )}
                   </li>
                   <li>
                     {(userRole === "superAdmin" || addCourse === 1) && (
-                      <NavLink to={"/add-course"}>
+                      <NavLink to={"/admin/add-course"}>
                         <i className="fa-solid fa-caret-right"></i>Add New Course
                       </NavLink>
                     )}
                   </li>
                   <li>
                     {(userRole === "superAdmin" || viewCourseCate === 1) && (
-                      <NavLink to={"/course-category"}>
+                      <NavLink to={"/admin/course-category"}>
                         <i className="fa-solid fa-caret-right"></i>Course Category
                       </NavLink>
                     )}
                   </li>
                   <li>
                     {(userRole === "superAdmin" || viewCourseCoupon === 1) && (
-                      <NavLink to={"/course-coupon"}>
+                      <NavLink to={"/admin/course-coupon"}>
                         <i className="fa-solid fa-caret-right"></i>Coupons
                       </NavLink>
                     )}
@@ -129,28 +129,28 @@ const Sidebar = () => {
               )}
             </li>
             <li className="main-li">
-              <NavLink to={"/enrollements"}>
+              <NavLink to={"/admin/enrollements"}>
                 <i className="fa-solid fa-registered"></i>
                 <span>Enrollements</span>
               </NavLink>
             </li>
 
             <li className="main-li">
-              <NavLink to={"/inquiry"}>
+              <NavLink to={"/admin/inquiry"}>
                 <i className="fa fa-question-circle"></i>
                 <span>Inquiry</span>
               </NavLink>
             </li>
 
             <li className="main-li">
-              <NavLink to={"/payment"}>
+              <NavLink to={"/admin/payment"}>
                 <i className="fa fa-inr" aria-hidden="true"></i>
                 <span>Payment</span>
               </NavLink>
             </li>
             {userRole === "superAdmin" && (
               <li className="main-li">
-                <NavLink to={"/roles-list"}>
+                <NavLink to={"/admin/roles-list"}>
                   <i className="fa fa-indent" aria-hidden="true"></i>
                   <span>Roles List</span>
                 </NavLink>
@@ -158,7 +158,7 @@ const Sidebar = () => {
             )}
             <li className="main-li">
               {(userRole === "superAdmin" || viewUserData === 1 && viewAdminData === 1 && viewInstrucatureData === 1) && (
-                <NavLink to={"/user"}>
+                <NavLink to={"/admin/user"}>
                   <i className="fa-regular fa-user"></i>
                   <span>User</span>
                 </NavLink>
@@ -172,7 +172,7 @@ const Sidebar = () => {
         <div className="sidebar-bottom">
           <ul>
             <li className="main-li">
-              <NavLink to={"/profile"}>
+              <NavLink to={"/admin/profile"}>
                 <i className="fa-regular fa-user"></i>
                 <span>Profile</span>
               </NavLink>
@@ -195,12 +195,12 @@ const Sidebar = () => {
               {activeDropdown === "setting" && (
                 <ul className="dropdown-menu">
                   <li>
-                    <NavLink to={"/payment-setting"}>
+                    <NavLink to={"/admin/payment-setting"}>
                       <i className="fa-solid fa-caret-right"></i>Payment Setting
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to={"/notification-setting"}>
+                    <NavLink to={"/admin/notification-setting"}>
                       <i className="fa-solid fa-caret-right"></i>Notification
                       Setting
                     </NavLink>

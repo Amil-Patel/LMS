@@ -343,7 +343,7 @@ const Profile = () => {
                     />
                   ) : (
                     <img
-                      src={`./upload/${imageSrc}` || 'https://via.placeholder.com/150'} // Show existing image or placeholder
+                      src={`../upload/${imageSrc}` || 'https://via.placeholder.com/150'} // Show existing image or placeholder
                       style={{ width: "67px", maxHeight: "67px" }}
                       alt="Profile Thumbnail"
                     />

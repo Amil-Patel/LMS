@@ -13,7 +13,7 @@ const CourseCouponRoute = () => {
     <>
       <Routes>
         <Route
-          path="/course-coupon"
+          path="/admin/course-coupon"
           element={
             <AdminAuthGuard>
               {viewCoupon ? <CourseCoupon /> : <NotAuthor />}

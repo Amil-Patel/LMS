@@ -353,7 +353,7 @@ const EditCourse = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            navigate('/all-course');
+            navigate('/admin/all-course');
             setLoading(false);
         } catch (error) {
             console.log(error);

@@ -7,7 +7,7 @@ const PaymentRoute = () => {
   return (
     <>
       <Routes>
-        <Route path="/payment" element={
+        <Route path="/admin/payment" element={
           <AdminAuthGuard>
             <Payment />
           </AdminAuthGuard>

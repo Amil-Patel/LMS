@@ -14,7 +14,7 @@ const EditCourseRoute = () => {
     return (
         <>
             <Routes>
-                <Route path="/edit-course/:id" element={
+                <Route path="/admin/edit-course/:id" element={
                     <AdminAuthGuard>
                         {editCourse ? <EditCourse /> : <NotAuthor />}
                     </AdminAuthGuard>

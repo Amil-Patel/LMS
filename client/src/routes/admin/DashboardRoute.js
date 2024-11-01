@@ -7,7 +7,7 @@ const DashboardRoute = () => {
   return (
     <Routes>
       <Route
-        path="/dashboard"
+        path="/admin/dashboard"
         element={
           <>
             <AdminAuthGuard>
