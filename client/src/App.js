@@ -18,6 +18,7 @@ import { RoleContext } from "./pages/admin/layout/RoleContext";
 import LoginRoute from "./routes/admin/LoginRoute";
 import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
 import HomeRoute from "./routes/client/HomeRoute";
+import CourseRoute from "./routes/client/CourseRoute";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
         <EditCourseRoute />
       </RoleContext>
       <HomeRoute />
+      <CourseRoute/>
     </>
   );
 };
