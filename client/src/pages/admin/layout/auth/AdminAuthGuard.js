@@ -24,7 +24,7 @@ const AdminAuthGuard = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to={"/admin/admin"} replace />;
+        return <Navigate to={"/admin"} replace />;
     }
 
     return <div>{children}</div>;
