@@ -13,7 +13,7 @@ const AllCourseRoute = () => {
 
   return (
     <Routes>
-      <Route path="/all-course" element={
+      <Route path="/admin/all-course" element={
         <AdminAuthGuard>
           {viewCourse ? <AllCourse /> : <NotAuthor />}
         </AdminAuthGuard>

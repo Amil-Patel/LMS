@@ -7,7 +7,7 @@ const InquiryRoute = () => {
   return (
     <>
       <Routes>
-        <Route path="/inquiry" element={
+        <Route path="/admin/inquiry" element={
           <AdminAuthGuard>
             <Inquiry />
           </AdminAuthGuard>

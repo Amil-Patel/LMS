@@ -7,7 +7,7 @@ const EnrollementsRoute = () => {
   return (
     <>
       <Routes>
-        <Route path="/enrollements" element={
+        <Route path="/admin/enrollements" element={
           <AdminAuthGuard>
             <Enrollements />
           </AdminAuthGuard>

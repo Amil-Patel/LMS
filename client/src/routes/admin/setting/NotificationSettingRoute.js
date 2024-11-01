@@ -7,7 +7,7 @@ const NotificationSettingRoute = () => {
 
     <Routes>
       <Route
-        path="/notification-setting"
+        path="/admin/notification-setting"
         element={
           <AdminAuthGuard>
               <NotificationSetting />

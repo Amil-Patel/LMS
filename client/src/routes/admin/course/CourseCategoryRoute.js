@@ -12,7 +12,7 @@ const CourseCategoryRoute = () => {
   return (
     <>
       <Routes>
-        <Route path="/course-category" element={
+        <Route path="/admin/course-category" element={
           <AdminAuthGuard>
             {viewCourseCategory ? <CourseCategory /> : <NotAuthor />}
           </AdminAuthGuard>

@@ -280,7 +280,7 @@ const AddCourse = () => {
         },
       });
       setLoading(false);
-      navigate('/all-course');
+      navigate('/admin/all-course');
     } catch (error) {
       console.log(error);
       setLoading(false);

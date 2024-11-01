@@ -43,7 +43,7 @@ const Login = () => {
                     setUserId(res.data.id);
                     console.log(res.data.token);
                     Cookies.set('token', res.data.token, { expires: 1 });
-                    navigate("/dashboard");
+                    navigate("/admin/dashboard");
                 } else {
                     notifyInfo("Invalid email or password");
                 }

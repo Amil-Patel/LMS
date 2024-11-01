@@ -11,7 +11,7 @@ const RoleslistRoute = () => {
   return (
     <>
       <Routes>
-        <Route path="/roles-list" element={
+        <Route path="/admin/roles-list" element={
           <AdminAuthGuard>
             {userRole === "superAdmin" ? (
               <RolesList />

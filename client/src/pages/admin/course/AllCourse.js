@@ -117,13 +117,11 @@ const AllCourse = () => {
                 <th>Lessions <i className="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
                 <th>Author <i className="fa-solid fa-sort" onClick={() => handleSort('author')}></i></th>
                 <th>Status</th>
-                {
-                  editCoursePermission == 1 || deleteCoursePermission == 1 ? (
-
-                    <th>Action</th>
-                  ) : (
-                    ""
-                  )
+                {(userRole === "superAdmin" || editCoursePermission == 1 || deleteCoursePermission == 1) ? (
+                  <th>Action</th>
+                ) : (
+                  ""
+                )
                 }
               </tr>
             </thead>
@@ -145,7 +143,7 @@ const AllCourse = () => {
                   <tr key={index}>
                     <td className="id">{index + 1}</td>
                     <td>
-                      <h6><NavLink to={`/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
+                      <h6><NavLink to={`/admin/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
                     </td>
                     <td>{i.course_cate}</td>
                     <td>{i.course_price}</td>
@@ -164,52 +162,51 @@ const AllCourse = () => {
                         <span className="slider"></span>
                       </label>
                     </td>
-                    {
-                      editCoursePermission == 1 || deleteCoursePermission == 1 ? (
-                        <td>
+                    {(userRole === "superAdmin" || editCoursePermission == 1 || deleteCoursePermission == 1) ? (
+                      <td>
+                        <div
+                          className={`menu-container ${activeDropdown === index ? "active" : ""
+                            }`}
+                        >
                           <div
-                            className={`menu-container ${activeDropdown === index ? "active" : ""
-                              }`}
+                            className="menu-button"
+                            onClick={() => toggleDropdown(index)}
                           >
-                            <div
-                              className="menu-button"
-                              onClick={() => toggleDropdown(index)}
-                            >
-                              {" "}
-                              ⋮{" "}
-                            </div>
-                            {activeDropdown === index && (
-                              <div className="menu-content">
-                                {
-                                  editCoursePermission == 1 && (
-                                    <a
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      <NavLink to={`/edit-course/${i.id}`}>
-                                        <p>
-
-                                          Edit
-                                        </p>
-                                      </NavLink>
-                                    </a>
-                                  )
-                                }
-                                {
-                                  deleteCoursePermission == 1 && (
-                                    <p
-                                      onClick={() => deleteToggleModal(i.id)}
-                                      style={{ cursor: "pointer" }}
-                                    >
-                                      Delete
-                                    </p>
-                                  )
-                                }
-
-                              </div>
-                            )}
+                            {" "}
+                            ⋮{" "}
                           </div>
-                        </td>
-                      ) : ("")
+                          {activeDropdown === index && (
+                            <div className="menu-content">
+                              {(userRole === "superAdmin" ||
+                                editCoursePermission == 1) && (
+                                  <a
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <NavLink to={`/admin/edit-course/${i.id}`}>
+                                      <p>
+
+                                        Edit
+                                      </p>
+                                    </NavLink>
+                                  </a>
+                                )
+                              }
+                              {(userRole === "superAdmin" ||
+                                deleteCoursePermission == 1) && (
+                                  <p
+                                    onClick={() => deleteToggleModal(i.id)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    Delete
+                                  </p>
+                                )
+                              }
+
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    ) : ("")
                     }
 
                   </tr>

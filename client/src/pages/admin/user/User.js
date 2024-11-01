@@ -3,10 +3,10 @@ import Hoc from "../layout/Hoc";
 import "../../../assets/css/user/user.css";
 import { NavLink } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
-import {notifyError, notifySuccess, notifyWarning} from "../layout/ToastMessage";
+import { notifyWarning } from "../layout/ToastMessage";
 import Loading from "../layout/Loading";
 import { userRolesContext } from "../layout/RoleContext";
-import { validationEmail,validationName } from "../../../utils/validation";
+import { validationEmail, validationName } from "../../../utils/validation";
 const port = process.env.REACT_APP_URL
 
 const User = () => {
@@ -232,7 +232,7 @@ const User = () => {
       notifyWarning("Please enter a valid email address.");
       return;
     }
-    if(!validationName(addUser.first_name)){
+    if (!validationName(addUser.first_name)) {
       notifyWarning("Please enter a valid first name.");
       return;
     }
@@ -530,7 +530,7 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`./upload/${item.profile}`} />
+                          <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
                         <td>{item.email}</td>
@@ -621,7 +621,7 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`./upload/${item.profile}`} />
+                          <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
                         <td>{item.email}</td>
@@ -712,7 +712,7 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`./upload/${item.profile}`} />
+                          <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
                         <td>{item.email}</td>
@@ -799,7 +799,7 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`./upload/${item.profile}`} />
+                          <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
                         <td>{item.email}</td>
@@ -1458,7 +1458,7 @@ const User = () => {
                       ) : (
                         editData?.profile && (
                           <img
-                            src={`./upload/${editData?.profile}`}
+                            src={`../upload/${editData?.profile}`}
                             style={{ width: "67px", maxHeight: "67px" }}
                             alt="Profile Thumbnail"
                           />

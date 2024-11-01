@@ -18,7 +18,7 @@ const UserRoute = () => {
   return (
     <Routes>
       <Route
-        path="/user"
+        path="/admin/user"
         element={
           <>
             <AdminAuthGuard>
