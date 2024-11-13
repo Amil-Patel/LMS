@@ -97,28 +97,28 @@ const Sidebar = () => {
 
               {activeDropdown === "course" && (
                 <ul className="dropdown-menu">
-                  <li>
+                  <li style={{ cursor: "auto" }}>
                     {(userRole === "superAdmin" || viewCourse === 1) && (
                       <NavLink to={"/admin/all-course"}>
                         <i className="fa-solid fa-caret-right"></i>All Course
                       </NavLink>
                     )}
                   </li>
-                  <li>
+                  <li style={{ cursor: "auto" }}>
                     {(userRole === "superAdmin" || addCourse === 1) && (
                       <NavLink to={"/admin/add-course"}>
                         <i className="fa-solid fa-caret-right"></i>Add New Course
                       </NavLink>
                     )}
                   </li>
-                  <li>
+                  <li style={{ cursor: "auto" }}>
                     {(userRole === "superAdmin" || viewCourseCate === 1) && (
                       <NavLink to={"/admin/course-category"}>
                         <i className="fa-solid fa-caret-right"></i>Course Category
                       </NavLink>
                     )}
                   </li>
-                  <li>
+                  <li style={{ cursor: "auto" }}>
                     {(userRole === "superAdmin" || viewCourseCoupon === 1) && (
                       <NavLink to={"/admin/course-coupon"}>
                         <i className="fa-solid fa-caret-right"></i>Coupons

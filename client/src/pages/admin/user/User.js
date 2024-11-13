@@ -856,7 +856,7 @@ const User = () => {
         {/* Add User Modal */}
         {addUserOpen && (
           <div className="modal">
-            <div className="add-lesson-container" style={{ width: "60%" }}>
+            <div className="add-lesson-container" style={{ width: "60%", height: "550px", overflowY: "scroll" }}>
               <div className="quiz-top-header">
                 <div className="quiz-header">
                   <h5>Add New User</h5>
@@ -1175,7 +1175,7 @@ const User = () => {
         {/* Edit User Modal */}
         {editUserOpen && (
           <div className="modal">
-            <div className="add-lesson-container" style={{ width: "60%" }}>
+            <div className="add-lesson-container" style={{ width: "60%", height: "550px", overflowY: "scroll" }}>
               <div className="quiz-top-header">
                 <div className="quiz-header">
                   <h5>Edit New User</h5>
