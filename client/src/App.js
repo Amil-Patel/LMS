@@ -19,6 +19,7 @@ import LoginRoute from "./routes/admin/LoginRoute";
 import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
 import HomeRoute from "./routes/client/HomeRoute";
 import CourseRoute from "./routes/client/CourseRoute";
+import ShoppingCartRoute from "./routes/client/ShoppingCartRoute";
 
 const App = () => {
   return (
@@ -44,6 +45,7 @@ const App = () => {
       </RoleContext>
       <HomeRoute />
       <CourseRoute/>
+      <ShoppingCartRoute/>
     </>
   );
 };
