@@ -1,8 +1,3 @@
-/* ViewCourse.css */
-
-body {
-  font-family: var(--ff-inter);
-}
 .main-section {
   padding: 5%;
   /* display: flex; */
@@ -29,9 +24,7 @@ body {
   font-weight: bold;
   margin-bottom: 10px;
 }
-.header-content {
-  /* width: 70%; */
-}
+
 .header-content p {
   font-size: 14px;
   color: #000000;
