@@ -87,7 +87,7 @@ const ShoppingCart = () => {
       </div>
       
       <div className="order-summary 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
-        <h3>Order Summary: <span>{courses.length} Items</span></h3>
+        <h4 className='text-black'>Order Summary: <span>{courses.length} Items</span></h4>
 
         <div className="promo-code">
           <label>Enter Promo Code</label>
@@ -95,8 +95,7 @@ const ShoppingCart = () => {
             <input 
               type="text" 
               value={promoCode} 
-              onChange={(e) => setPromoCode(e.target.value)} 
-              placeholder="Promo Code" 
+              onChange={(e) => setPromoCode(e.target.value)}
             />
             <button onClick={handleApplyPromo}>Apply</button>
           </div>

@@ -67,7 +67,7 @@ const ViewCourse = () => {
           >
             Curriculum
           </button>
-          <button
+          <button     
             className={activeTab === "faqs" ? "active" : ""}
             onClick={() => setActiveTab("faqs")}
           >
@@ -359,7 +359,6 @@ const ViewCourse = () => {
             </div>
           </>
         )}
-
         {activeTab === "reviews" && (
           <div className="reviews-section">
             <div className="average-rating">

@@ -21,8 +21,10 @@
   --heading-h6-color: #5383fd;
   --icon-color: #757575;
   --dropdown-bg-color: #7698ec;
+
   --button-primary-color: #4880ff;
   --button-secondary-color: #EEEEEE;
+
   --net-amount-row-color: #f5f6fa;
   --module-list-bg: #F5F6FA;
   --breadcrumb-bg-color:#F9F9FB;
@@ -226,8 +228,7 @@ button {
   width: 100%;
   padding: 5px 0;
 }
-
-
+  
 .secondary-btn:hover {
   background-color: var(--button-secondary-color);
 
