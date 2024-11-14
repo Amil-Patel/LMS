@@ -22,8 +22,8 @@ const ViewCourse = () => {
           <div className="badge">Security</div>
           <h2>The Complete 2020 Full Stack Web Developer Course</h2>
           <p>
-            Learn modern HTML5, CSS3 and web design by building a stunning website
-            for your portfolio! Includes flexbox and CSS Grid
+            Learn modern HTML5, CSS3 and web design by building a stunning
+            website for your portfolio! Includes flexbox and CSS Grid
           </p>
           <div className="rating-author">
             <span className="rating">
@@ -89,19 +89,20 @@ const ViewCourse = () => {
             <>
               <div className="long-desc">
                 <p>
-                  The minimum length of in-class time for the basic security guard
-                  training program is no less than 40 hours with Emergency Level
-                  First Aid Certification included or no less than 33.5 hours with
-                  Emergency Level First Aid Certification not included. The
-                  following table suggests the duration for each training section
-                  and includes both in-class and outside class hours. Outside
-                  class hours refer to pre-reading only; all other training
-                  methods must take place in-class. These hours are estimates and
-                  may need to be adjusted based on student learning
-                  abilities/trainer preference. The trainer must determine the
-                  optimal number of hours for each section of his/her program
-                  design, but the total must be no less than 40 or 33.5 hours with
-                  Emergency Level First Aid Certification not included.
+                  The minimum length of in-class time for the basic security
+                  guard training program is no less than 40 hours with Emergency
+                  Level First Aid Certification included or no less than 33.5
+                  hours with Emergency Level First Aid Certification not
+                  included. The following table suggests the duration for each
+                  training section and includes both in-class and outside class
+                  hours. Outside class hours refer to pre-reading only; all
+                  other training methods must take place in-class. These hours
+                  are estimates and may need to be adjusted based on student
+                  learning abilities/trainer preference. The trainer must
+                  determine the optimal number of hours for each section of
+                  his/her program design, but the total must be no less than 40
+                  or 33.5 hours with Emergency Level First Aid Certification not
+                  included.
                 </p>
               </div>
               <div className="learning-list">
@@ -114,8 +115,8 @@ const ViewCourse = () => {
                     want.
                   </li>
                   <li>
-                    Build fully-fledged websites and web apps for your startup or
-                    business.
+                    Build fully-fledged websites and web apps for your startup
+                    or business.
                   </li>
                   <li>Work as a freelance web developer.</li>
                   <li>Master frontend development with React</li>
@@ -129,8 +130,8 @@ const ViewCourse = () => {
                   <li>No coding or design experience necessary</li>
                   <li>Any computer works — Windows, macOS or Linux</li>
                   <li>
-                    You don’t need to buy any software — we will use the best free
-                    code editor in the world
+                    You don’t need to buy any software — we will use the best
+                    free code editor in the world
                   </li>
                 </ul>
               </div>
@@ -525,4 +526,4 @@ const ViewCourse = () => {
   );
 };
 
-export default ViewCourse;
+export default ViewCourse;
