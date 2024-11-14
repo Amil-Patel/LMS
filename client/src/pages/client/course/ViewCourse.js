@@ -525,4 +525,4 @@ const ViewCourse = () => {
   );
 };
 
-export default ViewCourse;
+export default ViewCourse;
