@@ -20,7 +20,7 @@ import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
 import HomeRoute from "./routes/client/HomeRoute";
 import CourseRoute from "./routes/client/CourseRoute";
 import ShoppingCartRoute from "./routes/client/ShoppingCartRoute";
-
+import LearningRoute from "./routes/stu_dashboard/LearningRoute";
 const App = () => {
   return (
     <>
@@ -44,8 +44,9 @@ const App = () => {
         <EditCourseRoute />
       </RoleContext>
       <HomeRoute />
-      <CourseRoute/>
-      <ShoppingCartRoute/>
+      <CourseRoute />
+      <ShoppingCartRoute />
+      <LearningRoute />
     </>
   );
 };
