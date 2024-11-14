@@ -359,6 +359,7 @@ const ViewCourse = () => {
             </div>
           </>
         )}
+
         {activeTab === "reviews" && (
           <div className="reviews-section">
             <div className="average-rating">
