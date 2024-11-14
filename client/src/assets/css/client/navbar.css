@@ -19,24 +19,13 @@
 .navbar-pages ul{
     display: flex;
     font-weight: 500;
-    font-family: "Exo", serif;
 }
 
-.navbar-pages ul li{
-    cursor: pointer;
-    padding: 18px 16px;
-}
-
-.navbar-pages ul li:hover{
-    color: var(--button-primary-color);
-    background-color: var(--breadcrumb-bg-color);
-}
 
 .navbar-login-section a{
-    font-size:17px;
+    font-size:15px;
     padding: 0 5px;
     font-weight: 500;
-    font-family: "Jost", sans-serif;
 }
 
 .navbar-login-section a:hover{

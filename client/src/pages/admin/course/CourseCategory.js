@@ -245,7 +245,7 @@ const CourseCategory = () => {
             <input id="search-input" type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
-          <div className="hero-inner-logo">
+          <div className="hero-inner-logo" style={{ display: "flex" }}>
             <img src={require("../../../assets/image/pdf-logo.png")} alt="pdf" />
             <img src={require("../../../assets/image/x-logo.png")} alt="x-logo" />
           </div>
