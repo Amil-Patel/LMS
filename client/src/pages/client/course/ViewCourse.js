@@ -22,8 +22,8 @@ const ViewCourse = () => {
           <div className="badge">Security</div>
           <h2>The Complete 2020 Full Stack Web Developer Course</h2>
           <p>
-            Learn modern HTML5, CSS3 and web design by building a stunning website
-            for your portfolio! Includes flexbox and CSS Grid
+            Learn modern HTML5, CSS3 and web design by building a stunning
+            website for your portfolio! Includes flexbox and CSS Grid
           </p>
           <div className="rating-author">
             <span className="rating">
@@ -89,19 +89,20 @@ const ViewCourse = () => {
             <>
               <div className="long-desc">
                 <p>
-                  The minimum length of in-class time for the basic security guard
-                  training program is no less than 40 hours with Emergency Level
-                  First Aid Certification included or no less than 33.5 hours with
-                  Emergency Level First Aid Certification not included. The
-                  following table suggests the duration for each training section
-                  and includes both in-class and outside class hours. Outside
-                  class hours refer to pre-reading only; all other training
-                  methods must take place in-class. These hours are estimates and
-                  may need to be adjusted based on student learning
-                  abilities/trainer preference. The trainer must determine the
-                  optimal number of hours for each section of his/her program
-                  design, but the total must be no less than 40 or 33.5 hours with
-                  Emergency Level First Aid Certification not included.
+                  The minimum length of in-class time for the basic security
+                  guard training program is no less than 40 hours with Emergency
+                  Level First Aid Certification included or no less than 33.5
+                  hours with Emergency Level First Aid Certification not
+                  included. The following table suggests the duration for each
+                  training section and includes both in-class and outside class
+                  hours. Outside class hours refer to pre-reading only; all
+                  other training methods must take place in-class. These hours
+                  are estimates and may need to be adjusted based on student
+                  learning abilities/trainer preference. The trainer must
+                  determine the optimal number of hours for each section of
+                  his/her program design, but the total must be no less than 40
+                  or 33.5 hours with Emergency Level First Aid Certification not
+                  included.
                 </p>
               </div>
               <div className="learning-list">
@@ -114,8 +115,8 @@ const ViewCourse = () => {
                     want.
                   </li>
                   <li>
-                    Build fully-fledged websites and web apps for your startup or
-                    business.
+                    Build fully-fledged websites and web apps for your startup
+                    or business.
                   </li>
                   <li>Work as a freelance web developer.</li>
                   <li>Master frontend development with React</li>
@@ -129,8 +130,8 @@ const ViewCourse = () => {
                   <li>No coding or design experience necessary</li>
                   <li>Any computer works — Windows, macOS or Linux</li>
                   <li>
-                    You don’t need to buy any software — we will use the best free
-                    code editor in the world
+                    You don’t need to buy any software — we will use the best
+                    free code editor in the world
                   </li>
                 </ul>
               </div>
@@ -154,113 +155,6 @@ const ViewCourse = () => {
                 </div>
                 {activeModuleIndex === 0 && (
                   <>
-<<<<<<< HEAD
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Cras facilisis faucibus odio arcu duis dui, adipiscing
-                      facilisis. Urna, donec turpis egestas volutpat. Quisque
-                      nec non amet quis. Varius tellus justo odio parturient
-                      mauris curabitur lorem in.
-                    </p>
-                  </>
-                )}
-              </div>
-              <div className="module">
-                <div className="module-header">
-                  <span className="module-title">
-                    What Does Royalty Free Mean?
-                  </span>
-                  <div className="module-controls">
-                    <button
-                      className="check-btn"
-                      onClick={() => toggleFaqsContent(1)}
-                    >
-                      <i className="fa-solid fa-angle-down"></i>
-                    </button>
-                  </div>
-                </div>
-                {activeFaqsIndex === 1 && (
-                  <>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Cras facilisis faucibus odio arcu duis dui, adipiscing
-                      facilisis. Urna, donec turpis egestas volutpat. Quisque
-                      nec non amet quis. Varius tellus justo odio parturient
-                      mauris curabitur lorem in.
-                    </p>
-                  </>
-                )}
-              </div>
-              <div className="module">
-                <div className="module-header">
-                  <span className="module-title">
-                    What Does Royalty Free Mean?
-                  </span>
-                  <div className="module-controls">
-                    <button
-                      className="check-btn"
-                      onClick={() => toggleFaqsContent(2)}
-                    >
-                      <i className="fa-solid fa-angle-down"></i>
-                    </button>
-                  </div>
-                </div>
-                {activeFaqsIndex === 2 && (
-                  <>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Cras facilisis faucibus odio arcu duis dui, adipiscing
-                      facilisis. Urna, donec turpis egestas volutpat. Quisque
-                      nec non amet quis. Varius tellus justo odio parturient
-                      mauris curabitur lorem in.
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-
-        {activeTab === "reviews" && (
-          <div className="reviews-section">
-            <div className="average-rating">
-              <div>
-                <h2>4.0 </h2>
-              </div>
-              <div>
-                <div className="review-rating">
-                  {[...Array(4)].map((_, i) => (
-                    <i className="fa-solid fa-star" key={i}></i>
-                  ))}
-                  <i className="fa-regular fa-star"></i> {/* Half star */}
-                </div>
-                <p>based on 146,951 ratings</p>
-              </div>
-            </div>
-            <div className="review-list">
-              {Array(2)
-                .fill()
-                .map((_, index) => (
-                  <div className="review-item" key={index}>
-                    <div className="reviewer-info">
-                      <img
-                        src="https://via.placeholder.com/50"
-                        alt="Reviewer"
-                      />
-                      <div>
-                        <h4>David W.</h4>
-                        <div className="flex items-center gap-2.5">
-                          <div className="review-rating">
-                            {[...Array(4)].map((_, i) => (
-                              <i className="fa-solid fa-star" key={i}></i>
-                            ))}
-                            <i className="fa-regular fa-star"></i>{" "}
-                            {/* Half star */}
-                          </div>
-                          <div className="review-date">
-                            <span>2 weeks ago</span>
-                          </div>
-=======
                     <div className="module-content">
                       <div className="module-lesson">
                         <div className="lesson-title">
@@ -277,7 +171,6 @@ const ViewCourse = () => {
 
                         <div className="lesson-time">
                           <span>13 Min</span>
->>>>>>> 1b734d097761eb967ce6e0f294faa08c00ceecb2
                         </div>
                       </div>
                     </div>
@@ -633,4 +526,4 @@ const ViewCourse = () => {
   );
 };
 
-export default ViewCourse;
+export default ViewCourse;
