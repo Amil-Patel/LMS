@@ -13,10 +13,10 @@ const Navbar = () => {
         <div className='navbar-pages'>
           <ul>
             <li>
-              <NavLink to="/view-course1">Home</NavLink>
+              <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/view-course1">Courses</NavLink>
+              <NavLink to="/all-course">Courses</NavLink>
             </li>
             <li>
               <NavLink to="/view-course1">Blog</NavLink>
@@ -28,13 +28,13 @@ const Navbar = () => {
               <NavLink to="/view-course1">LearnPress Add-On</NavLink>
             </li>
             <li>
-              <NavLink to="/view-course">Premium Theme</NavLink>
+              <NavLink to="/contact-us">Contact Us</NavLink>
             </li>
           </ul>
         </div>
         <div className='navbar-login-section'>
-          <a> Login </a> /
-          <a> Register </a>
+          <NavLink to="/">Login </NavLink> /
+          <NavLink to="/">Register </NavLink>
           <div className='login-section-icon'><i className="fa-solid fa-magnifying-glass"></i></div>
         </div>
       </nav>
