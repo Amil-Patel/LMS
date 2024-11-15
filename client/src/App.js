@@ -21,6 +21,7 @@ import HomeRoute from "./routes/client/HomeRoute";
 import CourseRoute from "./routes/client/CourseRoute";
 import ShoppingCartRoute from "./routes/client/ShoppingCartRoute";
 import LearningRoute from "./routes/stu_dashboard/LearningRoute";
+import ContactRoute from "./routes/client/ContactRoute";
 const App = () => {
   return (
     <>
@@ -47,6 +48,7 @@ const App = () => {
       <CourseRoute />
       <ShoppingCartRoute />
       <LearningRoute />
+      <ContactRoute />
     </>
   );
 };
