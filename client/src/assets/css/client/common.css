@@ -13,6 +13,17 @@
     --light-gray-text: #9D9D9D;
     --icon-primary-color: #FF782D;
     --secondary-btn-color: #D9D9D9;
+    --Primary-background: #EDF6F9;
+    --content1-background: #FFEEF3;
+    --content3-background: #F2EEFF;
+
+    --box-shadow: rgba(0, 0, 0, 0.2);
+    --content-border-color: blueviolet;
+    --icon-background: #E8EFF1;
+    --review-section-border: rgb(223, 222, 222);
+    --secondary-background: #17262C;
+    --step-button-background: #455156;
+    --footer-bottom-background: #f5f9f9;
 }
 
 .navbar-section {
@@ -90,9 +101,11 @@
     color: var(--black);
     font-weight: 600;
 }
-.stu-sidebar-menu{
+
+.stu-sidebar-menu {
     margin-top: 40px;
 }
+
 .stu-sidebar-menu ul li {
     display: flex;
     align-items: center;
@@ -125,26 +138,31 @@
 .stu-sidebar-menu ul li:hover i {
     color: var(--white);
 }
+
 .main_stu_dashboard .content {
     width: 75%;
     padding-left: 40px;
     font-family: var(--inter-ff);
 }
-.main_stu_dashboard .content h1{
-   font-weight: 600;
-   font-size: 23px;
-   color: var(--black);
-   margin-bottom: 10px;
+
+.main_stu_dashboard .content h1 {
+    font-weight: 600;
+    font-size: 23px;
+    color: var(--black);
+    margin-bottom: 10px;
 }
-.main_stu_dashboard .content .learning-cards{
+
+.main_stu_dashboard .content .learning-cards {
     display: flex;
     gap: 20px;
     border-bottom: 2px solid var(--bg-color);
 }
-.content .learning-cards .card-image{
+
+.content .learning-cards .card-image {
     width: 240px;
 }
-.content .learning-cards .card-view-btn{
+
+.content .learning-cards .card-view-btn {
     border: 1.4px solid var(--button-primary-color);
     background-color: transparent;
     color: var(--button-primary-color);
@@ -152,7 +170,8 @@
     font-size: 13px;
     border-radius: 4px;
 }
-.content .learning-cards .card-view-btn:hover{
+
+.content .learning-cards .card-view-btn:hover {
     background-color: var(--button-primary-color);
     color: var(--white);
 }
