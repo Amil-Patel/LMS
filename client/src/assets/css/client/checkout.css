@@ -1,0 +1,67 @@
+.checkout-section {
+  padding: 5%;
+}
+
+.checkout-section h2 {
+  font-size: 32px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--secondary-btn-color);
+  padding-bottom: 18px;
+  font-family: var(--inter-ff);
+  color: var(--black);
+}
+
+.form-container {
+  width: 44%;
+  background-color: var(--white);
+  padding: 4% 0;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  font-family: var(--inter-ff);
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: var(--light-gray-text);
+  font-family: var(--jost-ff);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-group label {
+  font-size: 15px;
+  font-family: var(--inter-ff);
+  color: var(--black);
+}
+
+.required {
+  color: var(--icon-primary-color);
+}
