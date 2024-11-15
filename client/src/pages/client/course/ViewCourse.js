@@ -17,25 +17,25 @@ const ViewCourse = () => {
     <>
       <Navbar />
       <Breadcrumb />
-      <div className="main-section 2xl:flex xl:flex lg:flex block">
+      <div className="main-section p-16 gap-20 2xl:flex xl:flex lg:flex block">
         <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
-          <div className="badge">Security</div>
-          <h2>The Complete 2020 Full Stack Web Developer Course</h2>
-          <p>
+          <div className="mini-title px-2 py-1 text-xs rounded inline-block mb-4">Security</div>
+          <h2 className="font-bold mb-2">The Complete 2020 Full Stack Web Developer Course</h2>
+          <p className="mb-4">
             Learn modern HTML5, CSS3 and web design by building a stunning
             website for your portfolio! Includes flexbox and CSS Grid
           </p>
           <div className="rating-author">
-            <span className="rating">
+            <span className="rating font-bold">
               4.5 <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i> (3,902)
             </span>
-            <p style={{ marginTop: "15px" }}>By Aakib Valuda</p>
+            <p className="mb-4 mt-2">By Aakib Valuda</p>
           </div>
-          <div className="metadata">
+          <div className="metadata text-sm gap-x-4 flex">
             <span>
               <i className="fa-solid fa-file"></i> 20 Lessons
             </span>
@@ -52,7 +52,7 @@ const ViewCourse = () => {
               <i className="fa-solid fa-graduation-cap"></i> English
             </span>
           </div>
-          <div className="metadata mt-4">
+          <div className="metadata mt-4 text-sm">
             <span>
               <i className="fa-solid fa-clock"></i> Last Update: 11/2024
             </span>
@@ -106,7 +106,7 @@ const ViewCourse = () => {
                 </p>
               </div>
               <div className="learning-list">
-                <h2>What you'll learn</h2>
+                <h2 className="font-bold mb-4">What you'll learn</h2>
                 <ul>
                   <li>updated for 2020</li>
                   <li>Build 16 web development projects...</li>
@@ -125,7 +125,7 @@ const ViewCourse = () => {
                 </ul>
               </div>
               <div className="prerequisites">
-                <h2>Prerequisites</h2>
+                <h2 className="font-bold mb-4">Prerequisites</h2>
                 <ul>
                   <li>No coding or design experience necessary</li>
                   <li>Any computer works — Windows, macOS or Linux</li>
@@ -481,13 +481,13 @@ const ViewCourse = () => {
         </div>
 
         <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
-          <img
+          <img className="w-full mb-6"
             src={require("../../../assets/image/course-thumbnail.png")}
             alt="Course Thumbnail"
           />
-          <div className="price">
+          <div className="price mb-8">
             <h3>
-              $499 <span className="discount">$899</span>
+              $499 <span className="discount line-through">$899</span>
               <span className="discount-badge">25% Off</span>
             </h3>
             <div className="cart-buttons">
