@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import "../../../assets/css/client/shopping-cart.css";
+import Navbar from "../layout/Navbar";
+import Breadcrumb from "../../../pages/client/course/Breadcrumb";
 
 const courses = [
   {
@@ -15,6 +17,17 @@ const courses = [
   },
   {
     id: 2,
+    title: "The Web Developer BootCamp 2024",
+    author: "Aakib Valuda",
+    rating: 4.5,
+    reviews: 3902,
+    price: 499,
+    originalPrice: 899,
+    discount: "25% Off",
+    image: require("../../../assets/image/course-thumbnail.png"),
+  },
+  {
+    id: 3,
     title: "The Web Developer BootCamp 2024",
     author: "Aakib Valuda",
     rating: 4.5,
@@ -50,18 +63,21 @@ const ShoppingCart = () => {
   };
 
   return (
-    <div className="main-section 2xl:flex xl:flex lg:flex block">
+    <>
+    <Navbar />
+    <Breadcrumb />
+    <div className="main-section p-16 gap-20 2xl:flex xl:flex lg:flex block">
       <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
 
         {courses.map((course) => (
-          <div key={course.id} className="cart flex gap-0.5">
+          <div key={course.id} className="cart flex justify-between gap-0.5">
             <div className="cart-img">
               <img src={course.image} alt="Course Thumbnail" />
             </div>
             <div className="content">
-              <h2>{course.title}</h2>
+              <h2 className='font-bold'>{course.title}</h2>
               <div className="rating-author">
-                <p>By {course.author}</p>
+                <p className='mt-2 mb-2'>By {course.author}</p>
                 <span className="rating">
                   {course.rating} 
                   <i className="fa-solid fa-star"></i>
@@ -73,7 +89,7 @@ const ShoppingCart = () => {
               </div>
             </div>
             <div className="price-info">
-              <span>${course.price}</span>
+              <span className='font-bold'>${course.price}</span>
               <h3>
                 <span className="discount-badge text-xs">{course.discount}</span>
                 <span className="discount text-xs">${course.originalPrice}</span>
@@ -86,7 +102,7 @@ const ShoppingCart = () => {
         ))}
       </div>
       
-      <div className="order-summary 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
+      <div className="order-summary 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full h-1/2">
         <h4 className='text-black'>Order Summary: <span>{courses.length} Items</span></h4>
 
         <div className="promo-code">
@@ -126,6 +142,7 @@ const ShoppingCart = () => {
         <button className="btn-checkout">Process To Checkout</button>
       </div>
     </div>
+    </>
   );
 }
 
