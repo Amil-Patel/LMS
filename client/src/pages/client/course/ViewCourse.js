@@ -17,25 +17,25 @@ const ViewCourse = () => {
     <>
       <Navbar />
       <Breadcrumb />
-      <div className="main-section 2xl:flex xl:flex lg:flex block">
+      <div className="main-section p-16 gap-20 2xl:flex xl:flex lg:flex block">
         <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
-          <div className="badge">Security</div>
-          <h2>The Complete 2020 Full Stack Web Developer Course</h2>
-          <p>
+          <div className="mini-title px-2 py-1 text-xs rounded inline-block mb-4">Security</div>
+          <h2 className="font-bold mb-2">The Complete 2020 Full Stack Web Developer Course</h2>
+          <p className="mb-4">
             Learn modern HTML5, CSS3 and web design by building a stunning
             website for your portfolio! Includes flexbox and CSS Grid
           </p>
           <div className="rating-author">
-            <span className="rating">
+            <span className="rating font-bold">
               4.5 <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i> (3,902)
             </span>
-            <p style={{ marginTop: "15px" }}>By Aakib Valuda</p>
+            <p className="mb-4 mt-2">By Aakib Valuda</p>
           </div>
-          <div className="metadata">
+          <div className="metadata text-sm gap-x-4 flex">
             <span>
               <i className="fa-solid fa-file"></i> 20 Lessons
             </span>
@@ -52,7 +52,7 @@ const ViewCourse = () => {
               <i className="fa-solid fa-graduation-cap"></i> English
             </span>
           </div>
-          <div className="metadata mt-4">
+          <div className="metadata mt-4 text-sm">
             <span>
               <i className="fa-solid fa-clock"></i> Last Update: 11/2024
             </span>
@@ -106,7 +106,7 @@ const ViewCourse = () => {
                 </p>
               </div>
               <div className="learning-list">
-                <h2>What you'll learn</h2>
+                <h2 className="font-bold mb-4">What you'll learn</h2>
                 <ul>
                   <li>updated for 2020</li>
                   <li>Build 16 web development projects...</li>
@@ -125,7 +125,7 @@ const ViewCourse = () => {
                 </ul>
               </div>
               <div className="prerequisites">
-                <h2>Prerequisites</h2>
+                <h2 className="font-bold mb-4">Prerequisites</h2>
                 <ul>
                   <li>No coding or design experience necessary</li>
                   <li>Any computer works — Windows, macOS or Linux</li>
@@ -159,7 +159,7 @@ const ViewCourse = () => {
                       <div className="module-lesson">
                         <div className="lesson-title">
                           <span className="lesson-icon">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <i className="fa-regular fa-circle-play"></i>
                           </span>
                           Video: Course Intro
                         </div>
@@ -178,7 +178,7 @@ const ViewCourse = () => {
                       <div className="module-lesson">
                         <div className="lesson-title">
                           <span className="lesson-icon">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <i className="fa-regular fa-circle-play"></i>
                           </span>
                           Video: Course Intro
                         </div>
@@ -197,7 +197,7 @@ const ViewCourse = () => {
                       <div className="module-lesson">
                         <div className="lesson-title">
                           <span className="lesson-icon">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <i className="fa-regular fa-circle-play"></i>
                           </span>
                           Video: Course Intro
                         </div>
@@ -229,7 +229,7 @@ const ViewCourse = () => {
                       <div className="module-lesson">
                         <div className="lesson-title">
                           <span className="lesson-icon">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <i className="fa-regular fa-circle-play"></i>
                           </span>
                           Video: Course Intro
                         </div>
@@ -248,7 +248,7 @@ const ViewCourse = () => {
                       <div className="module-lesson">
                         <div className="lesson-title">
                           <span className="lesson-icon">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <i className="fa-regular fa-circle-play"></i>
                           </span>
                           Video: Course Intro
                         </div>
@@ -267,7 +267,7 @@ const ViewCourse = () => {
                       <div className="module-lesson">
                         <div className="lesson-title">
                           <span className="lesson-icon">
-                            <i class="fa-regular fa-circle-play"></i>
+                            <i className="fa-regular fa-circle-play"></i>
                           </span>
                           Video: Course Intro
                         </div>
@@ -417,19 +417,19 @@ const ViewCourse = () => {
                   ))}
               </div>
 
-              <div class="container mx-auto px-4 mt-5">
+              <div className="container mx-auto px-4 mt-5">
                 <nav
-                  class="flex flex-row flex-nowrap justify-between md:justify-center items-center"
+                  className="flex flex-row flex-nowrap justify-between md:justify-center items-center"
                   aria-label="Pagination"
                 >
                   <a
-                    class="flex w-10 h-10 mr-1 justify-center items-center rounded-full border border-gray-200 text-black hover:border-gray-300"
+                    className="flex w-10 h-10 mr-1 justify-center items-center rounded-full border border-gray-200 text-black hover:border-gray-300"
                     href="#"
                     title="Previous Page"
                   >
-                    <span class="sr-only">Previous Page</span>
+                    <span className="sr-only">Previous Page</span>
                     <svg
-                      class="block w-4 h-4 fill-current"
+                      className="block w-4 h-4 fill-current"
                       viewBox="0 0 256 512"
                       aria-hidden="true"
                       role="presentation"
@@ -438,21 +438,21 @@ const ViewCourse = () => {
                     </svg>
                   </a>
                   <a
-                    class="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
+                    className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
                     href="#"
                     title="Page 1"
                   >
                     1
                   </a>
                   <a
-                    class="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
+                    className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
                     href="#"
                     title="Page 2"
                   >
                     2
                   </a>
                   <a
-                    class="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-black bg-black text-white"
+                    className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-black bg-black text-white"
                     href="#"
                     aria-current="page"
                     title="Page 3"
@@ -460,13 +460,13 @@ const ViewCourse = () => {
                     3
                   </a>
                   <a
-                    class="flex w-10 h-10 ml-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
+                    className="flex w-10 h-10 ml-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
                     href="#"
                     title="Next Page"
                   >
-                    <span class="sr-only">Next Page</span>
+                    <span className="sr-only">Next Page</span>
                     <svg
-                      class="block w-4 h-4 fill-current"
+                      className="block w-4 h-4 fill-current"
                       viewBox="0 0 256 512"
                       aria-hidden="true"
                       role="presentation"
@@ -481,13 +481,13 @@ const ViewCourse = () => {
         </div>
 
         <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
-          <img
+          <img className="w-full mb-6"
             src={require("../../../assets/image/course-thumbnail.png")}
             alt="Course Thumbnail"
           />
-          <div className="price">
+          <div className="price mb-8">
             <h3>
-              $499 <span className="discount">$899</span>
+              $499 <span className="discount line-through">$899</span>
               <span className="discount-badge">25% Off</span>
             </h3>
             <div className="cart-buttons">

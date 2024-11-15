@@ -16,12 +16,32 @@ const Sidebar = () => {
                             <a href="#">Dashboard</a>
                         </li>
                         <li>
-                            <i className="fa-solid fa-gauge"></i>
-                            <a href="#">Dashboard</a>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                            <a href="#">My Courses</a>
                         </li>
                         <li>
-                            <i className="fa-solid fa-gauge"></i>
-                            <a href="#">Dashboard</a>
+                            <i className="fa-solid fa-book"></i>
+                            <a href="#">Assignments</a>
+                        </li>
+                        <li>
+                        <i class="fa-solid fa-file"></i>
+                            <a href="#">Grades & Results</a>
+                        </li>
+                        <li>
+                            <i className="fa-solid fa-clock"></i>
+                            <a href="#">Schedule/Timetable</a>
+                        </li>
+                        <li>
+                            <i className="fa-solid fa-message"></i>
+                            <a href="#">Messages/Inbox</a>
+                        </li>
+                        <li>
+                           <i class="fa-solid fa-bullhorn"></i>
+                            <a href="#">Announcements</a>
+                        </li>
+                        <li>
+                            <i className="fa-solid fa-award"></i>
+                            <a href="#">Certificate</a>
                         </li>
                     </ul>
                 </div>
