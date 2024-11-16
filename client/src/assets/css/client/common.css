@@ -25,33 +25,7 @@
     --step-button-background: #455156;
     --footer-bottom-background: #f5f9f9;
 }
-
-.navbar-section {
-    font-family: var(--exo-ff);
-}
-
-.main-section{
-    font-family: var(--inter-ff);
-}
-
-.navbar-section ul li {
-    font-size: 15px;
-    padding: 18px 16px;
-    color: var(--black);
-    font-weight: 600;
-    font-family: var(--exo-ff);
-}
-
-.navbar-section ul li a.active {
-    color: var(--button-primary-color);
-    border-bottom: 1.7px solid var(--button-primary-color);
-}
-
-.navbar-section ul li a:hover {
-    color: var(--button-primary-color);
-}
-
-/* bread */
+/* breadcump */
 .breadcrumb {
     display: flex;
     align-items: center;
@@ -59,13 +33,19 @@
     color: #aaa;
     background-color: var(--bg-color);
     padding: 45px 75px;
+    gap: 3px;
 }
 
 .breadcrumb-item {
     text-decoration: none;
 }
-
+.breadcrumb i{
+    font-size: 14px;
+}
 .breadcrumb-item:hover {
+    text-decoration: underline;
+}
+.breadcrumb-item.active {
     text-decoration: underline;
 }
 
@@ -81,7 +61,16 @@
   }
 
 
-
+@media screen and (max-width: 768px) {
+    .breadcrumb {
+        padding: 30px 25px;
+    }
+}
+@media screen and (max-width: 426px) {
+    .breadcrumb {
+        padding: 20px 15px;
+    }    
+}
 /* student dashboard */
 .main_stu_dashboard {
     display: flex;

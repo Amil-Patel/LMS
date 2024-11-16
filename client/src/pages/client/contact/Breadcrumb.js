@@ -7,7 +7,7 @@ const Breadcrumb = () => {
             <nav className="breadcrumb">
                 <NavLink to="/" className="breadcrumb-item">Home</NavLink>
                 <span className="breadcrumb-divider"><i className="fa-solid fa-angle-right"></i></span>
-                <NavLink to="/all-course" className="breadcrumb-item">Courses</NavLink>
+                <NavLink to="/contact-us" className="breadcrumb-item">Contact Us</NavLink>
             </nav>
         </>
     )
