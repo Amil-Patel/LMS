@@ -230,10 +230,9 @@
 }
 
 .review-text {
-  font-size: 1rem;
+  /* font-size: 1rem; */
   color: #333;
 }
-
 
 
 /* Curriculum  */
@@ -257,6 +256,7 @@
 .header-content .module-content {
   padding: 0;
 }
+
 .header-content .module-lesson {
   background-color: transparent;
 }

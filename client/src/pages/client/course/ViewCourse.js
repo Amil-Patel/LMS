@@ -15,12 +15,16 @@ const ViewCourse = () => {
   };
   return (
     <>
-      <Navbar />
-      <Breadcrumb />
-      <div className="main-section p-16 gap-20 2xl:flex xl:flex lg:flex block">
+      {/* <Navbar />
+      <Breadcrumb /> */}
+      <div className="main-section p-4 sm:p-8 md:p-12 lg:p-16 gap-4 sm:gap-8 md:gap-12 lg:gap-20 2xl:flex xl:flex lg:flex block">
         <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
-          <div className="mini-title px-2 py-1 text-xs rounded inline-block mb-4">Security</div>
-          <h2 className="font-bold mb-2">The Complete 2020 Full Stack Web Developer Course</h2>
+          <div className="mini-title px-2 py-1 text-xs rounded inline-block mb-4">
+            Security
+          </div>
+          <h2 className="font-bold mb-2">
+            The Complete 2020 Full Stack Web Developer Course
+          </h2>
           <p className="mb-4">
             Learn modern HTML5, CSS3 and web design by building a stunning
             website for your portfolio! Includes flexbox and CSS Grid
@@ -35,23 +39,30 @@ const ViewCourse = () => {
             </span>
             <p className="mb-4 mt-2">By Aakib Valuda</p>
           </div>
-          <div className="metadata text-sm gap-x-4 flex">
-            <span>
-              <i className="fa-solid fa-file"></i> 20 Lessons
+
+          <div className="metadata flex flex-wrap gap-4 text-sm items-center">
+            <span className="flex items-center gap-1 text-orange-500">
+              <i className="fa-solid fa-file"></i>
+              <span className="text-gray-800">20 Lessons</span>
             </span>
-            <span>
-              <i className="fa-solid fa-clock"></i> 12.30 Hours
+            <span className="flex items-center gap-1 text-orange-500">
+              <i className="fa-solid fa-clock"></i>
+              <span className="text-gray-800">12.30 Hours</span>
             </span>
-            <span>
-              <i className="fa-solid fa-graduation-cap"></i> 156 Students
+            <span className="flex items-center gap-1 text-orange-500">
+              <i className="fa-solid fa-graduation-cap"></i>
+              <span className="text-gray-800">156 Students</span>
             </span>
-            <span>
-              <i className="fa-solid fa-signal"></i> Beginner
+            <span className="flex items-center gap-1 text-orange-500">
+              <i className="fa-solid fa-signal"></i>
+              <span className="text-gray-800">Beginner</span>
             </span>
-            <span>
-              <i className="fa-solid fa-graduation-cap"></i> English
+            <span className="flex items-center gap-1 text-orange-500">
+              <i className="fa-solid fa-graduation-cap"></i>
+              <span className="text-gray-800">English</span>
             </span>
           </div>
+
           <div className="metadata mt-4 text-sm">
             <span>
               <i className="fa-solid fa-clock"></i> Last Update: 11/2024
@@ -59,7 +70,7 @@ const ViewCourse = () => {
           </div>
 
           {/* Tab Bar */}
-          <div className="tabs">
+          <div className="tabs flex flex-wrap gap-2 justify-start md:justify-start">
             <button
               className={activeTab === "overview" ? "active" : ""}
               onClick={() => setActiveTab("overview")}
@@ -125,11 +136,15 @@ const ViewCourse = () => {
                 </ul>
               </div>
               <div className="prerequisites">
-                <h2 className="font-bold mb-4">Prerequisites</h2>
-                <ul>
-                  <li>No coding or design experience necessary</li>
-                  <li>Any computer works — Windows, macOS or Linux</li>
-                  <li>
+                <h2 className="text-xl font-bold mb-4">Prerequisites</h2>
+                <ul className="list-disc pl-4 md:pl-6 space-y-2">
+                  <li className="pl-4 md:pl-0">
+                    No coding or design experience necessary
+                  </li>
+                  <li className="pl-4 md:pl-0">
+                    Any computer works — Windows, macOS, or Linux
+                  </li>
+                  <li className="pl-4 md:pl-0">
                     You don’t need to buy any software — we will use the best
                     free code editor in the world
                   </li>
@@ -481,7 +496,8 @@ const ViewCourse = () => {
         </div>
 
         <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
-          <img className="w-full mb-6"
+          <img
+            className="w-full mb-6"
             src={require("../../../assets/image/course-thumbnail.png")}
             alt="Course Thumbnail"
           />
