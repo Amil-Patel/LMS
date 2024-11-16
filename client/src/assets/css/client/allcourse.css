@@ -26,7 +26,6 @@
 .course-category label {
   display: flex;
   align-items: center;
-  color: var(--course-category-color);
   font-family: var(--jost-ff);
   font-size: 18px;
   line-height: 1.9em;
@@ -53,7 +52,7 @@
 }
 
 .course-search-input {
-  border-bottom: 2px solid var(--course-category-color);
+  border-bottom: 2px solid var(--border-color);
   position: relative;
 }
 

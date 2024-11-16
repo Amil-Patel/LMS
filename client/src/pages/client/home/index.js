@@ -5,6 +5,7 @@ import '../../../assets/css/client/home.css'
 import CardSection from './CardSection'
 import EnrollSection from './EnrollSection'
 import Contact from './Contact'
+import Footer from '../layout/Footer'
 
 const index = () => {
     return (
@@ -14,6 +15,7 @@ const index = () => {
             <CardSection />
             <EnrollSection />
             <Contact />
+            <Footer />
         </>
     )
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import "../../../assets/css/client/allcourse.css";
+import { NavLink } from 'react-router-dom'
 
 const AllCourse = () => {
   return (
@@ -58,7 +59,9 @@ const AllCourse = () => {
             />
             <div className="course-details">
               <div className="course-details-header">
-                <h3>The Web Developer BootCamp 2024</h3>
+                <h3>
+                  <NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink>
+                </h3>
                 <span>$ 499</span>
               </div>
               <p>
@@ -99,7 +102,7 @@ const AllCourse = () => {
             />
             <div className="course-details">
               <div className="course-details-header">
-                <h3>The Web Developer BootCamp 2024</h3>
+                <h3><NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink></h3>
                 <span>$ 499</span>
               </div>
               <p>
@@ -140,7 +143,7 @@ const AllCourse = () => {
             />
             <div className="course-details">
               <div className="course-details-header">
-                <h3>The Web Developer BootCamp 2024</h3>
+                <h3><NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink></h3>
                 <span>$ 499</span>
               </div>
               <p>
@@ -181,7 +184,7 @@ const AllCourse = () => {
             />
             <div className="course-details">
               <div className="course-details-header">
-                <h3>The Web Developer BootCamp 2024</h3>
+                <h3><NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink></h3>
                 <span>$ 499</span>
               </div>
               <p>
@@ -217,8 +220,6 @@ const AllCourse = () => {
           </div>
         </div>
       </section>
-
-   
     </>
   );
 };
