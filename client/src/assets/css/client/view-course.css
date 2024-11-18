@@ -70,7 +70,7 @@
 .tabs {
   display: flex;
   gap: 10px;
-  margin: 20px 0;
+  margin: 20px 0px;
   padding: 10px 0;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
@@ -92,7 +92,8 @@
 
 .long-desc p {
   line-height: 20px;
-  padding: 10px 0;
+  padding-bottom: 20px;
+  font-size: 14px;
 }
 
 .prerequisites {
@@ -225,8 +226,8 @@
 }
 
 .review-text {
-  /* font-size: 1rem; */
-  color: var(--step-button-background);
+  font-size: 14px !important;
+  color: #333;
 }
 
 
@@ -281,6 +282,7 @@
 .header-content .faqs-header .module p{
   margin-top: 15px;
   margin-bottom: 5px;
+  font-size: 14px;
 }
 
 .header-content .faqs-header .module:nth-last-child(1){

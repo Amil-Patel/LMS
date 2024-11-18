@@ -52,7 +52,7 @@ const Contact = () => {
                                             value={formState.name}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-black"
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="Your Name"
                                         />
                                     </div>
@@ -70,7 +70,7 @@ const Contact = () => {
                                             value={formState.email}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-black"
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="your@email.com"
                                         />
                                     </div>
@@ -88,7 +88,7 @@ const Contact = () => {
                                             value={formState.subject}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-black"
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="What is this regarding?"
                                         />
                                     </div>
@@ -105,7 +105,7 @@ const Contact = () => {
                                             value={formState.message}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-black"
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="Your message here..."
                                             rows={4}
                                         />

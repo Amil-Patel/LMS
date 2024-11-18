@@ -34,6 +34,7 @@ const Navbar = () => {
   // Function to toggle the modal visibility
   const toggleLoginForm = () => {
     setIsLoginFormOpen(!isLoginFormOpen);
+    setIsMenuOpen(false);
     setIsSignupFormOpen(false); // Close signup form when opening login form
   };
 
@@ -41,6 +42,7 @@ const Navbar = () => {
   // Function to toggle the modal visibility
   const toggleSignupForm = () => {
     setIsSignupFormOpen(!isSignupFormOpen);
+    setIsMenuOpen(false);
     setIsLoginFormOpen(false); // Close login form when opening signup form
   };
   return (
@@ -48,7 +50,9 @@ const Navbar = () => {
       <nav className='navbar-section'>
         <div className={`navbar-logo-section ${isMenuOpen ? 'notdisplay' : ''}`}>
           <div className='navbar-logo'>
-            <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+            <NavLink to="/">
+              <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+            </NavLink>
           </div>
         </div>
         <div className={`navbar-pages ${isMenuOpen ? 'active' : ''}`}>
@@ -79,7 +83,7 @@ const Navbar = () => {
       </nav>
       {isModalOpen && (
         <div className="profile-modal-overlay" onClick={closeModal}>
-          <div className="modal" style={{ top: modalPosition.top + 8, left: modalPosition.left - 87 }}>
+          <div className="modal" style={{ top: modalPosition.top + 6, left: modalPosition.left - 78 }}>
             <ul>
               <li>
                 <NavLink to="/profile">
@@ -97,13 +101,14 @@ const Navbar = () => {
       )}
 
       {isLoginFormOpen && (
-        <div className='client_section'>
+        <div className="client_section">
           <div className="fixed inset-0 z-10 flex justify-center items-center bg-gray-700 bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl relative w-96">
+            <div className="bg-white p-6 rounded-lg shadow-xl relative w-11/12 sm:w-96 max-w-md lg:h-max md:h-4/5 sm:h-4/5">
               {/* Close Button */}
               <button
                 onClick={() => setIsLoginFormOpen(false)}
-                className="absolute top-2 right-6 text-gray-600 hover:text-black text-xl">
+                className="absolute top-2 right-5 text-gray-600 hover:text-black text-2xl"
+              >
                 <i className="fa-solid fa-xmark"></i>
               </button>
               {/* Login Form */}
@@ -111,20 +116,22 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+
       )}
 
       {isSignupFormOpen && (
-        <div className='client_section'>
+        <div className="client_section">
           <div className="fixed inset-0 z-10 flex justify-center items-center bg-gray-700 bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl relative w-96">
+            <div className="bg-white p-6 rounded-lg shadow-xl relative w-11/12 sm:w-96 max-w-md lg:h-max md:h-4/5 sm:h-4/5">
               {/* Close Button */}
               <button
                 onClick={() => setIsSignupFormOpen(false)}
-                className="absolute top-2 right-6 text-gray-600 hover:text-black text-xl">
+                className="absolute top-2 right-5 text-gray-600 hover:text-black text-2xl"
+              >
                 <i className="fa-solid fa-xmark"></i>
               </button>
               {/* Login Form */}
-              <SignupForm toggleLoginForm={toggleLoginForm} />
+              <SignupForm toggleLoginForm={toggleLoginForm} toggleSignupForm={toggleSignupForm} />
             </div>
           </div>
         </div>

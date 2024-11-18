@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Navbar from '../layout/Navbar'
 import HeroSection from './HeroSection'
 import '../../../assets/css/client/home.css'
