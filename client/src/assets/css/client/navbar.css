@@ -107,13 +107,13 @@
 .profile-modal-overlay .modal {
     background-color: var(--bg-color);
     border-radius: 4px;
-    padding: 6px 0px;
+    padding: 3px 0px;
     position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 120px;
+    width: 110px;
     height: fit-content;
 }
 
@@ -132,11 +132,12 @@
 .profile-modal-overlay .modal ul li a {
     text-decoration: none;
     color: var(--black);
-    font-weight: 600;
+    font-size: 14px;
 }
+
 .profile-modal-overlay .modal ul li a i {
-   font-size: 14px;
-   margin-right: 7px;
+    font-size: 14px;
+    margin-right: 7px;
 }
 
 .profile-modal-overlay .modal ul li a:hover {
@@ -189,8 +190,18 @@
         display: flex;
     }
 
+
+}
+
+@media screen and (max-width: 426px) {
+
     .navbar-login-section.notdisplay,
     .navbar-logo-section.notdisplay {
         display: none;
+    }
+
+    .navbar-login-section .profile-section img {
+        width: 35px;
+        height: 35px;
     }
 }

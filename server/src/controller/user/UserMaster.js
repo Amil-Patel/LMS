@@ -76,7 +76,42 @@ const addUserMasterData = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-
+const addStudentMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const createdDate = DateToUnixNumber(new Date(), "America/Toronto");
+    const encryptedPassword = EncryptPassword(req.body.password)
+    const data = {
+        first_name: req.body.first_name,
+        middle_name: null,
+        last_name: req.body.last_name,
+        description: null,
+        gender: req.body.gender,
+        dob: null,
+        address: null,
+        profile: req?.file?.filename || null,
+        contact: parseInt(req.body.contact),
+        whatsapp_number: parseInt(req.body.contact),
+        country: null,
+        email: req.body.email,
+        password: encryptedPassword,
+        facebook: req.body.facebook || null,
+        linkedin: req.body.linkedin || null,
+        role_id: req.body.role_id,
+        status: 1,
+        created_by: req.body.created_by || 0,
+        updated_by: req.body.updated_by || 0,
+        createdAt: createdDate,
+        updatedAt: createdDate,
+    };
+    try {
+        const usermasterdata = await UserMaster.create(data);
+        res.status(200).json(usermasterdata);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message });
+    }
+}
 const updateUserMasterData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -162,4 +197,5 @@ module.exports = {
     addUserMasterData,
     updateUserMasterData,
     deleteUserMaster,
+    addStudentMasterData
 }

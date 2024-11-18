@@ -41,7 +41,6 @@ const Login = () => {
                 if (res.status === 200) {
                     setUserRole(res.data.role);
                     setUserId(res.data.id);
-                    console.log(res.data.token);
                     Cookies.set('token', res.data.token, { expires: 1 });
                     navigate("/admin/dashboard");
                 } else {
