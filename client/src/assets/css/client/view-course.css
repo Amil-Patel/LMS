@@ -12,15 +12,10 @@
   color: var(--heading-color);
 }
 
-/* .course-content {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-} */
 
 .price h3 {
   font-size: 24px;
-  color: #000000;
+  color: var(--black);
   font-weight: bold;
 }
 
@@ -31,7 +26,7 @@
 }
 
 .discount {
-  color: #888;
+  color: var(--light-gray-text);
   font-size: 18px;
 }
 
@@ -62,14 +57,14 @@
 }
 
 .btn-add {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--button-primary-color);
+  color: var(--white);
 }
 
 .btn-buy {
-  background-color: #f9f9fb;
-  color: #007bff;
-  border: 0.5px solid #4880ff;
+  background-color: var(--border-color);
+  color: var(--button-primary-color);
+  border: 0.5px solid var(--button-primary-color);
 }
 
 .tabs {
@@ -77,8 +72,8 @@
   gap: 10px;
   margin: 20px 0px;
   padding: 10px 0;
-  border-top: 1px solid #d9d9d9;
-  border-bottom: 1px solid #d9d9d9;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tabs button {
@@ -87,12 +82,12 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: var(--step-button-background);
 }
 
 .tabs button.active {
-  background-color: #ddd;
-  color: #000;
+  background-color: var(--light-gray-bg-color);
+  color: var(--black);
 }
 
 .long-desc p {
@@ -102,7 +97,7 @@
 }
 
 .prerequisites {
-  border-top: 1px solid #d9d9d9;
+  border-top: 1px solid var(--secondary-btn-color);
   padding: 20px 0px;
 }
 
@@ -113,7 +108,7 @@
 }
 
 .learning-list {
-  border-top: 1px solid #d9d9d9;
+  border-top: 1px solid var(--secondary-btn-color);
   padding: 20px 0px;
 }
 
@@ -129,7 +124,7 @@
 
 .learning-list li:before {
   content: "✔";
-  color: #000;
+  color: var(--black);
   font-weight: bold;
   margin-right: 10px;
   font-size: 14px;
@@ -149,7 +144,7 @@
 
 .course-list li {
   font-size: 14px;
-  color: #555;
+  color: var(--step-button-background);
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -164,13 +159,13 @@
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--secondary-btn-color);
   padding: 15px;
 }
 
 .average-rating h2 {
   font-size: 2rem;
-  color: #000; /* Star color */
+  color: var(--black); /* Star color */
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -182,7 +177,7 @@
 }
 
 .average-rating p {
-  color: #888;
+  color: var(--step-button-background);
   margin-bottom: 0;
 }
 
@@ -193,9 +188,9 @@
 }
 
 .review-item {
-  background-color: #fff;
+  background-color: var(--white);
   padding: 10px 0 5px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--light-gray-bg-color);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -222,7 +217,7 @@
 
 .review-date {
   font-size: 0.85rem;
-  color: #888;
+  color: var(--step-button-background);
 }
 
 .review-rating {
@@ -248,8 +243,8 @@
 }
 
 .header-content .lesson-actions button {
-  background-color: #f5f6fa;
-  color: #007bff;
+  background-color: var(--search-bg);
+  color: var(--button-primary-color);
   padding: 3px 10px;
   border-radius: 25px;
 }
@@ -263,13 +258,15 @@
 }
 
 .header-content .lesson-time span{
-  color: #888;
+  color: var(--step-button-background);
   width: 57px;
   text-align: right;
 }
+
+
 /* faqs */
 .header-content .faqs-header {
-  background-color: #f5f6fa;
+  background-color: var(--search-bg);
   padding: 20px;
 }
 .header-content .faqs-header .module-header {
@@ -279,7 +276,7 @@
 
 .header-content .faqs-header .module {
   margin-bottom: 10px;
-   background-color: white;
+   background-color: var(--white);
 }
 
 .header-content .faqs-header .module p{

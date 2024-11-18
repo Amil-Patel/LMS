@@ -17,7 +17,7 @@ const ViewCourse = () => {
   return (
     <>
       <Navbar />
-      <Breadcrumb />
+      <Breadcrumb />   
       <div className="client_section">
         <div className="main-section p-4 sm:p-8 md:p-12 lg:p-16 gap-4 sm:gap-8 md:gap-12 lg:gap-20 2xl:flex xl:flex lg:flex block">
           <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
@@ -64,7 +64,6 @@ const ViewCourse = () => {
                 <span className="text-gray-800">English</span>
               </span>
             </div>
-
             <div className="metadata mt-4 text-sm">
               <span>
                 <i className="fa-solid fa-clock"></i> Last Update: 11/2024
