@@ -26,32 +26,33 @@ const ViewCourse = () => {
             website for your portfolio! Includes flexbox and CSS Grid
           </p>
           <div className="rating-author">
-            <span className="rating font-bold">
-              4.5 <i className="fa-solid fa-star"></i>
+            <span className="rating">
+              <b>4.5 </b> <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
               <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i> (3,902)
+              <i className="fa-solid fa-star"></i>
+              <span className="text-xs"> (3,902)</span>
             </span>
             <p className="mb-4 mt-2">By Aakib Valuda</p>
           </div>
-          <div className="metadata text-sm gap-x-4 flex">
-            <span>
-              <i className="fa-solid fa-file"></i> 20 Lessons
-            </span>
-            <span>
-              <i className="fa-solid fa-clock"></i> 12.30 Hours
-            </span>
-            <span>
-              <i className="fa-solid fa-graduation-cap"></i> 156 Students
-            </span>
-            <span>
-              <i className="fa-solid fa-signal"></i> Beginner
-            </span>
-            <span>
-              <i className="fa-solid fa-graduation-cap"></i> English
-            </span>
-          </div>
+          <div className="course-icon-section">
+                  <span>
+                    <i className="fa-solid fa-copy"></i> 20 Lessons
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-clock"></i> 12.30 Hours
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-graduation-cap"></i> 156 Students
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-signal"></i> Beginner
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-graduation-cap"></i> English
+                  </span>
+                </div>
           <div className="metadata mt-4 text-sm">
             <span>
               <i className="fa-solid fa-clock"></i> Last Update: 11/2024
