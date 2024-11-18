@@ -1,30 +1,40 @@
-.client_section  h1 {
+.client_section h1 {
     font-size: 44px;
     color: var(--black);
     font-weight: 800;
 }
-.client_section{
+
+.client_section {
     /* font-family: var(--tp-ff-body); */
     font-family: var(--inter-ff);
     /* font-family: var(--jost-ff); */
     /* font-family: var(--exo-ff); */
 }
-.client_section  h3 {
+
+.client_section label {
+    font-family: var(--inter-ff);
+}
+
+.client_section input::placeholder {
+    font-family: var(--inter-ff);
+}
+
+.client_section h3 {
     font-size: 35px;
     font-weight: 700;
-     color: var(--black);
+    color: var(--black);
 }
 
-.client_section  h1,
-.client_section  h2,
-.client_section  h3,
-.client_section  h4,
-.client_section  h5 {
+.client_section h1,
+.client_section h2,
+.client_section h3,
+.client_section h4,
+.client_section h5 {
     line-height: 1.2em;
-     color: var(--black);
+    color: var(--black);
 }
 
-.client_section  p {
+.client_section p {
     font-size: 16px;
     line-height: 1.5em;
     padding-bottom: 15px;
@@ -52,7 +62,7 @@
     font-size: 17px;
 }
 
-.cus-hero-btn1 {
+.cus-hero-btn1,.cus-hero-btn2:hover {
     background-color: var(--button-primary-color);
     color: var(--white);
     padding: 8px 25px;
@@ -60,9 +70,10 @@
     border: none;
     margin-right: 10px;
     border-radius: 20px;
+    border: 1px solid var(--button-primary-color);
 }
 
-.cus-hero-btn2 {
+.cus-hero-btn2,.cus-hero-btn1:hover {
     background-color: transparent;
     color: var(--black);
     cursor: pointer;
@@ -229,12 +240,15 @@
     background-color: var(--secondary-background);
     padding: 3% 8%;
 }
-.cus-course-growth-section p{
+
+.cus-course-growth-section p {
     color: var(--white);
 }
-.cus-course-growth-section h4{
+
+.cus-course-growth-section h4 {
     color: var(--white);
 }
+
 .cus-course-growth-header {
     text-align: center;
 }
@@ -256,7 +270,6 @@
 
 .cus-inner-text .cus-btn1 {
     padding: 3px 25px;
-    font-size: 18px;
     border-radius: 15px;
     border: none;
     color: var(--white);
@@ -297,12 +310,18 @@
 .cus-live-chat-btn button {
     background-color: var(--button-primary-color);
     color: var(--white);
-    border: none;
+    border: 1px solid var(--button-primary-color);
     font-weight: 500;
     font-size: 16px;
     border-radius: 25px;
     cursor: pointer;
     padding: 9px 23px;
+}
+
+.cus-live-chat-btn button:hover {
+    background-color: transparent;
+    border: 1px solid var(--button-primary-color);
+    color: var(--button-primary-color);
 }
 
 .cus-contact-form {
@@ -350,13 +369,19 @@
 
 .cus-submit-btn button {
     background-color: var(--button-primary-color);
+    border: 1px solid var(--button-primary-color);
     color: var(--white);
     font-size: 17px;
     font-weight: 600;
-    border: none;
     cursor: pointer;
     border-radius: 25px;
     padding: 10px 30px;
+}
+
+.cus-submit-btn button:hover {
+    border: 1px solid var(--button-primary-color);
+    color: var(--button-primary-color);
+    background-color: transparent;
 }
 
 /* -------------footer-section-------------- */
@@ -364,13 +389,15 @@
 .cus-footer-section {
     display: flex;
     padding: 0 9%;
+    align-items: center;
     gap: 14%;
     padding-bottom: 15px;
     border-bottom: 2px solid var(--footer-bottom-background);
 }
 
 .cus-footer-section img {
-    width: 18%;
+    width: 14%;
+    height: fit-content;
 }
 
 .cus-footer-inner-text {
@@ -394,8 +421,18 @@
 .cus-footer-icon i {
     background-color: var(--button-primary-color);
     color: var(--white);
-    padding: 15px;
-    border-radius: 12px;
+    width: 56px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cus-footer-icon i:hover {
+    border: 1px solid var(--button-primary-color);
+    color: var(--button-primary-color);
+    background-color: transparent;
 }
 
 .cus-footer-border-bottom-text {
@@ -419,7 +456,7 @@
     .cus-course-overview-section {
         padding: 0 5%;
     }
-
+   
     .cus-mid-overview- {
         width: 60%;
         height: 550px;
@@ -441,7 +478,8 @@
         left: 43%;
         top: 5%;
     }
-    .cus-Enroll-section{
+
+    .cus-Enroll-section {
         padding: 4% 6%;
     }
 
@@ -453,7 +491,8 @@
         gap: 9%;
         padding: 0 5%;
     }
-    .cus-contact-section{
+
+    .cus-contact-section {
         padding: 5%;
     }
 
@@ -673,7 +712,10 @@
     .cus-inner-text {
         text-align: center;
     }
-
+    .cus-footer-icon i {
+        width: 46px;
+        height: 42px;
+    }
     .cus-hero-container,
     .cus-hero-text,
     .cus-hero-image,
@@ -811,7 +853,7 @@
         text-align: center;
     }
 
-    .cus-footer-section img{
+    .cus-footer-section img {
         height: 50%;
         width: 50%;
     }
@@ -836,7 +878,7 @@
         font-size: 12px;
     }
 
-    .cus-policy-text{
+    .cus-policy-text {
         justify-content: center;
     }
 

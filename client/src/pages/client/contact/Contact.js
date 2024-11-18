@@ -1,96 +1,170 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../../assets/css/client/contact.css'
 
 const Contact = () => {
+    const [formState, setFormState] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormState((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Here you would typically send the form data to your backend
+        console.log('Form submitted:', formState);
+        // Reset form after submission
+        setFormState({ name: '', email: '', subject: '', message: '' });
+    };
+
     return (
         <>
-            <section className="contact-us flex gap-5 mb-5" id="main_contact">
-                <div className="lg-5 sm-12" id="right_section">
-                    <div className="form-sec" id="contact_form">
-                        <h4>Contact Us</h4>
-                        <p className="text-xs">
-                            If you require additional information, please complete the form
-                            below and submit it. Our team will be in touch with you promptly.
-                        </p>
+            <div className='client_section'>
+                <div className="min-h-screen flex items-center justify-center py-12 px-4">
+                    <div className="container border-none max-w-4xl mx-auto">
+                        <div className="text-center mb-12">
+                            <h1 className="text-4xl font-bold text-gray-800 mb-4">Contact Us</h1>
+                            <p className="text-gray-600">
+                                We'd love to hear from you. Please fill out the form below or use our contact information to reach out.
+                            </p>
+                        </div>
 
-                        <form className="contact-form" method="post">
-                            <div className="form-field">
-                                <label
-                                    htmlFor="name"
-                                    className="form-label"
-                                    id="form-lable-contact"
-                                >
-                                    Your Name: <small>*</small>
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    id="name"
-                                    placeholder="Enter Your Name"
-                                    className="form-input-contact"
-                                />
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {/* Contact Form */}
+                            <div className="bg-white shadow-lg rounded-lg p-6">
+                                <form onSubmit={handleSubmit} className="space-y-4">
+                                    <div>
+                                        <label
+                                            htmlFor="name"
+                                            className="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            Name
+                                        </label>
+                                        <input
+                                            id="name"
+                                            name="name"
+                                            type="text"
+                                            value={formState.name}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
+                                            placeholder="Your Name"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="email"
+                                            className="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            Email
+                                        </label>
+                                        <input
+                                            id="email"
+                                            name="email"
+                                            type="email"
+                                            value={formState.email}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
+                                            placeholder="your@email.com"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="subject"
+                                            className="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            Subject
+                                        </label>
+                                        <input
+                                            id="subject"
+                                            name="subject"
+                                            type="text"
+                                            value={formState.subject}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
+                                            placeholder="What is this regarding?"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="message"
+                                            className="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            Message
+                                        </label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            value={formState.message}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
+                                            placeholder="Your message here..."
+                                            rows={4}
+                                        />
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="w-full text-white py-2 px-4 rounded-lg"
+                                        style={{ backgroundColor: "#4880FF" }}
+                                    >
+                                        Send Message
+                                    </button>
+                                </form>
                             </div>
-                            <div className="form-field">
-                                <label
-                                    htmlFor="email"
-                                    className="form-label"
-                                    id="form-lable-contact"
-                                >
-                                    Your Email: <small>*</small>
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    placeholder="Enter Your Email"
-                                    className="form-input-contact"
-                                />
+
+                            {/* Contact Information */}
+                            <div className="space-y-8">
+                                <div className="bg-white shadow-lg rounded-lg p-6">
+                                    <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                                        Contact Information
+                                    </h2>
+                                    <ul className="space-y-4">
+                                        <li className="flex items-center">
+                                            <span className="text-white flex items-center justify-center rounded-full mr-4" style={{ width: "40px", height: "40px", backgroundColor: "#4880FF" }}>
+                                                <i className="fa-solid fa-location-dot"></i>
+                                            </span>
+                                            <span>123 Learning Street, Education City, 123 45</span>
+                                        </li>
+                                        <li className="flex items-center">
+                                            <span className="text-white flex items-center justify-center rounded-full mr-4" style={{ width: "40px", height: "40px", backgroundColor: "#4880FF" }}>
+                                                <i className="fa-solid fa-phone"></i>
+                                            </span>
+                                            <span>
+                                                <a href="tel:+17058080907">+17058080907</a>
+                                            </span>
+                                        </li>
+                                        <li className="flex items-center">
+                                            <span className="text-white flex items-center justify-center rounded-full mr-4" style={{ width: "40px", height: "40px", backgroundColor: "#4880FF" }}>
+                                                <i className="fa-solid fa-envelope"></i>
+                                            </span>
+                                            <span>
+                                                <a href="mailto:info@comfortsecurity.ca">info@comfortsecurity.ca</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="bg-white shadow-lg rounded-lg p-6">
+                                    <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                                        Our Location
+                                    </h2>
+                                    <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg flex items-center justify-center">
+                                        <span className="text-gray-500">Map Placeholder</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="form-field">
-                                <label
-                                    htmlFor="number"
-                                    className="form-label"
-                                    id="form-lable-contact"
-                                >
-                                    Mobile No.:
-                                </label>
-                                <input
-                                    type="text"
-                                    name="number"
-                                    id="number"
-                                    placeholder="Enter Your Mobile"
-                                    className="form-input-contact"
-                                />
-                            </div>
-                            <div className="form-field">
-                                <label
-                                    htmlFor="message"
-                                    className="form-label"
-                                    id="form-lable-contact"
-                                >
-                                    Message <small>*</small>
-                                </label>
-                                <textarea
-                                    rows="3"
-                                    name="message"
-                                    id="message"
-                                    placeholder="Type Your Message Here..."
-                                    className="form-input-contact"
-                                ></textarea>
-                            </div>
-                            <div className="form-action mt-4">
-                                <input
-                                    className="btn-primary mt-3"
-                                    type="submit"
-                                />
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-                <div className="lg-5 sm-12">
-                    <p>cdchbds</p>
-                </div>
-            </section>
+            </div>
         </>
     )
 }

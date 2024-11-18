@@ -53,7 +53,7 @@
 }
 
 .course-search-input {
-  border-bottom: 1px solid var(--step-button-background);
+  border-bottom: 2px solid var(--border-color);
   position: relative;
 }
 
