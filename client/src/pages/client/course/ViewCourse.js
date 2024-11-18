@@ -15,8 +15,8 @@ const ViewCourse = () => {
   };
   return (
     <>
-      {/* <Navbar />
-      <Breadcrumb /> */}
+      <Navbar />
+      <Breadcrumb />
       <div className="main-section p-4 sm:p-8 md:p-12 lg:p-16 gap-4 sm:gap-8 md:gap-12 lg:gap-20 2xl:flex xl:flex lg:flex block">
         <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
           <div className="mini-title px-2 py-1 text-xs rounded inline-block mb-4">
@@ -45,7 +45,7 @@ const ViewCourse = () => {
               <i className="fa-solid fa-file"></i>
               <span className="text-gray-800">20 Lessons</span>
             </span>
-            <span className="flex items-center gap-1 text-orange-500">
+            <span className="flex items-center gap-1 text-orange-50  first-line:0">
               <i className="fa-solid fa-clock"></i>
               <span className="text-gray-800">12.30 Hours</span>
             </span>
