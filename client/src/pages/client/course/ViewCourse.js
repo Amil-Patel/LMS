@@ -41,7 +41,6 @@ const ViewCourse = () => {
               </span>
               <p className="mb-4 mt-2">By Aakib Valuda</p>
             </div>
-
             <div className="metadata flex flex-wrap gap-4 text-sm items-center">
               <span className="flex items-center gap-1 text-orange-500">
                 <i className="fa-solid fa-file"></i>

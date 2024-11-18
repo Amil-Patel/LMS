@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../assets/css/client/allcourse.css";
-import { NavLink } from 'react-router-dom'
 
 const AllCourse = () => {
+  const [isGridView, setIsGridView] = useState(false)
   return (
     <>
       <section className="course-hero-container">
@@ -46,180 +46,204 @@ const AllCourse = () => {
                 <i
                   class="fa-brands fa-microsoft"
                   style={{ color: "#FF782D" }}
+                  onClick={() => setIsGridView(!isGridView)}
                 ></i>
                 <i class="fa-solid fa-bars-staggered"></i>
               </div>
             </div>
           </div>
 
-          <div className="course-main-div">
-            <img
-              src={require("../../../assets/image/course-thumbnail.png")}
-              alt="logo"
-            />
-            <div className="course-details">
-              <div className="course-details-header">
-                <h3>
-                  <NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink>
-                </h3>
-                <span>$ 499</span>
-              </div>
-              <p>
-                Learn modern HTML5, CSS3 and web design by building a stunning
-                website for your portfolio! Includes flexbox and CSS Grid
-              </p>
-              <div className="course-icon-section">
-                <span>
-                  <i className="fa-solid fa-copy"></i> 20 Lessons
-                </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> 12.30 Hours
-                </span>
-                <span>
-                  <i className="fa-solid fa-graduation-cap"></i> 156 Students
-                </span>
-                <span>
-                  <i className="fa-solid fa-signal"></i> Beginner
-                </span>
-              </div>
-              <div className="course-rating">
-                4.7 ***** ( 255 )
-              </div>
-              <div className="course-btn">
-                <button className="security-button">
-                  Security
-                </button>
-                <button className="add-to-cart-btn">
-                  Add to cart
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="course-main-div">
-            <img
-              src={require("../../../assets/image/course-thumbnail.png")}
-              alt="logo"
-            />
-            <div className="course-details">
-              <div className="course-details-header">
-                <h3><NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink></h3>
-                <span>$ 499</span>
-              </div>
-              <p>
-                Learn modern HTML5, CSS3 and web design by building a stunning
-                website for your portfolio! Includes flexbox and CSS Grid
-              </p>
-              <div className="course-icon-section">
-                <span>
-                  <i className="fa-solid fa-copy"></i> 20 Lessons
-                </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> 12.30 Hours
-                </span>
-                <span>
-                  <i className="fa-solid fa-graduation-cap"></i> 156 Students
-                </span>
-                <span>
-                  <i className="fa-solid fa-signal"></i> Beginner
-                </span>
-              </div>
-              <div className="course-rating">
-                4.7 ***** ( 255 )
-              </div>
-              <div className="course-btn">
-                <button className="security-button">
-                  Security
-                </button>
-                <button className="add-to-cart-btn">
-                  Add to cart
-                </button>
+          <div className={isGridView ? 'grid grid-cols-3 pt-6 gap-8' : ''}>
+
+            <div className={isGridView ? 'course-main-div-grid' : 'course-main-div'}>
+              <img
+                src={require("../../../assets/image/course-thumbnail.png")}
+                alt="logo"
+              />
+              <div className="course-details">
+                <div className="course-details-header">
+                  <h3>The Web Developer BootCamp 2024</h3>
+                  {!isGridView && <span>$ 499</span>}
+                </div>
+
+                {isGridView && <div className="course-tutor-and-rating">
+                  <div className="course-tutor-name">By Aakib Valuda</div>
+                  <div className="course-rating-grid">4.5
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    </div>
+                </div>}
+
+                {!isGridView && <p>
+                  Learn modern HTML5, CSS3 and web design by building a stunning
+                  website for your portfolio! Includes flexbox and CSS Grid
+                </p>}
+                <div className="course-icon-section">
+                  <span>
+                    <i className="fa-solid fa-copy"></i> 20 Lessons
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-clock"></i> 12.30 Hours
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-graduation-cap"></i> 156 Students
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-signal"></i> Beginner
+                  </span>
+                </div>
+                <div className="course-rating">
+                  4.7 ***** ( 255 )
+                </div>
+                <div className="course-btn">
+                  <button className="security-button">
+                    Security
+                  </button>
+                  {isGridView && <span>$ 499</span>}
+                  <button className="add-to-cart-btn">
+                    Add to cart
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="course-main-div">
-            <img
-              src={require("../../../assets/image/course-thumbnail.png")}
-              alt="logo"
-            />
-            <div className="course-details">
-              <div className="course-details-header">
-                <h3><NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink></h3>
-                <span>$ 499</span>
-              </div>
-              <p>
-                Learn modern HTML5, CSS3 and web design by building a stunning
-                website for your portfolio! Includes flexbox and CSS Grid
-              </p>
-              <div className="course-icon-section">
-                <span>
-                  <i className="fa-solid fa-copy"></i> 20 Lessons
-                </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> 12.30 Hours
-                </span>
-                <span>
-                  <i className="fa-solid fa-graduation-cap"></i> 156 Students
-                </span>
-                <span>
-                  <i className="fa-solid fa-signal"></i> Beginner
-                </span>
-              </div>
-              <div className="course-rating">
-                4.7 ***** ( 255 )
-              </div>
-              <div className="course-btn">
-                <button className="security-button">
-                  Security
-                </button>
-                <button className="add-to-cart-btn">
-                  Add to cart
-                </button>
+
+            <div className={isGridView ? 'course-main-div-grid' : 'course-main-div'}>
+              <img
+                src={require("../../../assets/image/course-thumbnail.png")}
+                alt="logo"
+              />
+              <div className="course-details">
+                <div className="course-details-header">
+                  <h3>The Web Developer BootCamp 2024</h3>
+                  {!isGridView && <span>$ 499</span>}
+
+                </div>
+                {!isGridView && <p>
+                  Learn modern HTML5, CSS3 and web design by building a stunning
+                  website for your portfolio! Includes flexbox and CSS Grid
+                </p>}
+                <div className="course-icon-section">
+                  <span>
+                    <i className="fa-solid fa-copy"></i> 20 Lessons
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-clock"></i> 12.30 Hours
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-graduation-cap"></i> 156 Students
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-signal"></i> Beginner
+                  </span>
+                </div>
+                <div className="course-rating">
+                  4.7 ***** ( 255 )
+                </div>
+                <div className="course-btn">
+                  <button className="security-button">
+                    Security
+                  </button>
+                  {isGridView && <span>$ 499</span>}
+                  <button className="add-to-cart-btn">
+                    Add to cart
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="course-main-div">
-            <img
-              src={require("../../../assets/image/course-thumbnail.png")}
-              alt="logo"
-            />
-            <div className="course-details">
-              <div className="course-details-header">
-                <h3><NavLink to="/view-course">The Web Developer BootCamp 2024</NavLink></h3>
-                <span>$ 499</span>
+            <div className={isGridView ? 'course-main-div-grid' : 'course-main-div'}>
+              <img
+                src={require("../../../assets/image/course-thumbnail.png")}
+                alt="logo"
+              />
+              <div className="course-details">
+                <div className="course-details-header">
+                  <h3>The Web Developer BootCamp 2024</h3>
+                  {!isGridView && <span>$ 499</span>}
+
+                </div>
+                {!isGridView && <p>
+                  Learn modern HTML5, CSS3 and web design by building a stunning
+                  website for your portfolio! Includes flexbox and CSS Grid
+                </p>}
+                <div className="course-icon-section">
+                  <span>
+                    <i className="fa-solid fa-copy"></i> 20 Lessons
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-clock"></i> 12.30 Hours
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-graduation-cap"></i> 156 Students
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-signal"></i> Beginner
+                  </span>
+                </div>
+                <div className="course-rating">
+                  4.7 ***** ( 255 )
+                </div>
+                <div className="course-btn">
+                  <button className="security-button">
+                    Security
+                  </button>
+                  {isGridView && <span>$ 499</span>}
+                  <button className="add-to-cart-btn">
+                    Add to cart
+                  </button>
+                </div>
               </div>
-              <p>
-                Learn modern HTML5, CSS3 and web design by building a stunning
-                website for your portfolio! Includes flexbox and CSS Grid
-              </p>
-              <div className="course-icon-section">
-                <span>
-                  <i className="fa-solid fa-copy"></i> 20 Lessons
-                </span>
-                <span>
-                  <i className="fa-solid fa-clock"></i> 12.30 Hours
-                </span>
-                <span>
-                  <i className="fa-solid fa-graduation-cap"></i> 156 Students
-                </span>
-                <span>
-                  <i className="fa-solid fa-signal"></i> Beginner
-                </span>
-              </div>
-              <div className="course-rating">
-                4.7 ***** ( 255 )
-              </div>
-              <div className="course-btn">
-                <button className="security-button">
-                  Security
-                </button>
-                <button className="add-to-cart-btn">
-                  Add to cart
-                </button>
+            </div>
+            <div className={isGridView ? 'course-main-div-grid' : 'course-main-div'}>
+              <img
+                src={require("../../../assets/image/course-thumbnail.png")}
+                alt="logo"
+              />
+              <div className="course-details">
+                <div className="course-details-header">
+                  <h3>The Web Developer BootCamp 2024</h3>
+                  {!isGridView && <span>$ 499</span>}
+
+                </div>
+                {!isGridView && <p>
+                  Learn modern HTML5, CSS3 and web design by building a stunning
+                  website for your portfolio! Includes flexbox and CSS Grid
+                </p>}
+                <div className="course-icon-section">
+                  <span>
+                    <i className="fa-solid fa-copy"></i> 20 Lessons
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-clock"></i> 12.30 Hours
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-graduation-cap"></i> 156 Students
+                  </span>
+                  <span>
+                    <i className="fa-solid fa-signal"></i> Beginner
+                  </span>
+                </div>
+                <div className="course-rating">
+                  4.7 ***** ( 255 )
+                </div>
+                <div className="course-btn">
+                  <button className="security-button">
+                    Security
+                  </button>
+                  {isGridView && <span>$ 499</span>}
+                  <button className="add-to-cart-btn">
+                    Add to cart
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+
     </>
   );
 };

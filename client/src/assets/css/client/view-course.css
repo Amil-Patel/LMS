@@ -11,8 +11,6 @@
 .metadata {
   color: var(--heading-color);
 }
-
-
 .price h3 {
   font-size: 24px;
   color: var(--black);
@@ -161,6 +159,10 @@
   margin-bottom: 20px;
   background-color: var(--secondary-btn-color);
   padding: 15px;
+}
+
+.rating span{
+  color: var(--course-category-color);
 }
 
 .average-rating h2 {
