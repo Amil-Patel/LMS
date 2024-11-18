@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     middle_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     last_name: {
       type: DataTypes.STRING,
@@ -43,11 +43,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     gender: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     dob: {
       type: DataTypes.INTEGER,
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     profile: {
       type: DataTypes.STRING,
@@ -71,11 +71,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -95,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      defaultValue: 1
     },
     created_by: {
       type: DataTypes.INTEGER,
