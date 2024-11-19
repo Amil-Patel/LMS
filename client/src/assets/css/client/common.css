@@ -45,9 +45,6 @@
 .breadcrumb-item:hover {
     text-decoration: underline;
 }
-.breadcrumb-item.active {
-    text-decoration: underline;
-}
 
 .breadcrumb-divider {
     margin: 0 8px;

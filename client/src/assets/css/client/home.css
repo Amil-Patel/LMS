@@ -62,7 +62,8 @@
     font-size: 17px;
 }
 
-.cus-hero-btn1,.cus-hero-btn2:hover {
+.cus-hero-btn1,
+.cus-hero-btn2:hover {
     background-color: var(--button-primary-color);
     color: var(--white);
     padding: 8px 25px;
@@ -73,7 +74,8 @@
     border: 1px solid var(--button-primary-color);
 }
 
-.cus-hero-btn2,.cus-hero-btn1:hover {
+.cus-hero-btn2,
+.cus-hero-btn1:hover {
     background-color: transparent;
     color: var(--black);
     cursor: pointer;
@@ -456,7 +458,7 @@
     .cus-course-overview-section {
         padding: 0 5%;
     }
-   
+
     .cus-mid-overview- {
         width: 60%;
         height: 550px;
@@ -712,10 +714,12 @@
     .cus-inner-text {
         text-align: center;
     }
+
     .cus-footer-icon i {
         width: 46px;
         height: 42px;
     }
+
     .cus-hero-container,
     .cus-hero-text,
     .cus-hero-image,

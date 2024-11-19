@@ -15,7 +15,7 @@
   --heading-h6-color: #5383fd;
   --icon-color: #757575;
   --dropdown-bg-color: #7698ec;
-  --light-grey-text-color:#555555;
+  --light-grey-text-color: #555555;
 
   --button-primary-color: #4880ff;
   --button-secondary-color: #EEEEEE;
@@ -115,6 +115,9 @@ td {
 /* tbody td {
     padding: 12px 16px;
   } */
+.main .main-top-bar .hero-inner-logo {
+  display: flex;
+}
 
 .table-wrapper {
   overflow-y: scroll;
@@ -150,6 +153,13 @@ textarea {
   resize: vertical;
 }
 
+.col6input::placeholder,
+.col3input::placeholder,
+.col12input::placeholder {
+  font-size: 13px;
+  font-family: var(--tp-ff-body);
+}
+
 .col6input,
 .col3input,
 .col12input {
@@ -158,6 +168,8 @@ textarea {
   border-radius: 5px;
   width: 40%;
   margin-top: 5px;
+  font-size: 13px;
+  font-family: var(--tp-ff-body);
 }
 
 .col8input {
@@ -166,14 +178,33 @@ textarea {
   border-radius: 5px;
   width: 85%;
   margin-top: 10px;
+  font-size: 13px;
+  font-family: var(--tp-ff-body);
+}
+
+.col8input::placeholder {
+  font-size: 13px;
+  font-family: var(--tp-ff-body);
 }
 
 .col3input {
   width: 15%;
+  font-size: 13px;
+}
+
+.col3input::placeholder {
+  font-size: 13px;
+  font-family: var(--tp-ff-body);
 }
 
 .col12input {
   width: 100%;
+  font-family: var(--tp-ff-body);
+}
+
+.col12input::placeholder {
+  font-size: 13px;
+  font-family: var(--tp-ff-body);
 }
 
 ::placeholder,
@@ -221,7 +252,7 @@ button {
   width: 100%;
   padding: 5px 0;
 }
-  
+
 .secondary-btn:hover {
   background-color: var(--button-secondary-color);
 

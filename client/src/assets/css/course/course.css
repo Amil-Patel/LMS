@@ -35,9 +35,11 @@
 
 .module-controls {
   display: flex;
-  /* gap: 10px; */
+  gap: 10px;
 }
-
+.module-controls i{
+  font-size: 13px;
+}
 .module-controls button {
   background: none;
   border: none;
@@ -93,8 +95,11 @@ i.fa-solid.fa-folder-open {
 .lesson-actions {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
-
+.lesson-actions .edit-btn i,.lesson-actions .delete-btn i{
+  font-size: 13px;
+}
 .lesson-actions button {
   background: none;
   cursor: pointer;
@@ -168,7 +173,6 @@ button.add-questions-btn {
 
 button {
   padding: 10px 20px;
-  /* background-color: #4CAF50; */
   color: #565656;
   border: none;
   border-radius: 5px;
