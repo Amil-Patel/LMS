@@ -70,6 +70,12 @@ const Navbar = () => {
         </div>
 
         <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
+          {/*cart section  */}
+          <button className="cart_section">
+            <i class="fa-solid fa-cart-arrow-down"></i>
+            <p>0</p>
+          </button>
+          {/*cart section  */}
           <button className="login_btn" onClick={toggleLoginForm}>Login</button>
           <button className="signup_btn" onClick={toggleSignupForm}>Register</button>
           <div className="profile-section" ref={profileRef} onClick={toggleModal}>

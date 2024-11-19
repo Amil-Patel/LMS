@@ -58,7 +58,7 @@ const CheckOut = () => {
                             <h3>Review your cart</h3>
                             <div className="course-cart-content">
                                 <img
-                                    src={require("../../../assets/image/course-thumbnail.png")}
+                                    src="https://via.placeholder.com/100x90"
                                     alt="logo"
                                 />
                                 <div className="course-cart-details">
@@ -68,21 +68,21 @@ const CheckOut = () => {
                                 </div>
                             </div>
                             <div className="course-payment-section">
-                                <div class="discount-code">
-                                    <i class="fa-solid fa-ticket"></i>
+                                <div className="discount-code">
+                                    <i className="fa-solid fa-ticket"></i>
                                     <input type="text" placeholder="Discount code" />
                                     <button className="course-payment-btn">Apply</button>
                                 </div>
-                                <div class="price-summary">
-                                    <div class="price-row">
+                                <div className="price-summary">
+                                    <div className="price-row">
                                         <span>Subtotal</span>
                                         <span className="subtotal-price">$45.00</span>
                                     </div>
-                                    <div class="price-row">
+                                    <div className="price-row">
                                         <span>Discount</span>
                                         <span className="discount-price">-$10.00</span>
                                     </div>
-                                    <div class="price-row total">
+                                    <div className="price-row total">
                                         <span>Total</span>
                                         <span>$35.00</span>
                                     </div>
@@ -91,7 +91,7 @@ const CheckOut = () => {
                                     <button>Pay Now</button>
                                 </div>
                                 <div className="secure-checkout">
-                                    <span><i class="fa-solid fa-lock"></i>Secure Checkout - SSL Encrypted</span>
+                                    <span><i className="fa-solid fa-lock"></i>Secure Checkout - SSL Encrypted</span>
                                     <p>Ensuring your financial and personal details are secure
                                         during every transaction.</p>
                                 </div>

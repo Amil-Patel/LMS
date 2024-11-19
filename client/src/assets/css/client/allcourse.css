@@ -1,6 +1,6 @@
 .course-hero-container {
   display: flex;
-  padding: 5%;
+  padding: 3% 5% 0.2% 5%;
 }
 
 .course-category {
@@ -12,7 +12,11 @@
 
 .course-section {
   width: 79%;
-  padding: 1.2% 0;
+  padding: 0; /* Remove unnecessary padding */
+  height: calc(100vh - 50px); /* Adjust based on your header or other elements */
+  overflow-y: auto; /* Enable vertical scrolling */
+  position: relative; /* Ensure the header sticks relative to this container */
+  scrollbar-width: none;
 }
 
 .course-category h3 {
@@ -43,6 +47,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky; /* Makes the header stick to the top */
+  top: 0; /* Sticks to the top of its container */
+  background-color: var(--white); /* Ensures the header doesn't show underlying content */
+  z-index: 10; /* Ensures the header stays above other content */
+  padding-top: 1.1rem; /* Adjust padding as necessary */
 }
 
 .course-section-header h1 {
@@ -160,27 +169,76 @@
   color: var(--white);
 }
 
-.course-main-div-grid .course-details {
-    padding: 10px 0 0 0;
+.course-grid-main-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  padding: 2% 0;
 }
 
-.course-main-div-grid .course-icon-section{
-  display: none;
+.course-inner-content{
+  border-bottom: 2px solid var(--secondary-btn-color);
+  padding-bottom: 12px;
 }
 
-.course-main-div-grid .course-details-header h3{
+.course-inner-content h3{
+  font-family: var(--inter-ff);
+  color: var(--black);
+  padding: 10px 0;
+  line-height: 1.4em;
   font-size: 18px;
-  line-height: 1.2em;
+  font-weight: 700;
 }
 
-.course-tutor-and-rating{
+.author-and-rating{
+  display: flex;
+  padding-bottom: 8px;
+  font-family: var(--inter-ff);
+  justify-content: space-between;
+}
+
+.author-and-rating span{
+  font-size: 15px;
+}
+
+.author-and-rating .courses-reviews{
+  font-weight: 700;
+}
+
+.courses-reviews i{
+  font-size: 13px;
+  color: var(--icon-primary-color);
+}
+
+.customer-review-number{
+  font-size: 13px !important;
+  font-weight: 500;
+  color: var(--light-grey-text-color);
+}
+
+.course-content .security-button{
+  font-family: var(--inter-ff);
+  font-weight: 500;
+}
+
+.course-price-and-add-to-cart-btn{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
-  padding: 8px 0;
+  padding: 8px 0 15px 0;
 }
 
-.course-rating-grid i{
-  color: var(--);
+.course-price{
+  font-size: 17px;
+  font-family: var(--inter-ff);
+  font-weight: 700;
+}
+
+.course-price-and-add-to-cart-btn .add-to-cart-btn{
+  font-family: var(--inter-ff);
+  padding: 5px 10px;
+}
+
+.courses-line-bottom-border{
+  border-bottom: 2px solid var(--light-grey-text-color);
 }

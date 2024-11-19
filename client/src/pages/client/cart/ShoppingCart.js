@@ -66,7 +66,7 @@ const ShoppingCart = () => {
     <>
     <Navbar />
     <Breadcrumb />
-    <div className="main-section p-16 gap-20 2xl:flex xl:flex lg:flex block">
+    {/* <div className="client_section main-section p-16 gap-20 2xl:flex xl:flex lg:flex block">
       <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
 
         {courses.map((course) => (
@@ -131,7 +131,7 @@ const ShoppingCart = () => {
           </div>
           <div className="price-row">
             <span>Tax</span>
-            <span>${(totalAmount * 0.1).toFixed(2)}</span> {/* Example 10% tax */}
+            <span>${(totalAmount * 0.1).toFixed(2)}</span>
           </div>
           <div className="price-row payable">
             <span>Payable Amount</span>
@@ -141,6 +141,9 @@ const ShoppingCart = () => {
 
         <button className="btn-checkout">Process To Checkout</button>
       </div>
+    </div> */}
+    <div className='client_section'>
+      <p>sds</p>
     </div>
     </>
   );
