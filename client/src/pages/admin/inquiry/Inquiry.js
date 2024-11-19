@@ -104,67 +104,67 @@ function Inquiry() {
             ))}
           </tbody>
         </table>
-      </div>
 
-      {/* Edit Modal */}
-      {editOpen && currentCourse && (
-        <div className="modal">
-          <div className="modal-container">
-            <h3>Edit Status</h3>
-            <form className="coupon-form">
-              <div className="form-group">
-                <label htmlFor="inquirystatus">
-                  Inquiry Status<span className="required">*</span>
-                </label>
-                <input
-                  id="inquirystatus"
-                  type="radio"
-                  name="fav_language"
-                  value="CSS"
-                  className="cur_sel"
-                />
-                <label htmlFor="right" className="text1">
-                  Succes
-                </label>
+        {/* Edit Modal */}
+        {editOpen && currentCourse && (
+          <div className="modal">
+            <div className="modal-container">
+              <h3>Edit Status</h3>
+              <form className="coupon-form">
+                <div className="form-group">
+                  <label htmlFor="inquirystatus">
+                    Inquiry Status<span className="required">*</span>
+                  </label>
+                  <input
+                    id="inquirystatus"
+                    type="radio"
+                    name="fav_language"
+                    value="CSS"
+                    className="cur_sel"
+                  />
+                  <label htmlFor="right" className="text1">
+                    Succes
+                  </label>
 
-                <input
-                  type="radio"
-                  name="fav_language"
-                  value="CSS"
-                  className="cur_sel"
-                  id="right"
-                />
-                <label htmlFor="pending" className="text1">
-                  Panding
-                </label>
+                  <input
+                    type="radio"
+                    name="fav_language"
+                    value="CSS"
+                    className="cur_sel"
+                    id="right"
+                  />
+                  <label htmlFor="pending" className="text1">
+                    Panding
+                  </label>
 
-                <input
-                  type="radio"
-                  name="fav_language"
-                  value="CSS"
-                  className="cur_sel"
-                  id="pending"
-                />
-                <label htmlFor="reject" className="text1">
-                  Rejectd
-                </label>
-              </div>
+                  <input
+                    type="radio"
+                    name="fav_language"
+                    value="CSS"
+                    className="cur_sel"
+                    id="pending"
+                  />
+                  <label htmlFor="reject" className="text1">
+                    Rejectd
+                  </label>
+                </div>
 
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button type="submit" className="submit-btn">
-                  Submit
-                </button>
-                <button
-                  onClick={handleCloseEditModal}
-                  className="back-to-coupons"
-                >
-                  Close
-                </button>
-              </div>
-            </form>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button type="submit" className="submit-btn">
+                    Submit
+                  </button>
+                  <button
+                    onClick={handleCloseEditModal}
+                    className="back-to-coupons"
+                  >
+                    Close
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }
