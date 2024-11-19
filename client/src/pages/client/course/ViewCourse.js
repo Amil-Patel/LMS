@@ -540,7 +540,7 @@ const ViewCourse = () => {
         </div>
       </div>
       <Footer />
-    </>
+           </>
   );
 };
 
