@@ -1,5 +1,5 @@
 .checkout-section {
-  padding: 5%;
+  padding: 2% 5% 0.2% 5%;
 }
 
 .checkout-section-main-div {
@@ -11,7 +11,7 @@
   font-size: 32px;
   font-weight: 700;
   border-bottom: 2px solid var(--secondary-btn-color);
-  padding-bottom: 18px;
+  padding-bottom: 12px;
   font-family: var(--inter-ff);
   color: var(--black);
 }
@@ -128,7 +128,7 @@
   color: var(--button-primary-color);
   padding: 10px 14px;
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 500;
   font-family: var(--jost-ff);
   background-color: var(--white);
 }
@@ -148,7 +148,7 @@
 }
 
 .checkout-section .total {
-  font-weight: bold;
+  font-weight: 600;
   font-size: 17px;
   color: var(--black);
 }
@@ -156,7 +156,7 @@
 .checkout-section .subtotal-price,
 .checkout-section .discount-price {
   color: var(--black);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .checkout-section .pay-now-btn {

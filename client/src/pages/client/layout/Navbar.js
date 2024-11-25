@@ -108,7 +108,7 @@ const Navbar = () => {
 
       {isLoginFormOpen && (
         <div className="client_section">
-          <div className="fixed inset-0 z-10 flex justify-center items-center bg-gray-700 bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-700 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-xl relative w-11/12 sm:w-96 max-w-md lg:h-max md:h-4/5 sm:h-4/5">
               {/* Close Button */}
               <button
@@ -127,7 +127,7 @@ const Navbar = () => {
 
       {isSignupFormOpen && (
         <div className="client_section">
-          <div className="fixed inset-0 z-10 flex justify-center items-center bg-gray-700 bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-700 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-xl relative w-11/12 sm:w-96 max-w-md lg:h-max md:h-4/5 sm:h-4/5">
               {/* Close Button */}
               <button

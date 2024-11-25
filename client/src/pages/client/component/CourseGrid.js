@@ -13,7 +13,7 @@ const CourseGrid = ({ courseData }) => {
                             <div className="author-and-rating">
                                 <span className="author-name">By {course.author}</span>
                                 <span className="courses-reviews">
-                                    {course.rating}{" "}
+                                    {course.rating}{""}
                                     <i className="fa-solid fa-star"></i>
                                     <i className="fa-solid fa-star"></i>
                                     <i className="fa-solid fa-star"></i>

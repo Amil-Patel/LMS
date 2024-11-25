@@ -1,9 +1,14 @@
 import React from "react";
 import "../../../assets/css/client/checkout.css"
+import Navbar from "../layout/Navbar";
+import Breadcrumb from "../course/Breadcrumb";
+import Footer from "../layout/Footer";
 
 const CheckOut = () => {
     return (
         <>
+            <Navbar />
+            <Breadcrumb />
             <section className="checkout-section">
                 <h2>Checkout</h2>
                 <div className="checkout-section-main-div">
@@ -100,6 +105,7 @@ const CheckOut = () => {
                     </div>
                 </div>
             </section>
+            <Footer />
         </>
     );
 };

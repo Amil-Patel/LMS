@@ -1,59 +1,534 @@
 import React from 'react'
 import Sidebar from '../layout/Sidebar'
+import Navbar from '../../client/layout/Navbar'
+import Footer from '../../client/layout/Footer'
+import Breadcrumb from '../../client/course/Breadcrumb'
+import '../../../assets/css/client/learning.css'
 
 const Learning = () => {
     return (
         <>
+            <Navbar />
+            <Breadcrumb />
             <div className='main_stu_dashboard'>
                 <Sidebar />
                 <div className='content'>
                     <h1>My Learning</h1>
-                    <div className='learning-cards'>
-                        <div className='card-image'>
-                            <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
-                        </div>
-                        <div className='card-content mb-0'>
-                            <div className='flex justify-between'>
-                                <h3 className='font-semibold text-black'>The Web Developer BootCamp 2024</h3>
-                                <button className='card-view-btn'>View</button>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
                             </div>
-                            <p className='mb-1 tracking-wide'>By Ahmad Padarwala</p>
-                            <div className="metadata">
-                                <span>
-                                    <i className="fa-solid fa-file"></i> 20 Lessons
-                                </span>
-                                <span>
-                                    <i className="fa-solid fa-file"></i> 20 Lessons
-                                </span>
-                                <span>
-                                    <i className="fa-solid fa-file"></i> 20 Lessons
-                                </span>
-                                <span>
-                                    <i className="fa-solid fa-file"></i> 20 Lessons
-                                </span>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
                             </div>
-                            <div className="h-1.5 w-full bg-neutral-200 dark:bg-neutral-600">
-                                <div className="h-1.5 bg-sky-600" style={{ width: "50%" }}></div>
-                            </div>
-                            <div className='flex justify-between'>
-                                <div>
-                                    <p>50% Completed</p>
-                                </div>
-                                <div>
-                                    <div>
-                                        <i className="fa-regular fa-star"></i>
-                                        <i className="fa-regular fa-star"></i>
-                                        <i className="fa-regular fa-star"></i>
-                                        <i className="fa-regular fa-star"></i>
-                                        <i className="fa-regular fa-star"></i>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
                                     </div>
-                                    <p>Leave YOur Review</p>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="course-main-div">
+                        <img src={require("../../../assets/image/course-thumbnail.png")} alt="learning" />
+                        <div className="course-details">
+                            <div className="course-details-header pb-1">
+                                <h3>The Web Developer BootCamp 2024</h3>
+                                <button class="py-0.5 font-medium px-6 border border-solid text-blue-700 text-base"> View </button>
+                            </div>
+                            <span className="author-name text-sm">By Aakib Valuda</span>
+                            <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
+                                <span><i className="fa-solid fa-clock"></i> 12.30 Hours</span>
+                                <span><i className="fa-solid fa-graduation-cap"></i> 156 Students</span>
+                                <span><i className="fa-solid fa-signal"></i> Beginner</span></div>
+                            <div class="w-full bg-gray-200 h-2">
+                                <div class="bg-blue-600 h-2" style={{ width: "80%" }}></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-sm font-normal  text-black">80% Complete</span>
+                                <div class="text-sm font-medium text-black">
+                                    <div className='flex justify-end mb-1 text-orange-500 text-xs'>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-solid fa-star'></i>
+                                        <i className='fa-regular fa-star'></i>
+                                    </div>
+                                    <span className='text-sm tracking-wide font-normal'>
+                                        Leave Your Review
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

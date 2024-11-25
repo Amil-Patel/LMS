@@ -1,127 +1,122 @@
+.shopping-cart-hero-container {
+  font-family: var(--inter-ff);
+  display: flex;
+  justify-content: space-between;
+}
 
-  .cart {
-    padding: 15px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .price-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .discount {
-    text-decoration: line-through;
-    color: #999;
-    margin-left: 8px;
-  }
-  
-  .discount-badge {
-    background-color: #D9D9D9;
-    padding: 4px 8px;
-    border-radius: 4px;
+.shopping-cart-course-content img {
+  width: 250px;
+  height: 150px;
+  margin-right: 15px;
+}
 
-    font-size: 12px;
-    margin-left: 5px;
-  }
-  
-  .cart-buttons button {
-    margin-top: 10px;
-  }
-  
-  .btn-remove {
-    background-color: #007bff;
-    color: white;
-    border: none;
+.shopping-cart-course-content h3 {
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.shopping-cart-course-price .course-price{
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.discount-price span:nth-child(1){
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--secondary-btn-color);
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+
+.shopping-cart-course-price{
+  text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.discount-price span:nth-child(2){
+  font-size: 14px;
+  color: var(--light-gray-text);
+  text-decoration: line-through;
+}
+
+.shopping-cart-course-price .remove-btn{
+  font-weight: 600;
+    background-color: var(--button-primary-color);
+    color: var(--white);
     font-size: 14px;
-    padding: 3px 10px;
-    margin-top: 20px;
-    cursor: pointer;
-  }
-  
+    padding: 4px 16px;
+}
 
-  .cart-img{
-    width: 195px;
-  }
+.shopping-cart-course-order-summary{
+  border: 1px solid var(--border-color);
+  margin-top: 1.25rem;
+  padding: 3% 2.5%;
+  height: fit-content;
+}
 
-  .header-content .content h2{
-    font-size: 16px;
-  }
+.order-summary h4{
+  font-size: 18px;
+  color: var(--black);
+  font-weight: 700;
+}
+
+.order-summary span{
+  font-size: 15px;
+}
+
+.promocode-apply-section{
+  padding-top: 6%;
+}
+
+.promocode-apply-section label{
+  font-family: var(--inter-ff);
+  font-size: 16px;
+}
+
+.promocode-input{
+  border: 1px solid var(--border-color);
+}
+
+.promocode-input input{
+  padding: 10px 15px;
+}
+
+.promocode-input input::placeholder {
+  font-family: var(--jost-ff);
+}
+
+.promocode-input .apply-btn{
+  background-color: var(--button-primary-color);
+  color: var(--white);
+  font-weight: 500;
+  padding: 0 40px ;
+  border-radius: 0;
+}
+
+.amount-details .detail-row{
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  line-height: 2em;
+}
+
+.detail-row.liner{
+  border-bottom: 2px dotted var(--border-color);
+}
+
+.promocode-apply-section .process-to-checkout-btn{
+  background-color: var(--button-primary-color);
+  color: var(--white);
+  width: 100%;
+  padding: 12px;
+  font-weight: 600;
+  border-radius: 0;
+}
 
 
 
-  .order-summary {
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    background-color: #fff;
-  }
-  
-  .order-summary h4 {
-    /* font-size: 18px; */
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .promo-code {
-    margin-bottom: 15px;
-  }
-  
-  .promo-code label {
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  .promo-input {
-    display: flex;
-  }
-  
-  .promo-input input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 0;
-  }
-  
-  .promo-input button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 8px 16px;
-    border: none;
-    cursor: pointer;
-    border-radius:  0;
-  }
-  
-  .price-breakdown {
-    padding-top: 15px;
-    margin-top: 15px;
-  }
-  
-  .price-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 0;
-    font-size: 14px;
-  }
-  
-  .price-row .discount s {
-    color: #999;
-  }
-  
-  .payable {
-    font-weight: bold;
-  }
-  
-  .btn-checkout {
-    width: 100%;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 15px;
-  }
-  
+
+

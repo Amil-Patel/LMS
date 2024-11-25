@@ -28,7 +28,7 @@
 
 .navbar-pages ul li {
     font-size: 17px;
-    padding: 18px 16px;
+    padding: 16px;
     color: var(--black);
     font-weight: 600;
 }
@@ -154,9 +154,8 @@
     color: var(--white);
     background-color: var(--icon-primary-color);
     border-radius: 50%;
-    margin-bottom: 0;
-    top: -7px;
-    right: 5px;
+    top: -6px;
+    right: 7px;
     font-size:10px;
     font-weight: 700;
     height: 16px;
