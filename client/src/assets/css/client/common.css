@@ -62,5 +62,16 @@
 }
 
 
+.content .learning-cards .card-view-btn:hover {
+    background-color: var(--button-primary-color);
+    color: var(--white);
+}
 
 
+.course-video-container{
+    font-family: var(--inter-ff);
+}
+
+.video-navbar{
+    font-family: var(--inter-ff);
+}

@@ -162,7 +162,11 @@ const ViewCourse = () => {
                         className="check-btn"
                         onClick={() => toggleContent(0)}
                       >
-                        <i className="fa-solid fa-angle-down"></i>
+                        <i
+                    className={`fa-solid ${
+                      activeModuleIndex === 0 ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
                       </button>
                     </div>
                   </div>
@@ -232,7 +236,11 @@ const ViewCourse = () => {
                         className="check-btn"
                         onClick={() => toggleContent(1)}
                       >
-                        <i className="fa-solid fa-angle-down"></i>
+                        <i
+                    className={`fa-solid ${
+                      activeModuleIndex === 1 ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
                       </button>
                     </div>
                   </div>
@@ -307,7 +315,11 @@ const ViewCourse = () => {
                           className="check-btn"
                           onClick={() => toggleFaqsContent(0)}
                         >
-                          <i className="fa-solid fa-angle-down"></i>
+                          <i
+                    className={`fa-solid ${
+                      activeFaqsIndex === 0 ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
                         </button>
                       </div>
                     </div>
@@ -333,7 +345,11 @@ const ViewCourse = () => {
                           className="check-btn"
                           onClick={() => toggleFaqsContent(1)}
                         >
-                          <i className="fa-solid fa-angle-down"></i>
+                          <i
+                    className={`fa-solid ${
+                      activeFaqsIndex === 1 ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
                         </button>
                       </div>
                     </div>
@@ -359,7 +375,11 @@ const ViewCourse = () => {
                           className="check-btn"
                           onClick={() => toggleFaqsContent(2)}
                         >
-                          <i className="fa-solid fa-angle-down"></i>
+                         <i
+                    className={`fa-solid ${
+                      activeFaqsIndex === 2 ? "fa-angle-up" : "fa-angle-down"
+                    }`}
+                  ></i>
                         </button>
                       </div>
                     </div>
@@ -378,7 +398,6 @@ const ViewCourse = () => {
                 </div>
               </>
             )}
-
             {activeTab === "reviews" && (
               <div className="reviews-section">
                 <div className="average-rating">
@@ -536,6 +555,7 @@ const ViewCourse = () => {
               </ul>
             </div>
           </div>
+          
         </div>
       </div>
       <Footer />
