@@ -22,7 +22,6 @@ import CourseRoute from "./routes/client/CourseRoute";
 import ShoppingCartRoute from "./routes/client/ShoppingCartRoute";
 import LearningRoute from "./routes/stu_dashboard/LearningRoute";
 import ContactRoute from "./routes/client/ContactRoute";
-import CourseVideo from "./pages/client/course/CourseVideo";
 const App = () => {
   return (
     <>
@@ -50,7 +49,6 @@ const App = () => {
       <ShoppingCartRoute />
       <LearningRoute />
       <ContactRoute />
-      <CourseVideo />
     </>
   );
 };
