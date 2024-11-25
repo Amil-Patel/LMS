@@ -162,3 +162,12 @@
     background-color: var(--button-primary-color);
     color: var(--white);
 }
+
+
+.course-video-container{
+    font-family: var(--inter-ff);
+}
+
+.video-navbar{
+    font-family: var(--inter-ff);
+}
