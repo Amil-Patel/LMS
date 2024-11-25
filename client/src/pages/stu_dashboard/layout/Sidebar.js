@@ -4,44 +4,28 @@ const Sidebar = () => {
     return (
         <>
             <aside className="stu-main-sidebar">
-                <div className="profile-section">
-                    <img src={require("../../../assets/image/profile-logo.png")} alt="profile" />
-                    <h3>Joseph Cena</h3>
+                <div className="sildebar-profile-section">
+                    <img src={require("../../../assets/image/course-thumbnail.png")} alt="profile" />
+                    <h3 className='pt-3'>Joseph Cena</h3>
                     <p>josephcena@gmail.com</p>
                 </div>
-                <div className='stu-sidebar-menu'>
+                <div className='stu-sidebar-menu py-7'>
                     <ul>
-                        <li className='active'>
-                            <i className="fa-solid fa-gauge"></i>
-                            <a href="#">Dashboard</a>
+                        <li>
+                            <a href="#" className=''><i className="fa-solid fa-gauge-high"></i>Dashboard </a>
                         </li>
                         <li>
-                        <i class="fa-solid fa-graduation-cap"></i>
-                            <a href="#">My Courses</a>
+                            <a href="#"><i className="fa-solid fa-border-all"></i>Courses </a>
                         </li>
                         <li>
-                            <i className="fa-solid fa-book"></i>
-                            <a href="#">Assignments</a>
+                            <a href="#" className='active'><i className="fa-regular fa-heart"></i>Favorites </a>
                         </li>
                         <li>
-                        <i class="fa-solid fa-file"></i>
-                            <a href="#">Grades & Results</a>
+                            <a href="#"><i className="fa-regular fa-folder-open"></i>Documents </a>
                         </li>
+                        <div className='mt-6 border-t-2 mb-3'></div>
                         <li>
-                            <i className="fa-solid fa-clock"></i>
-                            <a href="#">Schedule/Timetable</a>
-                        </li>
-                        <li>
-                            <i className="fa-solid fa-message"></i>
-                            <a href="#">Messages/Inbox</a>
-                        </li>
-                        <li>
-                           <i class="fa-solid fa-bullhorn"></i>
-                            <a href="#">Announcements</a>
-                        </li>
-                        <li>
-                            <i className="fa-solid fa-award"></i>
-                            <a href="#">Certificate</a>
+                            <a href="#"><i className="fa-solid fa-power-off"></i>Logout </a>
                         </li>
                     </ul>
                 </div>

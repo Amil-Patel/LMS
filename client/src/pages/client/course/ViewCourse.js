@@ -17,7 +17,7 @@ const ViewCourse = () => {
   return (
     <>
       <Navbar />
-      <Breadcrumb />   
+      <Breadcrumb />
       <div className="client_section">
         <div className="main-section p-4 sm:p-8 md:p-12 lg:p-16 gap-4 sm:gap-8 md:gap-12 lg:gap-20 2xl:flex xl:flex lg:flex block">
           <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
@@ -27,45 +27,43 @@ const ViewCourse = () => {
             <h2 className="font-bold mb-2">
               The Complete 2020 Full Stack Web Developer Course
             </h2>
-            <p className="mb-4">
+            <p>
               Learn modern HTML5, CSS3 and web design by building a stunning
               website for your portfolio! Includes flexbox and CSS Grid
             </p>
             <div className="rating-author">
-              <span className="rating font-bold">
-                4.5 <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i> (3,902)
+              <span className="courses-reviews">
+                {" "}
+                4.5
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <span className="customer-review-number"> (3,902) </span>
               </span>
-              <p className="mb-4 mt-2">By Aakib Valuda</p>
+              <p className="mt-2">By Aakib Valuda</p>
             </div>
-            <div className="metadata flex flex-wrap gap-4 text-sm items-center">
-              <span className="flex items-center gap-1 text-orange-500">
-                <i className="fa-solid fa-file"></i>
-                <span className="text-gray-800">20 Lessons</span>
-              </span>
-              <span className="flex items-center gap-1 text-orange-500">
-                <i className="fa-solid fa-clock"></i>
-                <span className="text-gray-800">12.30 Hours</span>
-              </span>
-              <span className="flex items-center gap-1 text-orange-500">
-                <i className="fa-solid fa-graduation-cap"></i>
-                <span className="text-gray-800">156 Students</span>
-              </span>
-              <span className="flex items-center gap-1 text-orange-500">
-                <i className="fa-solid fa-signal"></i>
-                <span className="text-gray-800">Beginner</span>
-              </span>
-              <span className="flex items-center gap-1 text-orange-500">
-                <i className="fa-solid fa-graduation-cap"></i>
-                <span className="text-gray-800">English</span>
-              </span>
-            </div>
-            <div className="metadata mt-4 text-sm">
+            <div className="course-icon-section">
               <span>
-                <i className="fa-solid fa-clock"></i> Last Update: 11/2024
+                <i class="fa-solid fa-copy"></i> 20 Lessons
+              </span>
+              <span>
+                <i class="fa-solid fa-clock"></i> 12.30 Hours
+              </span>
+              <span>
+                <i class="fa-solid fa-graduation-cap"></i> 156 Students
+              </span>
+              <span>
+                <i class="fa-solid fa-signal"></i> Beginner
+              </span>
+              <span>
+                <i class="fa-solid fa-graduation-cap"></i> English
+              </span>
+            </div>
+            <div className="course-icon-section mt-2">
+              <span>
+                <i className="fa-solid fa-clock"></i> Last Update: 11/2024{" "}
               </span>
             </div>
 
@@ -101,19 +99,19 @@ const ViewCourse = () => {
                 <div className="long-desc">
                   <p>
                     The minimum length of in-class time for the basic security
-                    guard training program is no less than 40 hours with Emergency
-                    Level First Aid Certification included or no less than 33.5
-                    hours with Emergency Level First Aid Certification not
-                    included. The following table suggests the duration for each
-                    training section and includes both in-class and outside class
-                    hours. Outside class hours refer to pre-reading only; all
-                    other training methods must take place in-class. These hours
-                    are estimates and may need to be adjusted based on student
-                    learning abilities/trainer preference. The trainer must
-                    determine the optimal number of hours for each section of
-                    his/her program design, but the total must be no less than 40
-                    or 33.5 hours with Emergency Level First Aid Certification not
-                    included.
+                    guard training program is no less than 40 hours with
+                    Emergency Level First Aid Certification included or no less
+                    than 33.5 hours with Emergency Level First Aid Certification
+                    not included. The following table suggests the duration for
+                    each training section and includes both in-class and outside
+                    class hours. Outside class hours refer to pre-reading only;
+                    all other training methods must take place in-class. These
+                    hours are estimates and may need to be adjusted based on
+                    student learning abilities/trainer preference. The trainer
+                    must determine the optimal number of hours for each section
+                    of his/her program design, but the total must be no less
+                    than 40 or 33.5 hours with Emergency Level First Aid
+                    Certification not included.
                   </p>
                 </div>
                 <div className="learning-list">
@@ -328,11 +326,11 @@ const ViewCourse = () => {
                     {activeFaqsIndex === 0 && (
                       <>
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                          Cras facilisis faucibus odio arcu duis dui, adipiscing
-                          facilisis. Urna, donec turpis egestas volutpat. Quisque
-                          nec non amet quis. Varius tellus justo odio parturient
-                          mauris curabitur lorem in.
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit. Cras facilisis faucibus odio arcu duis dui,
+                          adipiscing facilisis. Urna, donec turpis egestas
+                          volutpat. Quisque nec non amet quis. Varius tellus
+                          justo odio parturient mauris curabitur lorem in.
                         </p>
                       </>
                     )}
@@ -358,11 +356,11 @@ const ViewCourse = () => {
                     {activeFaqsIndex === 1 && (
                       <>
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                          Cras facilisis faucibus odio arcu duis dui, adipiscing
-                          facilisis. Urna, donec turpis egestas volutpat. Quisque
-                          nec non amet quis. Varius tellus justo odio parturient
-                          mauris curabitur lorem in.
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit. Cras facilisis faucibus odio arcu duis dui,
+                          adipiscing facilisis. Urna, donec turpis egestas
+                          volutpat. Quisque nec non amet quis. Varius tellus
+                          justo odio parturient mauris curabitur lorem in.
                         </p>
                       </>
                     )}
@@ -388,11 +386,11 @@ const ViewCourse = () => {
                     {activeFaqsIndex === 2 && (
                       <>
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                          Cras facilisis faucibus odio arcu duis dui, adipiscing
-                          facilisis. Urna, donec turpis egestas volutpat. Quisque
-                          nec non amet quis. Varius tellus justo odio parturient
-                          mauris curabitur lorem in.
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit. Cras facilisis faucibus odio arcu duis dui,
+                          adipiscing facilisis. Urna, donec turpis egestas
+                          volutpat. Quisque nec non amet quis. Varius tellus
+                          justo odio parturient mauris curabitur lorem in.
                         </p>
                       </>
                     )}
@@ -443,9 +441,9 @@ const ViewCourse = () => {
                           </div>
                         </div>
                         <p className="review-text">
-                          I love the way the instructor goes about the course. So
-                          easy to follow, even though a little bit challenging as
-                          expected.
+                          I love the way the instructor goes about the course.
+                          So easy to follow, even though a little bit
+                          challenging as expected.
                         </p>
                       </div>
                     ))}
@@ -541,8 +539,8 @@ const ViewCourse = () => {
                   <i className="fa-regular fa-file"></i> 3 articles
                 </li>
                 <li>
-                  <i className="fa-solid fa-file-arrow-down"></i> 249 downloadable
-                  resources
+                  <i className="fa-solid fa-file-arrow-down"></i> 249
+                  downloadable resources
                 </li>
                 <li>
                   <i className="fa-solid fa-mobile"></i> Access on mobile and TV
@@ -551,7 +549,8 @@ const ViewCourse = () => {
                   <i className="fa-solid fa-infinity"></i> Full lifetime access
                 </li>
                 <li>
-                  <i className="fa-solid fa-trophy"></i> Certificate of completion
+                  <i className="fa-solid fa-trophy"></i> Certificate of
+                  completion
                 </li>
               </ul>
             </div>
@@ -560,7 +559,7 @@ const ViewCourse = () => {
         </div>
       </div>
       <Footer />
-        </>
+    </>
   );
 };
 

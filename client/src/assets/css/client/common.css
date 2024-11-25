@@ -57,106 +57,10 @@
     font-size: 14px;
   }
 
-/* student dashboard */
-.main_stu_dashboard {
-    display: flex;
-    padding: 60px 75px;
+.main_stu_dashboard .course-details{
+    width: -webkit-fill-available;
 }
 
-.main_stu_dashboard .stu-main-sidebar {
-    background-color: var(--bg-color);
-    padding: 20px 20px;
-    width: 25%;
-    font-family: var(--inter-ff);
-}
-
-.stu-main-sidebar .profile-section {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-.stu-main-sidebar .profile-section img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 6px;
-}
-
-.stu-main-sidebar .profile-section h3 {
-    color: var(--black);
-    font-weight: 600;
-}
-
-.stu-sidebar-menu {
-    margin-top: 40px;
-}
-
-.stu-sidebar-menu ul li {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    margin-bottom: 10px;
-    padding: 12px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.stu-sidebar-menu ul li i {
-    font-size: 14px;
-}
-
-.stu-sidebar-menu ul li a {
-    text-decoration: none;
-    color: var(--black);
-    font-size: 14px;
-    padding-left: 10px;
-}
-
-.stu-sidebar-menu ul li.active,
-.stu-sidebar-menu ul li:hover {
-    background-color: var(--button-primary-color);
-}
-
-.stu-sidebar-menu ul li.active a,
-.stu-sidebar-menu ul li.active i,
-.stu-sidebar-menu ul li:hover a,
-.stu-sidebar-menu ul li:hover i {
-    color: var(--white);
-}
-
-.main_stu_dashboard .content {
-    width: 75%;
-    padding-left: 40px;
-    font-family: var(--inter-ff);
-}
-
-.main_stu_dashboard .content h1 {
-    font-weight: 600;
-    font-size: 23px;
-    color: var(--black);
-    margin-bottom: 10px;
-}
-
-.main_stu_dashboard .content .learning-cards {
-    display: flex;
-    gap: 20px;
-    border-bottom: 2px solid var(--bg-color);
-}
-
-.content .learning-cards .card-image {
-    width: 240px;
-}
-
-.content .learning-cards .card-view-btn {
-    border: 1.4px solid var(--button-primary-color);
-    background-color: transparent;
-    color: var(--button-primary-color);
-    padding: 1px 14px;
-    font-size: 13px;
-    border-radius: 4px;
-}
 
 .content .learning-cards .card-view-btn:hover {
     background-color: var(--button-primary-color);
