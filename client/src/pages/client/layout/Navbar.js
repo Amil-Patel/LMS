@@ -3,13 +3,15 @@ import '../../../assets/css/client/navbar.css';
 import { NavLink } from 'react-router-dom';
 import '../../../assets/css/client/common.css';
 import LoginForm from './LoginForm';
+import { RoleContext } from '../../admin/layout/RoleContext';
 import SignupForm from './SignupForm';
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
-
+  const savedToken = Cookies.get('student-token');
   const profileRef = useRef(null);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -45,6 +47,11 @@ const Navbar = () => {
     setIsMenuOpen(false);
     setIsLoginFormOpen(false); // Close login form when opening signup form
   };
+
+  //log out
+  const handleLogoutClick = () => {
+    Cookies.remove('student-token');
+  };
   return (
     <>
       <nav className='navbar-section'>
@@ -76,11 +83,17 @@ const Navbar = () => {
             <p>0</p>
           </button>
           {/*cart section  */}
-          <button className="login_btn" onClick={toggleLoginForm}>Login</button>
-          <button className="signup_btn" onClick={toggleSignupForm}>Register</button>
-          <div className="profile-section" ref={profileRef} onClick={toggleModal}>
-            <img src={require("../../../assets/image/user_img.jpeg")} alt="Profile" />
-          </div>
+          {!savedToken && (
+            <>
+              <button className="login_btn" onClick={toggleLoginForm}>Login</button>
+              <button className="signup_btn" onClick={toggleSignupForm}>Register</button>
+            </>
+          )}
+          {savedToken && (
+            <div className="profile-section" ref={profileRef} onClick={toggleModal}>
+              <img src={require("../../../assets/image/user_img.jpeg")} alt="Profile" />
+            </div>
+          )}
         </div>
         {/* Hamburger Icon */}
         <div className="hamburger" onClick={toggleMenu}>
@@ -97,7 +110,7 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/signout">
+                <NavLink onClick={handleLogoutClick}>
                   <i className="fa-solid fa-arrow-right-from-bracket"></i>Sign Out
                 </NavLink>
               </li>
@@ -108,7 +121,7 @@ const Navbar = () => {
 
       {isLoginFormOpen && (
         <div className="client_section">
-          <div className="fixed inset-0 z-10 flex justify-center items-center bg-gray-700 bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-700 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-xl relative w-11/12 sm:w-96 max-w-md lg:h-max md:h-4/5 sm:h-4/5">
               {/* Close Button */}
               <button
@@ -118,7 +131,9 @@ const Navbar = () => {
                 <i className="fa-solid fa-xmark"></i>
               </button>
               {/* Login Form */}
-              <LoginForm toggleSignupForm={toggleSignupForm} />
+              <RoleContext>
+                <LoginForm toggleSignupForm={toggleSignupForm} toggleLoginForm={toggleLoginForm} />
+              </RoleContext>
             </div>
           </div>
         </div>
@@ -127,7 +142,7 @@ const Navbar = () => {
 
       {isSignupFormOpen && (
         <div className="client_section">
-          <div className="fixed inset-0 z-10 flex justify-center items-center bg-gray-700 bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-700 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-xl relative w-11/12 sm:w-96 max-w-md lg:h-max md:h-4/5 sm:h-4/5">
               {/* Close Button */}
               <button
@@ -136,7 +151,7 @@ const Navbar = () => {
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
-              {/* Login Form */}
+              {/* Signup Form */}
               <SignupForm toggleLoginForm={toggleLoginForm} toggleSignupForm={toggleSignupForm} />
             </div>
           </div>

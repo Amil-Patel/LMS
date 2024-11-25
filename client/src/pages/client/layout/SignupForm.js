@@ -1,11 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axiosInstance from "../utils/axiosInstance";
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { userRolesContext } from '../../admin/layout/RoleContext';
+import { notifySuccess, notifyWarning } from '../../admin/layout/ToastMessage';
 
 const port = process.env.REACT_APP_URL;
-const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
+const SignupForm = ({ toggleLoginForm }) => {
     const [userData, setUserData] = useState({
         first_name: '',
         last_name: '',
@@ -13,8 +11,45 @@ const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
         password: '',
         role_id: "student"
     });
-    const navigate = useNavigate();
-    const { setUserRole, setUserId } = useContext(userRolesContext);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Validation function
+    const validate = () => {
+        if (!userData.first_name.trim()) {
+            notifyWarning("First name is required.");
+            return false;
+        }
+        if (!userData.last_name.trim()) {
+            notifyWarning("Last name is required.");
+            return false;
+        }
+        if (!userData.email.trim()) {
+            notifyWarning("Email is required.");
+            return false;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
+            notifyWarning("Enter a valid email address.");
+            return false;
+        }
+        if (!userData.password) {
+            notifyWarning("Password is required.");
+            return false;
+        }
+        if (userData.password.length < 8) {
+            notifyWarning("Password must be at least 8 characters.");
+            return false;
+        }
+        if (!/[A-Z]/.test(userData.password)) {
+            notifyWarning("Password must contain at least one uppercase letter.");
+            return false;
+        }
+        if (!/\d/.test(userData.password)) {
+            notifyWarning("Password must contain at least one number.");
+            return false;
+        }
+        return true; // All validations passed
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUserData((prev) => ({
@@ -22,19 +57,21 @@ const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
             [name]: value,
         }));
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validate()) return;
+
+        setIsSubmitting(true);
         try {
-            const res = axiosInstance.post(`${port}/addingStudentMaster`, userData);
-            toggleSignupForm();
+            const res = await axiosInstance.post(`${port}/addingStudentMaster`, userData);
             if (res.status === 200) {
-                setUserRole(res.data.role);  // Set role in context
-                setUserId(res.data.id);  // Set user ID in context
-                Cookies.set('token', res.data.token, { expires: 1 });
-                navigate("/admin/dashboard");
+                notifySuccess("Account created successfully. Please log in to continue.");
+                toggleLoginForm();
             }
         } catch (error) {
             console.error("Error signing up:", error);
+        } finally {
+            setIsSubmitting(false);
         }
     }
     return (
@@ -52,7 +89,6 @@ const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
                         placeholder="Enter your First Name"
                         value={userData.first_name}
                         onChange={handleChange}
-                        required
                     />
                 </div>
 
@@ -67,7 +103,6 @@ const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
                         placeholder="Enter your Last Name"
                         value={userData.last_name}
                         onChange={handleChange}
-                        required
                     />
                 </div>
                 <div className="mb-2">
@@ -80,7 +115,6 @@ const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
                         placeholder="Enter your Email"
                         value={userData.email}
                         onChange={handleChange}
-                        required
                     />
                 </div>
                 <div className="mb-4">
@@ -93,23 +127,22 @@ const SignupForm = ({ toggleLoginForm, toggleSignupForm }) => {
                         placeholder="Enter your password"
                         value={userData.password}
                         onChange={handleChange}
-                        required
                     />
                 </div>
 
                 {/* Submit Button */}
                 <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
                 >
-                    Sign Up
+                    {isSubmitting ? "Submitting..." : "Sign Up"}
                 </button>
             </form>
 
             {/* Alternative Actions */}
             <div className="mt-3 text-center">
                 <p className="text-sm text-gray-600">already have an account? <span onClick={toggleLoginForm} className="text-blue-500 cursor-pointer hover:underline">Login</span></p>
-                <p className="text-sm text-gray-600"><a href="/forgot-password" className="text-blue-500 hover:underline">Forgot Password?</a></p>
             </div>
         </div>
     );

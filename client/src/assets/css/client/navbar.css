@@ -27,7 +27,7 @@
 }
 
 .navbar-pages ul li {
-    font-size: 17px;
+    font-size: 15px;
     padding: 18px 16px;
     color: var(--black);
     font-weight: 600;
@@ -198,6 +198,7 @@
 
     .navbar-pages.active {
         display: flex;
+        padding-bottom: 5px;
     }
 
     .navbar-pages ul {
@@ -206,7 +207,8 @@
     }
 
     .navbar-pages ul li {
-        padding: 10px;
+        padding: 5px;
+        font-size: 14px !important;
         text-align: center;
     }
 

@@ -1047,7 +1047,13 @@ const ManageCourse = () => {
                         <i className="fa fa-trash"></i>
                       </button>
                       <button className="check-btn" onClick={() => toggleContent(index, module.id)}>
-                        <i className="fa-solid fa-angle-down"></i>
+                        {/* <i className="fa-solid fa-angle-down"></i> */}
+                        <i
+                          className={`fa-solid ${activeModuleIndex === index
+                            ? "fa-angle-up"
+                            : "fa-angle-down"
+                            }`}
+                        ></i>
                       </button>
                     </div>
                   </div>
