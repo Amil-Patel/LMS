@@ -132,7 +132,8 @@
 }
 
 .course-list p {
-  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .course-list ul {
@@ -149,16 +150,19 @@
 }
 
 .course-list i {
-  margin-right: 20px;
+  width: 20px;
+  font-size: 15px;
+  margin-right: 10px;
   text-align: center;
 }
 
 .average-rating {
   display: flex;
+  align-items: center;
   gap: 20px;
   margin-bottom: 20px;
   background-color: var(--secondary-btn-color);
-  padding: 15px;
+  padding: 20px;
 }
 
 .rating span{
@@ -180,7 +184,7 @@
 
 .average-rating p {
   color: var(--step-button-background);
-  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .review-list {
@@ -228,8 +232,9 @@
 }
 
 .review-text {
-  font-size: 14px !important;
+  font-size: 16px !important;
   color: #333;
+  font-family: var(--jost-ff);
 }
 
 
@@ -298,3 +303,4 @@
 .reviews-section .container .flex-row{
   border: none;
 }
+
