@@ -1,0 +1,122 @@
+.shopping-cart-hero-container {
+  font-family: var(--inter-ff);
+  display: flex;
+  justify-content: space-between;
+}
+
+.shopping-cart-course-content img {
+  width: 250px;
+  height: 150px;
+  margin-right: 15px;
+}
+
+.shopping-cart-course-content h3 {
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.shopping-cart-course-price .course-price{
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.discount-price span:nth-child(1){
+  font-size: 11px;
+  font-weight: 600;
+  background-color: var(--secondary-btn-color);
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+
+.shopping-cart-course-price{
+  text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.discount-price span:nth-child(2){
+  font-size: 14px;
+  color: var(--light-gray-text);
+  text-decoration: line-through;
+}
+
+.shopping-cart-course-price .remove-btn{
+  font-weight: 600;
+    background-color: var(--button-primary-color);
+    color: var(--white);
+    font-size: 14px;
+    padding: 4px 16px;
+}
+
+.shopping-cart-course-order-summary{
+  border: 1px solid var(--border-color);
+  margin-top: 1.25rem;
+  padding: 3% 2.5%;
+  height: fit-content;
+}
+
+.order-summary h4{
+  font-size: 18px;
+  color: var(--black);
+  font-weight: 700;
+}
+
+.order-summary span{
+  font-size: 15px;
+}
+
+.promocode-apply-section{
+  padding-top: 6%;
+}
+
+.promocode-apply-section label{
+  font-family: var(--inter-ff);
+  font-size: 16px;
+}
+
+.promocode-input{
+  border: 1px solid var(--border-color);
+}
+
+.promocode-input input{
+  padding: 10px 15px;
+}
+
+.promocode-input input::placeholder {
+  font-family: var(--jost-ff);
+}
+
+.promocode-input .apply-btn{
+  background-color: var(--button-primary-color);
+  color: var(--white);
+  font-weight: 500;
+  padding: 0 40px ;
+  border-radius: 0;
+}
+
+.amount-details .detail-row{
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  line-height: 2em;
+}
+
+.detail-row.liner{
+  border-bottom: 2px dotted var(--border-color);
+}
+
+.promocode-apply-section .process-to-checkout-btn{
+  background-color: var(--button-primary-color);
+  color: var(--white);
+  width: 100%;
+  padding: 12px;
+  font-weight: 600;
+  border-radius: 0;
+}
+
+
+
+
+
