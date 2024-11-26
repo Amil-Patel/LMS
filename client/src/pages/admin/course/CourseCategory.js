@@ -332,7 +332,7 @@ const CourseCategory = () => {
                           src={`../upload/${firstNullParentData.cate_thumbnail}`}
                           alt={firstNullParentData.cate_title}
                           className="card-image"
-                        />
+                        />  
                         <div className="content">
                           <h5>{firstNullParentData.cate_title}</h5>
                           <p>Sub Course: {firstNullParentData.subcoursecount}</p>
@@ -399,7 +399,7 @@ const CourseCategory = () => {
                     className="card-image"
                   />
                   <div className="card-content">
-                    <h5>{course.cate_title}-{course.id}</h5>
+                    <h5>{course.cate_title}</h5>
                     <div className="card-actions">
                       {(userRole === "superAdmin" || editCourseCatePermission == 1) && (
                         <label htmlFor={`coursestatus-${course.id}`} className="switch">
