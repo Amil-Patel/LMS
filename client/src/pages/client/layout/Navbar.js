@@ -80,7 +80,7 @@ const Navbar = () => {
           {/*cart section  */}
           <button className="cart_section">
             <i class="fa-solid fa-cart-arrow-down"></i>
-            <p>0</p>
+            <p className='p-0'>0</p>
           </button>
           {/*cart section  */}
           {!savedToken && (

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../../assets/css/client/contact.css'
 
 const Contact = () => {
     const [formState, setFormState] = useState({
