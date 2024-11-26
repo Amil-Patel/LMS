@@ -5,10 +5,7 @@
 }
 
 .client_section {
-    /* font-family: var(--tp-ff-body); */
     font-family: var(--inter-ff);
-    /* font-family: var(--jost-ff); */
-    /* font-family: var(--exo-ff); */
 }
 
 .client_section label {

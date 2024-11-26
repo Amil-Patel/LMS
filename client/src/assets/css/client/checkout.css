@@ -34,6 +34,12 @@
   margin-bottom: 5px;
 }
 
+.form-group-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
 .checkout-section .form-group input,
 .checkout-section .form-group select {
   width: 100%;
@@ -189,4 +195,77 @@
   padding-top: 10px;
   line-height: 1.5em;
   color: var(--sidebar-pages-color);
+}
+
+@media screen and (max-width: 1200px) {
+  .checkout-section .form-container {
+    width: 50%;
+    margin-right: 6%;
+  }
+
+  .checkout-section .checkout-review-cart-section {
+    width: 44%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .checkout-section {
+    padding: 4% 5% 0.2% 5%;
+  }
+
+  .checkout-section-main-div {
+    display: block;
+  }
+
+  .checkout-section h2 {
+    font-size: 27px;
+    padding-bottom: 6px;
+  }
+
+  .checkout-section .form-container {
+    width: 100%;
+  }
+
+  .checkout-section .checkout-review-cart-section {
+    margin-right: 0;
+    width: 60%;
+    margin-top: 4%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .checkout-section {
+    padding: 6% 5% 0.2% 5%;
+  }
+
+  .checkout-section-main-div {
+    padding-top: 7%;
+  }
+
+  .checkout-section .checkbox-group label {
+    font-size: 14px;
+  }
+
+  .checkout-section h2 {
+    font-size: 24px;
+    padding-bottom: 4px;
+  }
+
+  .checkout-section .checkout-review-cart-section {
+    width: 100%;
+    margin-top: 10%;
+    padding: 6%;
+  }
+
+  .checkout-section .course-cart-content img {
+    width: 90px;
+    height: 85px;
+  }
+
+  .form-group-grid{
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    column-gap: 1.25rem;
+  }
+
 }

@@ -426,7 +426,7 @@ const ViewCourse = () => {
                           />
                           <div>
                             <h4>David W.</h4>
-                            <div className="flex items-center gap-2.5">
+                            <div className="flex items-center gap-2.5 pt-1">
                               <div className="review-rating">
                                 {[...Array(4)].map((_, i) => (
                                   <i className="fa-solid fa-star" key={i}></i>
@@ -532,25 +532,23 @@ const ViewCourse = () => {
               <p>This Course includes:</p>
               <ul>
                 <li>
-                  <i className="fa-brands fa-youtube"></i> 54.5 hours on-demand
+                <i class="fa-regular fa-circle-play"></i>54.5 hours on-demand
                   video
                 </li>
                 <li>
-                  <i className="fa-regular fa-file"></i> 3 articles
+                  <i className="fa-regular fa-file"></i>3 articles
                 </li>
                 <li>
-                  <i className="fa-solid fa-file-arrow-down"></i> 249
-                  downloadable resources
+                  <i className="fa-solid fa-file-arrow-down"></i>249 downloadable resources
                 </li>
                 <li>
-                  <i className="fa-solid fa-mobile"></i> Access on mobile and TV
+                <i class="fa-solid fa-mobile-screen-button"></i>Access on mobile and TV
                 </li>
                 <li>
-                  <i className="fa-solid fa-infinity"></i> Full lifetime access
+                  <i className="fa-solid fa-infinity"></i>Full lifetime access
                 </li>
                 <li>
-                  <i className="fa-solid fa-trophy"></i> Certificate of
-                  completion
+                  <i className="fa-solid fa-trophy"></i>Certificate of completion
                 </li>
               </ul>
             </div>
