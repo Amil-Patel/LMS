@@ -36,7 +36,7 @@ const CheckOut = () => {
 
                                 </select>
                             </div>
-                            <div className="flex gap-4">
+                            <div className="form-group-grid">
                                 <div className="form-group">
                                     <label htmlFor="enter-city">City</label>
                                     <input type="text" id="enter-city" placeholder="Enter city" required />

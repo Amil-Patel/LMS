@@ -42,7 +42,7 @@ const ViewCourse = () => {
                 <i class="fa-solid fa-star"></i>
                 <span className="customer-review-number"> (3,902) </span>
               </span>
-              <p className="mt-2 text-sm">By Aakib Valuda</p>
+              <p className="mt-2">By Aakib Valuda</p>
             </div>
             <div className="course-icon-section">
               <span>
@@ -61,9 +61,9 @@ const ViewCourse = () => {
                 <i class="fa-solid fa-graduation-cap"></i> English
               </span>
             </div>
-            <div className="course-icon-section w-max mt-2">
+            <div className="course-icon-section mt-2">
               <span>
-                <i className="fa-solid fa-clock"></i> Last Update: 11/2024
+                <i className="fa-solid fa-clock"></i> Last Update: 11/2024{" "}
               </span>
             </div>
 
@@ -426,7 +426,7 @@ const ViewCourse = () => {
                           />
                           <div>
                             <h4>David W.</h4>
-                            <div className="flex items-center gap-2.5">
+                            <div className="flex items-center gap-2.5 pt-1">
                               <div className="review-rating">
                                 {[...Array(4)].map((_, i) => (
                                   <i className="fa-solid fa-star" key={i}></i>
@@ -512,7 +512,7 @@ const ViewCourse = () => {
             )}
           </div>
 
-          <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full md:mt-8">
+          <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
             <img
               className="w-full mb-6"
               src={require("../../../assets/image/course-thumbnail.png")}
@@ -532,25 +532,23 @@ const ViewCourse = () => {
               <p>This Course includes:</p>
               <ul>
                 <li>
-                  <i className="fa-brands fa-youtube"></i> 54.5 hours on-demand
+                <i class="fa-regular fa-circle-play"></i>54.5 hours on-demand
                   video
                 </li>
                 <li>
-                  <i className="fa-regular fa-file"></i> 3 articles
+                  <i className="fa-regular fa-file"></i>3 articles
                 </li>
                 <li>
-                  <i className="fa-solid fa-file-arrow-down"></i> 249
-                  downloadable resources
+                  <i className="fa-solid fa-file-arrow-down"></i>249 downloadable resources
                 </li>
                 <li>
-                  <i className="fa-solid fa-mobile"></i> Access on mobile and TV
+                <i class="fa-solid fa-mobile-screen-button"></i>Access on mobile and TV
                 </li>
                 <li>
-                  <i className="fa-solid fa-infinity"></i> Full lifetime access
+                  <i className="fa-solid fa-infinity"></i>Full lifetime access
                 </li>
                 <li>
-                  <i className="fa-solid fa-trophy"></i> Certificate of
-                  completion
+                  <i className="fa-solid fa-trophy"></i>Certificate of completion
                 </li>
               </ul>
             </div>
