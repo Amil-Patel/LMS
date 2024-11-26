@@ -24,22 +24,16 @@ const CourseVideo = () => {
   return (
     <>
       {/* Video page navbar  */}
-      <nav className="navbar-section video-navbar p-2">
-        <div
-          className={`navbar-logo-section ${isMenuOpen ? "notdisplay" : ""}`}
-        >
-          <div className="navbar-logo">
-            <NavLink to="/">
-              <img src={require("../../../assets/image/Logo.png")} alt="logo" />
-            </NavLink>
-          </div>
+      <nav className="video-navbar flex gap-4 items-center justify-between p-2">
+        <div className="navbar-logo">
+          <NavLink to="/">
+            <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+          </NavLink>
         </div>
 
-        <div className={`navbar-pages ${isMenuOpen ? "active" : ""}`}>
-          <span className="text-sm font-semibold">
-            Ontario Security Training Masterclass
-          </span>
-        </div>
+        <span className="text-sm font-semibold">
+          Ontario Security Training Masterclass
+        </span>
 
         <div>
           <span className="text-sm">
@@ -47,39 +41,33 @@ const CourseVideo = () => {
           </span>
         </div>
 
-        <div></div>
+        <div class="text-sm font-medium text-black">
+          <div className="flex justify-end mb-1 text-orange-500 text-xs">
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-regular fa-star"></i>
+          </div>
+          <span className="text-sm tracking-wide font-normal">
+            Leave Your Review
+          </span>
+        </div>
 
         <div>
           <span className="text-sm">Your Progress : 8 of 10 (80%)</span>
         </div>
 
-        <div
-          className={`navbar-login-section "" : "notdisplay"}`}
+        <button
+          className="back-btn"
         >
-          <button
-            className="login_btn"
-            style={{
-              borderRadius: "0",
-              color: "black",
-              borderColor: "black",
-              fontSize: "14px",
-            }}
-          >
-            <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-              <i class="fa-solid fa-angle-left mr-2"></i> Back To Main
-            </NavLink>
-          </button>
-        </div>
-
-        {/* Hamburger Icon */}
-        <div className="hamburger" onClick={toggleMenu}>
-          {isMenuOpen ? (
-            <i class="fa-solid fa-xmark"></i>
-          ) : (
-            <i class="fa-solid fa-bars"></i>
-          )}
-        </div>
+          <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
+            <i class="fa-solid fa-angle-left mr-2"></i> Back To Main
+          </NavLink>
+        </button>
       </nav>
+
+      
 
       <div className="course-video-container">
         {/* Video Section */}
@@ -134,7 +122,9 @@ const CourseVideo = () => {
                   </p>
                 </div>
                 <div className="learning-list">
-                  <h2 className="font-bold mb-4 text-2xl text-black">What you'll learn</h2>
+                  <h2 className="font-bold mb-4 text-2xl text-black">
+                    What you'll learn
+                  </h2>
                   <ul className="block sm:hidden">
                     <li>updated for 2020</li>
                     <li>Build 16 web development projects...</li>
@@ -153,7 +143,9 @@ const CourseVideo = () => {
                   </ul>
                 </div>
                 <div className="prerequisites">
-                  <h2 className="font-bold mb-4 text-2xl text-black">Prerequisites</h2>
+                  <h2 className="font-bold mb-4 text-2xl text-black">
+                    Prerequisites
+                  </h2>
                   <ul className="list-disc pl-4 md:pl-6 space-y-2">
                     <li className="pl-4 md:pl-0">
                       No coding or design experience necessary
@@ -170,116 +162,7 @@ const CourseVideo = () => {
               </>
             )}
             {activeTab === "resource" && (
-              <div className="reviews-section">
-                <div className="average-rating">
-                  <div>
-                    <h2>4.0 </h2>
-                  </div>
-                  <div>
-                    <div className="review-rating">
-                      {[...Array(4)].map((_, i) => (
-                        <i className="fa-solid fa-star" key={i}></i>
-                      ))}
-                      <i className="fa-regular fa-star"></i> {/* Half star */}
-                    </div>
-                    <p>based on 146,951 ratings</p>
-                  </div>
-                </div>
-                <div className="review-list">
-                  {Array(2)
-                    .fill()
-                    .map((_, index) => (
-                      <div className="review-item" key={index}>
-                        <div className="reviewer-info">
-                          <img
-                            src="https://via.placeholder.com/50"
-                            alt="Reviewer"
-                          />
-                          <div>
-                            <h4>David W.</h4>
-                            <div className="flex items-center gap-2.5">
-                              <div className="review-rating">
-                                {[...Array(4)].map((_, i) => (
-                                  <i className="fa-solid fa-star" key={i}></i>
-                                ))}
-                                <i className="fa-regular fa-star"></i>{" "}
-                                {/* Half star */}
-                              </div>
-                              <div className="review-date">
-                                <span>2 weeks ago</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <p className="review-text">
-                          I love the way the instructor goes about the course.
-                          So easy to follow, even though a little bit
-                          challenging as expected.
-                        </p>
-                      </div>
-                    ))}
-                </div>
-
-                <div className="container mx-auto px-4 mt-5">
-                  <nav
-                    className="flex flex-row flex-nowrap justify-between md:justify-center items-center"
-                    aria-label="Pagination"
-                  >
-                    <a
-                      className="flex w-10 h-10 mr-1 justify-center items-center rounded-full border border-gray-200 text-black hover:border-gray-300"
-                      href="#"
-                      title="Previous Page"
-                    >
-                      <span className="sr-only">Previous Page</span>
-                      <svg
-                        className="block w-4 h-4 fill-current"
-                        viewBox="0 0 256 512"
-                        aria-hidden="true"
-                        role="presentation"
-                      >
-                        <path d="M238.475 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L50.053 256 245.546 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L10.454 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z"></path>
-                      </svg>
-                    </a>
-                    <a
-                      className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
-                      href="#"
-                      title="Page 1"
-                    >
-                      1
-                    </a>
-                    <a
-                      className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
-                      href="#"
-                      title="Page 2"
-                    >
-                      2
-                    </a>
-                    <a
-                      className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-black bg-black text-white"
-                      href="#"
-                      aria-current="page"
-                      title="Page 3"
-                    >
-                      3
-                    </a>
-                    <a
-                      className="flex w-10 h-10 ml-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
-                      href="#"
-                      title="Next Page"
-                    >
-                      <span className="sr-only">Next Page</span>
-                      <svg
-                        className="block w-4 h-4 fill-current"
-                        viewBox="0 0 256 512"
-                        aria-hidden="true"
-                        role="presentation"
-                      >
-                        <path d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z"></path>
-                      </svg>
-                    </a>
-                  </nav>
-                </div>
-              </div>
+              <p>Data not found</p>
             )}
           </div>
         </div>
@@ -308,7 +191,7 @@ const CourseVideo = () => {
                     <div className="module-lesson">
                       <div className="lesson-title">
                         <span className="lesson-icon">
-                        <i className="fa-solid fa-file"></i>
+                          <i className="fa-solid fa-file"></i>
                         </span>
                         Course Intro
                       </div>
@@ -327,7 +210,7 @@ const CourseVideo = () => {
                     <div className="module-lesson">
                       <div className="lesson-title">
                         <span className="lesson-icon">
-                        <i className="fa-solid fa-file"></i>
+                          <i className="fa-solid fa-file"></i>
                         </span>
                         Course Intro
                       </div>
@@ -346,7 +229,7 @@ const CourseVideo = () => {
                     <div className="module-lesson">
                       <div className="lesson-title">
                         <span className="lesson-icon">
-                        <i className="fa-solid fa-file"></i>
+                          <i className="fa-solid fa-file"></i>
                         </span>
                         Course Intro
                       </div>
@@ -381,7 +264,7 @@ const CourseVideo = () => {
                     <div className="module-lesson">
                       <div className="lesson-title">
                         <span className="lesson-icon">
-                        <i className="fa-solid fa-file"></i>
+                          <i className="fa-solid fa-file"></i>
                         </span>
                         Course Intro
                       </div>
@@ -400,7 +283,7 @@ const CourseVideo = () => {
                     <div className="module-lesson">
                       <div className="lesson-title">
                         <span className="lesson-icon">
-                        <i className="fa-solid fa-file"></i>
+                          <i className="fa-solid fa-file"></i>
                         </span>
                         Course Intro
                       </div>
@@ -419,7 +302,7 @@ const CourseVideo = () => {
                     <div className="module-lesson">
                       <div className="lesson-title">
                         <span className="lesson-icon">
-                        <i className="fa-solid fa-file"></i>
+                          <i className="fa-solid fa-file"></i>
                         </span>
                         Course Intro
                       </div>

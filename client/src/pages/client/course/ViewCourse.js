@@ -42,7 +42,7 @@ const ViewCourse = () => {
                 <i class="fa-solid fa-star"></i>
                 <span className="customer-review-number"> (3,902) </span>
               </span>
-              <p className="mt-2">By Aakib Valuda</p>
+              <p className="mt-2 text-sm">By Aakib Valuda</p>
             </div>
             <div className="course-icon-section">
               <span>
@@ -61,9 +61,9 @@ const ViewCourse = () => {
                 <i class="fa-solid fa-graduation-cap"></i> English
               </span>
             </div>
-            <div className="course-icon-section mt-2">
+            <div className="course-icon-section w-max mt-2">
               <span>
-                <i className="fa-solid fa-clock"></i> Last Update: 11/2024{" "}
+                <i className="fa-solid fa-clock"></i> Last Update: 11/2024
               </span>
             </div>
 
@@ -512,7 +512,7 @@ const ViewCourse = () => {
             )}
           </div>
 
-          <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
+          <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full md:mt-8">
             <img
               className="w-full mb-6"
               src={require("../../../assets/image/course-thumbnail.png")}

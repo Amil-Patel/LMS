@@ -144,4 +144,27 @@
 .course-video-container .learning-list ul{
   display: block;
 }
+
+.course-info .module{
+  margin-left: 10px;
+}
+}
+
+
+.video-navbar{
+  font-family: var(--inter-ff);
+}
+
+
+.back-btn{
+  border: 1px solid var(--black);
+  border-radius: 0;
+  padding: 3px 10px;
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+.video-navbar .text-sm{
+  font-size: 12px;
+}
 }
