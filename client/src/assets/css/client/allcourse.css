@@ -28,14 +28,14 @@
 }
 
 .course-category label {
-  display: flex;
-  align-items: center;
+  display: block;
   color: var(--light-grey-text-color);
   font-family: var(--jost-ff);
   font-size: 18px;
-  line-height: 1.9em;
+  line-height: 1.4em;
   cursor: pointer;
   user-select: none;
+  margin-bottom: 10px;
 }
 
 .course-category input[type="checkbox"] {
@@ -130,6 +130,7 @@
 .course-details p {
   padding: 6px 0;
   width: 80%;
+  min-height: 54px;
 }
 
 .course-icon-section span {

@@ -127,7 +127,7 @@ const AllCourse = () => {
                 <input
                   type="checkbox"
                   value={item.id}
-                  onChange={handleCategoryChange} // Handle category selection
+                  onChange={handleCategoryChange}
                 />
                 {item.cate_title}
               </label>

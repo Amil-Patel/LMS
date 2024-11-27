@@ -159,7 +159,7 @@
 .average-rating {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   margin-bottom: 20px;
   background-color: var(--secondary-btn-color);
   padding: 20px;
@@ -249,7 +249,7 @@
   padding-left: 10px;
 }
 
-.header-content .lesson-actions button {
+.header-content .lesson-actions-time button {
   background-color: var(--search-bg);
   color: var(--button-primary-color);
   padding: 3px 10px;
@@ -287,9 +287,7 @@
 }
 
 .header-content .faqs-header .module p{
-  margin-top: 15px;
-  margin-bottom: 5px;
-  font-size: 14px;
+
 }
 
 .header-content .faqs-header .module:nth-last-child(1){
@@ -304,3 +302,44 @@
   border: none;
 }
 
+.reviews-section .average-rating h2{
+  font-family: var(--exo-ff);
+  font-weight: 600
+}
+
+.reviews-section .average-rating p{
+  font-family: var(--jost-ff);
+}
+
+
+.faqs-header .module-title {
+  font-family: var(--exo-ff);
+  font-size: 16px;
+}
+
+
+.faqs-header .module p{
+  font-family: var(--jost-ff);
+  margin-top: 15px;
+  font-size: 16px;
+  color: var(  --light-grey-text-color);
+}
+
+
+@media screen and (max-width: 426px) {
+.header-content .faqs-header {
+  margin-bottom: 20px;
+}
+}
+
+@media screen and (max-width: 768px) {
+  .course-image  img {
+     margin-top: 20px;
+   }
+   }
+
+@media screen and (max-width: 426px) {
+ .course-image  img {
+    margin-top: 20px;
+  }
+  }

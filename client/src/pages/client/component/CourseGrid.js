@@ -7,6 +7,13 @@ const CourseGrid = ({ courses, category }) => {
     const { addToCart } = useCart(); // Access the addToCart function from context
     return (
         <>
+            {courses.length === 0 && (
+                <div className="flex flex-col justify-center items-center h-60">
+                    <p className="text-2xl font-medium text-gray-700">
+                        No courses found
+                    </p>
+                </div>
+            )}
             <div className="course-grid-main-div">
                 {courses.map((course) => {
                     // Truncate course title if too long
@@ -29,8 +36,8 @@ const CourseGrid = ({ courses, category }) => {
                             : firstAuthor;
 
                     // Find the category title for the course
-                    const courseCategory =
-                        category?.find((cat) => cat.id === course.course_cate)?.cate_title || "Unknown Category";
+                    const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
+                    const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory
 
                     return (
                         <div key={course.id} className="course-content">
@@ -59,9 +66,7 @@ const CourseGrid = ({ courses, category }) => {
                                         </span>
                                     </span>
                                 </div>
-
-                                {/* Category Button */}
-                                <button className="security-button">{courseCategory}</button>
+                                <button className="security-button">{truncateCate}</button>
                             </div>
 
                             {/* Course Price and Add-to-Cart Button */}

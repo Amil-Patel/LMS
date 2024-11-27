@@ -8,6 +8,13 @@ const CourseList = ({ courses, category }) => {
 
     return (
         <>
+            {courses?.length === 0 && (
+                <div className="flex flex-col justify-center items-center h-60">
+                    <p className="text-2xl font-medium text-gray-700">
+                        No courses found
+                    </p>
+                </div>
+            )}
             {courses?.map((course) => {
                 const truncatedTitle =
                     course.course_title.length > 40
@@ -17,8 +24,10 @@ const CourseList = ({ courses, category }) => {
                     course.short_desc.length > 100
                         ? `${course.short_desc.slice(0, 100)} ...`
                         : course.short_desc;
-                const courseCategory =
-                    category?.find((cat) => cat.id === course.course_cate)?.cate_title || "Unknown Category";
+
+                // Find the category title for the course
+                const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
+                const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory
 
                 return (
                     <div key={course.id} className="course-main-div">
@@ -41,7 +50,7 @@ const CourseList = ({ courses, category }) => {
                             </div>
                             <div className="course-rating">4.7 ***** (255)</div>
                             <div className="course-btn">
-                                <button className="security-button">{courseCategory}</button>
+                                <button className="security-button">{truncateCate}</button>
                                 <button
                                     className="add-to-cart-btn"
                                     onClick={() => addToCart(course)}
