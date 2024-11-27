@@ -76,7 +76,7 @@ const SignupForm = ({ toggleLoginForm }) => {
     }
     return (
         <div>
-            <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Sign Up</h2>
+            <h2 className="text-2xl font-semibold text-center text-gray-700 mb-4">Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 {/* Email Input */}
                 <div className="mb-2">
@@ -89,6 +89,7 @@ const SignupForm = ({ toggleLoginForm }) => {
                         placeholder="Enter your First Name"
                         value={userData.first_name}
                         onChange={handleChange}
+                        autoComplete='username'
                     />
                 </div>
 
@@ -103,6 +104,7 @@ const SignupForm = ({ toggleLoginForm }) => {
                         placeholder="Enter your Last Name"
                         value={userData.last_name}
                         onChange={handleChange}
+                        autoComplete='username'
                     />
                 </div>
                 <div className="mb-2">
@@ -115,6 +117,7 @@ const SignupForm = ({ toggleLoginForm }) => {
                         placeholder="Enter your Email"
                         value={userData.email}
                         onChange={handleChange}
+                        autoComplete='email'
                     />
                 </div>
                 <div className="mb-4">

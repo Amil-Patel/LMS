@@ -5,6 +5,13 @@ import "../../../assets/css/client/allcourse.css";
 const CourseGrid = ({ courses, category }) => {
     return (
         <>
+            {courses.length === 0 && (
+                <div className="flex flex-col justify-center items-center h-60">
+                    <p className="text-2xl font-medium text-gray-700">
+                        No courses found
+                    </p>
+                </div>
+            )}
             <div className="course-grid-main-div">
                 {courses.map((course) => {
                     const truncatedTitle =
@@ -20,6 +27,7 @@ const CourseGrid = ({ courses, category }) => {
                         : firstAuthor;
                     // Find the category title for the course
                     const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
+                    const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory
                     return (
                         <div key={course.id} className="course-content">
                             <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
@@ -41,7 +49,7 @@ const CourseGrid = ({ courses, category }) => {
                                         </span>
                                     </span>
                                 </div>
-                                <button className="security-button">{courseCategory}</button>
+                                <button className="security-button">{truncateCate}</button>
                             </div>
                             <div className="course-price-and-add-to-cart-btn">
                                 <div className="course-price">$ {course.course_price}</div>
