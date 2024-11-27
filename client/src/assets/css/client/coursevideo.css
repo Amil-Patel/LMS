@@ -168,3 +168,26 @@
   font-size: 12px;
 }
 }
+
+/* Apply changes only on 475px width devices */
+@media (max-width: 475px) {
+  .video-navbar {
+    flex-direction: row;  /* Align items in a row */
+    justify-content: space-between; /* Space items apart */
+  }
+
+  .video-navbar .navbar-logo,
+  .video-navbar span {
+    margin-right: 10px; /* Add some spacing between logo and title */
+  }
+
+  .video-navbar .back-btn {
+    margin-top: 0; /* Remove extra margin for the back button */
+  }
+
+  .video-navbar > .flex {
+    flex-direction: row; /* Ensure the second line elements are aligned in a row */
+    justify-content: space-between; /* Space out the elements */
+    gap: 15px; /* Add spacing between the elements */
+  }
+}
