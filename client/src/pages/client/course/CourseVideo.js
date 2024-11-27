@@ -209,7 +209,7 @@ const CourseVideo = () => {
                       </div>
                       <div className="lesson-actions">
                         <button className="resource-btn">
-                          <i class="fa-regular fa-folder-open"></i> Resource
+                          <i className="fa-regular fa-folder-open"></i> Resource
                         </button>
                       </div>
 
@@ -228,7 +228,7 @@ const CourseVideo = () => {
                       </div>
                       <div className="lesson-actions">
                         <button className="resource-btn">
-                          <i class="fa-regular fa-folder-open"></i> Resource
+                          <i className="fa-regular fa-folder-open"></i> Resource
                         </button>
                       </div>
 
@@ -282,7 +282,7 @@ const CourseVideo = () => {
                       </div>
                       <div className="lesson-actions">
                         <button className="resource-btn">
-                          <i class="fa-regular fa-folder-open"></i> Resource
+                          <i className="fa-regular fa-folder-open"></i> Resource
                         </button>
                       </div>
 
@@ -301,7 +301,7 @@ const CourseVideo = () => {
                       </div>
                       <div className="lesson-actions">
                         <button className="resource-btn">
-                          <i class="fa-regular fa-folder-open"></i> Resource
+                          <i className="fa-regular fa-folder-open"></i> Resource
                         </button>
                       </div>
 
@@ -356,7 +356,7 @@ const CourseVideo = () => {
                       </div>
                       <div className="lesson-actions">
                         <button className="resource-btn">
-                          <i class="fa-regular fa-folder-open"></i> Resource
+                          <i className="fa-regular fa-folder-open"></i> Resource
                         </button>
                       </div>
 
@@ -375,7 +375,7 @@ const CourseVideo = () => {
                       </div>
                       <div className="lesson-actions">
                         <button className="resource-btn">
-                          <i class="fa-regular fa-folder-open"></i> Resource
+                          <i className="fa-regular fa-folder-open"></i> Resource
                         </button>
                       </div>
 

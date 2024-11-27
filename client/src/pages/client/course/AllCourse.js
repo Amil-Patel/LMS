@@ -26,7 +26,6 @@ const AllCourse = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingNotNullCourseCategory`);
       setCourseCategory(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +84,7 @@ const AllCourse = () => {
   }, []);
 
   useEffect(() => {
-    // getCourseData();
+    getCourseData();
     getCourseCategory();
   }, []);
 

@@ -99,7 +99,7 @@ const Navbar = () => {
         </div>
         {/* Hamburger Icon */}
         <div className="hamburger" onClick={toggleMenu}>
-          {isMenuOpen ? <i class="fa-solid fa-xmark"></i> : <i class="fa-solid fa-bars"></i>}
+          {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
         </div>
       </nav>
       {isModalOpen && (

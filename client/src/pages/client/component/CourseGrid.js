@@ -7,7 +7,7 @@ const CourseGrid = ({ courses, category }) => {
     const { addToCart } = useCart(); // Access the addToCart function from context
     return (
         <>
-            {courses.length === 0 && (
+            {courses?.length === 0 && (
                 <div className="flex flex-col justify-center items-center h-60">
                     <p className="text-2xl font-medium text-gray-700">
                         No courses found
@@ -15,7 +15,7 @@ const CourseGrid = ({ courses, category }) => {
                 </div>
             )}
             <div className="course-grid-main-div">
-                {courses.map((course) => {
+                {courses?.map((course) => {
                     // Truncate course title if too long
                     const truncatedTitle =
                         course.course_title.length > 40

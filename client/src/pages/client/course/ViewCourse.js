@@ -35,30 +35,30 @@ const ViewCourse = () => {
               <span className="courses-reviews">
                 {" "}
                 4.5
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
                 <span className="customer-review-number"> (3,902) </span>
               </span>
               <p className="mt-2">By Aakib Valuda</p>
             </div>
             <div className="course-icon-section">
               <span>
-                <i class="fa-solid fa-copy"></i> 20 Lessons
+                <i className="fa-solid fa-copy"></i> 20 Lessons
               </span>
               <span>
-                <i class="fa-solid fa-clock"></i> 12.30 Hours
+                <i className="fa-solid fa-clock"></i> 12.30 Hours
               </span>
               <span>
-                <i class="fa-solid fa-graduation-cap"></i> 156 Students
+                <i className="fa-solid fa-graduation-cap"></i> 156 Students
               </span>
               <span>
-                <i class="fa-solid fa-signal"></i> Beginner
+                <i className="fa-solid fa-signal"></i> Beginner
               </span>
               <span>
-                <i class="fa-solid fa-graduation-cap"></i> English
+                <i className="fa-solid fa-graduation-cap"></i> English
               </span>
             </div>
             <div className="course-icon-section mt-2">
@@ -596,7 +596,7 @@ const ViewCourse = () => {
               <p>This Course includes:</p>
               <ul>
                 <li>
-                  <i class="fa-regular fa-circle-play"></i>54.5 hours on-demand
+                  <i className="fa-regular fa-circle-play"></i>54.5 hours on-demand
                   video
                 </li>
                 <li>
@@ -607,7 +607,7 @@ const ViewCourse = () => {
                   downloadable resources
                 </li>
                 <li>
-                  <i class="fa-solid fa-mobile-screen-button"></i>Access on
+                  <i className="fa-solid fa-mobile-screen-button"></i>Access on
                   mobile and TV
                 </li>
                 <li>
