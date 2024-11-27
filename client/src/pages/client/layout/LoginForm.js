@@ -48,7 +48,7 @@ const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
     }
     return (
         <div>
-            <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
+            <h2 className="text-2xl font-semibold text-center text-gray-700 mb-4">Login</h2>
             <form onSubmit={handleSubmit}>
                 {/* Email Input */}
                 <div className="mb-4">
@@ -61,6 +61,7 @@ const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
                         value={loginData.email}
                         className="mt-1 w-full px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400"
                         placeholder="Enter your email"
+                        autoComplete='email'
                         required
                     />
                 </div>
