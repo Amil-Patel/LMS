@@ -15,6 +15,7 @@ import ManageCourseRoute from "./routes/admin/course/ManageCourseRoute";
 import UserRoute from "./routes/admin/user/UserRoute";
 import ProfileRoute from "./routes/admin/profile/ProfileRoute";
 import { RoleContext } from "./pages/admin/layout/RoleContext";
+import { CartProvider } from "./pages/client/layout/CartContext";
 import LoginRoute from "./routes/admin/LoginRoute";
 import EditCourseRoute from "./routes/admin/course/EditCourseRoute";
 import HomeRoute from "./routes/client/HomeRoute";
@@ -26,29 +27,31 @@ const App = () => {
   return (
     <>
       <ToastMessage />
-      <RoleContext>
-        <DashboardRoute />
-        <CourseCouponRoute />
-        <CourseCategoryRoute />
-        <AddCourseRoute />
-        <AllCourseRoute />
-        <ManageCourseRoute />
-        <EnrollementsRoute />
-        <InquiryRoute />
-        <PaymentRoute />
-        <RoleslistRoute />
-        <UserRoute />
-        <NotificationSettingRoute />
-        <PaymentSettingRoute />
-        <ProfileRoute />
-        <LoginRoute />
-        <EditCourseRoute />
-      </RoleContext>
-      <HomeRoute />
-      <CourseRoute />
-      <ShoppingCartRoute />
-      <LearningRoute />
-      <ContactRoute />
+      <CartProvider>
+        <RoleContext>
+          <DashboardRoute />
+          <CourseCouponRoute />
+          <CourseCategoryRoute />
+          <AddCourseRoute />
+          <AllCourseRoute />
+          <ManageCourseRoute />
+          <EnrollementsRoute />
+          <InquiryRoute />
+          <PaymentRoute />
+          <RoleslistRoute />
+          <UserRoute />
+          <NotificationSettingRoute />
+          <PaymentSettingRoute />
+          <ProfileRoute />
+          <LoginRoute />
+          <EditCourseRoute />
+        </RoleContext>
+        <HomeRoute />
+        <CourseRoute />
+        <ShoppingCartRoute />
+        <LearningRoute />
+        <ContactRoute />
+      </CartProvider>
     </>
   );
 };

@@ -4,6 +4,7 @@ import CourseList from "../component/CourseList";
 import CourseGrid from "../component/CourseGrid";
 import axiosInstance from "../utils/axiosInstance";
 import Footer from "../layout/Footer";
+// import { useCart } from "../layout/CartContext";
 
 const port = process.env.REACT_APP_URL;
 
@@ -30,7 +31,7 @@ const AllCourse = () => {
       console.log(error);
     }
   };
-
+  // const { courseData } = useCart();
   // Get course data
   const [courseData, setCourseData] = useState();
   const getCourseData = async () => {
@@ -84,7 +85,7 @@ const AllCourse = () => {
   }, []);
 
   useEffect(() => {
-    getCourseData();
+    // getCourseData();
     getCourseCategory();
   }, []);
 

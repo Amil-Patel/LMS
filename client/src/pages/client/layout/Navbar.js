@@ -6,8 +6,10 @@ import LoginForm from './LoginForm';
 import { RoleContext } from '../../admin/layout/RoleContext';
 import SignupForm from './SignupForm';
 import Cookies from 'js-cookie';
+import { useCart } from './CartContext';
 
 const Navbar = () => {
+  const { cart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
@@ -79,9 +81,9 @@ const Navbar = () => {
         <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
           {/*cart section  */}
           <button className="cart_section">
-            <i class="fa-solid fa-cart-arrow-down"></i>
-            <p className='p-0'>0</p>
-          </button>
+                <i className="fa-solid fa-cart-arrow-down"></i>
+                <p className="p-0">{cart.length}</p> 
+            </button>
           {/*cart section  */}
           {!savedToken && (
             <>
