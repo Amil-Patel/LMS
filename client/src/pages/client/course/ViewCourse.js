@@ -62,7 +62,7 @@ const ViewCourse = () => {
               </span>
             </div>
             <div className="course-icon-section mt-2">
-              <span>
+              <span className="w-max">
                 <i className="fa-solid fa-clock"></i> Last Update: 11/2024{" "}
               </span>
             </div>
@@ -153,73 +153,93 @@ const ViewCourse = () => {
             {activeTab === "curriculum" && (
               <>
                 <div className="module">
-                  <div className="module-header">
+                  <div
+                    className="module-header"
+                    onClick={() => toggleContent(0)}
+                  >
                     <span className="module-title">
                       MODULE-1 : Introduction to Security Guard
                     </span>
                     <div className="module-controls">
-                      <button
-                        className="check-btn"
-                        onClick={() => toggleContent(0)}
-                      >
+                      <button className="check-btn">
                         <i
-                    className={`fa-solid ${
-                      activeModuleIndex === 0 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                  ></i>
+                          className={`fa-solid ${
+                            activeModuleIndex === 0
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                          }`}
+                        ></i>
                       </button>
                     </div>
                   </div>
                   {activeModuleIndex === 0 && (
                     <>
                       <div className="module-content">
-                        <div className="module-lesson">
-                          <div className="lesson-title">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
+                          {/* Lesson Icon and Title */}
+                          <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
                               <i className="fa-regular fa-circle-play"></i>
                             </span>
-                            Video: Course Intro
-                          </div>
-                          <div className="lesson-actions">
-                            <button className="resource-btn">
-                              <i className="fa-solid fa-eye"></i> Preview
-                            </button>
+                            <span className="font-medium">
+                              Video: Course Intro
+                            </span>
                           </div>
 
-                          <div className="lesson-time">
-                            <span>13 Min</span>
+                          {/* Preview Button and Lesson Time */}
+                          <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                            <button className="resource-btn text-sm">
+                              <i className="fa-solid fa-eye mr-2"></i> Preview
+                            </button>
+                            <div className="lesson-time text-gray-500 ml-4">
+                              <span>13 Min</span>
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div className="module-content">
-                        <div className="module-lesson">
-                          <div className="lesson-title">
+                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                          {/* Lesson Icon and Title */}
+                          <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
                               <i className="fa-regular fa-circle-play"></i>
                             </span>
-                            Video: Course Intro
-                          </div>
-                          <div className="lesson-actions">
-                            <button className="resource-btn">
-                              <i className="fa-solid fa-eye"></i> Preview
-                            </button>
+                            <span className="font-medium">
+                              Video: Course Intro
+                            </span>
                           </div>
 
-                          <div className="lesson-time">
-                            <span>8 Min</span>
+                          {/* Preview Button and Lesson Time */}
+                          <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                            <button className="resource-btn text-sm">
+                              <i className="fa-solid fa-eye mr-2"></i> Preview
+                            </button>
+                            <div className="lesson-time text-gray-500 ml-4">
+                              <span>08 Min</span>
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div className="module-content">
-                        <div className="module-lesson">
-                          <div className="lesson-title">
+                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                          {/* Lesson Icon and Title */}
+                          <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
                               <i className="fa-regular fa-circle-play"></i>
                             </span>
-                            Video: Course Intro
+                            <span className="font-medium">
+                              Video: Course Intro
+                            </span>
                           </div>
-                          <div className="lesson-time">
-                            <span>20 Min</span>
+
+                          {/* Preview Button and Lesson Time */}
+                          <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                            <button className="resource-btn text-sm">
+                              <i className="fa-solid fa-eye mr-2"></i> Preview
+                            </button>
+                            <div className="lesson-time text-gray-500 ml-4">
+                              <span>20 Min</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -227,73 +247,93 @@ const ViewCourse = () => {
                   )}
                 </div>
                 <div className="module">
-                  <div className="module-header">
+                  <div
+                    className="module-header"
+                    onClick={() => toggleContent(1)}
+                  >
                     <span className="module-title">
-                      MODULE-1 : Introduction to Security Guard
+                      MODULE-2 : Introduction to Security Guard
                     </span>
                     <div className="module-controls">
-                      <button
-                        className="check-btn"
-                        onClick={() => toggleContent(1)}
-                      >
+                      <button className="check-btn">
                         <i
-                    className={`fa-solid ${
-                      activeModuleIndex === 1 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                  ></i>
+                          className={`fa-solid ${
+                            activeModuleIndex === 1
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                          }`}
+                        ></i>
                       </button>
                     </div>
                   </div>
                   {activeModuleIndex === 1 && (
                     <>
                       <div className="module-content">
-                        <div className="module-lesson">
-                          <div className="lesson-title">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
+                          {/* Lesson Icon and Title */}
+                          <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
                               <i className="fa-regular fa-circle-play"></i>
                             </span>
-                            Video: Course Intro
-                          </div>
-                          <div className="lesson-actions">
-                            <button className="resource-btn">
-                              <i className="fa-solid fa-eye"></i> Preview
-                            </button>
+                            <span className="font-medium">
+                              Video: Course Intro
+                            </span>
                           </div>
 
-                          <div className="lesson-time">
-                            <span>13 Min</span>
+                          {/* Preview Button and Lesson Time */}
+                          <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                            <button className="resource-btn text-sm">
+                              <i className="fa-solid fa-eye mr-2"></i> Preview
+                            </button>
+                            <div className="lesson-time text-gray-500 ml-4">
+                              <span>13 Min</span>
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div className="module-content">
-                        <div className="module-lesson">
-                          <div className="lesson-title">
+                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                          {/* Lesson Icon and Title */}
+                          <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
                               <i className="fa-regular fa-circle-play"></i>
                             </span>
-                            Video: Course Intro
-                          </div>
-                          <div className="lesson-actions">
-                            <button className="resource-btn">
-                              <i className="fa-solid fa-eye"></i> Preview
-                            </button>
+                            <span className="font-medium">
+                              Video: Course Intro
+                            </span>
                           </div>
 
-                          <div className="lesson-time">
-                            <span>8 Min</span>
+                          {/* Preview Button and Lesson Time */}
+                          <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                            <button className="resource-btn text-sm">
+                              <i className="fa-solid fa-eye mr-2"></i> Preview
+                            </button>
+                            <div className="lesson-time text-gray-500 ml-4">
+                              <span>08 Min</span>
+                            </div>
                           </div>
                         </div>
                       </div>
                       <div className="module-content">
-                        <div className="module-lesson">
-                          <div className="lesson-title">
+                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                          {/* Lesson Icon and Title */}
+                          <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
                               <i className="fa-regular fa-circle-play"></i>
                             </span>
-                            Video: Course Intro
+                            <span className="font-medium">
+                              Video: Course Intro
+                            </span>
                           </div>
-                          <div className="lesson-time">
-                            <span>20 Min</span>
+
+                          {/* Preview Button and Lesson Time */}
+                          <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                            <button className="resource-btn text-sm">
+                              <i className="fa-solid fa-eye mr-2"></i> Preview
+                            </button>
+                            <div className="lesson-time text-gray-500 ml-4">
+                              <span>20 Min</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -304,22 +344,30 @@ const ViewCourse = () => {
             )}
             {activeTab === "faqs" && (
               <>
-                <div className="faqs-header">
+                <div className="faqs-header md:mb-8 sm:mb-8">
                   <div className="module">
-                    <div className="module-header">
-                      <span className="module-title">
+                    <div
+                      className="module-header"
+                      onClick={() => toggleFaqsContent(0)}
+                    >
+                      <span
+                        className={`module-title ${
+                          activeFaqsIndex === 0
+                            ? "text-blue-500"
+                            : "text-black-700"
+                        }`}
+                      >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
-                        <button
-                          className="check-btn"
-                          onClick={() => toggleFaqsContent(0)}
-                        >
+                        <button className="check-btn">
                           <i
-                    className={`fa-solid ${
-                      activeFaqsIndex === 0 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                  ></i>
+                            className={`fa-solid ${
+                              activeFaqsIndex === 0
+                                ? "fa-angle-up"
+                                : "fa-angle-down"
+                            }`}
+                          ></i>
                         </button>
                       </div>
                     </div>
@@ -336,20 +384,28 @@ const ViewCourse = () => {
                     )}
                   </div>
                   <div className="module">
-                    <div className="module-header">
-                      <span className="module-title">
+                    <div
+                      className="module-header"
+                      onClick={() => toggleFaqsContent(1)}
+                    >
+                      <span
+                        className={`module-title ${
+                          activeFaqsIndex === 1
+                            ? "text-blue-500"
+                            : "text-black-700"
+                        }`}
+                      >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
-                        <button
-                          className="check-btn"
-                          onClick={() => toggleFaqsContent(1)}
-                        >
+                        <button className="check-btn">
                           <i
-                    className={`fa-solid ${
-                      activeFaqsIndex === 1 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                  ></i>
+                            className={`fa-solid ${
+                              activeFaqsIndex === 1
+                                ? "fa-angle-up"
+                                : "fa-angle-down"
+                            }`}
+                          ></i>
                         </button>
                       </div>
                     </div>
@@ -366,20 +422,28 @@ const ViewCourse = () => {
                     )}
                   </div>
                   <div className="module">
-                    <div className="module-header">
-                      <span className="module-title">
+                    <div
+                      className="module-header"
+                      onClick={() => toggleFaqsContent(2)}
+                    >
+                      <span
+                        className={`module-title ${
+                          activeFaqsIndex === 2
+                            ? "text-blue-500"
+                            : "text-black-700"
+                        }`}
+                      >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
-                        <button
-                          className="check-btn"
-                          onClick={() => toggleFaqsContent(2)}
-                        >
-                         <i
-                    className={`fa-solid ${
-                      activeFaqsIndex === 2 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
-                  ></i>
+                        <button className="check-btn">
+                          <i
+                            className={`fa-solid ${
+                              activeFaqsIndex === 2
+                                ? "fa-angle-up"
+                                : "fa-angle-down"
+                            }`}
+                          ></i>
                         </button>
                       </div>
                     </div>
@@ -532,28 +596,30 @@ const ViewCourse = () => {
               <p>This Course includes:</p>
               <ul>
                 <li>
-                <i class="fa-regular fa-circle-play"></i>54.5 hours on-demand
+                  <i class="fa-regular fa-circle-play"></i>54.5 hours on-demand
                   video
                 </li>
                 <li>
                   <i className="fa-regular fa-file"></i>3 articles
                 </li>
                 <li>
-                  <i className="fa-solid fa-file-arrow-down"></i>249 downloadable resources
+                  <i className="fa-solid fa-file-arrow-down"></i>249
+                  downloadable resources
                 </li>
                 <li>
-                <i class="fa-solid fa-mobile-screen-button"></i>Access on mobile and TV
+                  <i class="fa-solid fa-mobile-screen-button"></i>Access on
+                  mobile and TV
                 </li>
                 <li>
                   <i className="fa-solid fa-infinity"></i>Full lifetime access
                 </li>
                 <li>
-                  <i className="fa-solid fa-trophy"></i>Certificate of completion
+                  <i className="fa-solid fa-trophy"></i>Certificate of
+                  completion
                 </li>
               </ul>
             </div>
           </div>
-          
         </div>
       </div>
       <Footer />

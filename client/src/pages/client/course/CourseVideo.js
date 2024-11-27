@@ -24,48 +24,60 @@ const CourseVideo = () => {
   return (
     <>
       {/* Video page navbar  */}
-      <nav className="video-navbar flex gap-4 items-center justify-between p-2">
-        <div className="navbar-logo">
-          <NavLink to="/">
-            <img src={require("../../../assets/image/Logo.png")} alt="logo" />
-          </NavLink>
-        </div>
+      <nav className="video-navbar flex flex-col gap-4 p-2 sm:flex-row sm:items-center sm:justify-between">
+  {/* Logo and Video Title */}
+  <div className="flex items-center gap-4 w-full md:w-auto">
+    <div className="navbar-logo">
+      <NavLink to="/">
+        <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+      </NavLink>
+    </div>
 
-        <span className="text-sm font-semibold">
-          Ontario Security Training Masterclass
-        </span>
+    <span className="text-sm font-semibold">
+      Ontario Security Training Masterclass
+    </span>
+  </div>
 
-        <div>
-          <span className="text-sm">
-            <span className="font-semibold">Time Spent :</span> 05:30:05
-          </span>
-        </div>
+  {/* Content for Time Spent, Review, Progress, and Back Button */}
+  <div className="flex flex-col gap-2 sm:gap-4 w-full sm:w-auto md:flex-row md:items-center justify-between">
+    {/* Time Spent */}
+    <div className="text-sm sm:text-base">
+      <span className="font-semibold">Time Spent :</span> 05:30:05
+    </div>
 
-        <div class="text-sm font-medium text-black">
-          <div className="flex justify-end mb-1 text-orange-500 text-xs">
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-regular fa-star"></i>
-          </div>
-          <span className="text-sm tracking-wide font-normal">
-            Leave Your Review
-          </span>
-        </div>
+    {/* Rating & Review */}
+    <div className="text-sm font-medium text-black">
+      <div className="flex justify-start mb-1 text-orange-500 text-xs sm:text-sm">
+        <i className="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
+        <i className="fa-regular fa-star"></i>
+      </div>
+      <span className="text-sm tracking-wide font-normal sm:text-base">
+        Leave Your Review
+      </span>
+    </div>
 
-        <div>
-          <span className="text-sm">Your Progress : 8 of 10 (80%)</span>
-        </div>
+    {/* Progress */}
+    <div className="text-sm sm:text-base">
+      <span>Your Progress : 8 of 10 (80%)</span>
+    </div>
 
-        <button
-          className="back-btn"
-        >
-          <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-            <i class="fa-solid fa-angle-left mr-2"></i> Back To Main
-          </NavLink>
-        </button>
-      </nav>
+    {/* Back Button */}
+    <button className="back-btn mt-4 sm:mt-0">
+      <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
+        <i className="fa-solid fa-angle-left mr-2"></i> Back To Main
+      </NavLink>
+    </button>
+  </div>
+</nav>
+
+
+
+
+
+
 
       
 
