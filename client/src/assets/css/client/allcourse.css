@@ -204,7 +204,9 @@
   font-size: 15px;
 }
 
-.author-and-rating .courses-reviews {
+.courses-reviews {
+  display: flex;
+  align-items: center;
   font-weight: 700;
 }
 
@@ -249,7 +251,7 @@
 .filter-button {
   background-color: var(--button-primary-color);
   color: var(--white);
-  padding: 10px 20px;
+  padding: 6px 15px;
   font-size: 20px;
   font-family: var(--jost-ff);
   cursor: pointer;
