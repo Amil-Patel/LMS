@@ -60,8 +60,8 @@ const AllCourse = () => {
   // Filter courses based on search query and selected categories
   const filteredCourses = courseData?.filter((course) => {
     const matchesSearchQuery =
-      course.course_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      course.short_desc.toLowerCase().includes(searchQuery.toLowerCase());
+      course.course_title.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+      course.short_desc.toLowerCase().includes(searchQuery.toLowerCase().trim());
 
     const matchesCategory =
       selectedCategories.length === 0 || selectedCategories.includes(course.course_cate);

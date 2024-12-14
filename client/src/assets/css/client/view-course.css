@@ -279,6 +279,7 @@
 .header-content .faqs-header .module-header {
   border-bottom: none !important;
   padding: 0;
+  cursor: pointer;
 }
 
 .header-content .faqs-header .module {

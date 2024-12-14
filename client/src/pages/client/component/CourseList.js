@@ -35,7 +35,7 @@ const CourseList = ({ courses, category }) => {
                         <div className="course-details">
                             <div className="course-details-header">
                                 <h3>
-                                    <NavLink to={`/view-course`}>{truncatedTitle}</NavLink>
+                                    <NavLink to={`/view-course/${course.id}`}>{truncatedTitle}</NavLink>
                                 </h3>
                                 <span>$ {course.course_price}</span>
                             </div>

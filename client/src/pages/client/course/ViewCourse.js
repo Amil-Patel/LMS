@@ -3,9 +3,12 @@ import "../../../assets/css/client/view-course.css";
 import Navbar from "../layout/Navbar";
 import Breadcrumb from "./Breadcrumb";
 import Footer from "../layout/Footer";
+import { useParams } from "react-router-dom";
 
 const ViewCourse = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const { id } = useParams();
+  console.log(id)
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const toggleContent = (index) => {
     setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -163,11 +166,10 @@ const ViewCourse = () => {
                     <div className="module-controls">
                       <button className="check-btn">
                         <i
-                          className={`fa-solid ${
-                            activeModuleIndex === 0
-                              ? "fa-angle-up"
-                              : "fa-angle-down"
-                          }`}
+                          className={`fa-solid ${activeModuleIndex === 0
+                            ? "fa-angle-up"
+                            : "fa-angle-down"
+                            }`}
                         ></i>
                       </button>
                     </div>
@@ -198,7 +200,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -221,7 +223,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -257,11 +259,10 @@ const ViewCourse = () => {
                     <div className="module-controls">
                       <button className="check-btn">
                         <i
-                          className={`fa-solid ${
-                            activeModuleIndex === 1
-                              ? "fa-angle-up"
-                              : "fa-angle-down"
-                          }`}
+                          className={`fa-solid ${activeModuleIndex === 1
+                            ? "fa-angle-up"
+                            : "fa-angle-down"
+                            }`}
                         ></i>
                       </button>
                     </div>
@@ -292,7 +293,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -315,7 +316,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -351,22 +352,20 @@ const ViewCourse = () => {
                       onClick={() => toggleFaqsContent(0)}
                     >
                       <span
-                        className={`module-title ${
-                          activeFaqsIndex === 0
-                            ? "text-blue-500"
-                            : "text-black-700"
-                        }`}
+                        className={`module-title ${activeFaqsIndex === 0
+                          ? "text-blue-500"
+                          : "text-black-700"
+                          }`}
                       >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
                         <button className="check-btn">
                           <i
-                            className={`fa-solid ${
-                              activeFaqsIndex === 0
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                            }`}
+                            className={`fa-solid ${activeFaqsIndex === 0
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
                           ></i>
                         </button>
                       </div>
@@ -389,22 +388,20 @@ const ViewCourse = () => {
                       onClick={() => toggleFaqsContent(1)}
                     >
                       <span
-                        className={`module-title ${
-                          activeFaqsIndex === 1
-                            ? "text-blue-500"
-                            : "text-black-700"
-                        }`}
+                        className={`module-title ${activeFaqsIndex === 1
+                          ? "text-blue-500"
+                          : "text-black-700"
+                          }`}
                       >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
                         <button className="check-btn">
                           <i
-                            className={`fa-solid ${
-                              activeFaqsIndex === 1
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                            }`}
+                            className={`fa-solid ${activeFaqsIndex === 1
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
                           ></i>
                         </button>
                       </div>
@@ -427,22 +424,20 @@ const ViewCourse = () => {
                       onClick={() => toggleFaqsContent(2)}
                     >
                       <span
-                        className={`module-title ${
-                          activeFaqsIndex === 2
-                            ? "text-blue-500"
-                            : "text-black-700"
-                        }`}
+                        className={`module-title ${activeFaqsIndex === 2
+                          ? "text-blue-500"
+                          : "text-black-700"
+                          }`}
                       >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
                         <button className="check-btn">
                           <i
-                            className={`fa-solid ${
-                              activeFaqsIndex === 2
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                            }`}
+                            className={`fa-solid ${activeFaqsIndex === 2
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
                           ></i>
                         </button>
                       </div>

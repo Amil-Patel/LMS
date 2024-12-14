@@ -22,7 +22,7 @@
 .course-category h3 {
   font-size: 22px;
   font-weight: 600;
-  padding-bottom: 14px;
+  margin-bottom: 15px;
   color: var(--black);
   font-family: var(--exo-ff);
 }
@@ -35,13 +35,13 @@
   line-height: 1.4em;
   cursor: pointer;
   user-select: none;
-  margin-bottom: 10px;
 }
 
 .course-category input[type="checkbox"] {
   margin-right: 8px;
   width: 16px;
   height: 16px;
+  vertical-align: middle;
 }
 
 .course-section-header {
