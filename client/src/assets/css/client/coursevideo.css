@@ -101,7 +101,7 @@
 }
 .course-info .module-list {
   background-color: #fff;
-  padding: 8px;  
+  padding: 8px;
 }
 .course-info button.resource-btn {
   margin-right: 10px;
@@ -111,17 +111,10 @@
   padding: 3px 5px;
 }
 
-
-
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .course-video-container {
     grid-template-columns: 1fr; /* Single column for small screens */
-  }
-
-  .video-element {
-    height: 250px;
   }
 
   .play-button-overlay {
@@ -141,22 +134,20 @@
 }
 
 @media (max-width: 426px) {
-.course-video-container .learning-list ul{
-  display: block;
+  .course-video-container .learning-list ul {
+    display: block;
+  }
+
+  .course-info .module {
+    margin-left: 10px;
+  }
 }
 
-.course-info .module{
-  margin-left: 10px;
-}
-}
-
-
-.video-navbar{
+.video-navbar {
   font-family: var(--inter-ff);
 }
 
-
-.back-btn{
+.back-btn {
   border: 1px solid var(--black);
   border-radius: 0;
   padding: 3px 10px;
@@ -164,25 +155,15 @@
 }
 
 @media (max-width: 1024px) {
-.video-navbar .text-sm{
-  font-size: 12px;
-}
+  .video-navbar .text-sm {
+    font-size: 12px;
+  }
 }
 
-/* Apply changes only on 475px width devices */
 @media (max-width: 475px) {
   .video-navbar {
-    flex-direction: row;  /* Align items in a row */
+    flex-direction: row; /* Align items in a row */
     justify-content: space-between; /* Space items apart */
-  }
-
-  .video-navbar .navbar-logo,
-  .video-navbar span {
-    margin-right: 10px; /* Add some spacing between logo and title */
-  }
-
-  .video-navbar .back-btn {
-    margin-top: 0; /* Remove extra margin for the back button */
   }
 
   .video-navbar > .flex {

@@ -19,6 +19,7 @@
 .shopping-cart-course-content img {
   width: 250px;
   height: 150px;
+  object-fit: cover;
   margin-right: 15px;
 }
 
@@ -60,6 +61,10 @@
   color: var(--white);
   font-size: 14px;
   padding: 4px 16px;
+}
+
+.shopping-cart-course-price .remove-btn:hover {
+  background-color: rgb(254, 50, 50);
 }
 
 .shopping-cart-course-order-summary {
@@ -115,6 +120,14 @@
     margin-right: 15px;
   }
 
+  .course-details-header h3 {
+    font-size: 19px;
+  }
+
+  .shopping-cart-course-content p {
+    font-size: 15px;
+  }
+
   .shopping-cart-course-order-summary {
     width: 32%;
   }
@@ -128,6 +141,22 @@
   .horizontal-card {
     display: block !important;
   }
+
+  .shopping-cart-course-content {
+    display: block !important;
+  }
+
+  .shopping-cart-course-content img {
+    margin-right: 0px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 12px;
+  }
+
+  .course-details-header p {
+    padding: 4px 0;
+  }
+
   .price-with-btn {
     display: flex;
     justify-content: space-between;
@@ -135,8 +164,11 @@
     align-items: center;
   }
 
+  .shopping-cart-course-price .remove-btn {
+    margin-top: 5px;
+  }
   .shopping-cart-course-order-summary {
-    width: 43%;
+    width: 45%;
   }
 
   .shopping-cart-course-container {
@@ -150,16 +182,16 @@
   .shopping-cart-course-price {
     margin-top: 10px;
   }
-
 }
 
-@media screen and (max-width: 500px){
-
-  .shopping-cart-hero-container{
+@media screen and (max-width: 500px) {
+  .shopping-cart-hero-container {
     display: block;
   }
 
-  .shopping-cart-course-container,.shopping-cart-course-order-summary{
+  .shopping-cart-course-container,
+  .shopping-cart-course-order-summary,
+  .shopping-cart-course-content .course-details-header h3 {
     width: 100%;
   }
 
@@ -168,31 +200,12 @@
     overflow-y: none;
   }
 
-  .shopping-cart-course-order-summary{
-    margin-top: 50px;
-    padding: 8%;
+  .shopping-cart-course-order-summary {
+    margin-top: 40px;
+    padding: 6%;
   }
 
   .shopping-cart-course-content h3 {
-    font-size: 16px;
-}
-
- .shopping-cart-course-content img {
-  width: 80px;
-  height: 80px;
-  margin-right: 10;
- }
-
- p.py-2.text-base.font-normal.lg\:pb-0 {
-  padding: 3px 0;
-}
-
-.shopping-cart-course-order-summary {
-  padding: 4%;
-}
-
-
-
-
-
+    font-size: 18px;
+  }
 }

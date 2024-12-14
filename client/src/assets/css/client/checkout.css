@@ -99,6 +99,7 @@
 .checkout-section .course-cart-content img {
   width: 100px;
   height: 92px;
+  object-fit: cover;
   border-radius: 10px;
   margin-right: 15px;
   border: 2px solid var(--border-color);

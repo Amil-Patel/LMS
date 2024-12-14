@@ -23,63 +23,52 @@ const CourseVideo = () => {
   };
   return (
     <>
-      {/* Video page navbar  */}
-      <nav className="video-navbar flex flex-col gap-4 p-2 sm:flex-row sm:items-center sm:justify-between">
-  {/* Logo and Video Title */}
-  <div className="flex items-center gap-4 w-full md:w-auto">
-    <div className="navbar-logo">
-      <NavLink to="/">
-        <img src={require("../../../assets/image/Logo.png")} alt="logo" />
-      </NavLink>
-    </div>
+      <div className="video-navbar flex justify-between items-center py-1 px-3 flex-wrap">
+        <div className="navbar-logo">
+          <NavLink to="/">
+            <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+          </NavLink>
+        </div>
 
-    <span className="text-sm font-semibold">
-      Ontario Security Training Masterclass
-    </span>
-  </div>
+        <div>
+          <span className="text-sm font-semibold">
+            Ontario Security Training Masterclass
+          </span>
+        </div>
 
-  {/* Content for Time Spent, Review, Progress, and Back Button */}
-  <div className="flex flex-col gap-2 sm:gap-4 w-full sm:w-auto md:flex-row md:items-center justify-between">
-    {/* Time Spent */}
-    <div className="text-sm sm:text-base">
-      <span className="font-semibold">Time Spent :</span> 05:30:05
-    </div>
 
-    {/* Rating & Review */}
-    <div className="text-sm font-medium text-black">
-      <div className="flex justify-start mb-1 text-orange-500 text-xs sm:text-sm">
-        <i className="fa-solid fa-star"></i>
-        <i className="fa-solid fa-star"></i>
-        <i className="fa-solid fa-star"></i>
-        <i className="fa-solid fa-star"></i>
-        <i className="fa-regular fa-star"></i>
+        {/* Time Spent */}
+        <div className="text-sm sm:text-base">
+            <span className="font-semibold">Time Spent :</span> 05:30:05
+          </div>
+
+        {/* Rating & Review */}
+        <div className="text-sm font-medium text-black">
+          <div className="flex justify-end xl:mb-1 text-orange-500 text-xs sm:text-sm">
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-solid fa-star"></i>
+            <i className="fa-regular fa-star"></i>
+          </div>
+          <span className="text-sm tracking-wide font-normal sm:text-base">
+            Leave Your Review
+          </span>
+        </div>
+
+        {/* Progress */}
+        <div className="text-sm sm:text-base">
+          <span>Your Progress : 8 of 10 (80%)</span>
+        </div>
+
+        {/* Back Button */}
+        <button className="back-btn">
+          <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
+            <i className="fa-solid fa-angle-left mr-2"></i> Back To Main
+          </NavLink>
+        </button>
       </div>
-      <span className="text-sm tracking-wide font-normal sm:text-base">
-        Leave Your Review
-      </span>
-    </div>
 
-    {/* Progress */}
-    <div className="text-sm sm:text-base">
-      <span>Your Progress : 8 of 10 (80%)</span>
-    </div>
-
-    {/* Back Button */}
-    <button className="back-btn mt-4 sm:mt-0">
-      <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-        <i className="fa-solid fa-angle-left mr-2"></i> Back To Main
-      </NavLink>
-    </button>
-  </div>
-</nav>
-
-
-
-
-
-
-
-      
 
       <div className="course-video-container">
         {/* Video Section */}
@@ -117,20 +106,8 @@ const CourseVideo = () => {
               <>
                 <div className="long-desc">
                   <p>
-                    The minimum length of in-class time for the basic security
-                    guard training program is no less than 40 hours with
-                    Emergency Level First Aid Certification included or no less
-                    than 33.5 hours with Emergency Level First Aid Certification
-                    not included. The following table suggests the duration for
-                    each training section and includes both in-class and outside
-                    class hours. Outside class hours refer to pre-reading only;
-                    all other training methods must take place in-class. These
-                    hours are estimates and may need to be adjusted based on
-                    student learning abilities/trainer preference. The trainer
-                    must determine the optimal number of hours for each section
-                    of his/her program design, but the total must be no less
-                    than 40 or 33.5 hours with Emergency Level First Aid
-                    Certification not included.
+                    The minimum length of in-class time for the basic security guard training program is no less than 40 hours with
+                    Emergency Level First Aid Certification included or no less than 33.5 hours with Emergency Level First Aid Certification not included. The following table suggests the duration for each training section and includes both in-class and outside class hours. Outside class hours refer to pre-reading only;all other training methods must take place in-class. These hours are estimates and may need to be adjusted based on student learning abilities/trainer preference. The trainer must determine the optimal number of hours for each section of his/her program design, but the total must be no less than 40 or 33.5 hours with Emergency Level First Aid Certification not included.
                   </p>
                 </div>
                 <div className="learning-list">
@@ -141,12 +118,10 @@ const CourseVideo = () => {
                     <li>updated for 2020</li>
                     <li>Build 16 web development projects...</li>
                     <li>
-                      After the course you will be able to build ANY website you
-                      want.
+                      After the course you will be able to build ANY website you want.
                     </li>
                     <li>
-                      Build fully-fledged websites and web apps for your startup
-                      or business.
+                      Build fully-fledged websites and web apps for your startup or business.
                     </li>
                     <li>Work as a freelance web developer.</li>
                     <li>Master frontend development with React</li>
@@ -166,8 +141,7 @@ const CourseVideo = () => {
                       Any computer works — Windows, macOS, or Linux
                     </li>
                     <li className="pl-4 md:pl-0">
-                      You don’t need to buy any software — we will use the best
-                      free code editor in the world
+                      You don’t need to buy any software — we will use the best free code editor in the world
                     </li>
                   </ul>
                 </div>
@@ -182,16 +156,15 @@ const CourseVideo = () => {
         {/* Course Info Section */}
         <div className="course-info md:ml-2">
           <div className="module">
-            <div className="module-header">
+            <div className="module-header" onClick={() => toggleContent(0)}>
               <span className="module-title">
                 MODULE-1 : Introduction to Security Guard
               </span>
               <div className="module-controls">
-                <button className="check-btn" onClick={() => toggleContent(0)}>
+                <button className="check-btn">
                   <i
-                    className={`fa-solid ${
-                      activeModuleIndex === 0 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                    className={`fa-solid ${activeModuleIndex === 0 ? "fa-angle-up" : "fa-angle-down"
+                      }`}
                   ></i>
                 </button>
               </div>
@@ -255,16 +228,15 @@ const CourseVideo = () => {
             )}
           </div>
           <div className="module">
-            <div className="module-header">
+            <div className="module-header" onClick={() => toggleContent(1)}>
               <span className="module-title">
                 MODULE-2 : Introduction to Security Guard
               </span>
               <div className="module-controls">
-                <button className="check-btn" onClick={() => toggleContent(1)}>
+                <button className="check-btn">
                   <i
-                    className={`fa-solid ${
-                      activeModuleIndex === 1 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                    className={`fa-solid ${activeModuleIndex === 1 ? "fa-angle-up" : "fa-angle-down"
+                      }`}
                   ></i>
                 </button>
               </div>
@@ -327,18 +299,16 @@ const CourseVideo = () => {
               </>
             )}
           </div>
-
           <div className="module">
-            <div className="module-header">
+            <div className="module-header" onClick={() => toggleContent(2)}>
               <span className="module-title">
                 MODULE-3 : Introduction to Security Guard
               </span>
               <div className="module-controls">
-                <button className="check-btn" onClick={() => toggleContent(2)}>
+                <button className="check-btn">
                   <i
-                    className={`fa-solid ${
-                      activeModuleIndex === 2 ? "fa-angle-up" : "fa-angle-down"
-                    }`}
+                    className={`fa-solid ${activeModuleIndex === 2 ? "fa-angle-up" : "fa-angle-down"
+                      }`}
                   ></i>
                 </button>
               </div>

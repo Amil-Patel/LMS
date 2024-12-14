@@ -63,7 +63,7 @@ const CheckOut = () => {
                             <h3>Review your cart</h3>
                             <div className="course-cart-content">
                                 <img
-                                    src="https://via.placeholder.com/100x90"
+                                    src={require("../../../assets/image/course-thumbnail.png")}
                                     alt="logo"
                                 />
                                 <div className="course-cart-details">

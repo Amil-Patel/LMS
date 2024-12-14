@@ -8,6 +8,11 @@
   font-size: 24px;
 }
 
+.header-content .course-description {
+  font-size: 15px;
+  padding-bottom: 12px;
+}
+
 .metadata {
   color: var(--heading-color);
 }
@@ -15,6 +20,11 @@
   font-size: 24px;
   color: var(--black);
   font-weight: bold;
+}
+
+.rating-author .author-name{
+  font-size: 14px;
+  padding-bottom: 10px;
 }
 
 .price h3 {
@@ -81,6 +91,10 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--step-button-background);
+}
+
+.tabs button:hover{
+  background-color:var(--border-color) ;
 }
 
 .tabs button.active {
@@ -165,7 +179,7 @@
   padding: 20px;
 }
 
-.rating span{
+.rating span {
   color: var(--course-category-color);
 }
 
@@ -237,7 +251,6 @@
   font-family: var(--jost-ff);
 }
 
-
 /* Curriculum  */
 
 .header-content .module {
@@ -264,18 +277,19 @@
   background-color: transparent;
 }
 
-.header-content .lesson-time span{
+.header-content .lesson-time span {
   color: var(--step-button-background);
   width: 57px;
   text-align: right;
 }
 
-
 /* faqs */
 .header-content .faqs-header {
   background-color: var(--search-bg);
   padding: 20px;
+  border-radius: 6px;
 }
+
 .header-content .faqs-header .module-header {
   border-bottom: none !important;
   padding: 0;
@@ -283,63 +297,57 @@
 
 .header-content .faqs-header .module {
   margin-bottom: 10px;
-   background-color: var(--white);
+  background-color: var(--white);
 }
 
-.header-content .faqs-header .module p{
-
-}
-
-.header-content .faqs-header .module:nth-last-child(1){
+.header-content .faqs-header .module:nth-last-child(1) {
   margin-bottom: 0px;
 }
 
 /* review */
-.reviews-section .container{
-  border: none;
-}
-.reviews-section .container .flex-row{
+.reviews-section .container {
   border: none;
 }
 
-.reviews-section .average-rating h2{
+.reviews-section .container .flex-row {
+  border: none;
+}
+
+.reviews-section .average-rating h2 {
   font-family: var(--exo-ff);
-  font-weight: 600
+  font-weight: 600;
 }
 
-.reviews-section .average-rating p{
+.reviews-section .average-rating p {
   font-family: var(--jost-ff);
 }
-
 
 .faqs-header .module-title {
   font-family: var(--exo-ff);
   font-size: 16px;
 }
 
-
-.faqs-header .module p{
+.faqs-header .module p {
   font-family: var(--jost-ff);
   margin-top: 15px;
   font-size: 16px;
-  color: var(  --light-grey-text-color);
+  color: var(--light-grey-text-color);
 }
-
 
 @media screen and (max-width: 426px) {
-.header-content .faqs-header {
-  margin-bottom: 20px;
-}
+  .header-content .faqs-header {
+    margin-bottom: 20px;
+  }
 }
 
 @media screen and (max-width: 768px) {
-  .course-image  img {
-     margin-top: 20px;
-   }
-   }
-
-@media screen and (max-width: 426px) {
- .course-image  img {
+  .course-image img {
     margin-top: 20px;
   }
+}
+
+@media screen and (max-width: 426px) {
+  .course-image img {
+    margin-top: 20px;
   }
+}

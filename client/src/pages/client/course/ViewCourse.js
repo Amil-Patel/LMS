@@ -27,22 +27,20 @@ const ViewCourse = () => {
             <h2 className="font-bold mb-2">
               The Complete 2020 Full Stack Web Developer Course
             </h2>
-            <p>
-              Learn modern HTML5, CSS3 and web design by building a stunning
-              website for your portfolio! Includes flexbox and CSS Grid
+            <p className="course-description">
+              Learn modern HTML5, CSS3 and web design by building a stunning website for your portfolio! Includes flexbox and CSS Grid
             </p>
             <div className="rating-author">
               <span className="courses-reviews">
-                {" "}
                 4.5
                 <i className="fa-solid fa-star"></i>
                 <i className="fa-solid fa-star"></i>
                 <i className="fa-solid fa-star"></i>
                 <i className="fa-solid fa-star"></i>
-                <i className="fa-solid fa-star"></i>
+                <i className="fa-regular fa-star"></i>
                 <span className="customer-review-number"> (3,902) </span>
               </span>
-              <p className="mt-2">By Aakib Valuda</p>
+              <p className="author-name mt-2">By Aakib Valuda</p>
             </div>
             <div className="course-icon-section">
               <span>
@@ -63,34 +61,24 @@ const ViewCourse = () => {
             </div>
             <div className="course-icon-section mt-2">
               <span className="w-max">
-                <i className="fa-solid fa-clock"></i> Last Update: 11/2024{" "}
+                <i className="fa-solid fa-clock"></i> Last Update: 11/2024
               </span>
             </div>
 
             {/* Tab Bar */}
             <div className="tabs flex flex-wrap gap-2 justify-start md:justify-start">
               <button
-                className={activeTab === "overview" ? "active" : ""}
-                onClick={() => setActiveTab("overview")}
-              >
+                className={activeTab === "overview" ? "active" : ""} onClick={() => setActiveTab("overview")}>
                 Overview
               </button>
-              <button
-                className={activeTab === "curriculum" ? "active" : ""}
-                onClick={() => setActiveTab("curriculum")}
-              >
+              <button className={activeTab === "curriculum" ? "active" : ""} onClick={() => setActiveTab("curriculum")}>
                 Curriculum
               </button>
-              <button
-                className={activeTab === "faqs" ? "active" : ""}
-                onClick={() => setActiveTab("faqs")}
-              >
+              <button className={activeTab === "faqs" ? "active" : ""} onClick={() => setActiveTab("faqs")} >
                 FAQs
               </button>
               <button
-                className={activeTab === "reviews" ? "active" : ""}
-                onClick={() => setActiveTab("reviews")}
-              >
+                className={activeTab === "reviews" ? "active" : ""} onClick={() => setActiveTab("reviews")} >
                 Reviews
               </button>
             </div>
@@ -98,20 +86,8 @@ const ViewCourse = () => {
               <>
                 <div className="long-desc">
                   <p>
-                    The minimum length of in-class time for the basic security
-                    guard training program is no less than 40 hours with
-                    Emergency Level First Aid Certification included or no less
-                    than 33.5 hours with Emergency Level First Aid Certification
-                    not included. The following table suggests the duration for
-                    each training section and includes both in-class and outside
-                    class hours. Outside class hours refer to pre-reading only;
-                    all other training methods must take place in-class. These
-                    hours are estimates and may need to be adjusted based on
-                    student learning abilities/trainer preference. The trainer
-                    must determine the optimal number of hours for each section
-                    of his/her program design, but the total must be no less
-                    than 40 or 33.5 hours with Emergency Level First Aid
-                    Certification not included.
+                    The minimum length of in-class time for the basic security guard training program is no less than 40 hours with
+                    Emergency Level First Aid Certification included or no less than 33.5 hours with Emergency Level First Aid Certification not included. The following table suggests the duration for each training section and includes both in-class and outside class hours. Outside class hours refer to pre-reading only;all other training methods must take place in-class. These hours are estimates and may need to be adjusted based on student learning abilities/trainer preference. The trainer must determine the optimal number of hours for each section of his/her program design, but the total must be no less than 40 or 33.5 hours with Emergency Level First Aid Certification not included.
                   </p>
                 </div>
                 <div className="learning-list">
@@ -120,12 +96,10 @@ const ViewCourse = () => {
                     <li>updated for 2020</li>
                     <li>Build 16 web development projects...</li>
                     <li>
-                      After the course you will be able to build ANY website you
-                      want.
+                      After the course you will be able to build ANY website you want.
                     </li>
                     <li>
-                      Build fully-fledged websites and web apps for your startup
-                      or business.
+                      Build fully-fledged websites and web apps for your startup or business.
                     </li>
                     <li>Work as a freelance web developer.</li>
                     <li>Master frontend development with React</li>
@@ -143,8 +117,7 @@ const ViewCourse = () => {
                       Any computer works — Windows, macOS, or Linux
                     </li>
                     <li className="pl-4 md:pl-0">
-                      You don’t need to buy any software — we will use the best
-                      free code editor in the world
+                      You don’t need to buy any software — we will use the best free code editor in the world
                     </li>
                   </ul>
                 </div>
@@ -163,11 +136,10 @@ const ViewCourse = () => {
                     <div className="module-controls">
                       <button className="check-btn">
                         <i
-                          className={`fa-solid ${
-                            activeModuleIndex === 0
-                              ? "fa-angle-up"
-                              : "fa-angle-down"
-                          }`}
+                          className={`fa-solid ${activeModuleIndex === 0
+                            ? "fa-angle-up"
+                            : "fa-angle-down"
+                            }`}
                         ></i>
                       </button>
                     </div>
@@ -198,7 +170,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -221,7 +193,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -257,11 +229,10 @@ const ViewCourse = () => {
                     <div className="module-controls">
                       <button className="check-btn">
                         <i
-                          className={`fa-solid ${
-                            activeModuleIndex === 1
-                              ? "fa-angle-up"
-                              : "fa-angle-down"
-                          }`}
+                          className={`fa-solid ${activeModuleIndex === 1
+                            ? "fa-angle-up"
+                            : "fa-angle-down"
+                            }`}
                         ></i>
                       </button>
                     </div>
@@ -292,7 +263,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -315,7 +286,7 @@ const ViewCourse = () => {
                         </div>
                       </div>
                       <div className="module-content">
-                      <div className="module-lesson flex flex-wrap gap-2 p-3">
+                        <div className="module-lesson flex flex-wrap gap-2 p-3">
                           {/* Lesson Icon and Title */}
                           <div className="lesson-title flex items-center gap-1 w-full">
                             <span className="lesson-icon">
@@ -344,29 +315,27 @@ const ViewCourse = () => {
             )}
             {activeTab === "faqs" && (
               <>
-                <div className="faqs-header md:mb-8 sm:mb-8">
+                <div className="faqs-header">
                   <div className="module">
                     <div
                       className="module-header"
                       onClick={() => toggleFaqsContent(0)}
                     >
                       <span
-                        className={`module-title ${
-                          activeFaqsIndex === 0
-                            ? "text-blue-500"
-                            : "text-black-700"
-                        }`}
+                        className={`module-title ${activeFaqsIndex === 0
+                          ? "text-blue-500"
+                          : "text-black-700"
+                          }`}
                       >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
                         <button className="check-btn">
                           <i
-                            className={`fa-solid ${
-                              activeFaqsIndex === 0
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                            }`}
+                            className={`fa-solid ${activeFaqsIndex === 0
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
                           ></i>
                         </button>
                       </div>
@@ -374,10 +343,7 @@ const ViewCourse = () => {
                     {activeFaqsIndex === 0 && (
                       <>
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit. Cras facilisis faucibus odio arcu duis dui,
-                          adipiscing facilisis. Urna, donec turpis egestas
-                          volutpat. Quisque nec non amet quis. Varius tellus
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras facilisis faucibus odio arcu duis dui,adipiscing facilisis. Urna, donec turpis egestas volutpat. Quisque nec non amet quis. Varius tellus
                           justo odio parturient mauris curabitur lorem in.
                         </p>
                       </>
@@ -389,22 +355,20 @@ const ViewCourse = () => {
                       onClick={() => toggleFaqsContent(1)}
                     >
                       <span
-                        className={`module-title ${
-                          activeFaqsIndex === 1
-                            ? "text-blue-500"
-                            : "text-black-700"
-                        }`}
+                        className={`module-title ${activeFaqsIndex === 1
+                          ? "text-blue-500"
+                          : "text-black-700"
+                          }`}
                       >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
                         <button className="check-btn">
                           <i
-                            className={`fa-solid ${
-                              activeFaqsIndex === 1
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                            }`}
+                            className={`fa-solid ${activeFaqsIndex === 1
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
                           ></i>
                         </button>
                       </div>
@@ -412,10 +376,7 @@ const ViewCourse = () => {
                     {activeFaqsIndex === 1 && (
                       <>
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit. Cras facilisis faucibus odio arcu duis dui,
-                          adipiscing facilisis. Urna, donec turpis egestas
-                          volutpat. Quisque nec non amet quis. Varius tellus
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras facilisis faucibus odio arcu duis dui,adipiscing facilisis. Urna, donec turpis egestas volutpat. Quisque nec non amet quis. Varius tellus
                           justo odio parturient mauris curabitur lorem in.
                         </p>
                       </>
@@ -427,22 +388,20 @@ const ViewCourse = () => {
                       onClick={() => toggleFaqsContent(2)}
                     >
                       <span
-                        className={`module-title ${
-                          activeFaqsIndex === 2
-                            ? "text-blue-500"
-                            : "text-black-700"
-                        }`}
+                        className={`module-title ${activeFaqsIndex === 2
+                          ? "text-blue-500"
+                          : "text-black-700"
+                          }`}
                       >
                         What Does Royalty Free Mean?
                       </span>
                       <div className="module-controls">
                         <button className="check-btn">
                           <i
-                            className={`fa-solid ${
-                              activeFaqsIndex === 2
-                                ? "fa-angle-up"
-                                : "fa-angle-down"
-                            }`}
+                            className={`fa-solid ${activeFaqsIndex === 2
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
                           ></i>
                         </button>
                       </div>
@@ -450,10 +409,7 @@ const ViewCourse = () => {
                     {activeFaqsIndex === 2 && (
                       <>
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit. Cras facilisis faucibus odio arcu duis dui,
-                          adipiscing facilisis. Urna, donec turpis egestas
-                          volutpat. Quisque nec non amet quis. Varius tellus
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras facilisis faucibus odio arcu duis dui,adipiscing facilisis. Urna, donec turpis egestas volutpat. Quisque nec non amet quis. Varius tellus
                           justo odio parturient mauris curabitur lorem in.
                         </p>
                       </>
@@ -505,8 +461,7 @@ const ViewCourse = () => {
                           </div>
                         </div>
                         <p className="review-text">
-                          I love the way the instructor goes about the course.
-                          So easy to follow, even though a little bit
+                          I love the way the instructor goes about the course. So easy to follow, even though a little bit
                           challenging as expected.
                         </p>
                       </div>

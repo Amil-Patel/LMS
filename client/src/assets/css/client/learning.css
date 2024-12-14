@@ -1,77 +1,166 @@
 .main_stu_dashboard {
-    display: flex;
-    padding: 3% 5% 0.2% 5%;
-}
-
-.stu-main-sidebar .sildebar-profile-section {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  padding: 3% 5% 0.2% 5%;
 }
 
 .main_stu_dashboard .content {
-    width: 78%;
-    height: calc(100vh);
-    overflow-y: auto;
-    scrollbar-width: none;
-    padding-left: 60px;
-    font-family: var(--inter-ff);
+  width: calc(100% - 288px);
+  height: calc(100vh);
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-left: 60px;
+  font-family: var(--inter-ff);
 }
 
-.main_stu_dashboard .content img{
-    height: 165px;
+.main_stu_dashboard .content img {
+  height: 165px;
 }
 
 .main_stu_dashboard .content h1 {
-    font-weight: 700;
-    font-size: 30px;
-    position: sticky;
-    top: 0;
-    background-color: var(--white);
-    z-index: 10;
-    color: var(--black);
+  font-weight: 700;
+  font-size: 30px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: var(--white);
+  z-index: 10;
+  color: var(--black);
 }
 
 .main_stu_dashboard .stu-main-sidebar {
-    background-color: var(--bg-color);
-    padding: 30px;
-    width: 22%;
-    font-family: var(--inter-ff);
+  background-color: var(--bg-color);
 }
 
-.sildebar-profile-section img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+.main_stu_dashboard aside {
+  font-family: var(--inter-ff);
+  color: var(--black);
 }
 
-.sildebar-profile-section h3{
-    color: var(--black);
-    font-weight: 600;
-}
-.stu-sidebar-menu li {
-    font-family: var(--inter-ff);
-    cursor: pointer;
-    padding: 6% 8%;
-    margin-bottom: 5px;
-}
-.stu-sidebar-menu i{
-    font-size: 17px;
-    margin-right: 15px;
+.sidebar-profile-section img {
+  object-fit: cover;
 }
 
-.stu-sidebar-menu li:hover{
-    background-color: var(--button-primary-color);
-    color: var(--white);
-    border-radius: 6px;
+.stu-sidebar-menu i {
+  font-size: 19px;
+  margin-right: 15px;
 }
 
-.stu-sidebar-menu li:has(a.active) {
-    background-color: var(--button-primary-color);
-    color: var(--white);
-    border-left: 6px solid #ea5455;
-    border-radius: 6px;
-    padding-left: 13px;
+/* Tooltip styling */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
 }
 
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: var(--button-primary-color);
+  color: var(--white);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  top: 25%;
+  left: 110%;
+  font-size: 13px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+@media (max-width: 1200px) and (min-width: 900px) {
+  .main_stu_dashboard aside {
+    width: 260px;
+  }
+
+  .main_stu_dashboard .content {
+    width: calc(100% - 260px);
+    padding-left: 40px;
+  }
+
+  .course-details .course-icon-section {
+    display: grid;
+    gap: 5px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .main_stu_dashboard .content img {
+    height: 155px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .main_stu_dashboard_sidebar {
+    position: relative;
+  }
+
+  .main_stu_dashboard aside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 90;
+    transition: width 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .main_stu_dashboard .content {
+    width: 100%;
+    padding-left: 13%;
+    transition: filter 0.3s ease-in-out;
+  }
+
+  .main_stu_dashboard .content.dimmed {
+    filter: brightness(0.7);
+    pointer-events: none;
+  }
+
+  .main_stu_dashboard aside.collapsed {
+    width: 65px;
+  }
+
+  .main_stu_dashboard aside.open {
+    width: 240px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .main_stu_dashboard .content {
+    padding-left: 22%;
+  }
+
+  .course-details .course-icon-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .main_stu_dashboard .content h1 {
+    font-size: 26px;
+  }
+
+  .course-details-header h3 {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .main_stu_dashboard aside.collapsed {
+    width: 55px;
+  }
+
+  .sidebar_li {
+    padding-left: 0.9rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 330px) {
+  .main_stu_dashboard .content {
+    padding-left: 25%;
+  }
+
+  .course-details .course-icon-section {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
