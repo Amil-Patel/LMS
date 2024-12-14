@@ -3,9 +3,12 @@ import "../../../assets/css/client/view-course.css";
 import Navbar from "../layout/Navbar";
 import Breadcrumb from "./Breadcrumb";
 import Footer from "../layout/Footer";
+import { useParams } from "react-router-dom";
 
 const ViewCourse = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const { id } = useParams();
+  console.log(id)
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const toggleContent = (index) => {
     setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
