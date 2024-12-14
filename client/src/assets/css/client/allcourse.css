@@ -160,6 +160,10 @@
   font-size: 14px;
   padding: 4px 14px;
 }
+.add-to-cart-btn.disabled {
+  background-color: rgb(163, 160, 160);
+  cursor: not-allowed;
+}
 
 .security-button {
   font-weight: 700;

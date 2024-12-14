@@ -49,7 +49,7 @@ const AddCourse = () => {
     course_discount: "",
     is_tax: false,
     tax_name: "",
-    tax_rate: "",
+    tax_rate: 0,
     is_inclusive: false,
     is_exclusive: false,
     auther: [],
@@ -66,41 +66,8 @@ const AddCourse = () => {
     updated_by: userId
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
 
-    let updatedFields = { ...addCourse };
 
-    if (type === "checkbox") {
-      updatedFields[name] = checked;
-    } else {
-      updatedFields[name] = value;
-    }
-
-    if (name === "tax_type") {
-      if (value === "inclusive") {
-        updatedFields = { ...updatedFields, is_inclusive: 1, is_exclusive: 0 };
-      } else if (value === "exclusive") {
-        updatedFields = { ...updatedFields, is_inclusive: 0, is_exclusive: 1 };
-      }
-    } else if (name === "is_life_time" || name === "is_limited") {
-      if (type === "checkbox") {
-        if (checked) {
-          updatedFields = {
-            ...updatedFields,
-            expiring_time: name === "is_life_time" ? "life_time" : "limited_time",
-            [name]: 1
-          };
-        } else {
-          updatedFields = { ...updatedFields, [name]: 0 };
-          if (name === "is_limited") updatedFields.expiring_time = "";
-        }
-      }
-    }
-
-    setAddCourse(updatedFields);
-
-  };
 
   const handleTax = () => {
     setIsTax(!isTax);
@@ -234,6 +201,45 @@ const AddCourse = () => {
       ),
     });
   };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    let updatedFields = { ...addCourse };
+
+    if (type === "checkbox") {
+      updatedFields[name] = checked;
+    } else {
+      updatedFields[name] = value;
+    }
+
+    if (name === "tax_type") {
+      if (value === "inclusive") {
+        updatedFields = { ...updatedFields, is_inclusive: 1, is_exclusive: 0 };
+      } else if (value === "exclusive") {
+        updatedFields = { ...updatedFields, is_inclusive: 0, is_exclusive: 1 };
+      }
+    } else if (name === "is_life_time" || name === "is_limited") {
+      if (type === "checkbox") {
+        if (checked) {
+          updatedFields = {
+            ...updatedFields,
+            expiring_time: name === "is_life_time" ? "life_time" : "limited_time",
+            [name]: 1
+          };
+        } else {
+          updatedFields = { ...updatedFields, [name]: 0 };
+          if (name === "is_limited") updatedFields.expiring_time = "";
+        }
+      }
+    }
+
+    setAddCourse(updatedFields);
+
+  };
+
+  
+
   const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -251,30 +257,30 @@ const AddCourse = () => {
     formData.append('publish_date', addCourse.publish_date);
     formData.append('is_top_course', addCourse.is_top_course);
     formData.append('featured_course', addCourse.featured_course);
-    formData.append('course_faqs', JSON.stringify(addCourse.course_faqs));
-    formData.append('course_topics', JSON.stringify(addCourse.course_topics));
-    formData.append('course_requirenment', JSON.stringify(addCourse.course_requirenment));
+    formData.append('course_faqs',addCourse.course_faqs);
+    formData.append('course_topics',addCourse.course_topics);
+    formData.append('course_requirenment',addCourse.course_requirenment);
     formData.append('course_price', addCourse.course_price);
     formData.append('course_discount', addCourse.course_discount);
-    formData.append('is_tax', addCourse.is_tax);
+    formData.append('is_tax', isTax);
     formData.append('tax_name', addCourse.tax_name);
     formData.append('tax_rate', addCourse.tax_rate);
     formData.append('is_inclusive', addCourse.is_inclusive);
     formData.append('is_exclusive', addCourse.is_exclusive);
-    formData.append('auther', JSON.stringify(addCourse.auther));
+    formData.append('auther',addCourse.auther);
     formData.append('expiring_time', addCourse.expiring_time);
     formData.append('no_of_month', addCourse.no_of_month);
     formData.append('course_overview_link', addCourse.course_overview_link);
-    formData.append('course_thumbnail', addCourse.course_thumbnail);
-    formData.append('meta_tag', JSON.stringify(addCourse.meta_tag));
-    formData.append('meta_keyword', JSON.stringify(addCourse.meta_keyword));
+    formData.append('course_thumbnail', newImage);
+    formData.append('meta_tag',addCourse.meta_tag);
+    formData.append('meta_keyword',addCourse.meta_keyword);
     formData.append('meta_desc', addCourse.meta_desc);
     formData.append('canonical_url', addCourse.canonical_url);
     formData.append('title_tag', addCourse.title_tag)
-
+    console.log(addCourse)
 
     try {
-      const res = await axiosInstance.post(`${port}/addingCourseMaster`, addCourse, {
+      const res = await axiosInstance.post(`${port}/addingCourseMaster`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

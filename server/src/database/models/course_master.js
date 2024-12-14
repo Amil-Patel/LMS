@@ -112,6 +112,9 @@ module.exports = (sequelize, DataTypes) => {
     tax_name: {
       type: DataTypes.STRING
     },
+    tax_rate: {
+      type: DataTypes.INTEGER
+    },
     is_inclusive: {
       type: DataTypes.INTEGER
     },

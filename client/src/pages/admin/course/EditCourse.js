@@ -325,9 +325,9 @@ const EditCourse = () => {
         formData.append('publish_date', courseData.publish_date);
         formData.append('is_top_course', courseData.is_top_course);
         formData.append('featured_course', courseData.featured_course);
-        formData.append('course_faqs', JSON.stringify(courseData.course_faqs));
-        formData.append('course_topics', JSON.stringify(courseData.course_topics));
-        formData.append('course_requirenment', JSON.stringify(courseData.course_requirenment));
+        formData.append('course_faqs', courseData.course_faqs);
+        formData.append('course_topics', courseData.course_topics);
+        formData.append('course_requirenment', courseData.course_requirenment);
         formData.append('course_price', courseData.course_price);
         formData.append('course_discount', courseData.course_discount);
         formData.append('is_tax', courseData.is_tax);
@@ -335,13 +335,13 @@ const EditCourse = () => {
         formData.append('tax_rate', courseData.tax_rate);
         formData.append('is_inclusive', courseData.is_inclusive);
         formData.append('is_exclusive', courseData.is_exclusive);
-        formData.append('auther', JSON.stringify(courseData.auther));
+        formData.append('auther', courseData.auther);
         formData.append('expiring_time', courseData.expiring_time);
         formData.append('no_of_month', courseData.no_of_month);
         formData.append('course_overview_link', courseData.course_overview_link);
         formData.append('course_thumbnail', courseData.course_thumbnail);
-        formData.append('meta_tag', JSON.stringify(courseData.meta_tag));
-        formData.append('meta_keyword', JSON.stringify(courseData.meta_keyword));
+        formData.append('meta_tag', courseData.meta_tag);
+        formData.append('meta_keyword', courseData.meta_keyword);
         formData.append('meta_desc', courseData.meta_desc);
         formData.append('canonical_url', courseData.canonical_url);
         formData.append('title_tag', courseData.title_tag)

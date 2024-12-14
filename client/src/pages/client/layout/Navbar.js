@@ -80,10 +80,10 @@ const Navbar = () => {
 
         <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
           {/*cart section  */}
-          <button className="cart_section">
-                <i className="fa-solid fa-cart-arrow-down"></i>
-                <p className="p-0">{cart.length}</p> 
-            </button>
+          <NavLink to="/shopping-cart" className="cart_section">
+            <i className="fa-solid fa-cart-arrow-down"></i>
+            <p className="p-0">{cart.length}</p>
+          </NavLink>
           {/*cart section  */}
           {!savedToken && (
             <>

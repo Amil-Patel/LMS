@@ -115,7 +115,7 @@ const AllCourse = () => {
                 <th>Price <i className="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
                 <th>Enrollments <i className="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
                 <th>Lessions <i className="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
-                <th>Author <i className="fa-solid fa-sort" onClick={() => handleSort('author')}></i></th>
+                <th>Author <i className="fa-solid fa-sort" onClick={() => handleSort('auther')}></i></th>
                 <th>Status</th>
                 {(userRole === "superAdmin" || editCoursePermission == 1 || deleteCoursePermission == 1) ? (
                   <th>Action</th>
@@ -128,9 +128,10 @@ const AllCourse = () => {
 
             <tbody>
               {sortedData.map((i, index) => {
+                console.log(i)
                 let auther = i.auther;
                 try {
-                  auther = JSON.parse(auther);
+                  // auther = JSON.parse(auther);
                   if (typeof auther === 'string') {
                     auther = JSON.parse(auther);
                   }

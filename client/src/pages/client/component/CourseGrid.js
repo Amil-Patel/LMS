@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useCart } from "../layout/CartContext"; // Import Cart Context
+import { useCart } from "../../../pages/client/layout/CartContext";
 import "../../../assets/css/client/allcourse.css";
 
 const CourseGrid = ({ courses, category }) => {
-    const { addToCart } = useCart(); // Access the addToCart function from context
+    const { cart, addToCart } = useCart();
     return (
         <>
             {courses?.length === 0 && (
@@ -38,7 +38,7 @@ const CourseGrid = ({ courses, category }) => {
                     // Find the category title for the course
                     const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
                     const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory
-
+                    const isInCart = cart.some((item) => item.id === course.id);
                     return (
                         <div key={course.id} className="course-content">
                             {/* Course Thumbnail */}
@@ -73,10 +73,11 @@ const CourseGrid = ({ courses, category }) => {
                             <div className="course-price-and-add-to-cart-btn">
                                 <div className="course-price">$ {course.course_price}</div>
                                 <button
-                                    className="add-to-cart-btn"
-                                    onClick={() => addToCart(course)} // Add course to cart on button click
+                                    className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
+                                    onClick={() => addToCart(course)}
+                                    disabled={isInCart}
                                 >
-                                    Add to cart
+                                    {isInCart ? 'Added to Cart' : 'Add to Cart'}
                                 </button>
                             </div>
                         </div>

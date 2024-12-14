@@ -1,44 +1,52 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-// import axiosInstance from "../utils/axiosInstance";
-// const port = process.env.REACT_APP_URL;
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create the context
 const CartContext = createContext();
 
-// Custom hook to use the CartContext
-export const useCart = () => {
-    return useContext(CartContext);
-};
-
-// Provider component
 export const CartProvider = ({ children }) => {
-    // Get course data
-    // const [courseData, setCourseData] = useState();
-    // const getCourseData = async () => {
-    //     try {
-    //         const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
-    //         setCourseData(res.data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     getCourseData();
-    // }, []);
     const [cart, setCart] = useState([]);
 
-    const addToCart = (item) => {
-        setCart((prev) => [...prev, item]);
+    // Load cart from localStorage on initial load
+    useEffect(() => {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            setCart(JSON.parse(storedCart));
+        }
+    }, []);
+
+    // Save cart to localStorage whenever it changes
+    useEffect(() => {
+        if (cart.length > 0) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+    }, [cart]);
+
+    const addToCart = (course) => {
+        const uniqueCourse = {
+            ...course,
+            uniqueId: Date.now(),
+        };
+        setCart((prevCart) => {
+            const updatedCart = [...prevCart, uniqueCourse];
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return updatedCart;
+        });
     };
 
-    const removeFromCart = (id) => {
-        setCart((prev) => prev.filter((item) => item.id !== id));
+
+    const removeCart = (course) => {
+        setCart((prevCart) => {
+            const updatedCart = prevCart.filter((item) => item.uniqueId !== course.uniqueId);
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return updatedCart;
+        });
     };
+    
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeCart }}>
             {children}
         </CartContext.Provider>
     );
 };
+
+export const useCart = () => useContext(CartContext);

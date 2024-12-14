@@ -4,7 +4,7 @@ import { useCart } from "../../../pages/client/layout/CartContext";
 import "../../../assets/css/client/allcourse.css";
 
 const CourseList = ({ courses, category }) => {
-    const { addToCart } = useCart();
+    const { cart, addToCart } = useCart();
 
     return (
         <>
@@ -28,7 +28,7 @@ const CourseList = ({ courses, category }) => {
                 // Find the category title for the course
                 const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
                 const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory
-
+                const isInCart = cart.some((item) => item.id === course.id);
                 return (
                     <div key={course.id} className="course-main-div">
                         <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
@@ -52,10 +52,11 @@ const CourseList = ({ courses, category }) => {
                             <div className="course-btn">
                                 <button className="security-button">{truncateCate}</button>
                                 <button
-                                    className="add-to-cart-btn"
+                                    className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
                                     onClick={() => addToCart(course)}
+                                    disabled={isInCart}
                                 >
-                                    Add to cart
+                                    {isInCart ? 'Added to Cart' : 'Add to Cart'}
                                 </button>
                             </div>
                         </div>
