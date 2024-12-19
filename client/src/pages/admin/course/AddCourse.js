@@ -627,12 +627,12 @@ const AddCourse = () => {
 
                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
-                    <label htmlFor="auther">auther</label>
+                    <label htmlFor="auther">Author</label>
                     <input
                       type="text"
                       id="auther"
                       name="auther"
-                      placeholder="Enter One Or More auther"
+                      placeholder="Enter One Or More Author"
                       className="col12input"
                       onKeyDown={handleAddAuther}
                     />

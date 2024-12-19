@@ -135,6 +135,7 @@ td {
 }
 
 .main {
+  height: 100vh;
   position: relative;
   left: 230px;
   width: calc(100% - 230px);

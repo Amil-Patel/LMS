@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import "../../../assets/css/client/coursevideo.css";
+import { RiMenuAddLine } from "react-icons/ri";
 import courseThumbnail from "../../../assets/image/course-thumbnail.png";
 
 const CourseVideo = () => {
@@ -21,52 +22,100 @@ const CourseVideo = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
     <>
-      <div className="video-navbar flex justify-between items-center py-1 px-3 flex-wrap">
+
+      <div className="video-navbar flex justify-between items-center py-2 bg-[#F5F6FA] px-3">
+
         <div className="navbar-logo">
           <NavLink to="/">
             <img src={require("../../../assets/image/Logo.png")} alt="logo" />
           </NavLink>
         </div>
 
-        <div>
-          <span className="text-sm font-semibold">
+        <div className="course-title">
+          <span className="text-base font-semibold">
             Ontario Security Training Masterclass
           </span>
         </div>
 
+        {/* 3-Dot Menu for Small Screens */}
+        <div className="relative block xl:hidden border-[1px] border-black">
+          <button
+            className="text-xl p-1 flex items-center"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            <RiMenuAddLine />
+          </button>
 
-        {/* Time Spent */}
-        <div className="text-sm sm:text-base">
-            <span className="font-semibold">Time Spent :</span> 05:30:05
-          </div>
+          {/* Dropdown */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 top-9 bg-white border rounded shadow-md p-3 w-60 z-10">
+              {/* Time Spent */}
+              <div className="mb-1.5 text-base">
+                <span className="font-semibold">Time Spent: </span>
+                <span className="text-gray-800 text-[14px]">05:30:05</span>
+              </div>
 
-        {/* Rating & Review */}
-        <div className="text-sm font-medium text-black">
-          <div className="flex justify-end xl:mb-1 text-orange-500 text-xs sm:text-sm">
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <i className="fa-regular fa-star"></i>
-          </div>
-          <span className="text-sm tracking-wide font-normal sm:text-base">
-            Leave Your Review
-          </span>
+              {/* Progress */}
+              <div className="text-base mb-1.5">
+                <span className="font-semibold">Your Progress: </span>
+                <span className="text-gray-800 text-[14px]">8 of 10 (80%)</span>
+              </div>
+
+              {/* Rating & Review */}
+              <div className="text-sm font-medium flex text-black mb-0.5 items-center">
+                <span className="text-[15px] font-semibold">Leave Your Review:&nbsp;</span>
+                <div className="flex justify-end text-orange-500 text-[12px]">
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-regular fa-star"></i>
+                </div>
+              </div>
+
+            </div>
+          )}
         </div>
 
-        {/* Progress */}
-        <div className="text-sm sm:text-base">
-          <span>Your Progress : 8 of 10 (80%)</span>
+        {/* Full Content for Larger Screens */}
+        <div className="hidden xl:flex items-center space-x-6">
+          {/* Time Spent */}
+          <div className="text-base">
+            <span className="font-semibold">Time Spent: </span>
+            <span className="text-gray-800 text-sm">05:30:05</span>
+          </div>
+
+          {/* Rating & Review */}
+          <div className="text-sm font-medium text-black">
+            <div className="flex justify-end text-orange-500 text-sm mb-0.5">
+              <i className="fa-solid fa-star"></i>
+              <i className="fa-solid fa-star"></i>
+              <i className="fa-solid fa-star"></i>
+              <i className="fa-solid fa-star"></i>
+              <i className="fa-regular fa-star"></i>
+            </div>
+            <span className="text-sm font-normal">Leave Your Review</span>
+          </div>
+
+          {/* Progress */}
+          <div className="text-base">
+            <span className="font-semibold">Your Progress: </span>
+            <span className="text-gray-800 text-sm">8 of 10 (80%)</span>
+          </div>
         </div>
 
         {/* Back Button */}
         <button className="back-btn">
-          <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-            <i className="fa-solid fa-angle-left mr-2"></i> Back To Main
+          <NavLink to="/view-course" onClick={() => setIsMenuOpen(false)}>
+            <i className="fa-solid fa-angle-left mr-2"></i>
+            <span>Back To Main</span>
           </NavLink>
         </button>
+
       </div>
 
 
@@ -89,18 +138,11 @@ const CourseVideo = () => {
           {/* Tab Bar */}
           <div className="ml-2 mr-2">
             <div className="tabs flex flex-wrap gap-2 justify-start md:justify-start">
-              <button
-                className={activeTab === "overview" ? "active" : ""}
-                onClick={() => setActiveTab("overview")}
-              >
-                Overview
-              </button>
-              <button
-                className={activeTab === "resource" ? "active" : ""}
-                onClick={() => setActiveTab("resource")}
-              >
-                Resource
-              </button>
+              <button className={activeTab === "overview" ? "active" : ""} onClick={() => setActiveTab("overview")} >
+                Overview </button>
+
+              <button className={activeTab === "resource" ? "active" : ""} onClick={() => setActiveTab("resource")} >
+                Resource </button>
             </div>
             {activeTab === "overview" && (
               <>
@@ -111,18 +153,12 @@ const CourseVideo = () => {
                   </p>
                 </div>
                 <div className="learning-list">
-                  <h2 className="font-bold mb-4 text-2xl text-black">
-                    What you'll learn
-                  </h2>
+                  <h2 className="font-bold mb-4 text-2xl text-black"> What you'll learn </h2>
                   <ul className="block sm:hidden">
                     <li>updated for 2020</li>
                     <li>Build 16 web development projects...</li>
-                    <li>
-                      After the course you will be able to build ANY website you want.
-                    </li>
-                    <li>
-                      Build fully-fledged websites and web apps for your startup or business.
-                    </li>
+                    <li>After the course you will be able to build ANY website you want.</li>
+                    <li>Build fully-fledged websites and web apps for your startup or business.</li>
                     <li>Work as a freelance web developer.</li>
                     <li>Master frontend development with React</li>
                     <li>Master backend development with Node</li>
@@ -130,18 +166,12 @@ const CourseVideo = () => {
                   </ul>
                 </div>
                 <div className="prerequisites">
-                  <h2 className="font-bold mb-4 text-2xl text-black">
-                    Prerequisites
-                  </h2>
+                  <h2 className="font-bold mb-4 text-2xl text-black"> Prerequisites </h2>
                   <ul className="list-disc pl-4 md:pl-6 space-y-2">
-                    <li className="pl-4 md:pl-0">
-                      No coding or design experience necessary
-                    </li>
-                    <li className="pl-4 md:pl-0">
-                      Any computer works — Windows, macOS, or Linux
-                    </li>
-                    <li className="pl-4 md:pl-0">
-                      You don’t need to buy any software — we will use the best free code editor in the world
+                    <li className="pl-4 md:pl-0"> No coding or design experience necessary </li>
+                    <li className="pl-4 md:pl-0"> Any computer works — Windows, macOS, or Linux </li>
+                    <li className="pl-4 md:pl-0">You don’t need to buy any software — we will use the best free code editor
+                      in the world
                     </li>
                   </ul>
                 </div>

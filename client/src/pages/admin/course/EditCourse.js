@@ -714,11 +714,11 @@ const EditCourse = () => {
 
                                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                                     <div className="form-group mb-0" style={{ width: "90%" }}>
-                                        <label>auther</label>
+                                        <label>Author</label>
                                         <input
                                             type="text"
                                             name="auther"
-                                            placeholder="Enter One Or More auther"
+                                            placeholder="Enter One Or More Author"
                                             className="col12input"
                                             onKeyDown={handleAddAuther}
                                         />

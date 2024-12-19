@@ -34,7 +34,7 @@ const StudentProfile = () => {
 
         <Sidebar />
         <div className="main static p-0 " >
-          <h1 className='font-bold text-3xl sticky top-0 left-0 bg-white z-10 text-black'>Profile</h1>
+          <h1 className='font-bold text-3xl top-0 left-0 bg-white z-10 text-black'>Profile</h1>
           <div className="course-form-container shadow-none">
             <form>
               {/* first / middle / last  name */}

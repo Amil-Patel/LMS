@@ -11,10 +11,10 @@ const PurchaseHistory = () => {
             <Breadcrumb />
             <div className='main_stu_dashboard'>
                 <Sidebar />
-                <div className='content'>
-                    <h1>Purchase History</h1>
-                    <div className='purchase_history_content mt-3'>
-                        <table className='overflow-x-auto relative scrollbar-none'>  
+                <div className='content pl-4'>
+                    <h1 className='pb-2'>Purchase History</h1>
+                    <div className='purchase_history_content overflow-x-auto'>
+                        <table className='w-max xl:w-full'>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -28,16 +28,6 @@ const PurchaseHistory = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className='py-3'>1</td>
-                                    <td>Security Service. and Training </td>
-                                    <td>2</td>
-                                    <td>250.00</td>
-                                    <td>Stripe</td>
-                                    <td>#12542554</td>
-                                    <td>27-09-2024</td>
-                                    <td className='text-lg'><ImTicket /></td>
-                                </tr>
                                 <tr>
                                     <td className='py-3'>1</td>
                                     <td>Security Service. and Training </td>
