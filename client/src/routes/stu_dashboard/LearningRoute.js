@@ -8,9 +8,9 @@ const LearningRoute = () => {
     return (
         <>
             <Routes>
-                <Route path="/learning" element={<Learning />} />
-                <Route path="/purchase" element={<PurchaseHistory />} />
-                <Route path="/stu-profile" element={<StudentProfile />} />
+                <Route path="/student/learning" element={<Learning />} />
+                <Route path="/student/purchase" element={<PurchaseHistory />} />
+                <Route path="/student/stu-profile" element={<StudentProfile />} />
             </Routes>
         </>
     )

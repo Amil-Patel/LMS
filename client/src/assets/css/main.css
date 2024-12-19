@@ -296,6 +296,7 @@ button {
 }
 
 .modal-container {
+  font-family: var(--tp-ff-body);    
   width: 40%;
   margin: auto;
   padding: 20px;

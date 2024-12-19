@@ -34,7 +34,7 @@
   margin-bottom: 5px;
 }
 
-.form-group-grid{
+.form-group-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
@@ -166,7 +166,8 @@
   font-weight: 600;
 }
 
-.checkout-section .pay-now-btn {
+.checkout-section .pay-now-btn button {
+  width: 100%;
   text-align: center;
   border-radius: 6px;
   padding: 9px 0;
@@ -174,6 +175,11 @@
   font-weight: 500;
   background-color: var(--button-primary-color);
   color: var(--white);
+}
+
+.checkout-section .pay-now-btn button[disabled] {
+  background-color: #8198cf;
+  cursor: not-allowed;
 }
 
 .checkout-section .secure-checkout {
@@ -263,7 +269,7 @@
     height: 85px;
   }
 
-  .form-group-grid{
+  .form-group-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
     column-gap: 1.25rem;
