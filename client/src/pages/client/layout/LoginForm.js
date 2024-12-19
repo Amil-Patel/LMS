@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 const port = process.env.REACT_APP_URL;
 
 const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
-    const { setUserRole, setUserId } = useContext(userRolesContext);
+    const { setStuUserId, setStuUserRole } = useContext(userRolesContext);
 
     const [loginData, setLoginData] = useState({
         email: '',
@@ -24,8 +24,9 @@ const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
         try {
             const res = await axiosInstance.post(`${port}/studentlogin`, loginData)
             if (res.status === 200) {
-                setUserRole(res.data.role);
-                setUserId(res.data._id);
+                setStuUserRole(res.data.role);
+                setStuUserId(res.data.id);
+                console.log(res.data.role, res.data.id)
                 Cookies.set('student-token', res.data.token, { expires: 10 });
                 notifySuccess(res.data.message);
                 toggleLoginForm();

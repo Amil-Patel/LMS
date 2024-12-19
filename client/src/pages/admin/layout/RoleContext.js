@@ -4,8 +4,11 @@ const userRolesContext = createContext();
 
 const RoleContext = ({ children }) => {
     const savedToken = Cookies.get('token');
+    const stuSavedToken = Cookies.get('student-token');
     const [userRole, setUserRole] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [stuUserId, setStuUserId] = useState(null);
+    const [stuUserRole, setStuUserRole] = useState(null);
     useEffect(() => {
         if (savedToken) {
             try {
@@ -17,26 +20,20 @@ const RoleContext = ({ children }) => {
                 console.error("Failed to decode token:", error);
             }
         }
-    }, [savedToken]);
-    
-    // useEffect(() => {
-    //     if (userRole) {
-    //         localStorage.setItem('userRole', JSON.stringify(userRole));
-    //     } else {
-    //         localStorage.removeItem('userRole');
-    //     }
-    // }, [userRole]);
-    // useEffect(() => {
-    //     if (userId) {
-    //         localStorage.setItem('userId', JSON.stringify(userId));
-    //     } else {
-    //         localStorage.removeItem('userId');
-    //     }
-    // }, [userId]);
-
+        if (stuSavedToken) {
+            try {
+                const payload = stuSavedToken.split('.')[1];
+                const decodedPayload = JSON.parse(atob(payload));
+                setStuUserRole(decodedPayload.role);
+                setStuUserId(decodedPayload.id);
+            } catch (error) {
+                console.error("Failed to decode token:", error);
+            }
+        }
+    }, [savedToken, stuSavedToken]);
     return (
         <>
-            <userRolesContext.Provider value={{ userRole, setUserRole, userId, setUserId }}>
+            <userRolesContext.Provider value={{ userRole, setUserRole, userId, setUserId, stuUserId, setStuUserId, stuUserRole, setStuUserRole }}>
                 {children}
             </userRolesContext.Provider>
         </>

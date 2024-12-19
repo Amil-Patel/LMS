@@ -107,7 +107,7 @@ const Navbar = () => {
           <div className="modal" style={{ top: modalPosition.top + 6, left: modalPosition.left - 78 }}>
             <ul>
               <li>
-                <NavLink to="/profile">
+                <NavLink to="/student/stu-profile">
                   <i className="fa-regular fa-user"></i>My Profile
                 </NavLink>
               </li>

@@ -259,7 +259,7 @@
 
 .header-content .lesson-time span {
   padding-right: 0;
-  padding-left: 10px;
+  padding-left: 0px;
 }
 
 .header-content .lesson-actions-time button {
@@ -279,7 +279,7 @@
 
 .header-content .lesson-time span {
   color: var(--step-button-background);
-  width: 57px;
+  width: 90px;
   text-align: right;
 }
 

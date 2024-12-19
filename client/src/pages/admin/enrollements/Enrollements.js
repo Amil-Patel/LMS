@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../assets/css/enrollement/enrollement.css";
 import Hoc from "../layout/Hoc";
+import axiosInstance from "../utils/axiosInstance";
+const port = process.env.REACT_APP_URL
 
 function Enrollements() {
   const [addOpen, setAddOpen] = useState(false);
-
-  const [courses, setCourses] = useState([
-    { id: 1, name: "Security Service", status: true },
-  ]);
+  const [studentData, setStudentData] = useState([]);
+  const getStudentData = () => {
+    axiosInstance.get(`${port}/gettingEnrollmentData`)
+      .then((res) => {
+        setStudentData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const addToggleModal = () => {
     setAddOpen(!addOpen);
   };
 
-  // Toggle switch button
-  const handleToggle = (id) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) =>
-        course.id === id ? { ...course, status: !course.status } : course
-      )
-    );
-  };
+  useEffect(() => {
+    getStudentData();
+  }, []);
 
   return (
     <>
@@ -55,25 +58,27 @@ function Enrollements() {
           </thead>
 
           <tbody className="email_tbody">
-            {courses.map((course) => (
-              <tr key={course.id}>
-                <td>1</td>
-                <td className="profile-img"><img src={require("../../../assets/image/user_img.jpeg")} alt="User" /></td>
+            {studentData.map((enroll, index) => (
+              <tr key={enroll.id}>
+                <td>{index + 1}</td>
+                <td className="profile-img"><img src={`../upload/${enroll.user_enrollment.profile}`} alt="User" /></td>
                 <td>
-                  <h6>Christine Brooks</h6>
-                  <p>example@gmail.com</p>
+                  <h6>{`${enroll.user_enrollment.first_name} ${enroll.user_enrollment.last_name}`}</h6>
+                  <p>{enroll.user_enrollment.email}</p>
                 </td>
-                <td>{course.name}</td>
-                <td>LifeTime</td>
-                <td>Online / Manual</td>
+                <td>{enroll.course_master_enrollment.course_title}</td>
+                <td>
+                  <p>{enroll.course_master_enrollment.expiring_time}</p>
+                  <p>{enroll.course_master_enrollment.expiring_time === "life_time" ? "" : enroll.course_master_enrollment.no_of_month + " month"}</p>
+                </td>
+                <td>{enroll.enrollment_mode}</td>
                 <td>
                   <label htmlFor="coursestatus" className="switch">
                     <input
                       type="checkbox"
                       name="status"
                       id="coursestatus"
-                      checked={course.status}
-                      onChange={() => handleToggle(course.id)}
+                      checked={enroll.status}
                     />
                     <span className="slider"></span>
                   </label>
