@@ -8,7 +8,7 @@
   height: calc(100vh);
   overflow-y: auto;
   scrollbar-width: none;
-  padding-left: 60px;
+  padding-left: 50px;
   font-family: var(--inter-ff);
 }
 

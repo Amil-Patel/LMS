@@ -102,7 +102,7 @@ const AllCourse = () => {
             <div className={`filter-sidebar ${isFilterOpen ? "open" : "closed"}`}>
               <div className="filter-header">
                 <h3>Course Category</h3>
-                <button className="close-button" onClick={toggleFilter}>
+                <button className="close-button mb-[15px]" onClick={toggleFilter}>
                   <i className="fa fa-times"></i>
                 </button>
               </div>
