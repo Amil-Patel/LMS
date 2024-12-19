@@ -160,7 +160,7 @@
   font-size: 14px;
   padding: 4px 14px;
 }
-.add-to-cart-btn.disabled {
+.add-to-cart-btn.disabled,.btn-add.disabled {
   background-color: rgb(163, 160, 160);
   cursor: not-allowed;
 }

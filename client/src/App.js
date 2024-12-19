@@ -45,12 +45,12 @@ const App = () => {
           <ProfileRoute />
           <LoginRoute />
           <EditCourseRoute />
-        </RoleContext>
-        <HomeRoute />
-        <CourseRoute />
-        <ShoppingCartRoute />
-        <LearningRoute />
-        <ContactRoute />
+          <HomeRoute />
+          <CourseRoute />
+          <ShoppingCartRoute />
+          <LearningRoute />
+          <ContactRoute />
+        </RoleContext >
       </CartProvider>
     </>
   );

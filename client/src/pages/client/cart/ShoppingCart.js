@@ -9,14 +9,32 @@ import { useNavigate } from 'react-router-dom';
 
 const ShoppingCart = () => {
   const { cart, removeCart } = useCart();
-
+  console.log(cart)
   const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + item.course_price, 0);
   const sumOfAllCartTax = cart.reduce((accumulator, item) => accumulator + item.tax_rate, 0);
   const sumOfAllDiscountPrice = cart.reduce((total, item) => {
     const discount_price = (item.course_price * item.course_discount) / 100;
     return total + discount_price;
   }, 0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  // Navigate to Checkout with state
+  const processToCheckout = () => {
+    if (cart.length > 0) {
+      const price = sumOfAllCartAmount + sumOfAllCartTax;
+      const disc = sumOfAllCartTax;
+      const id = cart.map((course) => course.id);
+
+      navigate(`/checkout/`, {
+        state: {
+          price,
+          disc,
+          id,
+        },
+      });
+    } else {
+      alert("Your cart is empty. Please add courses to proceed.");
+    }
+  };
   return (
     <>
       <Navbar />
@@ -38,7 +56,18 @@ const ShoppingCart = () => {
                         />
                         <div className="course-details-header block">
                           <h3>{course.course_title}</h3>
-                          <p className='py-2 text-base font-normal lg:pb-0'>By {JSON.parse(course.auther)}</p>
+                          <p className='py-2 text-base font-normal lg:pb-0'>By {""}
+                            {(() => {
+                              try {
+                                // Clean up and parse the `auther` field
+                                const cleanedAuther = JSON.parse(JSON.parse(course.auther)); // Double parse to handle the nested escaping
+                                return Array.isArray(cleanedAuther) ? cleanedAuther[0] : 'Unknown Author';
+                              } catch (error) {
+                                console.error('Error parsing author:', error);
+                                return 'Unknown Author';
+                              }
+                            })()}
+                          </p>
                           <span className="courses-reviews font-semibold"> 4.5 <i className="fa-solid fa-star"></i>
                             <i className="fa-solid fa-star"></i>
                             <i className="fa-solid fa-star"></i>
@@ -105,7 +134,7 @@ const ShoppingCart = () => {
                   <span className='text-base font-semibold'>${(sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice) + sumOfAllCartTax)}</span>
                 </div>
               </div>
-              <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => navigate("/checkout")}>
+              <button className='process-to-checkout-btn hover:bg-blue-600' onClick={processToCheckout}>
                 Process To Checkout
               </button>
             </div>
