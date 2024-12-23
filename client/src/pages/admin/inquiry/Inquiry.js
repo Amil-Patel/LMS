@@ -109,53 +109,50 @@ function Inquiry() {
         {editOpen && currentCourse && (
           <div className="modal">
             <div className="modal-container">
-              <h3>Edit Status</h3>
+              <h5>Edit Status</h5>
               <form className="coupon-form">
-                <div className="form-group">
-                  <label htmlFor="inquirystatus">
+                <div className="form-group mb-3">
+                  <label htmlFor="inquirystatus" className="mr-5">
                     Inquiry Status<span className="required">*</span>
                   </label>
                   <input
                     id="inquirystatus"
                     type="radio"
                     name="fav_language"
-                    value="CSS"
-                    className="cur_sel"
+                    value="success"
                   />
                   <label htmlFor="right" className="text1">
-                    Succes
+                    Success
                   </label>
 
                   <input
                     type="radio"
                     name="fav_language"
-                    value="CSS"
-                    className="cur_sel"
+                    value="pending"
                     id="right"
                   />
-                  <label htmlFor="pending" className="text1">
-                    Panding
+                  <label htmlFor="pending" className="text1 mr-3">
+                    Pending
                   </label>
 
                   <input
                     type="radio"
                     name="fav_language"
                     value="CSS"
-                    className="cur_sel"
-                    id="pending"
+                    id="rejected"
                   />
                   <label htmlFor="reject" className="text1">
-                    Rejectd
+                    Rejected
                   </label>
                 </div>
 
                 <div style={{ display: "flex", gap: "10px" }}>
-                  <button type="submit" className="submit-btn">
-                    Submit
+                  <button type="submit" className="primary-btn">
+                    Save
                   </button>
                   <button
                     onClick={handleCloseEditModal}
-                    className="back-to-coupons"
+                    className="secondary-btn"
                   >
                     Close
                   </button>

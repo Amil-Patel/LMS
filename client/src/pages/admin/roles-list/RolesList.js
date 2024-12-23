@@ -210,7 +210,7 @@ function RolesList() {
                     </span>
                   </div>
                 </div>
-                <table>
+                <table style={{marginBottom: "0px"}}>
                   <thead>
                     <tr>
                       <th>Modules</th>

@@ -5,6 +5,7 @@ const upload = require("../../middleware/upload");
 
 
 UserMaster.get("/gettingUserMasterData", UserMasterController.getUserMasterData);
+UserMaster.get("/gettingAllStudentData", UserMasterController.getAllStudentData);
 UserMaster.get("/gettingUserMasterDataWithId/:id", UserMasterController.getUserMasterDataWithId);
 UserMaster.post("/addingUserMaster", upload.single('profile'), UserMasterController.addUserMasterData);
 UserMaster.post("/addingStudentMaster", UserMasterController.addStudentMasterData);

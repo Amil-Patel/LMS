@@ -18,11 +18,14 @@
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  font-family: var(--tp-ff-body);
 }
 
-.delete-popup-content h5 {
-  text-align: center;
+.delete-popup-content h4 {
   margin-bottom: 10px;
+  color: black;
+  font-size: 17px;
+  letter-spacing: 0.6px;
 }
 
 .delete-popup-content p {

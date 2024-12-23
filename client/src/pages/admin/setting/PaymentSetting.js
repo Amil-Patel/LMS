@@ -155,7 +155,7 @@ function PaymentSetting() {
               </select>
             </div>
 
-            <div className="cur_posi">
+            <div>
               <label htmlFor="currencyposition" className="currency_title">Currency Position</label>
               <br />
               <input
@@ -175,6 +175,9 @@ function PaymentSetting() {
               />
               <label htmlFor="right" className="text1">Right</label>
             </div>
+            {(userRole === "superAdmin" || addPaymentPermission == 1 || editPaymentPermission == 1) && (
+              <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
+            )}
           </div>
 
           <div className="strip_page">

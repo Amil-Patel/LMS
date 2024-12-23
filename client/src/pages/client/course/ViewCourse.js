@@ -207,7 +207,7 @@ const ViewCourse = () => {
                   </p>
                 </div>
                 <div className="learning-list">
-                  <h2 className="font-bold mb-4">What you'll learn</h2>
+                  <h2 className="font-bold mb-4">What You'll Learn</h2>
                   <ul>
                     {Array.isArray(courseData.course_topics) && courseData.course_topics.map((keyword, index) => (
                       <li>{keyword}</li>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Hoc from "../layout/Hoc";
 import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
-import { notifySuccess } from "../layout/ToastMessage";
+import { notifySuccess, notifyWarning } from "../layout/ToastMessage";
 import "../../../assets/css/course/coursecategory.css";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
@@ -66,6 +66,14 @@ const CourseCategory = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!addCourseCategoryData.cate_title.trim()) {
+      notifyWarning("Title is required.");
+      return;
+    }
+    if (!addCourseCategoryData.cate_thumbnail) {
+      notifyWarning("Image is required.");
+      return;
+    }
     setLoading(true);
     const formData = new FormData();
     formData.append("cate_title", addCourseCategoryData.cate_title);
@@ -169,6 +177,14 @@ const CourseCategory = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    if (!editData.cate_title.trim()) {
+      notifyWarning("Title is required.");
+      return;
+    }
+    if (!editData.cate_thumbnail) {
+      notifyWarning("Image is required.");
+      return;
+    }
     setLoading(true);
     const formData = new FormData();
     formData.append("cate_title", editData.cate_title);
@@ -332,7 +348,7 @@ const CourseCategory = () => {
                           src={`../upload/${firstNullParentData.cate_thumbnail}`}
                           alt={firstNullParentData.cate_title}
                           className="card-image"
-                        />  
+                        />
                         <div className="content">
                           <h5>{firstNullParentData.cate_title}</h5>
                           <p>Sub Course: {firstNullParentData.subcoursecount}</p>

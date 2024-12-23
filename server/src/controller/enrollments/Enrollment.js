@@ -124,8 +124,61 @@ const getEnrollWithStuId = async (req, res) => {
     }
 };
 
-
-
-
-module.exports = { getEnrollmentData, deleteEnrollmentData, addEnrollmentData, getEnrollAndCourseData, getEnrollWithStuId }
+const updateEnrollStatus = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    const status = req.body.status;
+    const newStatus = status === 1 ? 0 : 1;
+    try {
+        const data = await enrollment.update({ status: newStatus }, {
+            where: {
+                id: id
+            }
+        });
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+const getEnrollDataWithId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    try {
+        const data = await enrollment.findOne({
+            where: {
+                id: id
+            }
+        });
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+const updateEnrollData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    const data = {
+        student_id: req.body.student_id,
+        course_id: req.body.course_id,
+        enrollment_mode: req.body.enrollment_mode,
+        status: req.body.status,
+        createdAt: req.body.createdAt,
+        updatedAt: req.body.updatedAt,
+    }
+    try {
+        const courseCoupondate = await enrollment.update(data, {
+            where: {
+                id: id
+            }
+        });
+        res.status(200).json(courseCoupondate);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+module.exports = { getEnrollmentData, deleteEnrollmentData, addEnrollmentData, getEnrollAndCourseData, getEnrollWithStuId, updateEnrollStatus, getEnrollDataWithId, updateEnrollData }
 
