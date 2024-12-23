@@ -3,6 +3,8 @@ import { userRolesContext } from "../layout/RoleContext";
 import Hoc from "../layout/Hoc";
 import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
+import { validationEmail, validationName } from "../../../utils/validation";
+import { notifyWarning } from "../layout/ToastMessage";
 const port = process.env.REACT_APP_URL;
 
 const Profile = () => {
@@ -70,15 +72,55 @@ const Profile = () => {
   //save user data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    if (!validationName(userData.first_name)) {
+      notifyWarning("Please enter a valid first name.");
+      return;
+    }
+    if (!validationEmail(userData.email)) {
+      notifyWarning("Please enter a valid email address.");
+      return;
+    }
+    if (userData.password.length < 8) {
+      notifyWarning("Password must be at least 8 characters long.");
+      return;
+    }
+    if (userData.role_id === "") {
+      notifyWarning("Please select a role.");
+      return;
+    }
+    if (userData.status === "") {
+      notifyWarning("Please select a status.");
+      return;
+    }
+    if (userData.contact === "") {
+      notifyWarning("Please enter a contact number.");
+      return;
+    }
+    if (userData.whatsapp_number === "") {
+      notifyWarning("Please enter a whatsapp number.");
+      return;
+    }
+    if (userData.gender === "") {
+      notifyWarning("Please select a gender.");
+      return;
+    }
+    if (userData.dob === "") {
+      notifyWarning("Please enter a date of birth.");
+      return;
+    }
+    if (userData.profile === "") {
+      notifyWarning("Please select a profile image.");
+      return;
+    }
     // Check if new password and confirm password are the same
+    setLoading(true)
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match!");
       setLoading(false)
       return;
     }
     const updatedUserData = new FormData();
-
+    
     // Append user data to FormData
     updatedUserData.append('first_name', userData.first_name);
     updatedUserData.append('middle_name', userData.middle_name);

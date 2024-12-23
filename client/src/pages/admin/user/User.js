@@ -88,7 +88,7 @@ const User = () => {
     }
   };
   //check permission for view
-  const [studentView, setStudentView] = useState(false);
+  const [studentView, setStudentView] = useState(true);
   const [adminView, setAdminView] = useState(false);
   const [instructureView, setInstructorView] = useState(false);
   const checkePermissionForView = async () => {
@@ -228,15 +228,47 @@ const User = () => {
   }
 
   const handleSubmit = async (e) => {
-    if (!validationEmail(addUser.email)) {
-      notifyWarning("Please enter a valid email address.");
-      return;
-    }
+    e.preventDefault();
     if (!validationName(addUser.first_name)) {
       notifyWarning("Please enter a valid first name.");
       return;
     }
-    e.preventDefault();
+    if (!validationEmail(addUser.email)) {
+      notifyWarning("Please enter a valid email address.");
+      return;
+    }
+    if (addUser.password.length < 8) {
+      notifyWarning("Password must be at least 8 characters long.");
+      return;
+    }
+    if (addUser.role_id === "") {
+      notifyWarning("Please select a role.");
+      return;
+    }
+    if (addUser.status === "") {
+      notifyWarning("Please select a status.");
+      return;
+    }
+    if (addUser.contact === "") {
+      notifyWarning("Please enter a contact number.");
+      return;
+    }
+    if (addUser.whatsapp_number === "") {
+      notifyWarning("Please enter a whatsapp number.");
+      return;
+    }
+    if (addUser.gender === "") {
+      notifyWarning("Please select a gender.");
+      return;
+    }
+    if (addUser.dob === "") {
+      notifyWarning("Please enter a date of birth.");
+      return;
+    }
+    if (addUser.profile === "") {
+      notifyWarning("Please select a profile image.");
+      return;
+    }
     setLoading(true);
     const formData = new FormData();
     formData.append("first_name", addUser.first_name);
@@ -293,17 +325,23 @@ const User = () => {
   const [allUserData, setAllUserData] = useState([]);
 
   const getAllUserData = async () => {
+    console.log("object")
     setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterData`);
       setAllUserData(res.data);
+      console.log(studentView, instructureView, adminView);
       if (studentView) {
+        console.log("student view");
         filterUserData("student", res.data);
       } else if (instructureView) {
+        console.log("instructure view");
         filterUserData("instructure", res.data);
       } else if (adminView) {
+        console.log("admin view");
         filterUserData("admin", res.data);
       } else {
+        console.log("else")
         setUserData([]);
       }
       setLoading(false);
@@ -314,6 +352,7 @@ const User = () => {
   };
 
   const filterUserData = (roleName, data = allUserData) => {
+    console.log("object", roleName);
     if (roleName) {
       const filteredData = data.filter((user) => user.role_id === roleName);
       setUserData(filteredData);
@@ -337,8 +376,9 @@ const User = () => {
       setDeleteOpen(false);
       setLoading(false);
     } catch (error) {
-      console.error("Error deleting user:", error);
+      notifyWarning("Can't delete user!");
       setLoading(false);
+      setDeleteOpen(false);
     }
   }
 
@@ -394,6 +434,46 @@ const User = () => {
 
 
   const editUserData = async () => {
+    if (!validationName(editData.first_name)) {
+      notifyWarning("Please enter a valid first name.");
+      return;
+    }
+    if (!validationEmail(editData.email)) {
+      notifyWarning("Please enter a valid email address.");
+      return;
+    }
+    if (editData.password.length < 8) {
+      notifyWarning("Password must be at least 8 characters long.");
+      return;
+    }
+    if (editData.role_id === "") {
+      notifyWarning("Please select a role.");
+      return;
+    }
+    if (editData.status === "") {
+      notifyWarning("Please select a status.");
+      return;
+    }
+    if (editData.contact === "") {
+      notifyWarning("Please enter a contact number.");
+      return;
+    }
+    if (editData.whatsapp_number === "") {
+      notifyWarning("Please enter a whatsapp number.");
+      return;
+    }
+    if (editData.gender === "") {
+      notifyWarning("Please select a gender.");
+      return;
+    }
+    if (editData.dob === "") {
+      notifyWarning("Please enter a date of birth.");
+      return;
+    }
+    if (editData.profile === "") {
+      notifyWarning("Please select a profile image.");
+      return;
+    }
     setLoading(true);
     const formData = new FormData();
     formData.append("first_name", editData.first_name);
@@ -856,7 +936,7 @@ const User = () => {
         {/* Add User Modal */}
         {addUserOpen && (
           <div className="modal">
-            <div className="add-lesson-container" style={{ width: "60%", height: "550px", overflowY: "scroll" }}>
+            <div className="add-lesson-container" style={{ width: "60%" }}>
               <div className="quiz-top-header">
                 <div className="quiz-header">
                   <h5>Add New User</h5>
@@ -1175,7 +1255,7 @@ const User = () => {
         {/* Edit User Modal */}
         {editUserOpen && (
           <div className="modal">
-            <div className="add-lesson-container" style={{ width: "60%", height: "550px", overflowY: "scroll" }}>
+            <div className="add-lesson-container" style={{ width: "60%" }}>
               <div className="quiz-top-header">
                 <div className="quiz-header">
                   <h5>Edit New User</h5>

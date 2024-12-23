@@ -15,6 +15,16 @@ const AllCourse = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false)
 
+  // Get course category
+  const [courseCategory, setCourseCategory] = useState();
+  const getCourseCategory = async () => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingNotNullCourseCategory`);
+      setCourseCategory(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //getting course data
   const [courseData, setCourseData] = useState([]);
   const getCourseData = async () => {
@@ -50,6 +60,7 @@ const AllCourse = () => {
 
   useEffect(() => {
     getCourseData();
+    getCourseCategory();
   }, [])
   const perm = useCheckRolePermission("Course Master");
   const editCoursePermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
@@ -139,14 +150,14 @@ const AllCourse = () => {
                   auther = "Invalid data";
                 }
                 const formattedData = Array.isArray(auther) ? auther.join(", ") : "Invalid data";
-
+                const category = courseCategory?.find((cat) => cat.id === i.course_cate)?.cate_title || 'Unknown Category';
                 return (
                   <tr key={index}>
                     <td className="id">{index + 1}</td>
                     <td>
                       <h6><NavLink to={`/admin/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
                     </td>
-                    <td>{i.course_cate}</td>
+                    <td>{category}</td>
                     <td>{i.course_price}</td>
                     <td>{i.enrollment}</td>
                     <td>{i.lession}</td>

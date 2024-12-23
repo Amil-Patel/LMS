@@ -38,7 +38,22 @@ const getUserMasterDataWithId = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-
+const getAllStudentData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    console.log("object")
+    try {
+        const data = await UserMaster.findAll({
+            where: {
+                role_id: "student"
+            }
+        });
+        res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message });
+    }
+}
 const addUserMasterData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -197,5 +212,6 @@ module.exports = {
     addUserMasterData,
     updateUserMasterData,
     deleteUserMaster,
-    addStudentMasterData
+    addStudentMasterData,
+    getAllStudentData,
 }

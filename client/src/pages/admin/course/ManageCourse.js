@@ -4,7 +4,7 @@ import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
 import "../../../assets/css/sidebar.css";
 import { userRolesContext } from "../layout/RoleContext";
-import { notifySuccess } from "../layout/ToastMessage";
+import { notifySuccess, notifyWarning } from "../layout/ToastMessage";
 import { NavLink, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import SortTable from "../layout/SortTable";
@@ -127,6 +127,16 @@ const ManageCourse = () => {
   };
   const handleAddResourceSubmit = async (e) => {
     e.preventDefault();
+    console.log(addResource)
+    if (addResource.title.trim() === '') {
+      notifyWarning("Please enter resource title.");
+      return
+    }
+    if (addResource.link.trim() === '') {
+      notifyWarning("Please enter resource link.");
+      return
+    }
+
     try {
       const res = await axiosInstance.post('/addingCourseResource', addResource);
       if (res.status === 200) {
@@ -165,6 +175,14 @@ const ManageCourse = () => {
     }
   }
   const handleEditResourceSubmit = async (e) => {
+    if (editResource.title.trim() === '') {
+      notifyWarning("Please enter resource title.");
+      return
+    }
+    if (editResource.link.trim() === '') {
+      notifyWarning("Please enter resource link.");
+      return
+    }
     e.preventDefault();
     try {
       const res = await axiosInstance.put(`/updatingCourseResource/${editResource.id}`, editResource);
@@ -263,6 +281,10 @@ const ManageCourse = () => {
   };
   const handleAddModuleSubmit = async (e) => {
     e.preventDefault();
+    if (addModule.title.trim() === '') {
+      notifyWarning("Please enter module title.");
+      return
+    }
     try {
       const res = await axiosInstance.post(`${port}/addingCourseSection`, addModule);
       getModuleData();
@@ -302,6 +324,10 @@ const ManageCourse = () => {
   };
   const handleEditModuleSubmit = async (e) => {
     e.preventDefault();
+    if (editModule.title.trim() === '') {
+      notifyWarning("Please enter module title.");
+      return
+    }
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseSection/${editId}`, editModule);
       getModuleData();
@@ -403,7 +429,31 @@ const ManageCourse = () => {
 
   const handleAddLessonSubmit = async (e) => {
     e.preventDefault();
-
+    // Validation checks for required fields
+    if (!addLesson.title.trim()) {
+      notifyWarning("Title is required.");
+      return;
+    }
+    if (!addLesson.duration.trim()) {
+      notifyWarning("Duration is required.");
+      return;
+    }
+    if (!addLesson.course_id) {
+      notifyWarning("Course ID is required.");
+      return;
+    }
+    if (!addLesson.lesson_type.trim()) {
+      notifyWarning("Lesson type is required.");
+      return;
+    }
+    if (!addLesson.url.trim() && !addLesson.attachment) {
+      notifyWarning("Either URL or attachment is required.");
+      return;
+    }
+    if (!addLesson.description.trim()) {
+      notifyWarning("Description is required.");
+      return;
+    }
     const formData = new FormData();
     formData.append("title", addLesson.title);
     formData.append("duration", addLesson.duration);
@@ -514,6 +564,26 @@ const ManageCourse = () => {
 
   const handleEditLessonSubmit = async (e) => {
     e.preventDefault();
+    if (!editLessonData.title.trim()) {
+      notifyWarning("Title is required.");
+      return;
+    }
+    if (!editLessonData.course_id) {
+      notifyWarning("Course ID is required.");
+      return;
+    }
+    if (!editLessonData.lesson_type.trim()) {
+      notifyWarning("Lesson type is required.");
+      return;
+    }
+    if (!editLessonData.url.trim() && !editLessonData.attachment) {
+      notifyWarning("Either URL or attachment is required.");
+      return;
+    }
+    if (!editLessonData.description.trim()) {
+      notifyWarning("Description is required.");
+      return;
+    }
     const formData = new FormData();
     formData.append("title", editLessonData.title);
     formData.append("duration", editLessonData.duration);
@@ -569,6 +639,30 @@ const ManageCourse = () => {
 
   const handleAddQuizSubmit = async (e) => {
     e.preventDefault();
+    if (!addQuiz.title.trim()) {
+      notifyWarning("Title is required.");
+      return;
+    }
+    if (!addQuiz.passing__marks) {
+      notifyWarning("Passing marks is required.");
+      return;
+    }
+    if (!addQuiz.total_marks.trim()) {
+      notifyWarning("Total marks is required.");
+      return;
+    }
+    if (!addQuiz.quize_duration.trim()) {
+      notifyWarning("Duration is required.");
+      return;
+    }
+    if (!addQuiz.instruction.trim()) {
+      notifyWarning("Summery is required.");
+      return;
+    }
+    if (!addQuiz.total_showing_questions) {
+      notifyWarning("Total showing questions is required.");
+      return;
+    }
     try {
       const res = await axiosInstance.post(`${port}/addingCourseQuize/${sectionId}`, addQuiz);
       getLessonData(sectionId);
@@ -643,6 +737,18 @@ const ManageCourse = () => {
 
   const handleEditQuizSubmit = async (e) => {
     e.preventDefault();
+    if (!editQuizData.title.trim()) {
+      notifyWarning("Title is required.");
+      return;
+    }
+    if (!editQuizData.passing__marks) {
+      notifyWarning("Passing marks is required.");
+      return;
+    }
+    if (!editQuizData.instruction.trim()) {
+      notifyWarning("Summery is required.");
+      return;
+    }
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
       notifySuccess("Quiz updated successfully");

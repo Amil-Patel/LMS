@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-
+import { userRolesContext } from "./RoleContext";
+import axiosInstance from "../utils/axiosInstance";
+const port = process.env.REACT_APP_URL;
 const Navbar = () => {
+  const { userId, userRole } = useContext(userRolesContext);
+  const [userData, setUserData] = useState([]);
+  //get user data
+  const getUserData = async () => {
+    if (!userId) return;
+    try {
+      const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
+      setUserData(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getUserData();
+  }, [userId]);
   return (
     <>
       <nav className="navbar">
@@ -13,11 +31,6 @@ const Navbar = () => {
 
         <div className="nav-top-section">
           <div className="nav-left-section">
-            <input type="checkbox" id="btn" />
-            <span htmlFor="btn" className="menu-btn">
-              <i className="fa-solid fa-bars"></i>
-            </span>
-
             <div className="search-container">
               <input id="search" type="text" placeholder="Search" />
               <i className="fa-solid fa-magnifying-glass"></i>
@@ -27,18 +40,16 @@ const Navbar = () => {
           <div className="nav-right-section">
             <i className="fa-solid fa-bell"></i>
             <span className="nav-right-section language-dropdown">
-              <img src={require("../../../assets/image/Flag.png")} alt="flag" />
               <p>English</p>
               <i className="fa-solid fa-angle-down"></i>
             </span>
             <span className="nav-right-section profile-box">
-              <img src={require("../../../assets/image/profile-logo.png")} alt="profile" />
+              <img src={`../../upload/${userData?.profile}`} alt="profile" />
               <p>
-                <b>Moni Roy</b>
+                <b>{userData?.first_name}</b>
                 <br />
-                Admin
+                {userRole}
               </p>
-              <i className="fa-solid fa-angle-down"></i>
             </span>
           </div>
         </div>

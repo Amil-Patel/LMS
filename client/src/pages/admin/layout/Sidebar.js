@@ -1,7 +1,10 @@
 import React, { useState, useContext } from "react";
 import "../../../assets/css/sidebar.css";
 import useCheckRolePermission from "./CheckRolePermission";
+import { IoWallet } from "react-icons/io5";
+import { RiLogoutCircleLine } from "react-icons/ri";
 import { userRolesContext } from "./RoleContext";
+import { MdDashboard } from "react-icons/md";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import LogOutModal from "./LogOutModal";
@@ -15,6 +18,9 @@ const Sidebar = () => {
   const courseMaster = useCheckRolePermission("Course Master");
   const viewCourse = courseMaster.length > 0 && courseMaster[0].can_view === 1 ? 1 : 0;
   const addCourse = courseMaster.length > 0 && courseMaster[0].can_add === 1 ? 1 : 0;
+
+  const enrollInfo = useCheckRolePermission("Enrollment Information");
+  const viewEnrollPermission = enrollInfo.length > 0 && enrollInfo[0].can_view === 1 ? 1 : 0;
 
   const courseCategory = useCheckRolePermission("Course Category");
   const viewCourseCate = courseCategory.length > 0 && courseCategory[0].can_view === 1 ? 1 : 0;
@@ -72,7 +78,9 @@ const Sidebar = () => {
           <ul>
             <li className="main-li">
               <NavLink to="/admin/dashboard">
-                <i className="fa-solid fa-gauge-high"></i>{" "}
+                <i>
+                  <MdDashboard style={{ fontSize: "17px" }} />
+                </i>
                 <span>Dashboard</span>
               </NavLink>
             </li>
@@ -84,7 +92,7 @@ const Sidebar = () => {
                   onClick={(e) => toggleDropdown("course", e)}
                   className={isCourseActive ? "active" : ""}
                 >
-                  <i className="fa-solid fa-border-all"></i>
+                  <i className="fa-solid fa-graduation-cap"></i>
                   <span>Course</span>
                   <i
                     className={`fa-solid ${activeDropdown === "course"
@@ -129,10 +137,12 @@ const Sidebar = () => {
               )}
             </li>
             <li className="main-li">
-              <NavLink to={"/admin/enrollements"}>
-                <i className="fa-solid fa-registered"></i>
-                <span>Enrollements</span>
-              </NavLink>
+              {(userRole === "superAdmin" || viewEnrollPermission === 1) && (
+                <NavLink to={"/admin/enrollements"}>
+                  <i className="fa-solid fa-file-signature"></i>
+                  <span>Enrollements</span>
+                </NavLink>
+              )}
             </li>
 
             <li className="main-li">
@@ -144,7 +154,9 @@ const Sidebar = () => {
 
             <li className="main-li">
               <NavLink to={"/admin/payment"}>
-                <i className="fa fa-inr" aria-hidden="true"></i>
+                <i>
+                  <IoWallet style={{ fontSize: "17px" }} />
+                </i>
                 <span>Payment</span>
               </NavLink>
             </li>
@@ -159,8 +171,8 @@ const Sidebar = () => {
             <li className="main-li">
               {(userRole === "superAdmin" || viewUserData === 1 && viewAdminData === 1 && viewInstrucatureData === 1) && (
                 <NavLink to={"/admin/user"}>
-                  <i className="fa-regular fa-user"></i>
-                  <span>User</span>
+                  <i className="fa-solid fa-users"></i>
+                  <span>Users</span>
                 </NavLink>
               )}
             </li>
@@ -212,7 +224,9 @@ const Sidebar = () => {
 
             <li className="main-li">
               <a href="#" onClick={handleLogoutClick}>
-                <i className="fa-solid fa-power-off"></i>
+                <i>
+                  <RiLogoutCircleLine style={{ fontSize: "17px" }} />
+                </i>
                 <span>Logout</span>
               </a>
             </li>

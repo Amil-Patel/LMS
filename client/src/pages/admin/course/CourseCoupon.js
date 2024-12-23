@@ -7,6 +7,7 @@ import { userRolesContext } from "../layout/RoleContext";
 import DeleteModal from "../layout/DeleteModal";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
+import { notifyWarning } from "../layout/ToastMessage";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
@@ -127,6 +128,23 @@ const CourseCoupon = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!addCouponData.coupon_code) {
+      notifyWarning("Please enter a coupon code.");
+      return;
+    }
+    if (!addCouponData.course_name.length) {
+      notifyWarning("Please select at least one course.");
+      return;
+    }
+    if (!addCouponData.discount_in_percentage && !addCouponData.discount_in_amount) {
+      notifyWarning("Please enter a discount value.");
+      return;
+    }
+    if (!addCouponData.expired_date) {
+      notifyWarning("Please select an expiration date.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await axiosInstance.post(`${port}/addingCourseCoupon`, addCouponData);
@@ -223,7 +241,7 @@ const CourseCoupon = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
     if (discountType === "percentage") {
       setEditCouponData({
         ...editCouponData,
@@ -236,6 +254,23 @@ const CourseCoupon = () => {
         discount_in_percentage: "",
       });
     }
+    if (!editCouponData.coupon_code) {
+      notifyWarning("Please enter a coupon code.");
+      return;
+    }
+    if (!editCouponData.course_name.length) {
+      notifyWarning("Please select at least one course.");
+      return;
+    }
+    if (!editCouponData.discount_in_percentage && !editCouponData.discount_in_amount) {
+      notifyWarning("Please enter a discount value.");
+      return;
+    }
+    if (!editCouponData.expired_date) {
+      notifyWarning("Please select an expiration date.");
+      return;
+    }
+    setLoading(true);
     try {
       const res = await axiosInstance.put(
         `${port}/updatingCourseCoupon/${editCouponData.id}`,
@@ -480,14 +515,6 @@ const CourseCoupon = () => {
           </table>
         </div>
 
-        <div className="footer-text">
-          <p>Showing 1-09 of 78</p>
-          <span className="next-page-icon">
-            <i className="fa-solid fa-angle-left"></i>
-            <i className="fa-solid fa-angle-right"></i>
-          </span>
-        </div>
-
         {/* Add Model */}
         {addOpen && (
           <div className="modal">
@@ -522,7 +549,7 @@ const CourseCoupon = () => {
                   <select
                     className="form-control col12input"
                     onChange={handleCourseSelection}
-                    value=""
+                    value={courseData.id}
                   >
                     <option value="" disabled>
                       Select a course
@@ -541,7 +568,7 @@ const CourseCoupon = () => {
                           className="tag-close"
                           onClick={() => handleRemoveKeyword(index)}
                         >
-                          X
+                          <i className="fa-solid fa-xmark"></i>
                         </span>
                       </div>
                     ))}
@@ -684,7 +711,7 @@ const CourseCoupon = () => {
                     >
                       <option value="">Select a course</option>
                       {courseData.map((course, index) => (
-                        <option key={index} value={course.course_title}>
+                        <option key={index} value={course.id}>
                           {course.course_title}
                         </option>
                       ))}
@@ -698,7 +725,7 @@ const CourseCoupon = () => {
                           className="tag-close"
                           onClick={() => handleEditRemoveKeyword(index)}
                         >
-                          X
+                          <i className="fa-solid fa-xmark"></i>
                         </span>
                       </div>
                     ))}

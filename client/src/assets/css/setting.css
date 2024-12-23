@@ -9,14 +9,21 @@
 
 .currency_page {
   border: 1px solid var(--border-color);
-  width: 50%;
   border-radius: 5px;
+  width: 70%;
   height: auto;
   display: flex;
-  padding: 10px 30px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px;
 }
+
 .currency_input {
   width: 60%;
+}
+
+.currency_page button {
+  height: fit-content;
 }
 
 .currency_input select,
@@ -28,21 +35,18 @@
   width: 98%;
 }
 
-.cur_posi {
-  margin-left: 20px;
-}
-
 .cur_sel {
-  margin-top: 17px;
+  margin-top: 10px;
   margin-right: 2px;
 }
+
 #right {
   margin-left: 15px;
 }
 
 .text1 {
   position: relative;
-  top: -3px;
+  top: -2px;
 }
 
 .strip_page {
@@ -57,6 +61,7 @@
 #strip_cur {
   margin-top: 30px;
 }
+
 .str_text {
   color: var(--dropdown-bg-color);
   font-weight: 600;
@@ -69,6 +74,7 @@
 .status {
   display: flex;
 }
+
 #test {
   margin-top: 10px;
 }
@@ -77,6 +83,7 @@
   margin-left: 18px;
   border-radius: 5px;
 }
+
 .s_icon {
   margin-left: 5px;
 }
@@ -101,21 +108,26 @@
     flex-wrap: wrap;
     width: 100% !important;
   }
+
   .currency_input {
     width: 100%;
   }
+
   .cur_posi {
     margin-top: 10px !important;
   }
 }
+
 @media only screen and (max-width: 769px) {
   .main_pay_sec {
     padding: 20px;
   }
+
   .currency_page {
     width: 48%;
     padding: 5px 10px;
   }
+
   .currency_input select {
     width: 84%;
     padding: 4px;
@@ -128,9 +140,11 @@
   .strip_page {
     padding: 10px 16px;
   }
+
   #currency {
     width: 100%;
   }
+
   #strip_cur {
     margin-top: 15px;
   }
@@ -149,6 +163,7 @@
   justify-content: space-between;
   margin: 10px 0 10px 0px;
 }
+
 .admin-panel-tab-bar .tab {
   display: flex;
   font-size: 14px;
@@ -169,9 +184,11 @@
   color: var(--black);
   text-decoration: none;
 }
-.admin-panel-tab-bar .tab li > a.active-tab {
+
+.admin-panel-tab-bar .tab li>a.active-tab {
   color: var(--hover-color);
 }
+
 #not_bt {
   margin: 0;
   margin-right: 35px;
@@ -191,6 +208,7 @@
 .id {
   padding-left: 5px;
 }
+
 .h5 {
   /* font-size: 13px; */
   color: var(--dropdown-bg-color);
