@@ -8,6 +8,7 @@ const port = process.env.REACT_APP_URL;
 
 const StudentProfile = () => {
   const { stuUserId } = useContext(userRolesContext);
+  console.log(stuUserId)
   const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
   const [fileName, setFileName] = useState("");
 
@@ -19,6 +20,7 @@ const StudentProfile = () => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
+      setNewImage(file)
       const reader = new FileReader();
       reader.onload = () => {
         setImageSrc(reader.result);
@@ -34,7 +36,6 @@ const StudentProfile = () => {
   const [sameNumber, setSameNumber] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const getUserData = async () => {
-    console.log(stuUserId)
     if (!stuUserId) return
     try {
       const response = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${stuUserId}`);
@@ -336,7 +337,7 @@ const StudentProfile = () => {
                       <img
                         src={URL.createObjectURL(newImage)} // Show new image if selected
                         style={{ width: "67px", maxHeight: "67px" }}
-                        alt="Selected Thumbnail"
+                        alt="Selected Profile"
                       />
                     ) : (
                       <img

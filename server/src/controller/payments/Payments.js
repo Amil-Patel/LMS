@@ -1,4 +1,4 @@
-const { payment } = require("../../database/models/index");
+const { payment, Course_Master, UserMaster } = require("../../database/models/index");
 const AuthMiddleware = require("../../auth/AuthMiddleware");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 
@@ -31,4 +31,41 @@ const addPaymentData = async (req, res) => {
     }
 }
 
-module.exports = { addPaymentData }
+const getPaymentData = async (req, res) => {
+    try {
+        // Fetch all payments
+        const paymentData = await payment.findAll({ raw: true });
+
+        const detailedPayments = await Promise.all(
+            paymentData.map(async (payment) => {
+                const courseIds = JSON.parse(payment.courses);
+
+                // Fetch course names
+                const courseNames = await Course_Master.findAll({
+                    where: { id: courseIds },
+                    attributes: ['course_title','expiring_time', 'course_price', 'tax_rate', 'course_discount', 'is_inclusive', 'is_exclusive'],
+                    raw: true,
+                });
+
+                // Fetch student name
+                const studentData = await UserMaster.findOne({
+                    where: { id: payment.student_id },
+                    attributes: ['first_name', 'last_name', 'email'],
+                    raw: true,
+                });
+
+                return {
+                    ...payment,
+                    courseNames: courseNames.map((c) => c),
+                    studentName: studentData ? studentData : 'Unknown',
+                };
+            })
+        );
+
+        res.send(detailedPayments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'An error occurred while fetching payment data.' });
+    }
+};
+module.exports = { addPaymentData, getPaymentData }

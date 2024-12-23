@@ -3,16 +3,15 @@ import "../../../assets/css/client/checkout.css"
 import Navbar from "../layout/Navbar";
 import Breadcrumb from "../course/Breadcrumb";
 import Footer from "../layout/Footer";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { userRolesContext, RoleContext } from "../../admin/layout/RoleContext";
 import Cookies from 'js-cookie';
 import axiosInstance from "../utils/axiosInstance";
 const port = process.env.REACT_APP_URL
 const CheckOut = () => {
-    const { price, disc, id } = useLocation().state;
-    console.log(price, disc, id)
+    
+    const { id, total } = useLocation().state;
     const savedToken = Cookies.get('student-token');
-    const [totalPayment, setTotalPayment] = useState(price - (price * disc) / 100);
     const [infoData, setInfoData] = useState({
         name: "",
         email: "",
@@ -21,6 +20,9 @@ const CheckOut = () => {
         state: "",
         city: "",
         pincode: "",
+        bill_address: "",
+        bill_gst: "",
+        bill_pan: "",
     });
     const { stuUserId } = useContext(userRolesContext);
     const [isChecked, setIsChecked] = useState(false);
@@ -29,6 +31,7 @@ const CheckOut = () => {
         const { name, value } = e.target;
         setInfoData((prev) => ({ ...prev, [name]: value }));
     };
+    const navigate = useNavigate();
     const buyCourse = async (e) => {
         e.preventDefault();
 
@@ -82,19 +85,18 @@ const CheckOut = () => {
                 const paymentData = {
                     student_id: stuUserId,
                     course_id: courseIds, // Pass all course IDs for payment processing
-                    amount: totalPayment,
+                    amount: total,
                     payment_mode: "online",
                     transaction_id: "",
-                    bill_mobile: "",
-                    bill_name: "",
-                    bill_address: "",
-                    bill_gst: "",
-                    bill_pan: "",
+                    bill_mobile: infoData.phone,
+                    bill_name: infoData.name,
+                    bill_address: infoData.bill_address,
+                    bill_gst: infoData.bill_gst,
+                    bill_pan: infoData.bill_pan,
                 };
 
                 try {
                     const addPayment = await axiosInstance.post(`${port}/addingPayment`, paymentData);
-
                     if (addPayment.status === 200) {
                         alert("Course Enrolled and Payment Done Successfully!");
                     } else {
@@ -160,6 +162,18 @@ const CheckOut = () => {
                                 </div>
 
                             </div>
+                            <div className="form-group">
+                                <label htmlFor="bill_address">Bill Address</label>
+                                <input type="text" id="bill_address" name="bill_address" onChange={handleChange} placeholder="Enter Bill Address" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="bill_gst">Bill GST Number</label>
+                                <input type="text" id="bill_gst" name="bill_gst" onChange={handleChange} placeholder="Enter Bill GST Number" />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="bill_pan">Bill Pan Number</label>
+                                <input type="text" id="bill_pan" name="bill_pan" onChange={handleChange} placeholder="Enter Bill Pan Number" />
+                            </div>
                             <div className="checkbox-group">
                                 <input type="checkbox" id="terms" name="terms" onChange={(e) => setIsChecked(e.target.checked)} required />
                                 <label htmlFor="terms">I have read and agree to the Terms and Conditions.</label>
@@ -169,8 +183,8 @@ const CheckOut = () => {
 
                     <div className="checkout-review-cart-section">
                         <div className="cart-container">
-                            <h3>Review your cart</h3>
-                            <div className="course-cart-content">
+                            <h3>Your cart</h3>
+                            {/* <div className="course-cart-content">
                                 <img
                                     src={require("../../../assets/image/course-thumbnail.png")}
                                     alt="logo"
@@ -180,25 +194,25 @@ const CheckOut = () => {
                                     <span className="course-cart-quantity">1x</span>
                                     <div className="course-cart-price pt-4 font-semibold">$20.00</div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="course-payment-section">
-                                <div className="discount-code">
+                                {/* <div className="discount-code">
                                     <i className="fa-solid fa-ticket"></i>
                                     <input type="text" placeholder="Discount code" />
                                     <button className="course-payment-btn">Apply</button>
-                                </div>
+                                </div> */}
                                 <div className="price-summary">
-                                    <div className="price-row">
+                                    {/* <div className="price-row">
                                         <span>Subtotal</span>
                                         <span className="subtotal-price">${price}.00</span>
                                     </div>
                                     <div className="price-row">
                                         <span>Discount</span>
-                                        <span className="discount-price">-${(price * disc) / 100}</span>
-                                    </div>
+                                        <span className="discount-price">${(price * disc) / 100}</span>
+                                    </div> */}
                                     <div className="price-row total">
                                         <span>Total</span>
-                                        <span>${price - (price * disc) / 100}.00</span>
+                                        <span>${total}</span>
                                     </div>
                                 </div>
                                 <div className="pay-now-btn">

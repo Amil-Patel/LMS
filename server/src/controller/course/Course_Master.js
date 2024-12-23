@@ -113,7 +113,6 @@ const updateCourseMasterData = async (req, res) => {
             }
         }
     }
-
     const data = {
         course_title: req.body.course_title,
         short_desc: req.body.short_desc,
@@ -121,22 +120,22 @@ const updateCourseMasterData = async (req, res) => {
         course_cate: req.body.course_cate,
         course_level: req.body.course_level,
         course_language: req.body.course_language,
-        drip_content: req.body.drip_content=='true' ? 1 : 0,
+        drip_content: req.body.drip_content == 'true' ? 1 : 0,
         course_status: req.body.course_status,
         upcoming_course_thumbnail: req.body.course_status == "upcoming" ? (req?.body?.upcoming_course_thumbnail || null) : null,
         publish_date: req.body.course_status == 'upcoming' ? (publishDate || null) : null,
-        is_top_course: req.body.is_top_course=='true' ? 1 : 0,
-        featured_course: req.body.featured_course=='true' ? 1 : 0,
+        is_top_course: req.body.is_top_course == 'true' ? 1 : 0,
+        featured_course: req.body.featured_course == 'true' ? 1 : 0,
         course_faqs: JSON.stringify(req.body.course_faqs),
         course_requirenment: JSON.stringify(req.body.course_requirenment),
         course_topics: JSON.stringify(req.body.course_topics),
         course_price: req.body.course_price,
         course_discount: req.body.course_discount,
-        is_tax: req.body.is_tax=='true' ? 1 : 0,
-        tax_name: req.body.is_tax == 'true' ? (req.body.tax_name || null) : null,
-        tax_rate: req.body.is_tax == 'true' ? (req.body.tax_rate || null) : null,
-        is_inclusive: req.body.is_tax == 'true' ? (req.body.is_inclusive || null) : null,
-        is_exclusive: req.body.is_tax == 'true' ? (req.body.is_exclusive || null) : null,
+        is_tax: req.body.is_tax,
+        tax_name: req.body.tax_name,
+        tax_rate: req.body.tax_rate,
+        is_inclusive: req.body.is_inclusive,
+        is_exclusive: req.body.is_exclusive,
         auther: JSON.stringify(req.body.auther),
         expiring_time: req.body.expiring_time,
         no_of_month: req.body.expiring_time == "limited_time" ? (req.body.no_of_month || null) : null,
@@ -150,6 +149,7 @@ const updateCourseMasterData = async (req, res) => {
         updated_by: req.body.updated_by || 0,
         updatedAt: updateddate,
     }
+    console.log(data)
     try {
         const courseMasterdate = await Course_Master.update(data, {
             where: {

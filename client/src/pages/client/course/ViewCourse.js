@@ -11,6 +11,7 @@ const ViewCourse = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const { id } = useParams();
   const { cart, addToCart } = useCart();
+
   const navigate = useNavigate();
   //get lesson data
   const [lessonData, setLessonData] = useState([]);
@@ -119,8 +120,9 @@ const ViewCourse = () => {
   }
 
   //buy course
-  const handleBuyNow = (price, disc, id) => {
-    navigate(`/checkout/`, { state: { price, disc, id } });
+  const handleBuy = (data) => {
+    addToCart(data);
+    navigate(`/shopping-cart`);
   }
   useEffect(() => {
     getViewCourseData();
@@ -471,7 +473,7 @@ const ViewCourse = () => {
               <div className="cart-buttons">
                 <button className={`btn-add ${isInCart ? 'disabled' : ''}`} onClick={() => addToCart(courseData)}
                   disabled={isInCart}>{isInCart ? 'Added to Cart' : 'Add to Cart'}</button>
-                <button className="btn-buy" onClick={() => handleBuyNow(courseData.course_price, courseData.course_discount, courseData.id)}>Buy Now</button>
+                <button className="btn-buy" onClick={() => handleBuy(courseData)}>Buy Now</button>
               </div>
             </div>
             <div className="course-list">

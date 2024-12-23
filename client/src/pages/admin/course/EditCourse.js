@@ -34,22 +34,22 @@ const EditCourse = () => {
         course_cate: '',
         course_level: "",
         course_language: "",
-        drip_content: false,
+        drip_content: "",
         course_status: "",
         upcoming_course_thumbnail: null,
         publish_date: "",
-        is_top_course: false,
-        featured_course: false,
+        is_top_course: "",
+        featured_course: "",
         course_faqs: [{ question: "", answer: "" }],
         course_requirenment: [''],
         course_topics: [''],
         course_price: "",
         course_discount: "",
-        is_tax: false,
+        is_tax: "",
         tax_name: "",
         tax_rate: "",
-        is_inclusive: false,
-        is_exclusive: false,
+        is_inclusive: "",
+        is_exclusive: "",
         auther: [''],
         expiring_time: "",
         no_of_month: "",
@@ -75,6 +75,7 @@ const EditCourse = () => {
             if (res.data.is_tax === 1) {
                 setIsTax(true);
             }
+            console.log(res.data.is_top_course);
             // setup for auther
             let auther = res.data.auther;
             try {
@@ -167,11 +168,12 @@ const EditCourse = () => {
         }
 
         if (name === "tax_type") {
-            if (value === "inclusive") {
-                updatedFields = { ...updatedFields, is_inclusive: 1, is_exclusive: 0 };
-            } else if (value === "exclusive") {
-                updatedFields = { ...updatedFields, is_inclusive: 0, is_exclusive: 1 };
-            }
+            updatedFields = {
+                ...updatedFields,
+                tax_type: value,
+                is_inclusive: value === "inclusive" ? 1 : 0,
+                is_exclusive: value === "exclusive" ? 1 : 0,
+            };
         } else if (name === "is_life_time" || name === "is_limited") {
             if (type === "checkbox") {
                 if (checked) {
@@ -579,7 +581,7 @@ const EditCourse = () => {
                                                 <label>
                                                     Type <span className="required">*</span>
                                                 </label>
-                                                <select className="col12input" value={courseData.tax_type} name="tax_type" onChange={handleChange}>
+                                                <select className="col12input" value={courseData.is_inclusive == 1 ? "inclusive" : "exclusive"} name="tax_type" onChange={handleChange}>
                                                     <option value="">Select Tax Type</option>
                                                     <option value="inclusive">Is Inclusive</option>
                                                     <option value="exclusive">Is Exclusive</option>
@@ -697,7 +699,7 @@ const EditCourse = () => {
                                         />
                                         <div style={{ display: "flex", marginTop: "10px" }}>
                                             <div className="chekbox2">
-                                                <input type="checkbox" name="drip_content" checked={courseData.drip_content || false} onChange={handleChange} />
+                                                <input type="checkbox" name="drip_content" checked={courseData.drip_content == 1 ? true : false} onChange={handleChange} />
                                                 <label>Drip Content</label>
                                             </div>
                                             <div className="chekbox2">

@@ -9,26 +9,36 @@ import { useNavigate } from 'react-router-dom';
 
 const ShoppingCart = () => {
   const { cart, removeCart } = useCart();
-  console.log(cart)
   const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + item.course_price, 0);
-  const sumOfAllCartTax = cart.reduce((accumulator, item) => accumulator + item.tax_rate, 0);
+  const sumOfAllCartTax = cart.reduce((acc, item) => {
+    if (item.is_inclusive == 1) {
+      const disc = item.course_price - (item.course_price * item.course_discount / 100)
+      const tax = disc * (item.tax_rate / 100)
+      console.log(disc)
+      console.log(tax)
+      acc += tax
+    }
+    return acc
+  }, 0)
+  // const sumOfAllCartTax = cart.reduce((accumulator, item) =>{
+  //   if (item.is_inclusive == 1) {
+  // } accumulator + item.tax_rate, 0);
   const sumOfAllDiscountPrice = cart.reduce((total, item) => {
     const discount_price = (item.course_price * item.course_discount) / 100;
     return total + discount_price;
   }, 0);
   const navigate = useNavigate();
   // Navigate to Checkout with state
-  const processToCheckout = () => {
+  const processToCheckout = (total) => {
     if (cart.length > 0) {
-      const price = sumOfAllCartAmount + sumOfAllCartTax;
-      const disc = sumOfAllCartTax;
+      // const price = sumOfAllCartAmount + sumOfAllCartTax;
+      // const disc = sumOfAllCartTax;
       const id = cart.map((course) => course.id);
-
+      // const num = 1;
       navigate(`/checkout/`, {
         state: {
-          price,
-          disc,
           id,
+          total
         },
       });
     } else {
@@ -79,7 +89,7 @@ const ShoppingCart = () => {
                       </div>
                       <div className='shopping-cart-course-price'>
                         <div className='price-with-btn'>
-                          <span className='course-price'>$ {parseInt(discount_price)}</span>
+                          <span className='course-price'>$ {parseFloat(discount_price).toFixed(2)}</span>
                           <div className='discount-price py-2 flex items-center'>
                             <span className='mr-2'>{course.course_discount}% Off</span>
                             <span>$ {course.course_price}</span>
@@ -115,26 +125,26 @@ const ShoppingCart = () => {
               <div className="amount-details py-6">
                 <div className="detail-row">
                   <span>Total Amount</span>
-                  <span>${sumOfAllCartAmount}</span>
+                  <span>${parseFloat(sumOfAllCartAmount).toFixed(2)}</span>
                 </div>
                 <div className="detail-row liner pb-2">
                   <span>Discount</span>
-                  <span><s>${parseInt(sumOfAllDiscountPrice)}</s></span>
+                  <span><s>${parseFloat(sumOfAllDiscountPrice).toFixed(2)}</s></span>
                 </div>
                 <div className="detail-row pt-2">
                   <span>Sub Total</span>
-                  <span>${sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice)}</span>
+                  <span>${parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice).toFixed(2)}</span>
                 </div>
                 <div className="detail-row liner pb-2">
                   <span>Tax</span>
-                  <span>${sumOfAllCartTax}</span>
+                  <span>${parseFloat(sumOfAllCartTax).toFixed(2)}</span>
                 </div>
                 <div className="detail-row liner pb-2 pt-2">
                   <span className='text-base font-semibold'>Payable Amount</span>
-                  <span className='text-base font-semibold'>${(sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice) + sumOfAllCartTax)}</span>
+                  <span className='text-base font-semibold'>${parseFloat(sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2)}</span>
                 </div>
               </div>
-              <button className='process-to-checkout-btn hover:bg-blue-600' onClick={processToCheckout}>
+              <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2))}>
                 Process To Checkout
               </button>
             </div>
