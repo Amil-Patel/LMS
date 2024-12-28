@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     completed_lesson_id: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     course_progress: {
       type: DataTypes.INTEGER,

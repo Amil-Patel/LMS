@@ -2,6 +2,7 @@ import React from 'react'
 import Breadcrumb from './Breadcrumb'
 import Navbar from '../layout/Navbar'
 import AllCourse from './AllCourse'
+import Footer from '../layout/Footer'
 
 const index = () => {
     return (
@@ -9,6 +10,7 @@ const index = () => {
             <Navbar />
             <Breadcrumb />
             <AllCourse />
+            <Footer />
         </>
     )
 }

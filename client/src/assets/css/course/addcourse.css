@@ -14,36 +14,40 @@
   border-radius: 5px;
   margin-bottom: 20px;
 }
+
 .flex-row80 {
   width: 80%;
 }
+
 .flex-row40 {
   width: 49%;
 }
+
 .two_column {
   display: flex;
   margin-top: 20px;
   gap: 20px;
 }
 
-.chekbox{
+.chekbox {
   align-content: center;
   width: 8%;
   margin-left: 10px;
 }
 
-.chekbox label,.chekbox2 label{
+.chekbox label,.chekbox2 label {
   margin-left: 5px;
 }
 
-.chekbox2 :nth-child(1){
+.chekbox2 :nth-child(1) {
   margin-left: 10px;
 }
-.chekbox2{
+
+.chekbox2 {
   align-content: center;
 }
 
-.course-thumb-main-div{
+.course-thumb-main-div {
   display: flex;
   height: 88px;
   align-items: center;
@@ -255,12 +259,14 @@
 
 .faq-item {
   display: flex;
-  flex-direction: column; /* Arrange children in a column */
+  flex-direction: column;
+ /* Arrange children in a column */
   margin-bottom: 20px;
 }
 
 .faq-button {
-  align-self: flex-start; /* Align button to the start of the container */
+  align-self: flex-start;
+ /* Align button to the start of the container */
   font-size: 16px;
   padding: 5px 10px;
   border-radius: 4px;
@@ -329,6 +335,7 @@
   justify-content: center;
   align-items: center;
 }
-.tag-close i{
+
+.tag-close i {
   font-size: 14px;
 }
