@@ -49,5 +49,69 @@ const getAcademicProgressData = async (req, res) => {
         res.sendStatus(500);
     }
 }
+const getAcademicProgressDataWithCourseId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    const stuId = req.params.stuId;
+    try {
+        const data = await academic_progress.findAll({
+            where: {
+                course_id: id,
+                student_id: stuId
+            }
+        });
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+const UpdateAcademicProgressDataForViewed = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    const stuId = req.params.stuId;
+    const data = {
+        completed_lesson_id: JSON.stringify(req.body.completed_lesson_id),
+        current_watching_lesson: req.body.current_watching_lesson,
+        completed_date: new Date(),
+    }
+    console.log(id, stuId)
+    console.log(data)
+    try {
+        const userroledata = await academic_progress.update(data, {
+            where: {
+                id: id,
+                student_id: stuId
+            }
+        });
+        res.status(200).json(userroledata);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+const addAcedemicProgressData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const data = {
+        student_id: req.body.student_id,
+        course_id: req.body.course_id,
+        course_progress: 0,
+        current_watching_lesson: 0,
+        completed_date: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    }
+    try {
+        const userroledata = await academic_progress.create(data);
+        res.status(200).json(userroledata);
+    } catch (error) {
+        console.log(error);
+        console.log(res.message + " ll");
+        res.sendStatus(500);
+    }
+}
 
-module.exports = { getAcademicProgressData }
+module.exports = { getAcademicProgressData, addAcedemicProgressData, getAcademicProgressDataWithCourseId, UpdateAcademicProgressDataForViewed }

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ToastMessage from "./pages/admin/layout/ToastMessage";
+import { useLocation } from "react-router-dom";
 import DashboardRoute from "./routes/admin/DashboardRoute";
 import CourseCouponRoute from "./routes/admin/course/CourseCouponRoute";
 import CourseCategoryRoute from "./routes/admin/course/CourseCategoryRoute";
@@ -25,6 +26,12 @@ import ShoppingCartRoute from "./routes/client/ShoppingCartRoute";
 import LearningRoute from "./routes/stu_dashboard/LearningRoute";
 import ContactRoute from "./routes/client/ContactRoute";
 const App = () => {
+  const location = useLocation();
+
+  // Smooth scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]); // Runs whenever the path changes
   return (
     <>
       <ToastMessage />

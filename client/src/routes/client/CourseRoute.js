@@ -7,9 +7,9 @@ import CourseVideo from '../../pages/client/course/CourseVideo';
 const CourseRoute = () => {
   return (
     <Routes>
-      <Route path='/view-course/:id' element={<ViewCourse/>}/>
-      <Route path='/all-course' element={<AllCourse/>}/>
-      <Route path="/coursevideo" element={<CourseVideo />} />
+      <Route path='/view-course/:id' element={<ViewCourse />} />
+      <Route path='/all-course' element={<AllCourse />} />
+      <Route path="/coursevideo/:id" element={<CourseVideo />} />
     </Routes>
   )
 }

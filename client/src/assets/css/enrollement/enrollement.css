@@ -24,6 +24,7 @@
 .inq_message {
   width: 18%;
 }
+
 .edit-icon {
   color: #4880ff;
   cursor: pointer;
@@ -43,14 +44,16 @@
   text-align: center;
   width: 60%;
 }
-.filtered-student{
-    max-height: 73px;
-    overflow-y: scroll;
-    padding: 5px;
-    background-color: #dddddd;
-    margin-top: 5px;
+
+.filtered-student {
+  max-height: 73px;
+  overflow-y: scroll;
+  padding: 5px;
+  background-color: #dddddd;
+  margin-top: 5px;
 }
-.filtered-student .filtered-student-list li{
+
+.filtered-student .filtered-student-list li {
   font-size: 14px;
   cursor: pointer;
   margin-bottom: 4px;

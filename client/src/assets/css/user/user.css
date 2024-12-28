@@ -1,60 +1,59 @@
-.profile-img img{
-    width: 40px;
-    height: 40px;
-    margin-bottom: -5px;
-    border-radius: 100%;
-    border: 1px dashed var(--button-primary-color);
+.profile-img img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: -5px;
+  border-radius: 100%;
+  border: 1px dashed var(--button-primary-color);
 }
 
 /* login page */
 .login {
-    margin: 18vh auto;
-    padding: 40px 50px;
-    max-width: 400px;
-    border-radius: 5px;
-    background: var(--white);
-    border: 2px solid var(--button-primary-color);
+  margin: 18vh auto;
+  padding: 40px 50px;
+  max-width: 400px;
+  border-radius: 5px;
+  background: var(--white);
+  border: 2px solid var(--button-primary-color);
 }
 
 .login input {
-    width: 100%;
-    display: block;
-    box-sizing: border-box;
-    margin: 18px 0;
-    padding: 14px 12px;
-    font-size: 16px;
-    border-radius: 2px;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  margin: 18px 0;
+  padding: 14px 12px;
+  font-size: 16px;
+  border-radius: 2px;
 }
 
 .login input[type=text],
 .login input[type=password] {
-    border: 1px solid var(--button-primary-color);
-    transition: .2s;
+  border: 1px solid var(--button-primary-color);
+  transition: .2s;
 }
 
 .login input[type=text]:hover {
-    outline: none;
-    transition: all .2s ease-in-out;
+  outline: none;
+  transition: all .2s ease-in-out;
 }
 
 .login input[type=submit] {
-    border: none;
-    background: var(--button-primary-color);
-    color: white;
-    font-weight: bold;
-    transition: 0.2s;
-    margin: 20px 0px;
+  border: none;
+  background: var(--button-primary-color);
+  color: white;
+  font-weight: bold;
+  transition: 0.2s;
+  margin: 20px 0px;
 }
 
-
 .login h2 {
-    margin: 20px 0 0;
-    color: var(--button-primary-color);
-    font-size: 28px;
+  margin: 20px 0 0;
+  color: var(--button-primary-color);
+  font-size: 28px;
 }
 
 .login h2,
 .login p,
 .login a {
-    text-align: center;
+  text-align: center;
 }

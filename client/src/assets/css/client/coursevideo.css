@@ -1,31 +1,26 @@
-/* Container for the entire course video layout */
 .course-video-container {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Video section takes more space */
+  grid-template-columns: 2fr 1fr;
   gap: 10px;
   max-width: 100%;
   margin: auto;
 }
 
-/* Video Section */
 .video-player {
   position: relative;
   width: 100%;
+  margin: 10px;
 }
 
-/* Video Element Styling */
 .video-element {
   width: 100%;
   height: auto;
 }
 
-/* Thumbnail Container */
 .thumbnail-container {
   position: relative;
-  cursor: pointer;
 }
 
-/* Play Button Overlay Style */
 .play-button-overlay {
   position: absolute;
   top: 40%;
@@ -40,8 +35,7 @@
   align-items: center;
   cursor: pointer;
   border: 4px solid #f39c12;
-  animation: borderZoom 2s infinite ease-in-out; /* Zoom effect */
-  transition: background 0.3s ease; /* Smooth background transition */
+  animation: borderZoom 2s infinite ease-in-out;
 }
 
 /* Play Button Icon (Triangle Shape) */
@@ -59,9 +53,11 @@
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.2);
   }
+
   100% {
     transform: scale(1);
   }
@@ -99,10 +95,12 @@
 .course-info .module-lesson {
   border-bottom: 2px solid #fff;
 }
+
 .course-info .module-list {
   background-color: #fff;
   padding: 8px;
 }
+
 .course-info button.resource-btn {
   margin-right: 10px;
 }
@@ -126,6 +124,7 @@
   .video-navbar .md\\:hidden {
     display: block;
   }
+
   .video-navbar .md\\:flex {
     display: none;
   }
@@ -139,7 +138,7 @@
 
 @media (max-width: 768px) {
   .course-video-container {
-    grid-template-columns: 1fr; /* Single column for small screens */
+    grid-template-columns: 1fr;
   }
 
   .play-button-overlay {
@@ -173,14 +172,14 @@
 
 @media (max-width: 475px) {
   .video-navbar {
-    flex-direction: row; /* Align items in a row */
-    justify-content: space-between; /* Space items apart */
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .video-navbar > .flex {
-    flex-direction: row; /* Ensure the second line elements are aligned in a row */
-    justify-content: space-between; /* Space out the elements */
-    gap: 15px; /* Add spacing between the elements */
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15px;
   }
 }
 
@@ -189,14 +188,14 @@
     display: block;
   }
 
-  .video-navbar .course-title{
+  .video-navbar .course-title {
     width: 210px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }
 
-  .video-navbar .navbar-logo img{
+  .video-navbar .navbar-logo img {
     width: 85px;
   }
 

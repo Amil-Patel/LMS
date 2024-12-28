@@ -160,6 +160,7 @@
   font-size: 14px;
   padding: 4px 14px;
 }
+
 .add-to-cart-btn.disabled,.btn-add.disabled {
   background-color: rgb(163, 160, 160);
   cursor: not-allowed;
@@ -507,8 +508,6 @@
   .course-search-input input {
     width: 2.5in;
   }
-
-
 
   .course-icon-section {
     grid-template-columns: repeat(2, 1fr);

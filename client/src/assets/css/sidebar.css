@@ -217,6 +217,7 @@ li ul {
   padding: 0 0 5px 40px;
   line-height: 1.9em;
   /* background-color: var(--dropdown-bg-color); */
+  ;
 }
 
 li ul li a {
@@ -429,6 +430,7 @@ input:checked+.slider:before {
   border-radius: 5px;
   overflow: hidden;
   z-index: 1; */
+  ;
 }
 
 .menu-container.active .menu-content {
@@ -531,6 +533,7 @@ input:checked+.slider:before {
   table {
     overflow-x: scroll;
     /* width: max-content; */
+    ;
   }
 
   .nav-logo {
@@ -643,7 +646,8 @@ input:checked+.slider:before {
   .sidebar {
     width: 50px;
   }
-  .main{
+
+  .main {
     left: 50px;
     width: calc(100% - 50px);
   }

@@ -7,6 +7,7 @@ const port = process.env.REACT_APP_URL;
 const Sidebar = () => {
   const { stuUserId } = useContext(userRolesContext);
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
   const menus = [
     { name: "Dashboard", link: "/student/dashboard", icon: "fa-solid fa-gauge-high" },
     { name: "Courses", link: "/student/learning", icon: "fa-solid fa-border-all" },
@@ -16,11 +17,14 @@ const Sidebar = () => {
   const [userData, setUserData] = useState([]);
   const getUserData = async () => {
     if (!stuUserId) return
+    setLoading(true);
     try {
       const response = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${stuUserId}`);
       setUserData(response.data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   }
   useEffect(() => {
@@ -28,7 +32,6 @@ const Sidebar = () => {
   }, [stuUserId]);
 
   const [open, setOpen] = useState(true);
-  const [activeMenu, setActiveMenu] = useState("/student/learning");
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -66,25 +69,45 @@ const Sidebar = () => {
           )}
         </div>
         <div className="sidebar-profile-section mt-4 text-center">
-          <img
-            src={`../upload/${userData.profile}`}
-            alt="profile"
-            className={`mx-auto rounded-full duration-500 ${open ? "w-20 h-20" : "w-10 h-10"
-              }`}
-          />
-          {open && (
-            <>
-              <h3 className="pt-3 text-black font-semibold">{`${userData.first_name} ${userData.last_name}`}</h3>
-              <p>{userData.email}</p>
-            </>
+          {loading ? (
+            <div className="w-full">
+              <div className={`mx-auto bg-gray-200 rounded-full duration-500 ${open ? "w-20 h-20" : "w-10 h-10"
+                }`}></div>
+            </div>
+          ) : (
+            <img
+              src={`../upload/${userData.profile}`}
+              alt="profile"
+              className={`mx-auto rounded-full duration-500 ${open ? "w-20 h-20" : "w-10 h-10"
+                }`}
+            />
           )}
+          {open && (
+            loading ? (
+              <div className="w-full">
+                <div
+                  className="h-3 mt-3 mx-auto bg-gray-200 rounded-full duration-500"
+                ></div>
+                <div
+                  className="h-3 mt-3 mx-auto bg-gray-200 rounded-full duration-500"
+                ></div>
+              </div>
+            ) : (
+              <>
+                <h3 className="pt-3 text-black font-semibold">
+                  {`${userData.first_name} ${userData.last_name}`}
+                </h3>
+                <p>{userData.email}</p>
+              </>
+            )
+          )}
+
         </div>
         <div className="stu-sidebar-menu mt-8 flex flex-col gap-1.5">
           {menus.map((menu, i) => (
             <div className="tooltip" key={i}>
               <NavLink
                 to={menu.link}
-                onClick={() => setActiveMenu(menu.name)}
                 className={`sidebar_li flex items-center px-5 py-3.5 text-base rounded-md cursor-pointer
                   ${location.pathname === menu.link
                     ? "bg-blue-500 text-white"
@@ -104,7 +127,7 @@ const Sidebar = () => {
           ))}
         </div>
       </aside>
-    </section>
+    </section >
   );
 };
 

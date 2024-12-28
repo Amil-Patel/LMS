@@ -1,14 +1,12 @@
 import React from 'react'
 import { ImTicket } from "react-icons/im";
 import Sidebar from './layout/Sidebar'
-import Navbar from '../client/layout/Navbar'
-import Breadcrumb from '../client/course/Breadcrumb'
+import Navbar from '../client/layout/Navbar';
 
 const PurchaseHistory = () => {
     return (
         <>
             <Navbar />
-            <Breadcrumb />
             <div className='main_stu_dashboard'>
                 <Sidebar />
                 <div className='content pl-4'>

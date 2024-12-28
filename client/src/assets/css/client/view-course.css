@@ -16,13 +16,14 @@
 .metadata {
   color: var(--heading-color);
 }
+
 .price h3 {
   font-size: 24px;
   color: var(--black);
   font-weight: bold;
 }
 
-.rating-author .author-name{
+.rating-author .author-name {
   font-size: 14px;
   padding-bottom: 10px;
 }
@@ -93,8 +94,8 @@
   color: var(--step-button-background);
 }
 
-.tabs button:hover{
-  background-color:var(--border-color) ;
+.tabs button:hover {
+  background-color: var(--border-color);
 }
 
 .tabs button.active {
@@ -141,6 +142,7 @@
   margin-right: 10px;
   font-size: 14px;
 }
+
 .course-list {
   margin-top: 20px;
 }
@@ -185,7 +187,8 @@
 
 .average-rating h2 {
   font-size: 2rem;
-  color: var(--black); /* Star color */
+  color: var(--black);
+ /* Star color */
   display: inline-flex;
   align-items: center;
   gap: 5px;

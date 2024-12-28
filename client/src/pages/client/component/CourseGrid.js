@@ -48,7 +48,7 @@ const CourseGrid = ({ courses, category }) => {
                             <div className="course-inner-content">
                                 {/* Course Title */}
                                 <h3>
-                                    <NavLink to={`/view-course`}>{truncatedTitle}</NavLink>
+                                    <NavLink to={`/view-course/${course.id}`}>{truncatedTitle}</NavLink>
                                 </h3>
 
                                 {/* Author and Rating */}

@@ -3,8 +3,6 @@ import "../../../assets/css/client/allcourse.css";
 import CourseList from "../component/CourseList";
 import CourseGrid from "../component/CourseGrid";
 import axiosInstance from "../utils/axiosInstance";
-import Footer from "../layout/Footer";
-// import { useCart } from "../layout/CartContext";
 
 const port = process.env.REACT_APP_URL;
 
@@ -12,6 +10,7 @@ const port = process.env.REACT_APP_URL;
 const AllCourse = () => {
   const [isGridView, setIsGridView] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 850);
+  const [loading, setLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
@@ -23,22 +22,28 @@ const AllCourse = () => {
   // Get course category
   const [courseCategory, setCourseCategory] = useState();
   const getCourseCategory = async () => {
+    setLoading(true)
     try {
       const res = await axiosInstance.get(`${port}/gettingNotNullCourseCategory`);
       setCourseCategory(res.data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
-  // const { courseData } = useCart();
+
   // Get course data
   const [courseData, setCourseData] = useState();
   const getCourseData = async () => {
+    setLoading(true)
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -90,89 +95,94 @@ const AllCourse = () => {
 
   return (
     <>
-      <section className="course-hero-container lg:text-truncate">
-        <div className="course-category">
-          {isMobileView && (
-            <button className="filter-button" onClick={toggleFilter}>
-              Filter
-              <i className="fa-solid fa-filter"></i>
-            </button>
-          )}
-          {isMobileView && (
-            <div className={`filter-sidebar ${isFilterOpen ? "open" : "closed"}`}>
-              <div className="filter-header">
-                <h3>Course Category</h3>
-                <button className="close-button mb-[15px]" onClick={toggleFilter}>
-                  <i className="fa fa-times"></i>
-                </button>
+      {loading ? (
+        <div className="client_loading_container">
+          <div className="client_loader"></div>
+        </div>
+      ) : (
+        <section className="course-hero-container lg:text-truncate">
+          <div className="course-category">
+            {isMobileView && (
+              <button className="filter-button" onClick={toggleFilter}>
+                Filter
+                <i className="fa-solid fa-filter"></i>
+              </button>
+            )}
+            {isMobileView && (
+              <div className={`filter-sidebar ${isFilterOpen ? "open" : "closed"}`}>
+                <div className="filter-header">
+                  <h3>Course Category</h3>
+                  <button className="close-button mb-[15px]" onClick={toggleFilter}>
+                    <i className="fa fa-times"></i>
+                  </button>
+                </div>
+                {courseCategory?.map((item) => (
+                  <label key={item.id}>
+                    <input
+                      type="checkbox"
+                      value={item.id}
+                      onChange={handleCategoryChange} // Handle category selection
+                    />
+                    {item.cate_title}
+                  </label>
+                ))}
               </div>
+            )}
+
+            <div className="desktop-sidebar">
+              <h3>Course Category</h3>
               {courseCategory?.map((item) => (
                 <label key={item.id}>
                   <input
                     type="checkbox"
                     value={item.id}
-                    onChange={handleCategoryChange} // Handle category selection
+                    onChange={handleCategoryChange}
                   />
                   {item.cate_title}
                 </label>
               ))}
             </div>
-          )}
-
-          <div className="desktop-sidebar">
-            <h3>Course Category</h3>
-            {courseCategory?.map((item) => (
-              <label key={item.id}>
-                <input
-                  type="checkbox"
-                  value={item.id}
-                  onChange={handleCategoryChange}
-                />
-                {item.cate_title}
-              </label>
-            ))}
           </div>
-        </div>
-        <div className="course-section">
-          <div className="course-section-header">
-            <h1>All Courses</h1>
-            <div className="course-header-search-section">
-              <div className="course-search-input">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={handleSearchChange} // Update search query
-                />
-                <i className="fa-solid fa-magnifying-glass"></i>
-              </div>
-              <div className="course-list-icon">
-                <a
-                  title="GridView"
-                  onClick={() => setIsGridView(true)}
-                >
-                  <i
-                    className="fa-brands fa-microsoft"
-                    style={{ color: isGridView ? "#4880ff" : "initial" }}
-                  ></i>
-                </a>
-                <a
-                  title="ListView"
-                  onClick={() => setIsGridView(false)}
-                >
-                  <i
-                    className="fa-solid fa-list"
-                    style={{ color: isGridView ? "initial" : "#4880ff" }}
-                  ></i>
-                </a>
+          <div className="course-section">
+            <div className="course-section-header">
+              <h1>All Courses</h1>
+              <div className="course-header-search-section">
+                <div className="course-search-input">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={handleSearchChange} // Update search query
+                  />
+                  <i className="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div className="course-list-icon">
+                  <a
+                    title="GridView"
+                    onClick={() => setIsGridView(true)}
+                  >
+                    <i
+                      className="fa-brands fa-microsoft"
+                      style={{ color: isGridView ? "#4880ff" : "initial" }}
+                    ></i>
+                  </a>
+                  <a
+                    title="ListView"
+                    onClick={() => setIsGridView(false)}
+                  >
+                    <i
+                      className="fa-solid fa-list"
+                      style={{ color: isGridView ? "initial" : "#4880ff" }}
+                    ></i>
+                  </a>
+                </div>
               </div>
             </div>
+            {!isGridView && <CourseList courses={filteredCourses} category={courseCategory} />}
+            {isGridView && <CourseGrid courses={filteredCourses} category={courseCategory} />}
           </div>
-          {!isGridView && <CourseList courses={filteredCourses} category={courseCategory} />}
-          {isGridView && <CourseGrid courses={filteredCourses} category={courseCategory} />}
-        </div>
-      </section>
-      <Footer />
+        </section>
+      )}
     </>
   );
 };

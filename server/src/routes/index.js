@@ -23,7 +23,7 @@ const CheckRolePermissionRoute = require("./check_role_permission/CheckRolePermi
 const LoginRoute = require('./login/LoginRoute');
 const CourseResourceRoute = require('./course/Course_ResourceRoute');
 const PaymentsRoute = require('./payments/PaymentsRoute');
-
+const QuizResultRoute = require('./course/Quiz_ResultRoute');
 
 router.use("/", UserRoleRoute);
 router.use("/", UserMasterRoute);
@@ -47,6 +47,7 @@ router.use("/", CheckRolePermissionRoute);
 router.use('/', LoginRoute)
 router.use('/', CourseResourceRoute)
 router.use('/', PaymentsRoute)
+router.use('/', QuizResultRoute)
 
 
 

@@ -2,13 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { userRolesContext } from '../admin/layout/RoleContext';
 import axiosInstance from '../client/utils/axiosInstance';
 import Navbar from '../client/layout/Navbar'
-import Breadcrumb from '../client/course/Breadcrumb'
 import Sidebar from './layout/Sidebar'
+import { notifySuccess } from '../admin/layout/ToastMessage';
 const port = process.env.REACT_APP_URL;
 
 const StudentProfile = () => {
   const { stuUserId } = useContext(userRolesContext);
-  console.log(stuUserId)
   const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
   const [fileName, setFileName] = useState("");
 
@@ -108,6 +107,7 @@ const StudentProfile = () => {
       getUserData();
       setNewPassword("");
       setConfirmPassword("");
+      notifySuccess("Profile updated successfully");
     } catch (error) {
       console.log(error);
     }
@@ -120,16 +120,14 @@ const StudentProfile = () => {
   return (
     <>
       <Navbar />
-      <Breadcrumb />
       <div className='main_stu_dashboard'>
-
         <Sidebar />
         <div className="main static p-0 " >
-          <div className='flex items-center bg-white justify-between'>
-            <h1 className='font-bold text-3xl sticky top-0 left-0 bg-white z-10 text-black'>Profile</h1>
-            <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
-          </div>
-          <div className="course-form-container shadow-none">
+          <div className="course-form-container shadow-none pt-0">
+            <div className='flex items-center bg-white justify-between mb-5'>
+              <h1 className='font-bold text-3xl sticky top-0 left-0 bg-white z-10 text-black'>Profile</h1>
+              <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
+            </div>
             <form>
               {/* first / middle / last  name */}
               <div className="flex-row">
@@ -382,10 +380,10 @@ const StudentProfile = () => {
               {/* new Password  */}
 
               <div
-                className="flex-row flex-row80"
-                style={{ border: "none", width: "64%", padding: "20px 0 0 0" }}
+                className="flex-row gap-6 flex-row80"
+                style={{ border: "none", width: "70%", padding: "20px 0 0 0" }}
               >
-                <div style={{ width: "47%" }}>
+                <div style={{ width: "47%", position: "relative" }}>
                   <label htmlFor="new_password">New Password</label>
                   <input
                     name="password"
