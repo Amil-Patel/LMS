@@ -1,4 +1,4 @@
-const { Course_Master } = require("../../database/models/index");
+const { Course_Master,enrollment,Course_Lesson } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const path = require("path");
@@ -9,8 +9,30 @@ const getCourseMasterData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     try {
-        const data = await Course_Master.findAll();
-        res.send(data);
+        const courses = await Course_Master.findAll();
+
+        // Fetch enrollment and lesson counts for each course
+        const courseData = await Promise.all(
+            courses.map(async (course) => {
+                // Count enrollments for this course
+                const enrollmentCount = await enrollment.count({
+                    where: { course_id: course.id },
+                });
+
+                // Count lessons for this course
+                const lessonCount = await Course_Lesson.count({
+                    where: { course_id: course.id },
+                });
+
+                return {
+                    ...course.toJSON(),
+                    enrollmentCount,
+                    lessonCount,
+                };
+            })
+        );
+
+        res.status(200).json(courseData);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -88,7 +110,6 @@ const addCourseMasterData = async (req, res) => {
         res.sendStatus(500);
     }
 }
-
 const updateCourseMasterData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -136,7 +157,7 @@ const updateCourseMasterData = async (req, res) => {
         tax_rate: req.body.tax_rate,
         is_inclusive: req.body.is_inclusive,
         is_exclusive: req.body.is_exclusive,
-        auther: JSON.stringify(req.body.auther),
+        auther: req.body.auther,
         expiring_time: req.body.expiring_time,
         no_of_month: req.body.expiring_time == "limited_time" ? (req.body.no_of_month || null) : null,
         course_overview_link: req.body.course_overview_link,
@@ -151,17 +172,33 @@ const updateCourseMasterData = async (req, res) => {
     }
     console.log(data)
     try {
-        const courseMasterdate = await Course_Master.update(data, {
+        const courseMaserdate = await Course_Master.update(data, {
             where: {
                 id: id
             }
         });
-        res.status(200).json(courseMasterdate);
+        res.status(200).json(courseMaserdate);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-
+const updateCourseStatusData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    const status = req.body.status;
+    const newStatus = status === 1 ? 0 : 1;
+    try {
+        const data = await Course_Master.update({ status: newStatus }, {
+            where: {
+                id: id
+            }
+        });
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 const deleteCourseMaster = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -199,5 +236,6 @@ module.exports = {
     getCourseMasterDataWithId,
     addCourseMasterData,
     updateCourseMasterData,
+    updateCourseStatusData,
     deleteCourseMaster
 }

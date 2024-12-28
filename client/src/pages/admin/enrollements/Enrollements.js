@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import "../../../assets/css/enrollement/enrollement.css";
 import Hoc from "../layout/Hoc";
 import axiosInstance from "../utils/axiosInstance";
@@ -14,6 +14,7 @@ function Enrollements() {
   const [studentData, setStudentData] = useState([]);
   const [loading, setLoading] = useState(false)
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [addEnrollData, setAddEnrollData] = useState({
     students: [],
     courses: [],
@@ -243,6 +244,15 @@ function Enrollements() {
     setFilteredEnrollStudent(studentData);
   }, [studentData])
 
+  const filterData = useMemo(() => {
+    return filteredEnrollStudent.filter((student) => {
+      return student.user_enrollment.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.user_enrollment.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.course_master_enrollment.course_title.toLowerCase().includes(searchQuery.toLowerCase())
+
+    })
+  }, [filteredEnrollStudent, searchQuery])
+
   return (
     <>
       <Hoc />
@@ -253,7 +263,7 @@ function Enrollements() {
             <h5>Enrollements</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div id="header-course-selection">
@@ -300,7 +310,7 @@ function Enrollements() {
           </thead>
 
           <tbody className="email_tbody">
-            {filteredEnrollStudent.map((enroll, index) => (
+            {filterData.map((enroll, index) => (
               <tr key={enroll.id}>
                 <td>{index + 1}</td>
                 <td className="profile-img"><img src={`../upload/${enroll.user_enrollment.profile}`} alt="User" /></td>

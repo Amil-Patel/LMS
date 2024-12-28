@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import Hoc from "../layout/Hoc";
 import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
@@ -18,6 +18,7 @@ const CourseCategory = () => {
   const [nullCourseCategory, setNullCourseCategory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [firstNullParentData, setFirstNullParentData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const perm = useCheckRolePermission("Course Category");
   const addCourseCatePermission = perm.length > 0 && perm[0].can_add === 1 ? 1 : 0;
   const editCourseCatePermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
@@ -248,6 +249,12 @@ const CourseCategory = () => {
     setDeleteOpen(!deleteOpen);
   };
 
+   const filteredData = useMemo(() => {
+      return courseDataWithParentId.filter((item) =>
+        item.cate_title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }, [courseDataWithParentId, searchQuery]);
+
   return (
     <>
       <Hoc />
@@ -258,7 +265,7 @@ const CourseCategory = () => {
             <h5>Course Category</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo" style={{ display: "flex" }}>
@@ -406,8 +413,8 @@ const CourseCategory = () => {
           </div>
 
           <div className="courses-category">
-            {courseDataWithParentId.length > 0 ? (
-              courseDataWithParentId.map((course) => (
+            {filteredData.length > 0 ? (
+              filteredData.map((course) => (
                 <div key={course.id} className="card">
                   <img
                     src={`../upload/${course.cate_thumbnail}`}

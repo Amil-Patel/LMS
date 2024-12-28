@@ -62,11 +62,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     contact: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     whatsapp_number: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     country: {

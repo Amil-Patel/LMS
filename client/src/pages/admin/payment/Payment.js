@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
 import axiosInstance from '../../client/utils/axiosInstance';
 import "../../../assets/css/payment/payment.css";
@@ -7,13 +7,41 @@ const port = process.env.REACT_APP_URL;
 function Payment() {
   const [viewOpen, setViewOpen] = useState(false);
   const [currentCourse, setCurrentCourse] = useState(null);
-
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const handleViewClick = (course) => {
     setCurrentCourse(course);
-    console.log(course)
 
+    if (Array.isArray(course.courseNames)) {
+      const sub_total = course.courseNames.reduce((courseSum, course) => {
+        return courseSum + (course.course_price || 0);
+      }, 0);
+  
+      setSubTotal(sub_total);
+  
+      const total_discount = course.courseNames.reduce((discountSum, course) => {
+        const discount = course?.course_price * (course?.course_discount / 100);
+        return discountSum + discount;
+      }, 0);
+  
+      setTotalDiscount(total_discount);
+  
+      const inclusiveTax = course.courseNames.reduce((taxSum, course) => {
+        if (course.is_inclusive == 1) {
+          const amountWithDiscount = course?.course_price - (course?.course_price * (course?.course_discount / 100));
+          const tax_amount = amountWithDiscount * (course?.tax_rate / 100);
+          taxSum += tax_amount;
+        }
+        return taxSum;
+      }, 0);
+  
+      setInclusiveTax(inclusiveTax);
+    } else {
+      console.error("`course.courseNames` is not an array:", course.courseNames);
+    }
+  
     setViewOpen(true);
   };
+  
 
   const handleCloseEditModal = () => {
     setViewOpen(false);
@@ -28,42 +56,24 @@ function Payment() {
     try {
       const res = await axiosInstance.get(`${port}/gettingPaymentData`);
       setPaymentData(res.data);
-      const data = res.data;
-      const sub_total = data.reduce((total, item) => {
-        const courseTotal = item?.courseNames?.reduce((courseSum, course) => {
-          return courseSum + (course.course_price || 0);
-        }, 0);
-        return courseTotal;
-      }, 0);
-      setSubTotal(sub_total);
-      const total_discount = data.reduce((total, item) => {
-        const discountTotal = item?.courseNames?.reduce((discountSum, course) => {
-          const discount = course?.course_price * (course?.course_discount / 100)
-          return discountSum + discount;
-        }, 0);
-        return discountTotal;
-      }, 0);
-      setTotalDiscount(total_discount);
-      const inclusiveTax = data.reduce((total, item) => {
-        const taxTotal = item?.courseNames?.reduce((taxSum, course) => {
-          if (course.is_inclusive == 1) {
-            const tax_amount = course?.course_price * (course?.tax_rate / 100);
-            taxSum += tax_amount;
-          }
-          return taxSum;
-        }, 0);
-        return taxTotal;
-      })
-      setInclusiveTax(inclusiveTax);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getPaymentData();
   }, []);
 
-
+  const filteredData = useMemo(() => {
+    return paymentData.filter((item) => {
+      const courseNames = item?.courseNames?.map((course) => course.course_title);
+      return item.studentName.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.studentName.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(item.amount).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        courseNames.some((courseName) => courseName.toLowerCase().includes(searchQuery.toLowerCase()));
+    })
+  })
 
 
   return (
@@ -75,7 +85,7 @@ function Payment() {
             <h5>Payment</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -95,7 +105,7 @@ function Payment() {
           </thead>
 
           <tbody>
-            {paymentData.map((item) => (
+            {filteredData.map((item) => (
               <tr key={item.id}>
                 <td className="id">{item.id}</td>
                 <td>
@@ -174,18 +184,19 @@ function Payment() {
                   <tbody>
                     {
                       currentCourse?.courseNames?.map((item) => {
-                        const tax_amount = item?.course_price * (item?.tax_rate / 100);
-                        const net_amount = item?.course_price - tax_amount - item?.course_discount;
                         const discount = item?.course_price * (item?.course_discount / 100);
+                        const withDiscountPrice = item.course_price - discount
+                        const tax_amount = withDiscountPrice * (item?.tax_rate / 100);
+                        const net_amount = item?.course_price - tax_amount - item?.course_discount;
                         return (
                           <tr>
                             <td>{item?.course_title}</td>
                             <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
                             <td>{item?.course_price}</td>
                             <td>{(item?.tax_rate) ? item?.tax_rate : 0}%</td>
-                            <td>{tax_amount}</td>
+                            <td>{parseFloat(tax_amount).toFixed(2)}</td>
                             <td>{discount ? discount : 0}</td>
-                            <td>{net_amount}</td>
+                            <td>{parseFloat(net_amount).toFixed(2)}</td>
                           </tr>
                         );
                       })
@@ -223,23 +234,23 @@ function Payment() {
                     <tbody>
                       <tr>
                         <th>Sub Total</th>
-                        <th>{subTotal}</th>
+                        <th>{parseFloat(subTotal).toFixed(2)}</th>
                       </tr>
                       <tr>
                         <td>Discount</td>
-                        <td>{totalDiscount}</td>
+                        <td>{parseFloat(totalDiscount).toFixed(2)}</td>
                       </tr>
                       <tr>
                         <th>Total Amount</th>
-                        <th>{subTotal - totalDiscount}</th>
+                        <th>{parseFloat(subTotal - totalDiscount).toFixed(2)}</th>
                       </tr>
                       <tr>
                         <td>Tax (Inc.)</td>
-                        <td>{inclusiveTax}</td>
+                        <td>{parseFloat(inclusiveTax).toFixed(2)}</td>
                       </tr>
                       <tr className="net-amount-row">
                         <th>Net Amount</th>
-                        <th>{(subTotal - totalDiscount) + inclusiveTax}</th>
+                        <th>{parseFloat((subTotal - totalDiscount) + inclusiveTax).toFixed(2)}</th>
                       </tr>
                     </tbody>
                   </table>

@@ -1,5 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import axiosInstance from "../utils/axiosInstance";
+const port = process.env.REACT_APP_URL
 const userRolesContext = createContext();
 
 const RoleContext = ({ children }) => {
@@ -9,6 +11,19 @@ const RoleContext = ({ children }) => {
     const [userId, setUserId] = useState(null);
     const [stuUserId, setStuUserId] = useState(null);
     const [stuUserRole, setStuUserRole] = useState(null);
+    const [setting, setSetting] = useState([]);
+    const getSystemSettingData = async () => {
+        try {
+          const res = await axiosInstance.get(`${port}/gettingSystemSettingWithId`);
+          setSetting(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
+      useEffect(() => {
+        getSystemSettingData();
+      }, []);
     useEffect(() => {
         if (savedToken) {
             try {

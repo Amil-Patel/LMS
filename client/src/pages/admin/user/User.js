@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/user/user.css";
 import { NavLink } from "react-router-dom";
@@ -513,7 +513,34 @@ const User = () => {
     getAllUserData();
   }, [studentView, adminView, instructureView]);
 
-  //delete data code start
+  //status change code start
+  const handleStatusChange = async (id, status) => {
+    console.log(id, status);
+    setLoading(true);
+    try {
+      const res = await axiosInstance.put(`${port}/updatingUserMasterStatus/${id}`, {
+        status: status,
+      });
+      getAllUserData();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  //search data logic
+  const [searchQuery, setSearchQuery] = useState("");
+  const filtereData = useMemo(() => {
+    return userData.filter((item) => {
+      return (
+        (item?.first_name?.toLowerCase()?.includes(searchQuery.toLowerCase()) || "") ||
+        (item?.email?.toLowerCase()?.includes(searchQuery.toLowerCase()) || "") ||
+        (item?.contact?.toLowerCase()?.includes(searchQuery.toLowerCase()) || "") ||
+        (item?.country?.toLowerCase()?.includes(searchQuery.toLowerCase()) || "")
+      );
+    });
+  }, [userData, searchQuery]);
+  
   return (
     <>
       <Hoc />
@@ -524,7 +551,7 @@ const User = () => {
             <h5>Users</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-bar" type="text" placeholder="Search" />
+            <input id="search-bar" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -601,12 +628,12 @@ const User = () => {
               </thead>
               <tbody>
                 {
-                  userData.length === 0 ? (
+                  filtereData.length === 0 ? (
                     <tr>
                       <td colSpan="9">No user data found</td>
                     </tr>
                   ) : (
-                    userData.map((item, index) => (
+                    filtereData.map((item, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
@@ -619,7 +646,8 @@ const User = () => {
                         <td>{item.country}</td>
                         <td>
                           <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" />
+                            <input id="switch" type="checkbox" checked={item.status === 1}
+                              onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
                         </td>
@@ -692,12 +720,12 @@ const User = () => {
               </thead>
               <tbody>
                 {
-                  userData.length === 0 ? (
+                  filtereData.length === 0 ? (
                     <tr>
                       <td colSpan="9">No instructure data found</td>
                     </tr>
                   ) : (
-                    userData.map((item, index) => (
+                    filtereData.map((item, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
@@ -710,7 +738,8 @@ const User = () => {
                         <td>{item.country}</td>
                         <td>
                           <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" />
+                            <input id="switch" type="checkbox" checked={item.status === 1}
+                              onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
                         </td>
@@ -783,12 +812,12 @@ const User = () => {
               </thead>
               <tbody>
                 {
-                  userData.length === 0 ? (
+                  filtereData.length === 0 ? (
                     <tr>
                       <td colSpan="9">No admin data found</td>
                     </tr>
                   ) : (
-                    userData.map((item, index) => (
+                    filtereData.map((item, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
@@ -801,7 +830,8 @@ const User = () => {
                         <td>{item.country}</td>
                         <td>
                           <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" />
+                            <input id="switch" type="checkbox" checked={item.status === 1}
+                              onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
                         </td>
@@ -870,12 +900,12 @@ const User = () => {
               </thead>
               <tbody>
                 {
-                  userData.length === 0 ? (
+                  filtereData.length === 0 ? (
                     <tr>
                       <td colSpan="9">No super admin data found</td>
                     </tr>
                   ) : (
-                    userData.map((item, index) => (
+                    filtereData.map((item, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
@@ -888,7 +918,8 @@ const User = () => {
                         <td>{item.country}</td>
                         <td>
                           <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" />
+                            <input id="switch" type="checkbox" checked={item.status === 1}
+                              onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
                         </td>

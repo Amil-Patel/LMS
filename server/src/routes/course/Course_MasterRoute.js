@@ -12,6 +12,7 @@ CourseMaster.get("/gettingCourseMasterData", CourseMasterController.getCourseMas
 CourseMaster.get("/gettingCourseMasterDataWithId/:id", CourseMasterController.getCourseMasterDataWithId);
 CourseMaster.post("/addingCourseMaster", upload.single('course_thumbnail'), CourseMasterController.addCourseMasterData);
 CourseMaster.put("/updatingCourseMaster/:id", upload.single('course_thumbnail'), CourseMasterController.updateCourseMasterData);
+CourseMaster.put("/updatingCourseStatus/:id", CourseMasterController.updateCourseStatusData);
 CourseMaster.delete("/deletingCourseMaster/:id", CourseMasterController.deleteCourseMaster);
 
 

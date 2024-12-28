@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   inquiry.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,
-    mobile_number: DataTypes.BIGINT,
-    whatsapp_number: DataTypes.BIGINT,
+    mobile_number: DataTypes.STRING,
+    whatsapp_number: DataTypes.STRING,
     country: DataTypes.STRING,
     message: DataTypes.STRING,
     is_registreted: DataTypes.INTEGER,

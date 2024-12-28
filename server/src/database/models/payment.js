@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     amount: DataTypes.STRING,
     payment_mode: DataTypes.STRING,
     transiction_id: DataTypes.INTEGER,
-    bill_mobile: DataTypes.INTEGER,
+    bill_mobile: DataTypes.STRING,
     bill_name: DataTypes.STRING,
     bill_address: DataTypes.STRING,
     bill_gst: DataTypes.STRING,

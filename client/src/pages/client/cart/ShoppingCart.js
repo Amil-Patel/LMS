@@ -141,10 +141,10 @@ const ShoppingCart = () => {
                 </div>
                 <div className="detail-row liner pb-2 pt-2">
                   <span className='text-base font-semibold'>Payable Amount</span>
-                  <span className='text-base font-semibold'>${parseFloat(sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2)}</span>
+                  <span className='text-base font-semibold'>${parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2)}</span>
                 </div>
               </div>
-              <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseInt(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2))}>
+              <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2))}>
                 Process To Checkout
               </button>
             </div>

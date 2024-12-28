@@ -14,6 +14,7 @@ const AllCourse = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false)
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   // Get course category
   const [courseCategory, setCourseCategory] = useState();
@@ -32,6 +33,7 @@ const AllCourse = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
+      console.log(res.data)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -99,6 +101,31 @@ const AllCourse = () => {
     }
     return sortableItems;
   }, [courseData, sortConfig]);
+  //status change
+  const handleStatusChange = async (id, status) => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.put(`${port}/updatingCourseStatus/${id}`, {
+        status: status,
+      });
+      getCourseData();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  //search
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredData = useMemo(() => {
+    return sortedData.filter((item) =>
+      item.course_title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [sortedData, searchQuery]);
 
 
   return (
@@ -111,7 +138,7 @@ const AllCourse = () => {
             <h5>Courses</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={handleSearchChange}/>
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -138,12 +165,10 @@ const AllCourse = () => {
             </thead>
 
             <tbody>
-              {sortedData.map((i, index) => {
-                console.log(i)
+              {filteredData.map((i, index) => {
                 let auther = i.auther;
                 try {
-                  // auther = JSON.parse(auther);
-                  if (typeof auther === 'string') {
+                  if (typeof auther == 'string') {
                     auther = JSON.parse(auther);
                   }
                 } catch (e) {
@@ -159,8 +184,8 @@ const AllCourse = () => {
                     </td>
                     <td>{category}</td>
                     <td>{i.course_price}</td>
-                    <td>{i.enrollment}</td>
-                    <td>{i.lession}</td>
+                    <td>{i.enrollmentCount}</td>
+                    <td>{i.lessonCount}</td>
                     <td>
                       {formattedData}
                     </td>
@@ -170,6 +195,7 @@ const AllCourse = () => {
                           type="checkbox"
                           id="status"
                           checked={i.status === 1}
+                          onChange={() => handleStatusChange(i.id, i.status)}
                         />
                         <span className="slider"></span>
                       </label>

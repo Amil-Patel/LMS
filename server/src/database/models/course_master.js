@@ -121,9 +121,6 @@ module.exports = (sequelize, DataTypes) => {
     is_exclusive: {
       type: DataTypes.INTEGER
     },
-    is_exclusive: {
-      type: DataTypes.JSON
-    },
     auther: {
       type: DataTypes.JSON
     },
@@ -155,6 +152,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     title_tag: {
       type: DataTypes.STRING
+    },
+    status: {
+      type: DataTypes.INTEGER
     },
     created_by: {
       type: DataTypes.INTEGER

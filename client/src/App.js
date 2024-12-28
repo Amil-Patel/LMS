@@ -7,6 +7,7 @@ import AddCourseRoute from "./routes/admin/course/AddCourseRoute";
 import AllCourseRoute from "./routes/admin/course/AllCourseRoute";
 import NotificationSettingRoute from "./routes/admin/setting/NotificationSettingRoute";
 import PaymentSettingRoute from "./routes/admin/setting/PaymentSettingRoute";
+import GeneralSettingRoute from "./routes/admin/setting/GeneralSettingRoute";
 import EnrollementsRoute from "./routes/admin/enrollement/EnrollementsRoute";
 import InquiryRoute from "./routes/admin/inquiry/InquiryRoute";
 import PaymentRoute from "./routes/admin/payment/PaymentRoute";
@@ -42,6 +43,7 @@ const App = () => {
           <UserRoute />
           <NotificationSettingRoute />
           <PaymentSettingRoute />
+          <GeneralSettingRoute />
           <ProfileRoute />
           <LoginRoute />
           <EditCourseRoute />

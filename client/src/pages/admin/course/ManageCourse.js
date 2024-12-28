@@ -255,17 +255,18 @@ const ManageCourse = () => {
 
   //module section start
   //get module data
-
   const getModuleData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
       const sectionData = res.data;
       const sortedData = sectionData.sort((a, b) => a.order - b.order);
       setModuleData(sortedData);
+      console.log(sortedData);
     } catch (error) {
       console.log(error);
     }
   }
+
   //add module 
   const [addModule, setAddModule] = useState({
     title: "",
@@ -1134,99 +1135,124 @@ const ManageCourse = () => {
           {/* Module TAB */}
           {tab == "course" && (
             moduleData.length > 0 ? (
-              moduleData.map((module, index) => (
-                <div div className="module" key={index}>
-                  <div className="module-header">
-                    <span className="module-title">
-                      MODULE-{index + 1} : {module.title}
-                    </span>
-                    <span className="module-duration">15 Hours</span>
-                    <span className="module-status green-dot"></span>
-                    <div className="module-controls">
-                      <button className="arrow-btn" onClick={() => handleOpenSortLesson(module.id)}>
-                        <i className="fa-solid fa-sort"></i>{" "}
-                      </button>
-                      <button className="edit-btn" onClick={() => editModuleToggleModal(module.id)}>
-                        <i className="fa fa-pencil"></i>
-                      </button>
-                      <button className="delete-btn" onClick={() => deleteToggleModal(module.id)}>
-                        <i className="fa fa-trash"></i>
-                      </button>
-                      <button className="check-btn" onClick={() => toggleContent(index, module.id)}>
-                        {/* <i className="fa-solid fa-angle-down"></i> */}
-                        <i
-                          className={`fa-solid ${activeModuleIndex === index
-                            ? "fa-angle-up"
-                            : "fa-angle-down"
-                            }`}
-                        ></i>
-                      </button>
-                    </div>
-                  </div>
-                  {activeModuleIndex === index && (
-                    <div className="module-content">
-                      {lessonData.length > 0 ? (
-                        lessonData.map((lesson, index) => (
-                          <div className="module-lesson" key={index}>
-                            <div className="lesson-title">
-                              {lesson.quiz_id ? (
-                                <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
-                              ) : (
-                                <span className="lesson-icon">
-                                  <i className="fa-solid fa-file-lines"></i>
-                                </span>
-                              )}
-                              {
-                                lesson.quiz_id != null ? (
-                                  lesson.course_quize_lesson.title
-                                ) : (
-                                  lesson.title
-                                )
-                              }
-                            </div>
-                            <div className="lesson-time">
-                              {lesson.duration && <span>{lesson.duration} Minutes</span>}
-                            </div>
-                            <div className="lesson-actions">
-                              {lesson.quiz_id && (
-                                <button
-                                  className="add-questions-btn"
-                                  onClick={() => questionToggleModal(lesson.quiz_id)}
-                                >
-                                  + Add Questions
-                                </button>
-                              )}
-                              <button className="resource-btn" onClick={() => resourceToggleModal(module.id, lesson.id)}>
-                                <i className="fa-solid fa-folder-open"></i>Resource
-                              </button>
-                              <label className="switch">
-                                <input
-                                  type="checkbox"
-                                  checked={lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status}
-                                  onClick={() => handleStatusChange(lesson.id, lesson.quiz_id, lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status)}
-                                />
-                                <span className="slider"></span>
-                              </label>
-                              <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
-                                <i className="fa fa-pencil"></i>
-                              </span>
-                              <button className="delete-btn" onClick={() => handleDeleteQuizeOpen(lesson.id, lesson.quiz_id, 1)}>
-                                <i className="fa fa-trash"></i>
-                              </button>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <h6>No data available 😂</h6> // Display this if lessonData is empty
-                      )}
-                      <div className="module-actions">
-                        <button onClick={() => lessonToggleModal(module.id)}>+ Lesson</button>
-                        <button onClick={() => quizToggleModal(module.id)}>+ Add Quiz</button>
+              moduleData.map((module, index) => {
+                const lessonTime = (module.course_section_lesson || []).reduce((lessonTotal, item) => {
+                  if (item.is_count_time === 1) {
+                    return lessonTotal + (item.duration || 0);
+                  }
+                  return lessonTotal;
+                }, 0);
+
+                const quizeTime = (module.course_section_quize || []).reduce((quizeTotal, item) => {
+                  if (item.is_count_time === 1) {
+                    return quizeTotal + (item.quize_duration || 0);
+                  }
+                  return quizeTotal;
+                }, 0);
+                const totalMinutes = lessonTime + quizeTime;
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                const formattedTime = `${hours} hours and ${minutes} minutes`;
+                return (
+                  <div div className="module" key={index}>
+                    <div className="module-header">
+                      <span className="module-title">
+                        MODULE-{index + 1} : {module.title}
+                      </span>
+                      <span className="module-duration">{formattedTime}</span>
+                      <span className="module-status green-dot"></span>
+                      <div className="module-controls">
+                        <button className="arrow-btn" onClick={() => handleOpenSortLesson(module.id)}>
+                          <i className="fa-solid fa-sort"></i>{" "}
+                        </button>
+                        <button className="edit-btn" onClick={() => editModuleToggleModal(module.id)}>
+                          <i className="fa fa-pencil"></i>
+                        </button>
+                        <button className="delete-btn" onClick={() => deleteToggleModal(module.id)}>
+                          <i className="fa fa-trash"></i>
+                        </button>
+                        <button className="check-btn" onClick={() => toggleContent(index, module.id)}>
+                          {/* <i className="fa-solid fa-angle-down"></i> */}
+                          <i
+                            className={`fa-solid ${activeModuleIndex === index
+                              ? "fa-angle-up"
+                              : "fa-angle-down"
+                              }`}
+                          ></i>
+                        </button>
                       </div>
                     </div>
-                  )}
-                </div>
-              ))
+                    {activeModuleIndex === index && (
+                      <div className="module-content">
+                        {lessonData.length > 0 ? (
+                          lessonData.map((lesson, index) => (
+                            <div className="module-lesson" key={index}>
+                              <div className="lesson-title">
+                                {lesson.quiz_id ? (
+                                  <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
+                                ) : (
+                                  <span className="lesson-icon">
+                                    <i className="fa-solid fa-file-lines"></i>
+                                  </span>
+                                )}
+                                {
+                                  lesson.quiz_id != null ? (
+                                    lesson.course_quize_lesson.title
+                                  ) : (
+                                    lesson.title
+                                  )
+                                }
+                              </div>
+                              <div className="lesson-time">
+                                {
+                                  lesson.quiz_id != null ? (
+                                    <span>{lesson.course_quize_lesson.quize_duration} Minutes</span>
+                                  ) : (
+                                    <span>{lesson.duration} Minutes</span>
+                                  )
+                                }
+                              </div>
+                              <div className="lesson-actions">
+                                {lesson.quiz_id && (
+                                  <button
+                                    className="add-questions-btn"
+                                    onClick={() => questionToggleModal(lesson.quiz_id)}
+                                  >
+                                    + Add Questions
+                                  </button>
+                                )}
+                                <button className="resource-btn" onClick={() => resourceToggleModal(module.id, lesson.id)}>
+                                  <i className="fa-solid fa-folder-open"></i>Resource
+                                </button>
+                                <label className="switch">
+                                  <input
+                                    type="checkbox"
+                                    checked={lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status}
+                                    onClick={() => handleStatusChange(lesson.id, lesson.quiz_id, lesson.quiz_id != null ? lesson.course_quize_lesson.status : lesson.status)}
+                                  />
+                                  <span className="slider"></span>
+                                </label>
+                                <span className="edit-btn" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
+                                  <i className="fa fa-pencil"></i>
+                                </span>
+                                <button className="delete-btn" onClick={() => handleDeleteQuizeOpen(lesson.id, lesson.quiz_id, 1)}>
+                                  <i className="fa fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <h6>No data available 😂</h6> // Display this if lessonData is empty
+                        )}
+                        <div className="module-actions">
+                          <button onClick={() => lessonToggleModal(module.id)}>+ Lesson</button>
+                          <button onClick={() => quizToggleModal(module.id)}>+ Add Quiz</button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })
             ) : (
               <p>No Module data avalible</p>
             )

@@ -10,6 +10,7 @@ UserMaster.get("/gettingUserMasterDataWithId/:id", UserMasterController.getUserM
 UserMaster.post("/addingUserMaster", upload.single('profile'), UserMasterController.addUserMasterData);
 UserMaster.post("/addingStudentMaster", UserMasterController.addStudentMasterData);
 UserMaster.put("/updatingUserMaster/:id", upload.single('profile'), UserMasterController.updateUserMasterData);
+UserMaster.put("/updatingUserMasterStatus/:id", UserMasterController.updateUserMasterStatusData);
 UserMaster.delete("/deletingUserMaster/:id", UserMasterController.deleteUserMaster);
 
 module.exports = UserMaster

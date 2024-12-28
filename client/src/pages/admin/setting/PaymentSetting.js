@@ -125,7 +125,42 @@ function PaymentSetting() {
 
   useEffect(() => {
     handleGetPaymentGetwayData()
+    getCurrencyData();
+    getCurrencyDataWithId()
   }, [])
+
+  //get currency data
+  const [currencyData, setCurrencyData] = useState([]);
+
+  const getCurrencyData = async () => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCurrencyData`);
+      setCurrencyData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const [selectedCurrency, setSelectedCurrency] = useState('');
+  const [selectedCurrencyPosition, setSelectedCurrencyPosition] = useState('');
+
+  const getCurrencyDataWithId = async () => {
+    const id = 1;
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCurrencyDataWithId/${id}`);
+      setSelectedCurrency(res.data.currency);
+      setSelectedCurrencyPosition(res.data.position);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const updateCurrency = async () => {
+    const id = 1;
+    try {
+      const res = await axiosInstance.put(`${port}/updatingCurrencyData/${id}`, { currency: selectedCurrency, position: selectedCurrencyPosition });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -145,13 +180,14 @@ function PaymentSetting() {
           <div className="currency_page">
             <div className="currency_input">
               <label htmlFor="currency" className="currency_title">Currency</label>
-              <select name="currency" id="currency" form="carform">
-                <option value="USD">US Dollar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="JPY">Japanese Yen (JPY)</option>
-                <option value="GBP">British Pound (GBP)</option>
-                <option value="AUD">Australian Dollar (AUD)</option>
-                <option value="CAD">Canadian Dollar (CAD)</option>
+              <select name="currency" id="currency" form="carform" value={selectedCurrency}
+                onChange={(e) => setSelectedCurrency(e.target.value)}>
+                <option value="">Select</option>
+                {
+                  currencyData.map((item) => (
+                    <option value={item.name}>{item.name} ({item.symbol})</option>
+                  ))
+                }
               </select>
             </div>
 
@@ -164,6 +200,8 @@ function PaymentSetting() {
                 name="currencyPosition"
                 value="left"
                 className="cur_sel"
+                checked={selectedCurrencyPosition === 'left'}
+                onChange={(e) => setSelectedCurrencyPosition(e.target.value)}
               />
               <label htmlFor="left" className="text1">Left</label>
               <input
@@ -172,11 +210,13 @@ function PaymentSetting() {
                 value="right"
                 className="cur_sel"
                 id="right"
+                checked={selectedCurrencyPosition === 'right'}
+                onChange={(e) => setSelectedCurrencyPosition(e.target.value)}
               />
               <label htmlFor="right" className="text1">Right</label>
             </div>
             {(userRole === "superAdmin" || addPaymentPermission == 1 || editPaymentPermission == 1) && (
-              <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
+              <button onClick={updateCurrency} className="primary-btn module-btn">Save</button>
             )}
           </div>
 
@@ -184,24 +224,6 @@ function PaymentSetting() {
             <h6 className="str_text">STRIPE</h6>
 
             <div className="currency_input2" id="strip_cur">
-              <label htmlFor="currency2">Currency</label>
-              <div className="carrency_div">
-                <select
-                  name="currency"
-                  id="currency2"
-                  className="col12input"
-                  value={formData.currency}
-                  onChange={handleChange}
-                  form="currencyform"
-                >
-                  <option value="USD">US Dollar (USD)</option>
-                  <option value="EUR">Euro (EUR)</option>
-                  <option value="JPY">Japanese Yen (JPY)</option>
-                  <option value="GBP">British Pound (GBP)</option>
-                  <option value="AUD">Australian Dollar (AUD)</option>
-                  <option value="CAD">Canadian Dollar (CAD)</option>
-                </select>
-              </div>
               <div className="priv">
                 <label htmlFor="privatetestkey">Private Test Key</label>
                 <input

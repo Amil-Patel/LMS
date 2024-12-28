@@ -6,12 +6,8 @@ const getSystemSettingDataWithId = async (req, res) => {
     if (!isAuthenticated) return;
     const id = req.params.id;
     try {
-        const data = System_Setting.findeOne({
-            where: {
-                id: id
-            }
-        })
-        res.status(200).json(data);
+        const data = await System_Setting.findAll();
+        res.status(200).json(data[0]);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

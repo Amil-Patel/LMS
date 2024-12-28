@@ -15,6 +15,7 @@ const CourseCoupon = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [couponData, setCouponData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -80,23 +81,26 @@ const CourseCoupon = () => {
   };
   //add coupon data
   const handleCourseSelection = (e) => {
-    const selectedCourse = e.target.value;
-    if (selectedCourse && !addCouponData.course_name.includes(selectedCourse)) {
+    const selectedCourseId = parseInt(e.target.value); // Ensure the value is an integer
+
+    if (selectedCourseId && !addCouponData.course_name.includes(selectedCourseId)) {
       setAddCouponData({
         ...addCouponData,
-        course_name: [...addCouponData.course_name, selectedCourse],
+        course_name: [...addCouponData.course_name, selectedCourseId], // Only store IDs
       });
     }
   };
+
+
   const handleEditCourseSelection = (e) => {
-    const selectedCourse = e.target.value;
+    const selectedCourseId = parseInt(e.target.value);
     if (
-      selectedCourse &&
-      !editCouponData.course_name.includes(selectedCourse)
+      selectedCourseId &&
+      !editCouponData.course_name.includes(selectedCourseId)
     ) {
       setEditCouponData({
         ...editCouponData,
-        course_name: [...editCouponData.course_name, selectedCourse],
+        course_name: [...editCouponData.course_name, selectedCourseId],
       });
     }
   };
@@ -166,11 +170,11 @@ const CourseCoupon = () => {
 
   //delete code
 
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     setLoading(true);
     try {
       const res = await axiosInstance.delete(
-        `${port}/deletingCourseCoupon/${deleteId}`
+        `${port}/deletingCourseCoupon/${id}`
       );
       getCouponData();
       setDeleteOpen(false);
@@ -310,7 +314,11 @@ const CourseCoupon = () => {
 
   const editToggleModal = async (id) => {
     if (id) {
-      await getCouponDataForEdit(id);
+      try {
+        await getCouponDataForEdit(id);
+      } catch (error) {
+        console.error("Error fetching coupon data:", error);
+      }
     }
     setEditOpen(!editOpen);
   };
@@ -332,7 +340,12 @@ const CourseCoupon = () => {
     }
     setSortConfig({ key, direction });
   };
-
+  const courseLookup = useMemo(() => {
+    return courseData.reduce((acc, course) => {
+      acc[course.id] = course.course_title;
+      return acc;
+    }, {});
+  }, [courseData]);
   const sortedData = useMemo(() => {
     let sortableItems = [...couponData];
     if (sortConfig.key !== null) {
@@ -365,6 +378,19 @@ const CourseCoupon = () => {
     };
   }, []);
 
+  //filterd data
+  const filteredData = useMemo(() => {
+    return sortedData.filter((item) => {
+      const courseIds = JSON.parse(item.course_name); // Parse the course_name to get the array of course IDs
+      const courseNames = courseIds.map((courseId) => courseLookup[courseId] || "Invalid course");
+      return item.coupon_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(item.discount_in_percentage).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        String(item.discount_in_amount).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        courseNames.some((courseName) => courseName.toLowerCase().includes(searchQuery.toLowerCase()));
+    });
+  }, [sortedData, searchQuery]);
+
+
   return (
     <>
       <Hoc />
@@ -375,7 +401,7 @@ const CourseCoupon = () => {
             <h5>Course Coupons</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" />
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo">
@@ -435,18 +461,11 @@ const CourseCoupon = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((i, index) => {
-                let courseName = i.course_name;
+              {filteredData.map((i, index) => {
+                const courseIds = JSON.parse(i.course_name); // Parse the course_name to get the array of course IDs
+                const courseNames = courseIds.map((courseId) => courseLookup[courseId] || "Invalid course");
 
-                try {
-                  courseName = JSON.parse(courseName);
-                } catch (e) {
-                  courseName = "Invalid data";
-                }
-
-                const formattedData = Array.isArray(courseName)
-                  ? courseName.join(", ")
-                  : "Invalid data";
+                const formattedData = courseNames.length > 0 ? courseNames.join(", ") : "Invalid data";
 
                 return (
                   <tr key={index}>
@@ -551,27 +570,30 @@ const CourseCoupon = () => {
                     onChange={handleCourseSelection}
                     value={courseData.id}
                   >
-                    <option value="" disabled>
+                    <option value="" >
                       Select a course
                     </option>
                     {courseData.map((course, index) => (
-                      <option key={index} value={course.course_title}>
+                      <option key={index} value={course.id}>
                         {course.course_title}
                       </option>
                     ))}
                   </select>
                   <div className="tag-container">
-                    {addCouponData.course_name.map((coursename, index) => (
-                      <div className="tag" key={index}>
-                        {coursename}
-                        <span
-                          className="tag-close"
-                          onClick={() => handleRemoveKeyword(index)}
-                        >
-                          <i className="fa-solid fa-xmark"></i>
-                        </span>
-                      </div>
-                    ))}
+                    {addCouponData.course_name.map((courseId, index) => {
+                      const course = courseData.find((course) => course.id === courseId); // Find the course title
+                      return (
+                        <div className="tag" key={index}>
+                          {course?.course_title || "Unknown Course"} {/* Display course title */}
+                          <span
+                            className="tag-close"
+                            onClick={() => handleRemoveKeyword(index)}
+                          >
+                            <i className="fa-solid fa-xmark"></i>
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -707,7 +729,7 @@ const CourseCoupon = () => {
                     <select
                       className="form-control"
                       onChange={handleEditCourseSelection}
-                      value=""
+                      value={editCouponData.course_name}
                     >
                       <option value="">Select a course</option>
                       {courseData.map((course, index) => (
@@ -718,17 +740,20 @@ const CourseCoupon = () => {
                     </select>
                   </div>
                   <div className="tag-container">
-                    {editCouponData.course_name.map((coursename, index) => (
-                      <div className="tag" key={index}>
-                        {coursename}
-                        <span
-                          className="tag-close"
-                          onClick={() => handleEditRemoveKeyword(index)}
-                        >
-                          <i className="fa-solid fa-xmark"></i>
-                        </span>
-                      </div>
-                    ))}
+                    {editCouponData.course_name.map((courseId, index) => {
+                      const course = courseData.find((course) => course.id === courseId);
+                      return course ? (
+                        <div className="tag" key={index}>
+                          {course.course_title}
+                          <span
+                            className="tag-close"
+                            onClick={() => handleEditRemoveKeyword(index)}
+                          >
+                            <i className="fa-solid fa-xmark"></i>
+                          </span>
+                        </div>
+                      ) : null;
+                    })}
                   </div>
                 </div>
                 <div className="form-group" style={{ display: "flex" }}>

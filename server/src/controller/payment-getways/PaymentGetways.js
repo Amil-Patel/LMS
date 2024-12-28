@@ -19,7 +19,7 @@ const updatePaymentGetwayData = async (req, res) => {
     const id = req.params.id;
     const data = {
         identifier: req.body.identifier,
-        currency: req.body.currency,
+        currency: req.body.currency||null,
         title: req.body.title,
         description: req.body.description || null,
         keys: JSON.stringify(req.body.keys),
@@ -46,7 +46,7 @@ const addPaymentGetwayData = async (req, res) => {
     if (!isAuthenticated) return;
     const data = {
         identifier: req.body.identifier,
-        currency: req.body.currency,
+        currency: req.body.currency||null,
         title: req.body.title,
         description: req.body.description,
         keys: JSON.stringify(req.body.keys),

@@ -217,6 +217,12 @@ const Sidebar = () => {
                       Setting
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink to={"/admin/general-setting"}>
+                      <i className="fa-solid fa-caret-right"></i>General
+                      Setting
+                    </NavLink>
+                  </li>
                 </ul>
               )}
             </li>

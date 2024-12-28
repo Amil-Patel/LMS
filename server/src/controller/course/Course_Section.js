@@ -1,4 +1,4 @@
-const { Course_Section } = require("../../database/models/index");
+const { Course_Section, Course_Lesson, Course_Quize } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const AuthMiddleware = require("../../auth/AuthMiddleware")
@@ -12,7 +12,21 @@ const getCourseSectionData = async (req, res) => {
             where: {
                 course_id: id,
                 // status: 1
-            }
+            },
+            include: [
+                {
+                    model: Course_Lesson,
+                    as: 'course_section_lesson',
+                    required: false,
+                    attributes: ['duration', 'is_count_time'],
+                },
+                {
+                    model: Course_Quize,
+                    as: 'course_section_quize',
+                    required: false,
+                    attributes: ['quize_duration', 'is_count_time'],
+                }
+            ]
         });
         res.send(data);
     } catch (error) {
