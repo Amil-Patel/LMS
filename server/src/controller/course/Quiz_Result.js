@@ -25,4 +25,18 @@ const addQuizResultData = async (req, res) => {
     }
 }
 
-module.exports = { addQuizResultData };
+
+const getQuizResultDatWithquizId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    console.log(id)
+    try {
+        const result = await quize_result.findAll({ where: { quize_id: id } });
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+module.exports = { addQuizResultData, getQuizResultDatWithquizId };
