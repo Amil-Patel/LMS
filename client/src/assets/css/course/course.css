@@ -23,7 +23,9 @@
   border-bottom: 1px solid #ddd;
   cursor: pointer;
 }
-
+.module-header.active{
+  color: var(--button-primary-color);
+}
 .module-title {
   font-size: 14px;
   font-weight: 600;
