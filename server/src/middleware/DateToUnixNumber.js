@@ -6,3 +6,4 @@ const DateToUnixNumber = (date, time_zone) => {
 }
 
 module.exports = DateToUnixNumber
+

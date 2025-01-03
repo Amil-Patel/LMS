@@ -35,7 +35,7 @@ const ManageCourse = () => {
   };
   // Function to toggle visibility of content
   const [moduleId, setModuleId] = useState(null)
-  const [activeModuleIndex, setActiveModuleIndex] = useState(null);
+  const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const toggleContent = (index, id) => {
     setModuleId(id)
     setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -992,7 +992,13 @@ const ManageCourse = () => {
 
   useEffect(() => {
     getModuleData();
-  }, [])
+  }, []);
+  useEffect(() => {
+    if (moduleData.length > 0) {
+      setModuleId(moduleData[0].id);
+      getLessonData(moduleData[0].id);
+    }
+  }, [moduleData]);
 
   const handleTimeLimit = () => {
     setTimeLimit(!timeLimit)
@@ -1155,7 +1161,7 @@ const ManageCourse = () => {
                 const formattedTime = `${hours} hours and ${minutes} minutes`;
                 return (
                   <div div className="module" key={index}>
-                    <div className="module-header">
+                    <div className="module-header" onClick={() => toggleContent(index, module.id)}>
                       <span className="module-title">
                         MODULE-{index + 1} : {module.title}
                       </span>
@@ -1171,7 +1177,7 @@ const ManageCourse = () => {
                         <button className="delete-btn" onClick={() => deleteToggleModal(module.id)}>
                           <i className="fa fa-trash"></i>
                         </button>
-                        <button className="check-btn" onClick={() => toggleContent(index, module.id)}>
+                        <button className="check-btn">
                           {/* <i className="fa-solid fa-angle-down"></i> */}
                           <i
                             className={`fa-solid ${activeModuleIndex === index

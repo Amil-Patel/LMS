@@ -35,8 +35,8 @@ const App = () => {
   return (
     <>
       <ToastMessage />
-      <CartProvider>
-        <RoleContext>
+      <RoleContext>
+        <CartProvider>
           <DashboardRoute />
           <CourseCouponRoute />
           <CourseCategoryRoute />
@@ -59,8 +59,8 @@ const App = () => {
           <ShoppingCartRoute />
           <LearningRoute />
           <ContactRoute />
-        </RoleContext >
-      </CartProvider>
+        </CartProvider>
+      </RoleContext >
     </>
   );
 };

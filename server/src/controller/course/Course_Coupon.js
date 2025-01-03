@@ -9,10 +9,10 @@ const getCourseCouponData = async (req, res) => {
     if (!isAuthenticated) return;
     try {
         const data = await Course_Coupon.findAll();
-        for (let i = 0; i < data.length; i++) {
-            const expiredDate = UnixNumberToDate(data[i].expired_date, 'America/Toronto');
-            data[i].dataValues.expired_date = expiredDate;
-        }
+        // for (let i = 0; i < data.length; i++) {
+        //     const expiredDate = UnixNumberToDate(data[i].expired_date, 'America/Toronto');
+        //     data[i].dataValues.expired_date = expiredDate;
+        // }
         res.send(data);
     } catch (error) {
         console.log(error);
@@ -30,8 +30,8 @@ const getCourseCouponDataWithId = async (req, res) => {
                 id: id
             }
         });
-        const expiredDate = UnixNumberToDate(data.expired_date, 'America/Toronto');
-        data.dataValues.expired_date = expiredDate;
+        // const expiredDate = UnixNumberToDate(data.expired_date, 'America/Toronto');
+        // data.dataValues.expired_date = expiredDate;
         res.status(200).json(data);
     } catch (error) {
         console.log(error);

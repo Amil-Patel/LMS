@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Hoc from "../layout/Hoc";
 import Loading from '../layout/Loading';
 import axiosInstance from '../../client/utils/axiosInstance';
+import { userRolesContext } from '../layout/RoleContext';
 const port = process.env.REACT_APP_URL;
 
 const GeneralSetting = () => {
+    const { refreshSettings } = useContext(userRolesContext);
     const [loading, setLoading] = useState(false);
     const [timeZoneData, setTimeZoneData] = useState([]);
     const [selectedTimeZone, setSelectedTimeZone] = useState('');  // State for selected timezone
@@ -40,9 +42,10 @@ const GeneralSetting = () => {
     const updateTimeZone = async () => {
         setLoading(true);
         try {
-            const res = await axiosInstance.put(`${port}/updatingTimezone`, {
+            await axiosInstance.put(`${port}/updatingTimezone`, {
                 timezonename: selectedTimeZone 
             });
+            await refreshSettings();
             getTimeZone(); 
             setLoading(false);
         } catch (error) {

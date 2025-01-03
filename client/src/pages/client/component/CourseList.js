@@ -1,11 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
 import { useCart } from "../../../pages/client/layout/CartContext";
 import "../../../assets/css/client/allcourse.css";
 
 const CourseList = ({ courses, category }) => {
     const { cart, addToCart } = useCart();
 
+    const savedToken = Cookies.get('student-token');
     return (
         <>
             {courses?.length === 0 && (
@@ -27,8 +29,18 @@ const CourseList = ({ courses, category }) => {
 
                 // Find the category title for the course
                 const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
-                const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory
-                const isInCart = cart.some((item) => item.id === course.id);
+                const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory;
+                // console.log(cart)
+                const isInCart = cart?.some((item) => {
+                    if (savedToken) {
+                        console.log(item)
+                        console.log(course)
+                        return item.course_id === course.id
+                    } else {
+                        return item.id === course.id
+                    }
+                })
+
                 return (
                     <div key={course.id} className="course-main-div">
                         <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />

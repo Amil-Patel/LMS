@@ -1,30 +1,40 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Hoc from "../layout/Hoc";
 import axiosInstance from '../../client/utils/axiosInstance';
+import { userRolesContext } from "../layout/RoleContext";
+import moment from "moment-timezone";
 import "../../../assets/css/payment/payment.css";
 const port = process.env.REACT_APP_URL;
 
 function Payment() {
+  const { setting } = useContext(userRolesContext);
   const [viewOpen, setViewOpen] = useState(false);
   const [currentCourse, setCurrentCourse] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const handleViewClick = (course) => {
-    setCurrentCourse(course);
+    const time = moment.unix(course.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
+    console.log(time)
+    console.log(setting.timezone)
+    setCurrentCourse((prev) => ({
+      ...prev,
+      ...course,
+      createdAt: time
+    }));
 
     if (Array.isArray(course.courseNames)) {
       const sub_total = course.courseNames.reduce((courseSum, course) => {
         return courseSum + (course.course_price || 0);
       }, 0);
-  
+
       setSubTotal(sub_total);
-  
+
       const total_discount = course.courseNames.reduce((discountSum, course) => {
         const discount = course?.course_price * (course?.course_discount / 100);
         return discountSum + discount;
       }, 0);
-  
+
       setTotalDiscount(total_discount);
-  
+
       const inclusiveTax = course.courseNames.reduce((taxSum, course) => {
         if (course.is_inclusive == 1) {
           const amountWithDiscount = course?.course_price - (course?.course_price * (course?.course_discount / 100));
@@ -33,15 +43,15 @@ function Payment() {
         }
         return taxSum;
       }, 0);
-  
+
       setInclusiveTax(inclusiveTax);
     } else {
       console.error("`course.courseNames` is not an array:", course.courseNames);
     }
-  
+
     setViewOpen(true);
   };
-  
+
 
   const handleCloseEditModal = () => {
     setViewOpen(false);

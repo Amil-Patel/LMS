@@ -7,10 +7,11 @@ import { notifyWarning } from "../layout/ToastMessage";
 import Loading from "../layout/Loading";
 import { userRolesContext } from "../layout/RoleContext";
 import { validationEmail, validationName } from "../../../utils/validation";
+import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL
 
 const User = () => {
-  const { userRole, userId } = useContext(userRolesContext);
+  const { userRole, userId,setting } = useContext(userRolesContext);
   const [tab, setTab] = useState("student");
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -405,7 +406,12 @@ const User = () => {
     setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${id}`);
-      setEditData(res.data);
+      const time = moment.unix(res.data.dob).tz(setting.timezone).format("YYYY-MM-DD");
+      setEditData((prev)=>({
+        ...prev,
+        ...res.data,
+        dob: time
+      }));
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);

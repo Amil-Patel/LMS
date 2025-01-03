@@ -30,8 +30,6 @@ const getUserMasterDataWithId = async (req, res) => {
         });
         const decryptedPassword = DecryptPassword(data.password)
         data.dataValues.password = decryptedPassword;
-        const dobdate = UnixNumberToDate(data.dob, "America/Toronto");
-        data.dataValues.dob = dobdate;
         res.status(200).json(data);
     } catch (error) {
         console.log(error)

@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import axiosInstance from '../../admin/utils/axiosInstance';
+import { notifySuccess } from '../../admin/layout/ToastMessage';
+const port = process.env.REACT_APP_URL
 
 const Contact = () => {
     const [formState, setFormState] = useState({
         name: '',
         email: '',
-        subject: '',
+        mobile_number: '',
+        country: '',
+        address: '',
         message: '',
     });
 
@@ -13,12 +18,22 @@ const Contact = () => {
         setFormState((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you would typically send the form data to your backend
-        console.log('Form submitted:', formState);
-        // Reset form after submission
-        setFormState({ name: '', email: '', subject: '', message: '' });
+        try {
+            await axiosInstance.post(`${port}/addingInquiry`, formState);
+            notifySuccess("Message sent successfully");
+            setFormState({
+                name: '',
+                email: '',
+                mobile_number: '',
+                country: '',
+                address: '',
+                message: '',
+            });
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     };
 
     return (
@@ -75,16 +90,56 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <label
-                                            htmlFor="subject"
+                                            htmlFor="mobile_number"
                                             className="block text-sm font-medium text-gray-700 mb-1"
                                         >
-                                            Subject
+                                            Contact Number
                                         </label>
                                         <input
-                                            id="subject"
-                                            name="subject"
+                                            id="mobile_number"
+                                            name="mobile_number"
+                                            type="mobile_number"
+                                            value={formState.mobile_number}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
+                                            placeholder="Mobile Number"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="country"
+                                            className="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            Country
+                                        </label>
+                                        <select
+                                            id="country"
+                                            name="country"
+                                            value={formState.country}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
+                                        >
+                                            <option value="">Select Country</option>
+                                            <option value="india">India</option>
+                                            <option value="usa">USA</option>
+                                            <option value="uk">United Kingdom</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            htmlFor="address"
+                                            className="block text-sm font-medium text-gray-700 mb-1"
+                                        >
+                                            Address
+                                        </label>
+                                        <input
+                                            id="address"
+                                            name="address"
                                             type="text"
-                                            value={formState.subject}
+                                            value={formState.address}
                                             onChange={handleInputChange}
                                             required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"

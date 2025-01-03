@@ -8,10 +8,11 @@ import DeleteModal from "../layout/DeleteModal";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
 import { notifyWarning } from "../layout/ToastMessage";
+import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
-  const { userId, userRole } = useContext(userRolesContext);
+  const { userId, userRole ,setting} = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -201,16 +202,21 @@ const CourseCoupon = () => {
         `${port}/gettingCourseCouponDataWithId/${id}`
       );
       let courseName = res.data.course_name;
-
+      
       try {
         courseName = JSON.parse(courseName);
       } catch (e) {
         courseName = [];
       }
-
+      
       res.data.course_name = Array.isArray(courseName) ? courseName : [];
-
-      setEditCouponData(res.data);
+      
+      const time = moment.unix(res.data.expired_date).tz(setting.timezone).format("YYYY-MM-DD");
+      setEditCouponData((prev)=>({
+        ...prev,
+        ...res.data,
+        expired_date: time
+      }));
       setDiscountType(
         res.data.discount_in_percentage ? "percentage" : "amount"
       );
@@ -467,6 +473,8 @@ const CourseCoupon = () => {
 
                 const formattedData = courseNames.length > 0 ? courseNames.join(", ") : "Invalid data";
 
+                const time = moment.unix(i.expired_date).tz(setting.timezone).format("DD-MM-YYYY");
+
                 return (
                   <tr key={index}>
                     <td style={{ paddingLeft: "10px" }}>{index + 1}</td>
@@ -477,7 +485,7 @@ const CourseCoupon = () => {
                         ? i.discount_in_percentage + "%"
                         : i.discount_in_amount}
                     </td>
-                    <td>{i.expired_date}</td>
+                    <td>{time}</td>
                     {(userRole === "superAdmin" || editCourseCoupon == 1) && (
                       <td>
                         <label className="switch">

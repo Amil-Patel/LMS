@@ -14,16 +14,20 @@ const RoleContext = ({ children }) => {
     const [setting, setSetting] = useState([]);
     const getSystemSettingData = async () => {
         try {
-          const res = await axiosInstance.get(`${port}/gettingSystemSettingWithId`);
-          setSetting(res.data);
+            const res = await axiosInstance.get(`${port}/gettingSystemSettingWithId`);
+            setSetting(res.data);
+            console.log(res.data);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
-    
-      useEffect(() => {
+    };
+    const refreshSettings = async () => {
+        await getSystemSettingData(); // Refresh settings
+    };
+    useEffect(() => {
         getSystemSettingData();
-      }, []);
+    }, []);
+
     useEffect(() => {
         if (savedToken) {
             try {
@@ -48,7 +52,7 @@ const RoleContext = ({ children }) => {
     }, [savedToken, stuSavedToken]);
     return (
         <>
-            <userRolesContext.Provider value={{ userRole, setUserRole, userId, setUserId, stuUserId, setStuUserId, stuUserRole, setStuUserRole }}>
+            <userRolesContext.Provider value={{ userRole, setUserRole, userId, setUserId, stuUserId, setStuUserId, stuUserRole, setStuUserRole, setting, refreshSettings }}>
                 {children}
             </userRolesContext.Provider>
         </>

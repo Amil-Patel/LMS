@@ -1,39 +1,63 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
+import axiosInstance from "../utils/axiosInstance";
+const port = process.env.REACT_APP_URL;
 
 function Inquiry() {
   const [editOpen, setEditOpen] = useState(false);
-  const [currentCourse, setCurrentCourse] = useState(null);
+  const [viewOpen, setViewOpen] = useState(false);
+  const [currentInquiry, setCurrentInquiry] = useState(null);
+  const [currentViewData, setCurrentViewData] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("pending");
+  const [inquiryData, setInquiryData] = useState([]);
 
-  const [courses, setCourses] = useState([
-    { id: 1, name: "Security Service", status: true },
-  ]);
+  const getInquiryData = async () => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingInquiry`);
+      setInquiryData(res.data);
+    } catch (error) {
+      console.log("Error fetching inquiry data", error);
+    }
+  };
 
-  const handleEditClick = (course) => {
-    setCurrentCourse(course);
+  useEffect(() => {
+    getInquiryData();
+  }, []);
+
+  const handleEditClick = (inquiry) => {
+    setCurrentInquiry(inquiry);
+    setSelectedStatus(inquiry.status || "pending");
     setEditOpen(true);
+  };
+
+  const handleViewClick = (inquiry) => {
+    setCurrentViewData(inquiry);
+    setViewOpen(true);
   };
 
   const handleCloseEditModal = () => {
     setEditOpen(false);
-    setCurrentCourse(null);
+    setCurrentInquiry(null);
   };
 
-  const handleEditSubmit = (e) => {
+  const handleCloseViewModal = () => {
+    setViewOpen(false);
+    setCurrentViewData(null);
+  };
+
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
-    // Handle editing logic here
-    handleCloseEditModal();
-  };
+    if (!currentInquiry) return;
 
-  // Toggle switch button
-  const handleToggle = (id) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) =>
-        course.id === id ? { ...course, status: !course.status } : course
-      )
-    );
+    try {
+      const updatedData = { status: selectedStatus };
+      await axiosInstance.put(`${port}/updateInquiryStatus/${currentInquiry.id}`, updatedData);
+      getInquiryData();
+      handleCloseEditModal();
+      console.log("Status updated successfully");
+    } catch (error) {
+      console.error("Error updating status", error);
+    }
   };
 
   return (
@@ -41,13 +65,8 @@ function Inquiry() {
       <Hoc />
       <div className="main">
         <div className="main-top-bar">
-          <div id="user-tag">
-            <h5>Inquiry</h5>
-          </div>
-          <div id="search-inner-hero-section">
-            <input id="search-bar" type="text" placeholder="Search" />
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
+          <h5>Inquiry</h5>
+          <input id="search-bar" type="text" placeholder="Search" />
         </div>
 
         <table>
@@ -58,106 +77,121 @@ function Inquiry() {
               <th>Contact info</th>
               <th>Country</th>
               <th>Message</th>
-              <th>Inquiry Status</th>
               <th>Action</th>
             </tr>
           </thead>
-
           <tbody>
-            {courses.map((course) => (
-              <tr key={course.id}>
-                <td>{course.id}</td>
-                <td>
-                  <h6>Christine Brooks</h6>
-                  <p>Address Details is over Here</p>
-                </td>
-                <td>
-                  <p>Email: admin@gmail.com</p>
-                  <p>Call: +919510672871</p>
-                  <p>wp: 9510672871</p>
-                </td>
-                <td>India</td>
-                <td className="inq_message">
-                  <p>Message Submitted By User will Appear Here</p>
-                </td>
-                <td>
-                  <label htmlFor="switch" className="switch">
-                    <input
-                      id="switch"
-                      type="checkbox"
-                    />
-                    <span className="slider"></span>
-                  </label>
-                </td>
-                <td className="del_icon">
-                  <span className="view">
-                    <i className="fa-regular fa-eye"></i>
-                  </span>
-                  <span
-                    className="edit"
-                    onClick={() => handleEditClick(course)}
-                  >
-                    <i className="fa-solid fa-pencil"></i>
-                  </span>
-                </td>
-              </tr>
-            ))}
+            {inquiryData.length > 0 ? (
+              inquiryData.map((inquiry) => (
+                <tr key={inquiry.id}>
+                  <td>{inquiry.id}</td>
+                  <td>
+                    <h6>{inquiry.name}</h6>
+                    <p>{inquiry.summery}</p>
+                  </td>
+                  <td>
+                    <p>Email: {inquiry.email}</p>
+                    <p>Call: +{inquiry.mobile_number}</p>
+                    <p>wp: {inquiry.mobile_number}</p>
+                  </td>
+                  <td>{inquiry.country}</td>
+                  <td className="inq_message">
+                    <p>{inquiry.message.substring(0, 20)}...</p>
+                  </td>
+                  <td className="del_icon">
+                    <span
+                      className="view"
+                      onClick={() => handleViewClick(inquiry)}
+                    >
+                      <i className="fa-regular fa-eye"></i>
+                    </span>
+                    <span
+                      className="edit"
+                      onClick={() => handleEditClick(inquiry)}
+                    >
+                      <i className="fa-solid fa-pencil"></i>
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <p>No inquiry data available</p>
+            )}
           </tbody>
         </table>
 
         {/* Edit Modal */}
-        {editOpen && currentCourse && (
+        {editOpen && currentInquiry && (
           <div className="modal">
             <div className="modal-container">
               <h5>Edit Status</h5>
-              <form className="coupon-form">
-                <div className="form-group mb-3">
-                  <label htmlFor="inquirystatus" className="mr-5">
-                    Inquiry Status<span className="required">*</span>
-                  </label>
+              <form onSubmit={handleEditSubmit}>
+                <div>
+                  <label>Status:</label>
                   <input
-                    id="inquirystatus"
                     type="radio"
-                    name="fav_language"
+                    name="status"
                     value="success"
+                    checked={selectedStatus === "success"}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                    style={{ marginRight: "10px" }}
                   />
-                  <label htmlFor="right" className="text1">
-                    Success
-                  </label>
-
+                  Success
                   <input
                     type="radio"
-                    name="fav_language"
+                    name="status"
                     value="pending"
-                    id="right"
+                    checked={selectedStatus === "pending"}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
                   />
-                  <label htmlFor="pending" className="text1 mr-3">
-                    Pending
-                  </label>
-
+                  Pending
                   <input
                     type="radio"
-                    name="fav_language"
-                    value="CSS"
-                    id="rejected"
+                    name="status"
+                    value="rejected"
+                    checked={selectedStatus === "rejected"}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
                   />
-                  <label htmlFor="reject" className="text1">
-                    Rejected
-                  </label>
+                  Rejected
                 </div>
-
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <button type="submit" className="primary-btn">
-                    Save
-                  </button>
-                  <button
-                    onClick={handleCloseEditModal}
-                    className="secondary-btn"
-                  >
+                <div style={{ display: "flex", gap: "10px",marginTop:"10px" }}>
+                  <button type="submit" className="primary-btn">Save</button>
+                  <button type="button" onClick={handleCloseEditModal} className="secondary-btn">
                     Close
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* View Modal */}
+        {viewOpen && currentViewData && (
+          <div className="modal">
+            <div className="modal-container">
+              <h5>Inquiry Details</h5>
+              <table>
+                <tbody>
+                  {Object.entries(currentViewData).map(([key, value]) => {
+                    if (key === "is_registreted" || key === "updatedAt" || key === "createdAt") return null;
+                    const displayKey = key === "summery" ? "ADDRESS" : key.replace(/_/g, " ").toUpperCase();
+                    const isStatusField = key === "status";
+                    const statusColor =
+                      value === "success" ? "green" : value === "rejected" ? "red" : "black";
+
+                    return (
+                      <tr key={key}>
+                        <td>
+                          <strong>{displayKey}</strong>
+                        </td>
+                        <td style={isStatusField ? { color: statusColor } : {}}>{value}</td>
+                      </tr>
+                    );
+                  })}
+
+                </tbody>
+              </table>
+              <button onClick={handleCloseViewModal} className="secondary-btn">Close</button>
             </div>
           </div>
         )}

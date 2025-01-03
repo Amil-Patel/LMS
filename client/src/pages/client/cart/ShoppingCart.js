@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import "../../../assets/css/client/shopping-cart.css";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
@@ -56,6 +56,7 @@ const ShoppingCart = () => {
             {
               cart.length > 0 ? (
                 cart.map((course, index) => {
+                  console.log(course)
                   const discount_price = course.course_price - (course.course_price * course.course_discount / 100);
                   return (
                     <div className='horizontal-card flex justify-between py-5 border-b-2 border-border-color' key={index}>

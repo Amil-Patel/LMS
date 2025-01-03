@@ -5,12 +5,13 @@ import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 import { validationEmail, validationName } from "../../../utils/validation";
 import { notifyWarning } from "../layout/ToastMessage";
+import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL;
 
 const Profile = () => {
   const [newImage, setNewImage] = useState(null); // New selected image
   const [fileName, setFileName] = useState(""); // Display file name
-  const { userId } = useContext(userRolesContext);
+  const { userId,setting } = useContext(userRolesContext);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState([]);
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/150');
@@ -24,7 +25,13 @@ const Profile = () => {
     setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
-      setUserData(res.data);
+      const time = moment.unix(res.data.dob).tz(setting.timezone).format("YYYY-MM-DD");
+      setUserData((prevState) => ({
+        ...prevState,
+          ...res.data,
+          dob: time, 
+      }));
+      // setUserData(res.data);
       setOldPassword(res.data.password);
       setImageSrc(res.data.profile);
       setFileName(res.data.profile);

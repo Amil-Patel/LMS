@@ -123,8 +123,15 @@ const CourseCategory = () => {
   //delete data code
   const handleDelete = async () => {
     setLoading(true);
+
     try {
-      const res = await axiosInstance.delete(
+      const res = await axiosInstance.get(`${port}/gettingCourseCategoryWithParentId/${deleteId}`);
+      if (res.data.length > 0) {
+        setDeleteOpen(false);
+        notifyWarning("Please delete sub category first");
+        return;
+      }
+      await axiosInstance.delete(
         `${port}/deletingCourseCategory/${deleteId}`
       );
       getNullCourseCategoryData();
@@ -249,11 +256,11 @@ const CourseCategory = () => {
     setDeleteOpen(!deleteOpen);
   };
 
-   const filteredData = useMemo(() => {
-      return courseDataWithParentId.filter((item) =>
-        item.cate_title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }, [courseDataWithParentId, searchQuery]);
+  const filteredData = useMemo(() => {
+    return courseDataWithParentId.filter((item) =>
+      item.cate_title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [courseDataWithParentId, searchQuery]);
 
   return (
     <>
@@ -265,7 +272,7 @@ const CourseCategory = () => {
             <h5>Course Category</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo" style={{ display: "flex" }}>

@@ -49,8 +49,8 @@ const getCourseMasterDataWithId = async (req, res) => {
                 id: id
             }
         })
-        const publishdate = UnixNumberToDate(data.publish_date, 'America/Toronto');
-        data.dataValues.publish_date = publishdate;
+        // const publishdate = UnixNumberToDate(data.publish_date, 'America/Toronto');
+        // data.dataValues.publish_date = publishdate;
         res.status(200).json(data);
     } catch (error) {
         console.log(error);
@@ -115,7 +115,7 @@ const updateCourseMasterData = async (req, res) => {
     if (!isAuthenticated) return;
     const id = req.params.id;
     const updateddate = DateToUnixNumber(new Date(), 'America/Toronto');
-    const publishDate = DateToUnixNumber(req.body.course_publish_date, 'America/Toronto');
+    const publishDate = DateToUnixNumber(req.body.publish_date, 'America/Toronto');
     const curentcoursemaster = await Course_Master.findOne({ where: { id } });
     if (!curentcoursemaster) {
         return res.status(404).json({ message: 'course not found' });
@@ -141,12 +141,12 @@ const updateCourseMasterData = async (req, res) => {
         course_cate: req.body.course_cate,
         course_level: req.body.course_level,
         course_language: req.body.course_language,
-        drip_content: req.body.drip_content == 'true' ? 1 : 0,
+        drip_content: req.body.drip_content,
         course_status: req.body.course_status,
         upcoming_course_thumbnail: req.body.course_status == "upcoming" ? (req?.body?.upcoming_course_thumbnail || null) : null,
         publish_date: req.body.course_status == 'upcoming' ? (publishDate || null) : null,
-        is_top_course: req.body.is_top_course == 'true' ? 1 : 0,
-        featured_course: req.body.featured_course == 'true' ? 1 : 0,
+        is_top_course: req.body.is_top_course,
+        featured_course: req.body.featured_course,
         course_faqs: JSON.stringify(req.body.course_faqs),
         course_requirenment: JSON.stringify(req.body.course_requirenment),
         course_topics: JSON.stringify(req.body.course_topics),
@@ -170,7 +170,6 @@ const updateCourseMasterData = async (req, res) => {
         updated_by: req.body.updated_by || 0,
         updatedAt: updateddate,
     }
-    console.log(data)
     try {
         const courseMaserdate = await Course_Master.update(data, {
             where: {

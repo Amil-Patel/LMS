@@ -4,10 +4,11 @@ import { userRolesContext } from "../layout/RoleContext";
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import Loading from '../layout/Loading';
+import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL
 
 const EditCourse = () => {
-    const { userRole, userId } = useContext(userRolesContext);
+    const { userRole, userId, setting } = useContext(userRolesContext);
     const [loading, setLoading] = useState(false)
     const { id } = useParams()
     const [tab, setTab] = useState("basic-info");
@@ -26,6 +27,7 @@ const EditCourse = () => {
             setLoading(false)
         }
     }
+
     //get data for edit
     const [courseData, setCourseData] = useState({
         course_title: "",
@@ -67,8 +69,6 @@ const EditCourse = () => {
         setLoading(true)
         try {
             const res = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
-            setCourseData(res.data);
-
             if (res.data.expiring_time === "limited_time") {
                 setIsLimited(true);
             }
@@ -145,8 +145,14 @@ const EditCourse = () => {
                 meta_keyword = [];
             }
             res.data.meta_keyword = Array.isArray(meta_keyword) ? meta_keyword : [];
-
-            setCourseData(res.data);
+            const time = moment.unix(res.data.publish_date).tz(setting.timezone).format("YYYY-MM-DD");
+            console.log(time)
+            console.log(res.data.publish_date)
+            setCourseData((prevState) => ({
+                ...prevState,
+                ...res.data,
+                publish_date: time,
+            }));
 
             setLoading(false)
         } catch (error) {
@@ -162,7 +168,8 @@ const EditCourse = () => {
         let updatedFields = { ...courseData };
 
         if (type === "checkbox") {
-            updatedFields[name] = checked;
+            // Normalize checkbox values to 1 or 0
+            updatedFields[name] = checked ? 1 : 0;
         } else {
             updatedFields[name] = value;
         }
@@ -174,22 +181,36 @@ const EditCourse = () => {
                 is_inclusive: value === "inclusive" ? 1 : 0,
                 is_exclusive: value === "exclusive" ? 1 : 0,
             };
-        } else if (name === "is_life_time" || name === "is_limited") {
-            if (type === "checkbox") {
-                if (checked) {
-                    updatedFields = {
-                        ...updatedFields,
-                        expiring_time: name === "is_life_time" ? "life_time" : "limited_time",
-                        [name]: 1
-                    };
-                } else {
-                    updatedFields = { ...updatedFields, [name]: 0 };
-                    if (name === "is_limited") updatedFields.expiring_time = "";
-                }
+        } else if (name === "is_life_time") {
+            if (checked) {
+                updatedFields = {
+                    ...updatedFields,
+                    expiring_time: "life_time",
+                    is_life_time: 1,
+                    is_limited: 0, // Uncheck "is_limited" when "is_life_time" is selected
+                };
+                setIsLimited(false)
+            } else {
+                updatedFields = { ...updatedFields, is_life_time: 0 };
+            }
+        } else if (name === "is_limited") {
+            if (checked) {
+                updatedFields = {
+                    ...updatedFields,
+                    expiring_time: "limited_time",
+                    is_limited: 1,
+                    is_life_time: 0, // Uncheck "is_life_time" when "is_limited" is selected
+                };
+                setIsLimited(true)
+            } else {
+                updatedFields = { ...updatedFields, is_limited: 0, expiring_time: "" };
             }
         }
+
         setCourseData(updatedFields);
     };
+
+
     const handleTax = () => {
         setIsTax(!isTax);
     }
@@ -209,9 +230,16 @@ const EditCourse = () => {
 
     const handleFaqChange = (index, event) => {
         const values = [...courseData.course_faqs];
+
+        if (!values[index]) {
+            values[index] = { question: "", answer: "" };
+        }
+
         values[index][event.target.name] = event.target.value;
+
         setCourseData((prev) => ({ ...prev, course_faqs: values }));
     };
+
 
     const handleLearningChange = (index, event) => {
         const values = [...courseData.course_topics];
@@ -538,7 +566,7 @@ const EditCourse = () => {
                                                     type="date"
                                                     name="publish_date"
                                                     onChange={handleChange}
-                                                    value={courseData.publish_date ? courseData.publish_date.split('T')[0] : ""}
+                                                    value={courseData.publish_date || 0}
                                                     className="col12input"
                                                 />
                                             </div>
@@ -606,7 +634,7 @@ const EditCourse = () => {
                             <div style={{ display: "flex" }}>
                                 <div className="flex-row" style={{ width: isLimited ? "43%" : "26%" }}>
                                     <div className="chekbox2">
-                                        <input type="checkbox" name="is_life_time" checked={courseData.is_life_time} onChange={handleChange} />
+                                        <input type="checkbox" name="is_life_time" checked={courseData.is_life_time == 1} onChange={handleChange} />
                                         <label>Life Time</label>
                                     </div>
                                     <div className="chekbox2">
@@ -699,15 +727,15 @@ const EditCourse = () => {
                                         />
                                         <div style={{ display: "flex", marginTop: "10px" }}>
                                             <div className="chekbox2">
-                                                <input type="checkbox" name="drip_content" checked={courseData.drip_content == 1 ? true : false} onChange={handleChange} />
+                                                <input type="checkbox" name="drip_content" checked={courseData.drip_content} onChange={handleChange} />
                                                 <label>Drip Content</label>
                                             </div>
                                             <div className="chekbox2">
-                                                <input type="checkbox" name="featured_course" checked={courseData.featured_course || false} onChange={handleChange} />
+                                                <input type="checkbox" name="featured_course" checked={courseData.featured_course} onChange={handleChange} />
                                                 <label>Featured Course</label>
                                             </div>
                                             <div className="chekbox2">
-                                                <input type="checkbox" name="is_top_course" checked={courseData.is_top_course || false} onChange={handleChange} />
+                                                <input type="checkbox" name="is_top_course" checked={courseData.is_top_course} onChange={handleChange} />
                                                 <label>Top Course</label>
                                             </div>
                                         </div>
@@ -802,6 +830,36 @@ const EditCourse = () => {
                                         />
                                     </div>
                                 ))}
+
+                                {/* Ensure at least one FAQ input is shown if the array is empty */}
+                                {courseData.course_faqs.length === 0 && (
+                                    <div className="faq-item">
+                                        <div className="input-button">
+                                            <input
+                                                type="text"
+                                                name="question"
+                                                value=""
+                                                onChange={(event) => handleFaqChange(0, event)}
+                                                className="col12input"
+                                            />
+                                            <button className="faq-button add" onClick={handleAddFaq}>
+                                                +
+                                            </button>
+                                        </div>
+                                        <textarea
+                                            style={{
+                                                width: "calc(100% - 41px)",
+                                                marginRight: "41px",
+                                            }}
+                                            name="answer"
+                                            value=""
+                                            onChange={(event) => handleFaqChange(0, event)}
+                                            placeholder="Your FAQS Answer Description Here"
+                                            className="textarea-field col12input"
+                                        />
+                                    </div>
+                                )}
+
                             </div>
 
                             <div className="section">
@@ -809,58 +867,95 @@ const EditCourse = () => {
                                     What You Will Learn ?
                                 </label>
                                 {
-                                    courseData.course_topics.map((point, index) => (
-                                        <div key={index} className="learning-item">
+                                    courseData.course_topics.length === 0 ? (
+                                        <div className="learning-item">
                                             <input
                                                 type="text"
-                                                value={point}
-                                                onChange={(event) => handleLearningChange(index, event)}
+                                                value=""
+                                                onChange={(event) => handleLearningChange(0, event)}
                                                 placeholder="Enter Topics detail what you will learn"
                                                 className="col12input input-space"
                                             />
                                             <button
-                                                className={`faq-button ${index === courseData.course_topics.length - 1 ? "add" : "remove"
-                                                    }`}
-                                                onClick={
-                                                    index === courseData.course_topics.length - 1
-                                                        ? handleAddLearning
-                                                        : () => handleRemoveLearning(index)
-                                                }
+                                                className="faq-button add"
+                                                onClick={handleAddLearning}
                                             >
-                                                {index === courseData.course_topics.length - 1 ? "+" : "-"}
+                                                +
                                             </button>
                                         </div>
-                                    ))}
+                                    ) : (
+                                        courseData.course_topics.map((point, index) => (
+                                            <div key={index} className="learning-item">
+                                                <input
+                                                    type="text"
+                                                    value={point}
+                                                    onChange={(event) => handleLearningChange(index, event)}
+                                                    placeholder="Enter Topics detail what you will learn"
+                                                    className="col12input input-space"
+                                                />
+                                                <button
+                                                    className={`faq-button ${index === courseData.course_topics.length - 1 ? "add" : "remove"}`}
+                                                    onClick={
+                                                        index === courseData.course_topics.length - 1
+                                                            ? handleAddLearning
+                                                            : () => handleRemoveLearning(index)
+                                                    }
+                                                >
+                                                    {index === courseData.course_topics.length - 1 ? "+" : "-"}
+                                                </button>
+                                            </div>
+                                        ))
+                                    )
+                                }
+
                             </div>
 
                             <div className="section">
                                 <label htmlFor="courseDescription" className="description-label">
                                     Prerequisites
                                 </label>
-                                {courseData.course_requirenment.map((point, index) => (
-                                    <div key={index} className="learning-item">
-                                        <input
-                                            type="text"
-                                            name="course_requirenment"
-                                            value={point}
-                                            onChange={(event) =>
-                                                handlePrerequisiteChange(index, event)
-                                            }
-                                            className="col12input input-space"
-                                        />
-                                        <button
-                                            className={`faq-button ${index === courseData.course_requirenment.length - 1 ? "add" : "remove"
-                                                }`}
-                                            onClick={
-                                                index === courseData.course_requirenment.length - 1
-                                                    ? handleAddPrerequisite
-                                                    : () => handleRemovePrerequisite(index)
-                                            }
-                                        >
-                                            {index === courseData.course_requirenment.length - 1 ? "+" : "-"}
-                                        </button>
-                                    </div>
-                                ))}
+                                {
+                                    courseData.course_requirenment.length === 0 ? (
+                                        <div className="learning-item">
+                                            <input
+                                                type="text"
+                                                value=""
+                                                onChange={(event) => handlePrerequisiteChange(0, event)}
+                                                placeholder="Enter prerequisite"
+                                                className="col12input input-space"
+                                            />
+                                            <button
+                                                className="faq-button add"
+                                                onClick={handleAddPrerequisite}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        courseData.course_requirenment.map((point, index) => (
+                                            <div key={index} className="learning-item">
+                                                <input
+                                                    type="text"
+                                                    name="course_requirenment"
+                                                    value={point}
+                                                    onChange={(event) => handlePrerequisiteChange(index, event)}
+                                                    className="col12input input-space"
+                                                />
+                                                <button
+                                                    className={`faq-button ${index === courseData.course_requirenment.length - 1 ? "add" : "remove"}`}
+                                                    onClick={
+                                                        index === courseData.course_requirenment.length - 1
+                                                            ? handleAddPrerequisite
+                                                            : () => handleRemovePrerequisite(index)
+                                                    }
+                                                >
+                                                    {index === courseData.course_requirenment.length - 1 ? "+" : "-"}
+                                                </button>
+                                            </div>
+                                        ))
+                                    )
+                                }
+
                             </div>
                         </div>
                     )}
