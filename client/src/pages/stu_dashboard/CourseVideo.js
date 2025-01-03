@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink, resolvePath } from "react-router-dom";
-import "../../../assets/css/client/coursevideo.css";
+import { NavLink } from "react-router-dom";
+import "../../assets/css/client/coursevideo.css";
 import { RiMenuAddLine } from "react-icons/ri";
+import { MdLockOutline } from "react-icons/md";
 import { useParams } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
-import { userRolesContext } from "../../admin/layout/RoleContext";
+import axiosInstance from "../client/utils/axiosInstance";
+import { userRolesContext } from "../admin/layout/RoleContext";
 const port = process.env.REACT_APP_URL;
 // Load PDF worker
 const CourseVideo = () => {
@@ -74,11 +75,10 @@ const CourseVideo = () => {
 
   //get or add ace_progress data
   const [courseProgress, setCourseProgress] = useState([]);
-  const [lastCompletedModule, setLastCompletedModule] = useState(null);
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${courseData.id}/${stuUserId}`);
-      setCourseProgress(res.data[0]);
+      await setCourseProgress(res.data[0]);
       if (res.data.length === 0 && stuUserId) {
         addcourseProgressData();
       }
@@ -90,7 +90,7 @@ const CourseVideo = () => {
     }
   };
 
-  const getcourseProgressData2 = async () => {
+  const getcourseProgressDataRefresh = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${courseData.id}/${stuUserId}`);
       setCourseProgress(res.data[0]);
@@ -104,7 +104,6 @@ const CourseVideo = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setActiveModuleIndex(res.data.section_id)
-      setLastCompletedModule(res.data.section_id)
       getLessonData(res.data.section_id);
       if (res.data.quiz_id === null) {
         await getLessonDataForEdit(res.data.id);
@@ -130,7 +129,6 @@ const CourseVideo = () => {
       console.log(error);
     }
   };
-
   //get module data
   const [moduleData, setModuleData] = useState([]);
   const getModuleData = async () => {
@@ -256,7 +254,6 @@ const CourseVideo = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseQuizeDataWithId/${id}`);
       const quizData = res.data;
-      console.log(res.data)
       setEditQuizData(quizData);
       if (courseProgress.completed_lesson_id &&
         !JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)) {
@@ -276,6 +273,7 @@ const CourseVideo = () => {
       console.log(error);
     }
   }
+  const [quizPassOrFail, setQuizPassOrFail] = useState("");
   const getQuizResultDatWithquizId = async (id) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingQuizResultDatWithquizId/${id}`);
@@ -283,6 +281,7 @@ const CourseVideo = () => {
       if (!quizResultData) {
         setAnswers({});
       }
+      setQuizPassOrFail(quizResultData.result);
       const parsedAnswers = JSON.parse(quizResultData.user_answers);
       setAnswers(parsedAnswers);
     } catch (error) {
@@ -293,6 +292,7 @@ const CourseVideo = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const getQuizQuestionData = async (id) => {
+    setCurrentQuestionIndex(0);
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseQuizeQuestionData/${id}`);
       const quizeQuestiondata = res.data;
@@ -361,6 +361,11 @@ const CourseVideo = () => {
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
           if (currentModule) {
             const nextModule = moduleData.find((item) => item.order === currentModule.order + 1);
+            if (!nextModule) {
+              console.log("Course is completed");
+              getcourseProgressDataRefresh();
+              return;
+            }
             setActiveModuleIndex(nextModule.id);
             const res = await getLessonData(nextModule.id);
             if (res.length > 0) {
@@ -371,37 +376,22 @@ const CourseVideo = () => {
                 await getQuizeDataForEdit(res[0].quiz_id);
               }
             }
-            if (!nextModule) {
-              console.log("Course Is Completed");
-            }
           }
         }
       }
-      getcourseProgressData2();
+      getcourseProgressDataRefresh();
     } catch (error) {
       console.error("Error in handleViewedLessonData:", error);
-      // If there's a next module, load the lesson and quiz data
     }
   };
   const handleSubmitQuizAnswer = async () => {
     const correctAnswersKeyValue = {};
     const userAnswersKeyValue = {};
-
     quizQuestionData.forEach((question) => {
       userAnswersKeyValue[question.id] = answers[question.id] || null; // User's answer
       correctAnswersKeyValue[question.id] = question.correct_answer;   // Correct answer
     });
-    const quizAnswerData = {
-      quiz_id: editQuizData.id,
-      student_id: stuUserId,
-      // Get the user's academic progress again
-      course_id: id,
-      user_answers: answers,
-      // If there's an error, log it to the console
-      correct_answers: correctAnswersKeyValue,
-    };
 
-    // new
     let parsData = [];
     try {
       if (courseProgress.completed_lesson_id === null) {
@@ -417,12 +407,44 @@ const CourseVideo = () => {
       parsData = [];
     }
     parsData.push(editQuizData.id);
+    // Check for matching answers
+    const matchingAnswers = [];
+
+    for (const questionId in correctAnswersKeyValue) {
+      if (correctAnswersKeyValue.hasOwnProperty(questionId)) {
+        const correctAnswer = JSON.parse(correctAnswersKeyValue[questionId]); // Assuming the correct answer is a stringified array
+        const userAnswer = userAnswersKeyValue[questionId];
+
+        // Check if the user's answer matches the correct answer
+        if (Array.isArray(correctAnswer)) {
+          if (correctAnswer.includes(userAnswer)) {
+            matchingAnswers.push({ questionId, userAnswer, correctAnswer });
+          }
+        } else {
+          if (correctAnswer === userAnswer) {
+            matchingAnswers.push({ questionId, userAnswer, correctAnswer });
+          }
+        }
+      }
+    }
+
+    const perQuizMark = (editQuizData.total_marks / quizQuestionData.length);
+    const passingMarks = editQuizData.passing__marks;
+    const obtainedMarks = (matchingAnswers.length * perQuizMark)
+    const passOrFail = obtainedMarks >= passingMarks ? "pass" : "fail";
+
+    const quizAnswerData = {
+      quiz_id: editQuizData.id,
+      student_id: stuUserId,
+      course_id: id,
+      user_answers: answers,
+      correct_answers: correctAnswersKeyValue,
+      result: passOrFail
+    };
     const data = {
       completed_lesson_id: JSON.stringify(parsData),
       current_watching_lesson: editQuizData.id,
     };
-    // new
-
     try {
       await axiosInstance.put(
         `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
@@ -430,6 +452,7 @@ const CourseVideo = () => {
       );
       const res = await axiosInstance.post(`${port}/addingQuizResultData`, quizAnswerData);
       if (res.status === 200) {
+        getQuizResultDatWithquizId(editQuizData.id);
         const currentLesson = lessonData.find((item) => item.quiz_id === editQuizData.id);
         const currentOrder = currentLesson.order;
         const nextLesson = lessonData.find((item) => item.order === currentOrder + 1);
@@ -445,6 +468,11 @@ const CourseVideo = () => {
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
           if (currentModule) {
             const nextModule = moduleData.find((item) => item.order === currentModule.order + 1);
+            if (!nextModule) {
+              getcourseProgressDataRefresh();
+              console.log("Course Is Completed");
+              return;
+            }
             setActiveModuleIndex(nextModule.id);
             const res = await getLessonData(nextModule.id);
             if (res.length > 0) {
@@ -455,16 +483,13 @@ const CourseVideo = () => {
                 await getQuizeDataForEdit(res[0].quiz_id);
               }
             }
-            if (!nextModule) {
-              console.log("Course Is Completed");
-            }
           }
         }
       }
     } catch (error) {
       console.error("Error submitting quiz answers:", error);
     }
-    getcourseProgressData2();
+    getcourseProgressDataRefresh();
   };
 
   useEffect(() => {
@@ -474,7 +499,6 @@ const CourseVideo = () => {
   useEffect(() => {
     getcourseProgressData()
   }, [courseData]);
-
   return (
     <>
       {loading ? (
@@ -486,7 +510,7 @@ const CourseVideo = () => {
           <div className="video-navbar flex justify-between items-center py-2 bg-[#F5F6FA] px-3">
             <div className="navbar-logo">
               <NavLink to="/">
-                <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+                <img src={require("../../assets/image/Logo.png")} alt="logo" />
               </NavLink>
             </div>
 
@@ -628,8 +652,7 @@ const CourseVideo = () => {
                             {editLessonData.description || "No description available"}
                           </p>
                         </div>
-                        <p><strong>Duration:</strong> {editLessonData.duration || "N/A"}</p>
-                        {/* <button type="button" className="primary-btn module-btn" onClick={handleViewedLessonData}>Next</button> */}
+                        <p><strong>Duration:</strong> {editLessonData.duration || "N/A"} Minutes</p>
                         {!(
                           courseProgress.completed_lesson_id &&
                           JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)
@@ -644,81 +667,152 @@ const CourseVideo = () => {
                           )}
                       </>
                     )}
-                    {editQuizData?.title && (
-                      <>
-                        <h2 className="font-bold text-xl text-black mb-2">{editQuizData.title}
-                          <span className="ml-4 px-3 text-sm py-1 rounded bg-slate-400 uppercase">QUIZ</span>
-                        </h2>
-                        <p><strong>Instruction:</strong> {editQuizData.instruction || "No instructions available"}</p>
-                        <p><strong>Total Marks:</strong> {editQuizData.total_marks || "N/A"}</p>
-                        <p><strong>Passing Marks:</strong> {editQuizData.passing__marks || "N/A"}</p>
-                      </>
-                    )}
-                    {editQuizData?.title && (
-                      <div>
-                        <h3 className="font-bold text-lg mt-4">{quizQuestionData[currentQuestionIndex]?.title}</h3>
+                    <div>
+                      {editQuizData?.title && (
+                        <>
+                          {/* Simplified Header Section */}
+                          <header className="mb-6">
+                            <div className="flex justify-between items-center">
+                              <h1 className="text-3xl font-bold text-gray-800">
+                                {editQuizData.title}
+                                <span className="ml-4 px-3 py-1 text-sm bg-blue-500 text-white uppercase rounded">
+                                  Quiz
+                                </span>
+                              </h1>
+                              <p className="text-sm text-gray-600 mt-2 md:mt-0">
+                                <strong>Instruction:</strong> {editQuizData.instruction || "No instructions available"}
+                              </p>
+                            </div>
 
-                        {/* Render options if available */}
-                        {quizQuestionData[currentQuestionIndex]?.options && (
-                          <ul>
-                            {JSON.parse(quizQuestionData[currentQuestionIndex].options).map((option, index) => (
-                              option &&
-                              <li key={index} className="mb-2">
-                                <label>
-                                  <input
-                                    type="radio"
-                                    name={`question-${quizQuestionData[currentQuestionIndex].id}`}
-                                    value={option}
-                                    disabled={courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id)}
-                                    checked={answers[quizQuestionData[currentQuestionIndex].id] === option}
-                                    onChange={() => handleAnswerChange(quizQuestionData[currentQuestionIndex].id, option)}
-                                    className="mr-2"
-                                  />
-                                  {option}
-                                </label>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
+                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                              <p>
+                                <strong>Total Marks:</strong> {editQuizData.total_marks || "N/A"}
+                              </p>
+                              <p>
+                                <strong>Passing Marks:</strong> {editQuizData.passing__marks || "N/A"}
+                              </p>
+                              <p>
+                                <strong>Total Questions:</strong> {quizQuestionData.length || "N/A"}
+                              </p>
+                            </div>
+                          </header>
 
-                        {/* Navigation buttons */}
-                        <div className="mt-4">
-                          {currentQuestionIndex !== 0 ? (
+                          {/* Question Section */}
+                          <section>
+                            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+                              <span className="mr-2 font-extrabold">{currentQuestionIndex + 1}.)</span>
+                              {quizQuestionData[currentQuestionIndex]?.title}
+                              {courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) && (
+                                <span className="ml-2 font-extrabold">({quizPassOrFail ? quizPassOrFail : ""})</span>
+                              )}
+                            </h2>
+                            {quizQuestionData[currentQuestionIndex]?.options && (
+                              <ul className="space-y-3">
+                                {JSON.parse(quizQuestionData[currentQuestionIndex].options).map((option, index) => (
+                                  option &&
+                                  <li key={index}>
+                                    {courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) ? (
+                                      <label
+                                        className={`block px-4 py-3 rounded-lg ${answers[quizQuestionData[currentQuestionIndex].id] ===
+                                          index
+                                          ? "bg-blue-500 text-white shadow-md"
+                                          : "bg-gray-100"
+                                          }`}
+                                      >
+                                        <span className="mr-2 font-semibold">{index + 1}.</span>
+                                        <input
+                                          type="radio"
+                                          name={`question-${quizQuestionData[currentQuestionIndex].id}`}
+                                          value={option}
+                                          checked={
+                                            answers[quizQuestionData[currentQuestionIndex].id] ===
+                                            index
+                                          }
+                                          className="hidden"
+                                        />
+                                        {option}
+                                      </label>
+                                    ) : (
+                                      <label
+                                        className={`block px-4 py-3 rounded-lg cursor-pointer transition hover:bg-gray-200 ${answers[quizQuestionData[currentQuestionIndex].id] ===
+                                          index
+                                          ? "bg-blue-500 text-white shadow-md"
+                                          : "bg-gray-100"
+                                          }`}
+                                      >
+                                        <span className="mr-2 font-semibold">{index + 1}.</span>
+                                        <input
+                                          type="radio"
+                                          name={`question-${quizQuestionData[currentQuestionIndex].id}`}
+                                          value={option}
+                                          checked={
+                                            answers[quizQuestionData[currentQuestionIndex].id] ===
+                                            index
+                                          }
+                                          onChange={() =>
+                                            handleAnswerChange(
+                                              quizQuestionData[currentQuestionIndex].id,
+                                              index
+                                            )
+                                          }
+                                          className="hidden"
+                                        />
+                                        {option}
+                                      </label>
+                                    )}
+                                  </li>
+                                )
+                                )}
+                              </ul>
+                            )}
+                          </section>
+
+                          {/* Navigation Section */}
+                          <footer className="mt-6 flex items-center justify-between space-x-4">
+                            {/* Previous Button */}
                             <button
                               onClick={prevQuestion}
-                              className="px-4 py-2 bg-gray-400 rounded mr-2"
+                              className={`flex-1 px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${currentQuestionIndex === 0
+                                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                : "bg-gray-400 text-white hover:bg-gray-500 hover:shadow-md"
+                                }`}
+                              disabled={currentQuestionIndex === 0}
                             >
-                              Previous
+                              <i class="fa-solid fa-circle-chevron-left"></i> Previous
                             </button>
-                          ) : (
-                            <button
-                              className="px-4 py-2 bg-gray-200 rounded mr-2"
-                              disabled
-                            >
-                              Previous
-                            </button>
-                          )}
-                          {currentQuestionIndex !== quizQuestionData.length - 1 ? (
-                            <button
-                              onClick={nextQuestion}
-                              className="px-4 py-2 bg-blue-500 text-white rounded"
-                            >
-                              Next
-                            </button>
-                          ) : (
-                            courseProgress.completed_lesson_id &&
-                            JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) === false && (
+
+                            {/* Next Button */}
+                            {currentQuestionIndex !== quizQuestionData.length - 1 ? (
                               <button
-                                className="px-4 py-2 bg-blue-500 text-white rounded"
+                                onClick={nextQuestion}
+                                className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 hover:shadow-md transition-all duration-200"
+                              >
+                                Next <i class="fa-solid fa-circle-chevron-right"></i>
+                              </button>
+                            ) : (
+                              <button
+                                className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-blue-400 text-white cursor-not-allowed transition-all duration-200"
+                                disabled
+                              >
+                                Next <i class="fa-solid fa-circle-chevron-right"></i>
+                              </button>
+                            )}
+
+                            {/* Submit Button */}
+                            {courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) ? (
+                              ""
+                            ) : (
+                              <button
                                 onClick={handleSubmitQuizAnswer}
+                                className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
                               >
                                 Submit
                               </button>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
+                            )}
+                          </footer>
+                        </>
+                      )}
+                    </div>
                   </div>
                 ) :
                   courseData.course_overview_link && courseData.course_overview_link.trim() !== "" ? (
@@ -744,9 +838,6 @@ const CourseVideo = () => {
                     )) : (
                     <p>Video not available</p>
                   )}
-                {/* <div className="play-button-overlay">
-                  <span className="play-icon"></span>
-                </div> */}
               </div>
 
               {/* Tab Bar */}
@@ -792,68 +883,227 @@ const CourseVideo = () => {
             </div>
 
             {/* Course Info Section */}
-            <div className="course-info md:ml-2">
+            {/* <div className="course-info md:ml-2">
               {moduleData.length > 0 ? (
-                moduleData.map((module, index) => (
-                  <div className="module" key={index}>
-                    <div className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`} onClick={() => toggleContent(module.id, module.id, activeModuleIndex === module.id ? null : module.id)}>
-                      <span className="module-title">
-                        MODULE-{index + 1} : {module.title}
-                      </span>
-                      <div className="module-controls">
-                        <button className="check-btn">
-                          <i
-                            className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
-                              }`}
-                          ></i>
-                        </button>
+                moduleData.map((module, index) => {
+                  return (
+                    <div className="module" key={index}>
+                      <div
+                        className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
+                        onClick={() => toggleContent(module.id, module.id, activeModuleIndex === module.id ? null : module.id)}
+                      >
+                        <span className="module-title">
+                          MODULE-{index + 1} : {module.title}
+                        </span>
+                        <div className="module-controls">
+                          <button className="check-btn">
+                            <i
+                              className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
+                                }`}
+                            ></i>
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    {activeModuleIndex === module.id && (
-                      <>
-                        <div className="module-list">
-                          {lessonLoading ? (
-                            <div className="lesson_loader"></div>
-                          ) : (
-                            lessonData.length > 0 ? (
-                              lessonData.map((lesson, index) => (
-                                <div className="module-content" key={index}>
-                                  <div className="module-lesson">
-                                    <div className="lesson-title cursor-pointer" onClick={() => editLessonToggleModal(lesson.id, lesson.quiz_id, 1)}>
-                                      {lesson.quiz_id ? (
-                                        <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
-                                      ) : (
-                                        <span className="lesson-icon">
-                                          <i className="fa-solid fa-file-lines"></i>
-                                        </span>
-                                      )}
-                                      {
-                                        lesson.quiz_id != null ? (
-                                          lesson.course_quize_lesson.title
+                      {activeModuleIndex === module.id && (
+                        <>
+                          <div className="module-list">
+                            {lessonLoading ? (
+                              <div className="lesson_loader"></div>
+                            ) : lessonData.length > 0 ? (
+                              lessonData.map((lesson, lessonIndex) => {
+                                const isCompleted =
+                                  courseProgress &&
+                                  courseProgress.completed_lesson_id &&
+                                  (JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id) ||
+                                    JSON.parse(courseProgress.completed_lesson_id).includes(lesson.quiz_id));
+                                const canAccess =
+                                  lessonIndex === 0 ||
+                                  (courseProgress &&
+                                    courseProgress.completed_lesson_id &&
+                                    JSON.parse(courseProgress.completed_lesson_id).includes(
+                                      lessonData[lessonIndex +- 1]?.id
+                                    ));
+                                return (
+                                  <div
+                                    className={`module-content ${!canAccess ? "cursor-not-allowed" : ""}`}
+                                    key={lessonIndex}
+                                  >
+                                    <div className="module-lesson">
+                                      <div
+                                        className={`lesson-title ${!canAccess ? "cursor-not-allowed" : "cursor-pointer"}`}
+                                        onClick={() =>
+                                          canAccess &&
+                                          editLessonToggleModal(lesson.id, lesson.quiz_id, 1)
+                                        }
+                                      >
+                                        {lesson.quiz_id ? (
+                                          <span className="quiz-icon">
+                                            <i className="fa-regular fa-circle-question"></i>
+                                          </span>
                                         ) : (
-                                          lesson.title
-                                        )
-                                      }
-                                    </div>
-                                    <div className="lesson-time">
-                                      <input type="checkbox" className="checkbox-class" />
+                                          <span className="lesson-icon">
+                                            <i className="fa-solid fa-file-lines"></i>
+                                          </span>
+                                        )}
+                                        {lesson.quiz_id != null
+                                          ? lesson.course_quize_lesson.title
+                                          : lesson.title}
+                                      </div>
+                                      <span className="mr-2">
+                                        {!canAccess && <MdLockOutline />}
+                                      </span>
+                                      <div className="lesson-time">
+                                        <input
+                                          type="checkbox"
+                                          className={`checkbox-class ${!canAccess ? "cursor-not-allowed" : "cursor-pointer"}`}
+                                          checked={isCompleted}
+                                          readOnly
+                                        />
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              ))
+                                );
+                              })
                             ) : (
-                              <h6>No data available 😂</h6> // Display this if lessonData is empty
-                            )
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))
+                              <h6>No data available 😂</h6>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })
               ) : (
-                <p>No Module data avalible</p>
+                <p>No Module data available</p>
+              )}
+            </div> */}
+
+            <div className="course-info md:ml-2">
+              {moduleData.length > 0 ? (
+                moduleData.map((module, moduleIndex) => {
+                  const isFirstModule = moduleIndex === 0;
+                  const isModuleCompleted =
+                    courseProgress &&
+                    courseProgress.completed_lesson_id &&
+                    lessonData.every((lesson) =>
+                      JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id)
+                    );
+
+                  return (
+                    <div className="module" key={moduleIndex}>
+                      <div
+                        className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
+                        onClick={() =>
+                          toggleContent(
+                            module.id,
+                            module.id,
+                            activeModuleIndex === module.id ? null : module.id
+                          )
+                        }
+                      >
+                        <span className="module-title">
+                          MODULE-{moduleIndex + 1} : {module.title}
+                        </span>
+                        <div className="module-controls">
+                          <button className="check-btn">
+                            <i
+                              className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
+                                }`}
+                            ></i>
+                          </button>
+                        </div>
+                      </div>
+                      {activeModuleIndex === module.id && (
+                        <>
+                          <div className="module-list">
+                            {lessonLoading ? (
+                              <div className="lesson_loader"></div>
+                            ) : lessonData.length > 0 ? (
+                              lessonData.map((lesson, lessonIndex) => {
+                                const isFirstLesson = isFirstModule && lessonIndex === 0;
+                                const isCompleted =
+                                  courseProgress &&
+                                  courseProgress.completed_lesson_id &&
+                                  JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id);
+                                const canAccess =
+                                  isFirstLesson ||
+                                  (lessonIndex > 0 &&
+                                    courseProgress &&
+                                    courseProgress.completed_lesson_id &&
+                                    JSON.parse(courseProgress.completed_lesson_id).includes(
+                                      lessonData[lessonIndex - 1]?.id
+                                    ));
+                                const isModuleLocked =
+                                  moduleIndex > 0 &&
+                                  (!courseProgress ||
+                                    !courseProgress.completed_lesson_id ||
+                                    !lessonData.some((lesson) =>
+                                      JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id)
+                                    ));
+
+                                return (
+                                  <div
+                                    className={`module-content ${!canAccess || isModuleLocked ? "cursor-not-allowed" : ""
+                                      }`}
+                                    key={lessonIndex}
+                                  >
+                                    <div className="module-lesson">
+                                      <div
+                                        className={`lesson-title ${!canAccess || isModuleLocked
+                                          ? "cursor-not-allowed"
+                                          : "cursor-pointer"
+                                          }`}
+                                        onClick={() =>
+                                          canAccess &&
+                                          !isModuleLocked &&
+                                          editLessonToggleModal(lesson.id, lesson.quiz_id, 1)
+                                        }
+                                      >
+                                        {lesson.quiz_id ? (
+                                          <span className="quiz-icon">
+                                            <i className="fa-regular fa-circle-question"></i>
+                                          </span>
+                                        ) : (
+                                          <span className="lesson-icon">
+                                            <i className="fa-solid fa-file-lines"></i>
+                                          </span>
+                                        )}
+                                        {lesson.quiz_id != null
+                                          ? lesson.course_quize_lesson.title
+                                          : lesson.title}
+                                      </div>
+                                      <span className="mr-2">
+                                        {(!canAccess || isModuleLocked) && <MdLockOutline />}
+                                      </span>
+                                      <div className="lesson-time">
+                                        <input
+                                          type="checkbox"
+                                          className={`checkbox-class ${!canAccess || isModuleLocked
+                                            ? "cursor-not-allowed"
+                                            : "cursor-pointer"
+                                            }`}
+                                          checked={isCompleted}
+                                          readOnly
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <h6>No data available 😂</h6>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No Module data available</p>
               )}
             </div>
+
           </div>
         </>
       )

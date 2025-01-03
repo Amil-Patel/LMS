@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    result:{
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.INTEGER

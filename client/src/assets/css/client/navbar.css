@@ -100,49 +100,46 @@
   bottom: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Align at the top of the screen */
   z-index: 100;
 }
 
 .profile-modal-overlay .modal {
-  background-color: var(--bg-color);
-  border-radius: 4px;
-  padding: 3px 0px;
-  position: absolute;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 16rem;
   display: flex;
   flex-direction: column;
+  height: auto;
+}
+
+.profile-modal-overlay .modal .flex {
+  display: flex;
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 110px;
-  height: fit-content;
 }
 
-.profile-modal-overlay .modal ul {
+.profile-modal-overlay .modal .space-y-3 > li {
   list-style: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
 }
 
-.profile-modal-overlay .modal ul li {
-  text-align: center;
-  padding: 4px;
-}
-
-.profile-modal-overlay .modal ul li a {
+.profile-modal-overlay .modal a {
   text-decoration: none;
-  color: var(--black);
+  color: #4a4a4a;
   font-size: 14px;
+  display: flex;
+  align-items: center;
 }
 
-.profile-modal-overlay .modal ul li a i {
-  font-size: 14px;
-  margin-right: 7px;
+.profile-modal-overlay .modal a:hover {
+  color: #3490dc; /* Tailwind primary color */
 }
 
-.profile-modal-overlay .modal ul li a:hover {
-  color: var(--button-primary-color);
+.profile-modal-overlay .modal i {
+  font-size: 14px;
+  margin-right: 0.5rem;
 }
+
 
 .cart_section {
   display: flex;
