@@ -1,15 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import '../../../assets/css/client/navbar.css';
 import { NavLink } from 'react-router-dom';
 import '../../../assets/css/client/common.css';
 import LoginForm from './LoginForm';
-import { RoleContext } from '../../admin/layout/RoleContext';
+import { RoleContext, userRolesContext } from '../../admin/layout/RoleContext';
 import SignupForm from './SignupForm';
 import Cookies from 'js-cookie';
 import { useCart } from './CartContext';
+import axiosInstance from '../utils/axiosInstance';
+const port = process.env.REACT_APP_URL;
 
 const Navbar = () => {
   const { cart } = useCart();
+  const { stuUserId } = useContext(userRolesContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
@@ -54,6 +57,24 @@ const Navbar = () => {
   const handleLogoutClick = () => {
     Cookies.remove('student-token');
   };
+
+
+  //get user data
+  const [userData, setUserData] = useState([]);
+  const getUserData = async () => {
+    if (!stuUserId) return
+    try {
+      const response = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${stuUserId}`);
+      setUserData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, [stuUserId]);
   return (
     <>
       <nav className='navbar-section'>
@@ -92,8 +113,8 @@ const Navbar = () => {
             </>
           )}
           {savedToken && (
-            <div className="profile-section" ref={profileRef} onClick={toggleModal}>
-              <img src={require("../../../assets/image/user_img.jpeg")} alt="Profile" />
+            <div className="profile-section relative" ref={profileRef} onClick={toggleModal}>
+              <img src={`../upload/${userData?.profile}`} alt="Profile" />
             </div>
           )}
         </div>
@@ -104,23 +125,33 @@ const Navbar = () => {
       </nav>
       {isModalOpen && (
         <div className="profile-modal-overlay" onClick={closeModal}>
-          <div className="modal" style={{ top: modalPosition.top + 6, left: modalPosition.left - 78 }}>
-            <ul>
+          <div
+            className="modal absolute bg-white rounded-lg shadow-lg p-4"
+            style={{ top: modalPosition.top + 6, left: modalPosition.left - 223 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center mb-3">
+              <img src={`../upload/${userData?.profile}`} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
+              <div>
+                <p className="font-semibold">{userData?.first_name + " " + userData?.last_name}</p>
+                <p className="text-sm text-gray-500">{userData?.email}</p>
+              </div>
+            </div>
+            <ul className="space-y-3">
               <li>
-                <NavLink to="/student/stu-profile">
-                  <i className="fa-regular fa-user"></i>My Profile
+                <NavLink to="/student/stu-profile" className="flex items-center text-gray-700 hover:text-primary">
+                  <i className="fa-solid fa-user-gear mr-2"></i>My Profile
                 </NavLink>
               </li>
               <li>
-                <NavLink onClick={handleLogoutClick}>
-                  <i className="fa-solid fa-arrow-right-from-bracket"></i>Sign Out
+                <NavLink onClick={handleLogoutClick} className="flex items-center text-gray-700 hover:text-primary">
+                  <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>Sign Out
                 </NavLink>
               </li>
             </ul>
           </div>
         </div>
       )}
-
       {isLoginFormOpen && (
         <div className="client_section">
           <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-700 bg-opacity-50">

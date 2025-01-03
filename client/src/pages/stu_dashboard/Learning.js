@@ -42,7 +42,7 @@ const Learning = () => {
                                         <h3>{item.course_master_enrollment.course_title}</h3>
                                         <button className="py-0.5 font-medium h-fit px-6 border border-solid 
                                 text-blue-600 text-base border-blue-600 
-                                hover:bg-blue-500 hover:text-white" onClick={() => { navigate(`/coursevideo/${item.course_id}`) }}>View</button>
+                                hover:bg-blue-500 hover:text-white" onClick={() => { navigate(`/student/coursevideo/${item.course_id}`) }}>View</button>
                                     </div>
                                     <span className="author-name text-sm">By Ahamd</span>
                                     <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> 20 Lessons</span>
