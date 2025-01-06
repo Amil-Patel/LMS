@@ -277,8 +277,6 @@ const AddCourse = () => {
     formData.append('meta_desc', addCourse.meta_desc);
     formData.append('canonical_url', addCourse.canonical_url);
     formData.append('title_tag', addCourse.title_tag)
-    console.log(addCourse)
-
     try {
       const res = await axiosInstance.post(`${port}/addingCourseMaster`, formData, {
         headers: {

@@ -127,7 +127,6 @@ const ManageCourse = () => {
   };
   const handleAddResourceSubmit = async (e) => {
     e.preventDefault();
-    console.log(addResource)
     if (addResource.title.trim() === '') {
       notifyWarning("Please enter resource title.");
       return
@@ -261,7 +260,6 @@ const ManageCourse = () => {
       const sectionData = res.data;
       const sortedData = sectionData.sort((a, b) => a.order - b.order);
       setModuleData(sortedData);
-      console.log(sortedData);
     } catch (error) {
       console.log(error);
     }
@@ -430,26 +428,45 @@ const ManageCourse = () => {
 
   const handleAddLessonSubmit = async (e) => {
     e.preventDefault();
+    console.log(addLesson);
     // Validation checks for required fields
+    if (!addLesson.lesson_type) {
+      notifyWarning("Select The Lesson Type.");
+      return
+    }
     if (!addLesson.title.trim()) {
       notifyWarning("Title is required.");
       return;
     }
-    if (!addLesson.duration.trim()) {
-      notifyWarning("Duration is required.");
-      return;
+    if (addLesson.lesson_type === 'pdf') {
+      if (!addLesson.url.trim()) {
+        notifyWarning("URL is required.");
+        return;
+      }
+      if (!addLesson.attachment) {
+        notifyWarning("Attachment is required.");
+        return;
+      }
     }
-    if (!addLesson.course_id) {
-      notifyWarning("Course ID is required.");
-      return;
+    if (addLesson.lesson_type === 'youtube-video') {
+      if (!addLesson.url.trim()) {
+        notifyWarning("URL is required.");
+        return;
+      }
+      if (!addLesson.thumbnail_preview_image_url) {
+        notifyWarning("Thumbnail is required.");
+        return;
+      }
     }
-    if (!addLesson.lesson_type.trim()) {
-      notifyWarning("Lesson type is required.");
-      return;
-    }
-    if (!addLesson.url.trim() && !addLesson.attachment) {
-      notifyWarning("Either URL or attachment is required.");
-      return;
+    if (addLesson.lesson_type === 'video') {
+      if (!addLesson.attachment.trim()) {
+        notifyWarning("Attachment is required.");
+        return;
+      }
+      if (!addLesson.thumbnail_preview_image_url) {
+        notifyWarning("Thumbnail is required.");
+        return;
+      }
     }
     if (!addLesson.description.trim()) {
       notifyWarning("Description is required.");
@@ -814,7 +831,6 @@ const ManageCourse = () => {
       const res = await axiosInstance.get(`${port}/gettingCourseQuizeQuestionData/${id}`);
       const quizeQuestiondata = res.data;
       const sortdata = quizeQuestiondata.sort((a, b) => a.order - b.order);
-      console.log(sortdata)
       setQuizQuestionData(sortdata);
     } catch (error) {
       console.log(error);
@@ -851,7 +867,6 @@ const ManageCourse = () => {
       ...prevState,
       options: newOptions,
     }));
-    console.log(addQuizeQuestion)
   };
 
   // Handle correct answer checkbox change
@@ -867,7 +882,6 @@ const ManageCourse = () => {
       ...prevState,
       correct_answer: newCorrectAnswers,
     }));
-    console.log(addQuizeQuestion)
   };
 
   const addQuizQuestionSubmit = async (e) => {

@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Hoc from "../layout/Hoc";
 import axiosInstance from "../utils/axiosInstance";
+import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL;
 
 function Inquiry() {
   const [editOpen, setEditOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
   const [currentInquiry, setCurrentInquiry] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [currentViewData, setCurrentViewData] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("pending");
   const [inquiryData, setInquiryData] = useState([]);
 
   const getInquiryData = async () => {
+    setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingInquiry`);
       setInquiryData(res.data);
+      setLoading(false);
     } catch (error) {
       console.log("Error fetching inquiry data", error);
+      setLoading(false);
     }
   };
 
@@ -46,6 +51,7 @@ function Inquiry() {
   };
 
   const handleEditSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     if (!currentInquiry) return;
 
@@ -54,9 +60,10 @@ function Inquiry() {
       await axiosInstance.put(`${port}/updateInquiryStatus/${currentInquiry.id}`, updatedData);
       getInquiryData();
       handleCloseEditModal();
-      console.log("Status updated successfully");
+      setLoading(false);
     } catch (error) {
       console.error("Error updating status", error);
+      setLoading(false);
     }
   };
 
@@ -64,9 +71,15 @@ function Inquiry() {
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
-          <h5>Inquiry</h5>
-          <input id="search-bar" type="text" placeholder="Search" />
+          <div id="user-tag">
+            <h5>Inquiry</h5>
+          </div>
+          <div id="search-inner-hero-section">
+            <input id="search-input" type="text" placeholder="Search" />
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </div>
         </div>
 
         <table>
@@ -154,7 +167,7 @@ function Inquiry() {
                   />
                   Rejected
                 </div>
-                <div style={{ display: "flex", gap: "10px",marginTop:"10px" }}>
+                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                   <button type="submit" className="primary-btn">Save</button>
                   <button type="button" onClick={handleCloseEditModal} className="secondary-btn">
                     Close

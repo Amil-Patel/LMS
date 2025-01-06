@@ -12,7 +12,6 @@ const Navbar = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
       setUserData(res.data);
-      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
