@@ -129,7 +129,7 @@ function NotificationSetting() {
         {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
-            <h4>Notification Setting</h4>
+            <h5>Notification Setting</h5>
           </div>
           <div id="search-inner-hero-section">
             <input id="search-input" type="text" placeholder="Search" />

@@ -16,7 +16,6 @@ const RoleContext = ({ children }) => {
         try {
             const res = await axiosInstance.get(`${port}/gettingSystemSettingWithId`);
             setSetting(res.data);
-            console.log(res.data);
         } catch (error) {
             console.log(error);
         }

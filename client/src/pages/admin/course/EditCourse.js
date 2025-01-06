@@ -75,7 +75,6 @@ const EditCourse = () => {
             if (res.data.is_tax === 1) {
                 setIsTax(true);
             }
-            console.log(res.data.is_top_course);
             // setup for auther
             let auther = res.data.auther;
             try {
@@ -146,8 +145,6 @@ const EditCourse = () => {
             }
             res.data.meta_keyword = Array.isArray(meta_keyword) ? meta_keyword : [];
             const time = moment.unix(res.data.publish_date).tz(setting.timezone).format("YYYY-MM-DD");
-            console.log(time)
-            console.log(res.data.publish_date)
             setCourseData((prevState) => ({
                 ...prevState,
                 ...res.data,

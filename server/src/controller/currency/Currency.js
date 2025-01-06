@@ -15,10 +15,9 @@ const getCurrencyData = async (req, res) => {
 const getCurrencyDataWithid = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    const id = req.params.id;
     try {
-        const data = await System_Setting.findOne({ where: { id: id } });
-        res.send(data);
+        const data = await System_Setting.findAll();
+        res.send(data[0]);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -28,10 +27,10 @@ const getCurrencyDataWithid = async (req, res) => {
 const updateCurrencyData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    const { currency, position } = req.body;
+    const { currency, symbol, position } = req.body;
     const id = req.params.id
     try {
-        await System_Setting.update({ currency: currency, position: position }, { where: { id: id } });
+        await System_Setting.update({ currency: currency, symbol: symbol, position: position }, { where: { id: id } });
         res.sendStatus(200);
     } catch (error) {
         console.log(error);

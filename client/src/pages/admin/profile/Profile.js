@@ -11,7 +11,7 @@ const port = process.env.REACT_APP_URL;
 const Profile = () => {
   const [newImage, setNewImage] = useState(null); // New selected image
   const [fileName, setFileName] = useState(""); // Display file name
-  const { userId,setting } = useContext(userRolesContext);
+  const { userId, setting } = useContext(userRolesContext);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState([]);
   const [imageSrc, setImageSrc] = useState('https://via.placeholder.com/150');
@@ -28,10 +28,9 @@ const Profile = () => {
       const time = moment.unix(res.data.dob).tz(setting.timezone).format("YYYY-MM-DD");
       setUserData((prevState) => ({
         ...prevState,
-          ...res.data,
-          dob: time, 
+        ...res.data,
+        dob: time,
       }));
-      // setUserData(res.data);
       setOldPassword(res.data.password);
       setImageSrc(res.data.profile);
       setFileName(res.data.profile);
@@ -127,7 +126,7 @@ const Profile = () => {
       return;
     }
     const updatedUserData = new FormData();
-    
+
     // Append user data to FormData
     updatedUserData.append('first_name', userData.first_name);
     updatedUserData.append('middle_name', userData.middle_name);

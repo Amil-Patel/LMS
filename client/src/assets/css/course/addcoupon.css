@@ -37,7 +37,7 @@ input[type="radio"] {
 .percentage-icon {
   border: 1px solid var(--border-color);
   background-color: #eee;
-  padding: 6.5px 12px;
+  padding: 8.5px 12px;
   border-radius: 0 4px 4px 0;
   margin-left: -5px;
   border-left: none;

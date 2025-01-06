@@ -10,12 +10,11 @@ import useCheckRolePermission from "../layout/CheckRolePermission";
 const port = process.env.REACT_APP_URL
 
 const AllCourse = () => {
-  const { userRole, userId } = useContext(userRolesContext);
+  const { userRole, setting } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false)
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
-
+  const [searchQuery, setSearchQuery] = useState("");
   // Get course category
   const [courseCategory, setCourseCategory] = useState();
   const getCourseCategory = async () => {
@@ -33,7 +32,6 @@ const AllCourse = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
-      console.log(res.data)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -68,16 +66,12 @@ const AllCourse = () => {
   const editCoursePermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
   const deleteCoursePermission = perm.length > 0 && perm[0].can_delete === 1 ? 1 : 0;
 
-
-
   const toggleDropdown = (index) => {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
   // sorting table
-
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -128,6 +122,22 @@ const AllCourse = () => {
   }, [sortedData, searchQuery]);
 
 
+  const handleClickOutside = (event) => {
+    if (
+      !event.target.closest(".menu-content") &&
+      !event.target.closest(".dropdown-trigger")
+    ) {
+      setActiveDropdown(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <Hoc />
@@ -138,7 +148,7 @@ const AllCourse = () => {
             <h5>Courses</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={handleSearchChange}/>
+            <input id="search-input" type="text" placeholder="Search" value={searchQuery} onChange={handleSearchChange} />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>
@@ -183,7 +193,7 @@ const AllCourse = () => {
                       <h6><NavLink to={`/admin/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
                     </td>
                     <td>{category}</td>
-                    <td>{i.course_price}</td>
+                    <td>{setting.position == "left" ? setting.symbol : ""}{i.course_price}{setting.position == "right" ? setting.symbol : ""}</td>
                     <td>{i.enrollmentCount}</td>
                     <td>{i.lessonCount}</td>
                     <td>
@@ -233,7 +243,7 @@ const AllCourse = () => {
                                 deleteCoursePermission == 1) && (
                                   <p
                                     onClick={() => deleteToggleModal(i.id)}
-                                    style={{ cursor: "pointer" }}
+                                    className="cursor-pointer"
                                   >
                                     Delete
                                   </p>
@@ -246,7 +256,6 @@ const AllCourse = () => {
                       </td>
                     ) : ("")
                     }
-
                   </tr>
                 )
               })}
