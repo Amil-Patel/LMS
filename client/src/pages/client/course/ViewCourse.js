@@ -13,6 +13,7 @@ const ViewCourse = () => {
   const { cart, addToCart } = useCart();
   const [loading, setLoading] = useState(true);
   const [lessonLoading, setLessonLoading] = useState(false);
+  const [totalTime, setTotalTime] = useState(0);
   const navigate = useNavigate();
   //get lesson data
   const [lessonData, setLessonData] = useState([]);
@@ -30,10 +31,40 @@ const ViewCourse = () => {
       setLessonLoading(false)
     }
   }
+
+  //get lesson with courseId
+  const [allLessonData, setAllLessonData] = useState([]);
+  const getAllLessonData = async () => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithCourseId/${id}`);
+      const lessonquizdata = res.data
+      // const filterOrderData = lessonquizdata.filter((item) => item.order !== 0);
+      const sortedData = lessonquizdata.sort((a, b) => a.order - b.order);
+      setAllLessonData(sortedData);
+      const totalDuration = sortedData
+        .filter((item) => item.is_count_time === 1)
+        .reduce((sum, item) => sum + item.duration, 0);
+      const totalHours = (totalDuration / 60).toFixed(2); // Convert to hours and round to 1 decimal place
+      setTotalTime(totalHours);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //get total enroll student
+  const [totalEnroll, setTotalEnroll] = useState(0);
+  const getTotalEnroll = async () => {
+    try {
+      const response = await axiosInstance.get(`${port}/gettingEnrollWithCourseId/${id}`);
+      const data = await response.data;
+      setTotalEnroll(data.length);
+    } catch (error) {
+      console.error("Error fetching total enroll:", error);
+    }
+  }
   // Function to toggle visibility of content
   const [activeModuleIndex, setActiveModuleIndex] = useState(null);
   const toggleContent = (index, id) => {
-    console.log("object")
     setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
     getLessonData(id);
   };
@@ -139,6 +170,8 @@ const ViewCourse = () => {
   }
   useEffect(() => {
     getViewCourseData();
+    getAllLessonData();
+    getTotalEnroll();
   }, []);
   useEffect(() => {
     getCourseCategory();
@@ -181,13 +214,13 @@ const ViewCourse = () => {
               </div>
               <div className="course-icon-section">
                 <span>
-                  <i className="fa-solid fa-copy"></i> 20 Lessons
+                  <i className="fa-solid fa-copy"></i> {allLessonData?.length} Lessons
                 </span>
                 <span>
-                  <i className="fa-solid fa-clock"></i> 12.30 Hours
+                  <i className="fa-solid fa-clock"></i> {totalTime ? totalTime : 0} Hours
                 </span>
                 <span>
-                  <i className="fa-solid fa-graduation-cap"></i> 156 Students
+                  <i className="fa-solid fa-graduation-cap"></i> {totalEnroll ? totalEnroll : 0} Students
                 </span>
                 <span>
                   <i className="fa-solid fa-signal"></i> {courseData?.course_level}
@@ -249,79 +282,106 @@ const ViewCourse = () => {
               {activeTab === "curriculum" && (
                 <>
                   {moduleData.length > 0 ? (
-                    moduleData.map((module, index) => (
-                      <div className="module" key={index}>
-                        <div
-                          className="module-header"
-                          onClick={() => toggleContent(index, module.id)}
-                        >
-                          <span className="module-title">
-                            MODULE-{index + 1} : {module.title}
-                          </span>
-                          <div className="module-controls">
-                            <span className="check-btn">
-                              <i
-                                className={`fa-solid ${activeModuleIndex === index
-                                  ? "fa-angle-up"
-                                  : "fa-angle-down"
-                                  }`}
-                              ></i>
-                            </span>
-                          </div>
-                        </div>
-                        {activeModuleIndex === index && (
-                          <>
-                            <div className="module-content min-h-10">
-                              {lessonLoading ? (
-                                <div className="lesson_loader" style={{ top: "-2px" }}></div>
-                              ) : (
-                                lessonData.length > 0 ? (
-                                  lessonData.map((lesson, index) => (
-                                    <div className="module-lesson flex flex-wrap gap-2 p-3" key={index}>
-                                      {/* Lesson Icon and Title */}
-                                      <div className="lesson-title flex items-center gap-1 w-full">
-                                        {lesson.quiz_id ? (
-                                          <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
-                                        ) : (
-                                          <span className="lesson-icon">
-                                            <i className="fa-regular fa-file-lines"></i>
-                                          </span>
-                                        )}
+                    moduleData.map((module, index) => {
+                      const lessonTime = (module.course_section_lesson || []).reduce((lessonTotal, item) => {
+                        if (item.is_count_time === 1) {
+                          return lessonTotal + (item.duration || 0);
+                        }
+                        return lessonTotal;
+                      }, 0);
 
-                                        {/* <span className="font-medium">
+                      const quizeTime = (module.course_section_quize || []).reduce((quizeTotal, item) => {
+                        if (item.is_count_time === 1) {
+                          return quizeTotal + (item.quize_duration || 0);
+                        }
+                        return quizeTotal;
+                      }, 0);
+                      const totalMinutes = lessonTime + quizeTime;
+                      const hours = Math.floor(totalMinutes / 60);
+                      const minutes = totalMinutes % 60;
+                      console.log(totalMinutes)
+                      const formattedTime = `${hours} hours and ${minutes} minutes`;
+                      return (
+                        <div className="module" key={index}>
+                          <div
+                            className="module-header"
+                            onClick={() => toggleContent(index, module.id)}
+                          >
+                            <span className="module-title">
+                              MODULE-{index + 1} : {module.title}
+                            </span>
+                            <span className="module-duration">{formattedTime}</span>
+                            <div className="module-controls">
+                              <span className="check-btn">
+                                <i
+                                  className={`fa-solid ${activeModuleIndex === index
+                                    ? "fa-angle-up"
+                                    : "fa-angle-down"
+                                    }`}
+                                ></i>
+                              </span>
+                            </div>
+                          </div>
+                          {activeModuleIndex === index && (
+                            <>
+                              <div className="module-content min-h-10">
+                                {lessonLoading ? (
+                                  <div className="lesson_loader" style={{ top: "-2px" }}></div>
+                                ) : (
+                                  lessonData.length > 0 ? (
+                                    lessonData.map((lesson, index) => (
+                                      <div className="module-lesson flex flex-wrap gap-2 p-3" key={index}>
+                                        {/* Lesson Icon and Title */}
+                                        <div className="lesson-title flex items-center gap-1 w-full">
+                                          {lesson.quiz_id ? (
+                                            <span className="quiz-icon"><i className="fa-regular fa-circle-question"></i></span>
+                                          ) : (
+                                            <span className="lesson-icon">
+                                              <i className="fa-regular fa-file-lines"></i>
+                                            </span>
+                                          )}
+
+                                          {/* <span className="font-medium">
                                       Video: Course Intro
                                     </span> */}
-                                        <span className="font-medium">
-                                          {
-                                            lesson.quiz_id != null ? (
-                                              lesson.course_quize_lesson.title
-                                            ) : (
-                                              lesson.title
-                                            )
-                                          }
-                                        </span>
-                                      </div>
-
-                                      {/* Preview Button and Lesson Time */}
-                                      <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
-                                        <div className="lesson-time text-gray-500">
-                                          {lesson.duration && <span>{lesson.duration} Minutes</span>}
+                                          <span className="font-medium">
+                                            {
+                                              lesson.quiz_id != null ? (
+                                                lesson.course_quize_lesson.title
+                                              ) : (
+                                                lesson.title
+                                              )
+                                            }
+                                          </span>
                                         </div>
-                                        <button className="resource-btn text-sm ml-3">
-                                          <i className="fa-solid fa-eye mr-2"></i> Preview
-                                        </button>
-                                      </div>
-                                    </div>
-                                  ))
-                                ) : (
-                                  <h6 className="p-3">No data available 😂</h6> // Display this if lessonData is empty
-                                ))}
 
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    ))
+                                        {/* Preview Button and Lesson Time */}
+                                        <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                                          <div className="lesson-time text-gray-500">
+                                            {
+                                              lesson.quiz_id != null ? (
+                                                <span>{lesson.course_quize_lesson.quize_duration} Minutes</span>
+                                              ) : (
+                                                <span>{lesson.duration} Minutes</span>
+                                              )
+                                            }
+                                          </div>
+                                          <button className="resource-btn text-sm ml-3">
+                                            <i className="fa-solid fa-eye mr-2"></i> Preview
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <h6 className="p-3">No data available 😂</h6> // Display this if lessonData is empty
+                                  ))}
+
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )
+                    })
                   ) : (
                     "No modules found"
                   )}
@@ -497,7 +557,7 @@ const ViewCourse = () => {
                   <button className="btn-buy" onClick={() => handleBuy(courseData)}>Buy Now</button>
                 </div>
               </div>
-              <div className="course-list">
+              {/* <div className="course-list">
                 <p>This Course includes:</p>
                 <ul>
                   <li>
@@ -523,7 +583,7 @@ const ViewCourse = () => {
                     completion
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -156,6 +156,22 @@ const getEnrollDataWithId = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+const getEnrollWithCourseId = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    try {
+        const data = await enrollment.findAll({
+            where: {
+                course_id: id
+            }
+        });
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 const updateEnrollData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -180,5 +196,5 @@ const updateEnrollData = async (req, res) => {
         res.sendStatus(500);
     }
 }
-module.exports = { getEnrollmentData, deleteEnrollmentData, addEnrollmentData, getEnrollAndCourseData, getEnrollWithStuId, updateEnrollStatus, getEnrollDataWithId, updateEnrollData }
+module.exports = { getEnrollmentData, deleteEnrollmentData, getEnrollWithCourseId, addEnrollmentData, getEnrollAndCourseData, getEnrollWithStuId, updateEnrollStatus, getEnrollDataWithId, updateEnrollData }
 

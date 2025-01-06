@@ -31,6 +31,31 @@ const getCourseLessonDataWithSectionId = async (req, res) => {
     }
 };
 
+const getCourseLessonDataWithCourseId = async (req, res) => {
+
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    try {
+        const data = await Course_Lesson.findAll({
+            where: {
+                course_id: id
+            },
+            include: [
+                {
+                    model: Course_Quize,
+                    as: 'course_quize_lesson',
+                    attributes: ['id', 'title', 'instruction', 'quize_duration', 'status'],
+                    required: false
+                }
+            ]
+        });
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+};
 
 const getCourseLessonDataWithId = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -246,5 +271,6 @@ module.exports = {
     updateCourseLessonData,
     updateCourseLessonStatus,
     updateCourseLessonOrderData,
-    deleteCourseLessonData
+    deleteCourseLessonData,
+    getCourseLessonDataWithCourseId
 }
