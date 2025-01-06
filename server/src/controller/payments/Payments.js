@@ -1,4 +1,4 @@
-const { payment, Course_Master, UserMaster } = require("../../database/models/index");
+const { payment, student_cart, UserMaster } = require("../../database/models/index");
 const AuthMiddleware = require("../../auth/AuthMiddleware");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 
@@ -39,9 +39,8 @@ const getPaymentData = async (req, res) => {
         const detailedPayments = await Promise.all(
             paymentData.map(async (payment) => {
                 const courseIds = JSON.parse(payment.courses);
-
                 // Fetch course names
-                const courseNames = await Course_Master.findAll({
+                const courseNames = await student_cart.findAll({
                     where: { id: courseIds },
                     attributes: ['course_title','expiring_time', 'course_price', 'tax_rate', 'course_discount', 'is_inclusive', 'is_exclusive'],
                     raw: true,

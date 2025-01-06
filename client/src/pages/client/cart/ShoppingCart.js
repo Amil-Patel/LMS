@@ -1,14 +1,43 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import "../../../assets/css/client/shopping-cart.css";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import Breadcrumb from "../../../pages/client/course/Breadcrumb";
 import { useCart } from "../layout/CartContext"
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from "../utils/axiosInstance";
+import { userRolesContext } from '../../admin/layout/RoleContext';
+const port = process.env.REACT_APP_URL
 
 
 const ShoppingCart = () => {
   const { cart, removeCart } = useCart();
+  const { stuUserId } = useContext(userRolesContext);
+  //getting default course cart data if user login 
+  const [defaultCart, setDefaultCart] = useState([]);
+  const [mergedCart, setMergedCart] = useState([]);
+  const getDefaultCart = async () => {
+    try {
+      const response = await axiosInstance.get(`${port}/gettingStudentCart/${stuUserId}`);
+      setDefaultCart(response.data);
+    } catch (error) {
+      console.error('Error loading default cart from database:', error);
+    }
+  }
+  useEffect(() => {
+    const combinedCart = [...defaultCart, ...cart];
+    const uniqueCart = combinedCart.filter(
+      (item, index, self) =>
+        index === self.findIndex((t) => t.courseId === item.courseId)
+    );
+    setMergedCart(uniqueCart);
+  }, [defaultCart, cart]);
+
+  useEffect(() => {
+    if (stuUserId) {
+      getDefaultCart();
+    }
+  }, [stuUserId]);
   const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + item.course_price, 0);
   const sumOfAllCartTax = cart.reduce((acc, item) => {
     if (item.is_inclusive == 1) {
@@ -54,7 +83,7 @@ const ShoppingCart = () => {
         <div className='shopping-cart-hero-container pt-5'>
           <div className='shopping-cart-course-container'>
             {
-              cart.length > 0 ? (
+              mergedCart.length > 0 ? (
                 cart.map((course, index) => {
                   console.log(course)
                   const discount_price = course.course_price - (course.course_price * course.course_discount / 100);

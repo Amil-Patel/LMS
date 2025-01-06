@@ -67,11 +67,12 @@ export const CartProvider = ({ children }) => {
             ...course,
             studentId: stuUserId ? stuUserId : 0
         };
+        console.log(uniqueCourse)
         const updatedCart = [...cart, uniqueCourse];
         setCart(updatedCart);
-        if(savedToken && stuUserId) {
+        if (savedToken && stuUserId) {
             saveCart(uniqueCourse);
-        }else{
+        } else {
             saveCart(updatedCart);
         }
     };
@@ -99,21 +100,19 @@ export const CartProvider = ({ children }) => {
 
     useEffect(() => {
         const moveCartToDatabase = async () => {
-            if (savedToken && stuUserId) {
+            if (savedToken) {
                 const storedCart = localStorage.getItem('cart');
+                const parsedCart = JSON.parse(storedCart);
+                const mergedCart = parsedCart?.map((item) => ({
+                    ...item,
+                    studentId: stuUserId, 
+                }));
                 if (storedCart) {
                     try {
-                        const decryptedCart = storedCart;
-                        const response = await axiosInstance.get(`/gettingStudentCart/${stuUserId}`, {
-                            headers: { Authorization: `Bearer ${savedToken}` },
-                        });
-                        const databaseCart = response.data || [];
-                        const mergedCart = [...databaseCart, ...decryptedCart];
-
                         await axiosInstance.post('/addingStudentCart', { cart: mergedCart }, { headers: { Authorization: `Bearer ${savedToken}` } }
                         );
                         localStorage.removeItem('cart');
-                        setCart(mergedCart);
+                        setCart(storedCart);
                     } catch (error) {
                         console.error('Error transferring cart to database:', error);
                     }
@@ -121,7 +120,7 @@ export const CartProvider = ({ children }) => {
             }
         };
         moveCartToDatabase();
-    }, [savedToken]);
+    }, [savedToken, stuUserId]);
 
     return (
         <CartContext.Provider value={{ cart, addToCart, removeCart }}>

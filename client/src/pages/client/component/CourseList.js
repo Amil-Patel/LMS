@@ -31,15 +31,15 @@ const CourseList = ({ courses, category }) => {
                 const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
                 const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory;
                 // console.log(cart)
-                const isInCart = cart?.some((item) => {
-                    if (savedToken) {
-                        console.log(item)
-                        console.log(course)
-                        return item.course_id === course.id
-                    } else {
-                        return item.id === course.id
-                    }
-                })
+                if (cart) {
+                    var isInCart = cart?.some((item) => {
+                        if (savedToken) {
+                            return item.course_id === course.id
+                        } else {
+                            return item.id === course.id
+                        }
+                    })
+                }
 
                 return (
                     <div key={course.id} className="course-main-div">

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    symbol: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     position: {
       type: DataTypes.STRING,
       allowNull: false

@@ -22,26 +22,47 @@ const getStudentCartData = async (req, res) => {
 const addStudentCartData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    const data = {
-        course_id: req.body.cart.id,
-        student_id: req.body.cart.studentId,
-        course_title: req.body.cart.course_title,
-        expiring_time: req.body.cart.expiring_time,
-        no_of_month: req.body.cart.no_of_month,
-        course_price: req.body.cart.course_price,
-        tax_rate: req.body.cart.tax_rate,
-        is_inclusive: req.body.cart.is_inclusive,
-        is_exclusive: req.body.cart.is_exclusive,
-        course_discount: req.body.cart.course_discount
-    };
+
     try {
-        const result = await student_cart.create(data);
+        let cartData = req.body.cart;
+
+        // Normalize cartData: If it's a single object, wrap it in an array
+        if (!Array.isArray(cartData)) {
+            cartData = [cartData];
+        }
+
+        console.log(cartData)
+        // Prepare the data for bulk insertion
+        const dataArray = cartData
+            .filter((item) => item.id && item.course_title && item.studentId) // Ensure required fields are present
+            .map((item) => ({
+                course_id: item.id,
+                student_id: item.studentId,
+                course_title: item.course_title,
+                auther: item.auther,
+                course_thumbnail: item.course_thumbnail,
+                expiring_time: item.expiring_time || null,
+                no_of_month: item.no_of_month || 0,
+                course_price: item.course_price || 0,
+                tax_rate: item.tax_rate || 0,
+                is_inclusive: item.is_inclusive || 0,
+                is_exclusive: item.is_exclusive || 0,
+                course_discount: item.course_discount || 0,
+            }));
+        if (dataArray.length == 0) {
+            return res.status(400).json({ message: "No valid data to insert" });
+        }
+
+        const result = await student_cart.bulkCreate(dataArray);
         res.status(200).json(result);
     } catch (error) {
-        res.status(500).json(error);
-        console.log(error)
+        console.error(error);
+        res.status(500).json({ message: "Internal server error", error });
     }
-}
+};
+
+
+
 
 const removeStudentCartData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -54,9 +75,9 @@ const removeStudentCartData = async (req, res) => {
     try {
         const result = await student_cart.destroy({
             where: {
-              id: id,
-              course_id: courseId,
-              student_id: studentId
+                id: id,
+                course_id: courseId,
+                student_id: studentId
             }
         });
         res.status(200).json({ success: true, result });
