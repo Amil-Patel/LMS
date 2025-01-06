@@ -80,7 +80,6 @@ const CourseVideo = () => {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${courseData.id}/${stuUserId}`);
       await setCourseProgress(res.data[0]);
       if (res.data.length === 0 && stuUserId) {
-        getModuleData();
         addcourseProgressData();
       }
       if (res.data[0].current_watching_lesson) {
@@ -119,20 +118,10 @@ const CourseVideo = () => {
     }
   }
   const addcourseProgressData = async () => {
-    console.log(id)
-    const res = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
-    const sectionData = res.data;
-    if (sectionData.length === 0) return;
-    const sortedData = sectionData.sort((a, b) => a.order - b.order);
-    const moduleUId = sortedData && sortedData?.length > 0 ? sortedData[0].id : 0;
-    const res2 = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${moduleUId}`);
-    const lessonquizdata = res2.data
-    if (lessonquizdata.length === 0) return;
-    const sortedData2 = lessonquizdata.sort((a, b) => a.order - b.order);
+
     const data = {
       student_id: stuUserId,
       course_id: courseData.id,
-      current_watching_lesson: sortedData2[0].id,
     }
     try {
       const res = await axiosInstance.post(`${port}/addingAcademicProgressData`, data);
@@ -161,13 +150,13 @@ const CourseVideo = () => {
 
   //get lesson data
   const [lessonData, setLessonData] = useState([]);
-
   const getLessonData = async (id) => {
     setLessonLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
       const lessonquizdata = res.data
-      const sortedData = lessonquizdata.sort((a, b) => a.order - b.order);
+      const sortedData = lessonquizdata.sort((a, b) => a.order - b.order); //sorted with sort order
+      console.log(sortedData[0].id)
       setLessonData(sortedData);
       if (sortedData.length > 0) {
         if (courseProgress && stuUserId) {
@@ -534,7 +523,6 @@ const CourseVideo = () => {
     getCourseData();
     getModuleData();
   }, []);
-
   useEffect(() => {
     getcourseProgressData()
   }, [courseData]);

@@ -430,6 +430,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid var(--button-primary-color);
 }
 
 .cus-footer-icon i:hover {

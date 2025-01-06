@@ -99,7 +99,7 @@ const addAcedemicProgressData = async (req, res) => {
         student_id: req.body.student_id,
         course_id: req.body.course_id,
         course_progress: 0,
-        current_watching_lesson: 0,
+        current_watching_lesson: req.body.current_watching_lesson,
         completed_date: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),

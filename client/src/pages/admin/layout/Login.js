@@ -41,7 +41,7 @@ const Login = () => {
                 if (res.status === 200) {
                     setUserRole(res.data.role);
                     setUserId(res.data.id);
-                    Cookies.set('token', res.data.token, { expires: 1 });
+                    Cookies.set('token', res.data.token, { expires: 7 });
                     navigate("/admin/dashboard");
                 } else {
                     notifyInfo("Invalid email or password");
