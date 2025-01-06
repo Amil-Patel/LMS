@@ -203,6 +203,7 @@ const CourseVideo = () => {
     is_count_time: "",
     description: "",
   });
+  console.log(editLessonData)
   const [editQuizData, setEditQuizData] = useState({
     title: "",
     section_id: "",
@@ -538,6 +539,11 @@ const CourseVideo = () => {
   useEffect(() => {
     getcourseProgressData()
   }, [courseData]);
+  const getYouTubeEmbedUrl = (url) => {
+    const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+  };
   return (
     <>
       {loading ? (
@@ -637,18 +643,25 @@ const CourseVideo = () => {
           <div className="course-video-container">
             {/* Video Section */}
             <div className="video-player">
-              <div className="thumbnail-container">
+              <div className={editLessonData.lesson_type == "text" || editLessonData.lesson_type == "pdf" ? "thumbnail-container" : "thumbnail-other-type-container"}>
                 {editLessonData?.title || editQuizData?.title ? (
                   <div className="edit-content">
                     {editLessonData?.title && (
                       <>
-                        <h2 className="font-bold text-xl text-black mb-2">{editLessonData.title}
-                          <span className="ml-4 px-3 text-sm py-1 rounded bg-slate-400 uppercase">{editLessonData.lesson_type}</span></h2>
+                        <div className="flex justify-between items-center mb-2">
+                          <div className="flex">
+                            <h2 className="font-bold flex text-xl text-black">{editLessonData.title}
+                            </h2>
+                            <span className="ml-2 font-semibold px-2 py-0.5 h-fit text-[12px] rounded bg-[#DDDDDD] uppercase">{editLessonData.lesson_type}</span>
+                          </div>
+                          <p className="course_module_duration"><strong>Duration:</strong> {editLessonData.duration || "N/A"} Minutes</p>
+                        </div>
+
                         {editLessonData.lesson_type === "youtube-video" && (
                           <iframe
                             width="100%"
                             height="500px"
-                            src={`https://www.youtube.com/embed/${editLessonData.url.split("v=")[1]}`}
+                            src={getYouTubeEmbedUrl(editLessonData.url)}
                             title="YouTube video"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -657,28 +670,27 @@ const CourseVideo = () => {
                         )}
                         {editLessonData.lesson_type === "text" && (
                           <div className="long-desc mt-4">
-                            <p>
+                            <p className="max-h-[300px] scrollbar overflow-y-scroll ">
                               {editLessonData.text_content || "No Text available"}
                             </p>
                           </div>
                         )}
                         {editLessonData.lesson_type === "pdf" && (
                           <div className="pdf-container">
-                            {/* <iframe
+                            <iframe
                               src={`../../upload/${editLessonData.attachment}`}
                               width="100%"
                               height="500px"
                               title="PDF Viewer"
                               className="border rounded shadow"
-                            ></iframe> */}
-                            <p>show display</p>
+                            ></iframe>
                           </div>
                         )}
                         {editLessonData.lesson_type === "video" && (
                           <div className="pdf-container">
                             <video
                               controls
-                              className="video-element"
+                              className="video-element max-h-[420px]"
                               poster={`../../upload/${editLessonData.thumbnail_preview_image_url}`}
                             >
                               <source src={`../../upload/${editLessonData.attachment}`} type="video/mp4" />
@@ -687,11 +699,10 @@ const CourseVideo = () => {
                           </div>
                         )}
                         <div className="long-desc mt-4">
-                          <p>
+                          <p id="description_bottom">
                             {editLessonData.description || "No description available"}
                           </p>
                         </div>
-                        <p><strong>Duration:</strong> {editLessonData.duration || "N/A"} Minutes</p>
                         {!(
                           courseProgress.completed_lesson_id &&
                           JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)
@@ -706,18 +717,19 @@ const CourseVideo = () => {
                           )}
                       </>
                     )}
-                    <div>
+                    <div className="max w-[650px] mx-auto">
                       {editQuizData?.title && (
                         <>
                           {/* Simplified Header Section */}
                           <header className="mb-6">
                             <div className="flex justify-between items-center">
-                              <h1 className="text-3xl font-bold text-gray-800">
-                                {editQuizData.title}
-                                <span className="ml-4 px-3 py-1 text-sm bg-blue-500 text-white uppercase rounded">
-                                  Quiz
-                                </span>
-                              </h1>
+                              <div className="flex">
+                                <h2 className="font-bold flex text-xl text-black">{editQuizData.title}
+                                </h2>
+                                <span className="ml-2 font-semibold px-2 py-0.5 h-fit text-[12px] rounded bg-[#DDDDDD] uppercase">Quiz</span>
+                              </div>
+
+
                               <p className="text-sm text-gray-600 mt-2 md:mt-0">
                                 <strong>Instruction:</strong> {editQuizData.instruction || "No instructions available"}
                               </p>
@@ -1088,6 +1100,18 @@ const CourseVideo = () => {
                                         {lesson.quiz_id ? (
                                           <span className="quiz-icon">
                                             <i className="fa-regular fa-circle-question"></i>
+                                          </span>
+                                        ) : lesson.lesson_type == "video" ? (
+                                          <span className="lesson-icon">
+                                            <i className="fa-solid fa-circle-play"></i>
+                                          </span>
+                                        ) : lesson.lesson_type == "youtube-video" ? (
+                                          <span className="lesson-icon">
+                                            <i className="fa-brands fa-youtube"></i>
+                                          </span>
+                                        ) : lesson.lesson_type == "pdf" ? (
+                                          <span className="lesson-icon">
+                                            <i class="fa-solid fa-file-pdf"></i>
                                           </span>
                                         ) : (
                                           <span className="lesson-icon">

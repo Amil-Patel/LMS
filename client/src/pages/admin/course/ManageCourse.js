@@ -447,10 +447,10 @@ const ManageCourse = () => {
       notifyWarning("Lesson type is required.");
       return;
     }
-    if (!addLesson.url.trim() && !addLesson.attachment) {
-      notifyWarning("Either URL or attachment is required.");
-      return;
-    }
+    // if (!addLesson.url.trim() && !addLesson.attachment) {
+    //   notifyWarning("Either URL or attachment is required.");
+    //   return;
+    // }
     if (!addLesson.description.trim()) {
       notifyWarning("Description is required.");
       return;
@@ -577,10 +577,10 @@ const ManageCourse = () => {
       notifyWarning("Lesson type is required.");
       return;
     }
-    if (!editLessonData.url.trim() && !editLessonData.attachment) {
-      notifyWarning("Either URL or attachment is required.");
-      return;
-    }
+    // if (!editLessonData.url.trim() && !editLessonData.attachment) {
+    //   notifyWarning("Either URL or attachment is required.");
+    //   return;
+    // }
     if (!editLessonData.description.trim()) {
       notifyWarning("Description is required.");
       return;

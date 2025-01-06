@@ -19,6 +19,12 @@
 
 .thumbnail-container {
   position: relative;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+#description_bottom{
+  padding-bottom: 0px;
 }
 
 .play-button-overlay {
