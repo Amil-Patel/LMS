@@ -4,17 +4,17 @@ import axiosInstance from '../../client/utils/axiosInstance';
 import { userRolesContext } from "../layout/RoleContext";
 import moment from "moment-timezone";
 import "../../../assets/css/payment/payment.css";
+import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL;
 
 function Payment() {
   const { setting } = useContext(userRolesContext);
   const [viewOpen, setViewOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentCourse, setCurrentCourse] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const handleViewClick = (course) => {
     const time = moment.unix(course.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
-    console.log(time)
-    console.log(setting.timezone)
     setCurrentCourse((prev) => ({
       ...prev,
       ...course,
@@ -63,11 +63,14 @@ function Payment() {
   //get payment data
   const [paymentData, setPaymentData] = useState([]);
   const getPaymentData = async () => {
+    setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingPaymentData`);
       setPaymentData(res.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -90,6 +93,7 @@ function Payment() {
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Payment</h5>
@@ -128,7 +132,7 @@ function Payment() {
                   ))}
                 </td>
                 <td>{item?.courseNames?.length}</td>
-                <td>{item?.amount}</td>
+                <td>{setting.position == "left" ? setting.symbol : ""}{item?.amount}{setting.position == "right" ? setting.symbol : ""}</td>
                 <td>{item?.payment_mode}</td>
                 <td>{item?.transiction_id}</td>
                 <td>
@@ -158,7 +162,7 @@ function Payment() {
                   </div>
                   <div>
                     <h5 className="head_text">Amount</h5>
-                    <p className="email">{currentCourse?.amount}</p>
+                    <p className="email">{setting.position == "left" ? setting.symbol : ""}{currentCourse?.amount}{setting.position == "right" ? setting.symbol : ""}</p>
                   </div>
                   <div>
                     <h5 className="head_text">Transaction Id</h5>
@@ -202,11 +206,17 @@ function Payment() {
                           <tr>
                             <td>{item?.course_title}</td>
                             <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
-                            <td>{item?.course_price}</td>
+                            <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_price}{setting.position == "right" ? setting.symbol : ""}</td>
                             <td>{(item?.tax_rate) ? item?.tax_rate : 0}%</td>
-                            <td>{parseFloat(tax_amount).toFixed(2)}</td>
-                            <td>{discount ? discount : 0}</td>
-                            <td>{parseFloat(net_amount).toFixed(2)}</td>
+                            <td>
+                              {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                            </td>
+                            <td>
+                              {setting.position == "left" ? setting.symbol : ""}{discount ? discount : 0}{setting.position == "right" ? setting.symbol : ""}
+                            </td>
+                            <td>
+                              {setting.position == "left" ? setting.symbol : ""}{parseFloat(net_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                            </td>
                           </tr>
                         );
                       })
@@ -244,23 +254,32 @@ function Payment() {
                     <tbody>
                       <tr>
                         <th>Sub Total</th>
-                        <th>{parseFloat(subTotal).toFixed(2)}</th>
+                        <th>
+                          {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                        </th>
                       </tr>
                       <tr>
                         <td>Discount</td>
-                        <td>{parseFloat(totalDiscount).toFixed(2)}</td>
+                        <td>
+                          {setting.position == "left" ? setting.symbol : ""}{parseFloat(totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                        </td>
                       </tr>
                       <tr>
                         <th>Total Amount</th>
-                        <th>{parseFloat(subTotal - totalDiscount).toFixed(2)}</th>
+                        <th>
+                          {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal - totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}</th>
                       </tr>
                       <tr>
                         <td>Tax (Inc.)</td>
-                        <td>{parseFloat(inclusiveTax).toFixed(2)}</td>
+                        <td>
+                          {setting.position == "left" ? setting.symbol : ""}{parseFloat(inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                        </td>
                       </tr>
                       <tr className="net-amount-row">
                         <th>Net Amount</th>
-                        <th>{parseFloat((subTotal - totalDiscount) + inclusiveTax).toFixed(2)}</th>
+                        <th>
+                          {setting.position == "left" ? setting.symbol : ""}{parseFloat((subTotal - totalDiscount) + inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                        </th>
                       </tr>
                     </tbody>
                   </table>

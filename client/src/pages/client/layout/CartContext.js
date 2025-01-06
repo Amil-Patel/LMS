@@ -100,14 +100,15 @@ export const CartProvider = ({ children }) => {
 
     useEffect(() => {
         const moveCartToDatabase = async () => {
-            if (savedToken) {
+            if (savedToken && stuUserId) {
                 const storedCart = localStorage.getItem('cart');
                 const parsedCart = JSON.parse(storedCart);
                 const mergedCart = parsedCart?.map((item) => ({
                     ...item,
-                    studentId: stuUserId, 
+                    studentId: stuUserId,
                 }));
-                if (storedCart) {
+                console.log(savedToken, stuUserId, mergedCart);
+                if (mergedCart.length > 0) {
                     try {
                         await axiosInstance.post('/addingStudentCart', { cart: mergedCart }, { headers: { Authorization: `Bearer ${savedToken}` } }
                         );

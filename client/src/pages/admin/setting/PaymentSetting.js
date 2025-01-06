@@ -140,23 +140,26 @@ function PaymentSetting() {
       console.log(error);
     }
   };
+  const [currency, setCurrency] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState('');
+  const [selectedCurrencySymbol, setSelectedCurrencySymbol] = useState('');
   const [selectedCurrencyPosition, setSelectedCurrencyPosition] = useState('');
 
   const getCurrencyDataWithId = async () => {
-    const id = 1;
     try {
-      const res = await axiosInstance.get(`${port}/gettingCurrencyDataWithId/${id}`);
+      const res = await axiosInstance.get(`${port}/gettingCurrencyDataWithId`);
+      setCurrency(res.data);
       setSelectedCurrency(res.data.currency);
+      setSelectedCurrencySymbol(res.data.symbol);
       setSelectedCurrencyPosition(res.data.position);
     } catch (error) {
       console.log(error);
     }
   }
   const updateCurrency = async () => {
-    const id = 1;
     try {
-      const res = await axiosInstance.put(`${port}/updatingCurrencyData/${id}`, { currency: selectedCurrency, position: selectedCurrencyPosition });
+      const res = await axiosInstance.put(`${port}/updatingCurrencyData/${currency.id}`, { currency: selectedCurrency, symbol: selectedCurrencySymbol, position: selectedCurrencyPosition });
+      notifySuccess("Currency updated successfully");
     } catch (error) {
       console.log(error);
     }
@@ -181,11 +184,14 @@ function PaymentSetting() {
             <div className="currency_input">
               <label htmlFor="currency" className="currency_title">Currency</label>
               <select name="currency" id="currency" form="carform" value={selectedCurrency}
-                onChange={(e) => setSelectedCurrency(e.target.value)}>
+                onChange={(e) => {
+                  setSelectedCurrency(e.target.value);
+                  setSelectedCurrencySymbol(e.target.selectedOptions[0].getAttribute('name'));
+                }}>
                 <option value="">Select</option>
                 {
                   currencyData.map((item) => (
-                    <option value={item.name}>{item.name} ({item.symbol})</option>
+                    <option key={item.name} value={item.name} name={item.symbol}>{item.name} ({item.symbol})</option>
                   ))
                 }
               </select>

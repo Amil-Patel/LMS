@@ -12,7 +12,7 @@ import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL;
 
 const CourseCoupon = () => {
-  const { userId, userRole ,setting} = useContext(userRolesContext);
+  const { userId, userRole, setting } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -202,17 +202,17 @@ const CourseCoupon = () => {
         `${port}/gettingCourseCouponDataWithId/${id}`
       );
       let courseName = res.data.course_name;
-      
+
       try {
         courseName = JSON.parse(courseName);
       } catch (e) {
         courseName = [];
       }
-      
+
       res.data.course_name = Array.isArray(courseName) ? courseName : [];
-      
+
       const time = moment.unix(res.data.expired_date).tz(setting.timezone).format("YYYY-MM-DD");
-      setEditCouponData((prev)=>({
+      setEditCouponData((prev) => ({
         ...prev,
         ...res.data,
         expired_date: time
@@ -637,7 +637,7 @@ const CourseCoupon = () => {
                     <div className="flex-item">
                       <label>Discount percentage</label>
                       <div
-                        className="input-group"
+                        className="input-group relative"
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         <input
@@ -649,7 +649,7 @@ const CourseCoupon = () => {
                           value={addCouponData.discount_in_percentage || null}
                           style={{ marginTop: "0px" }}
                         />
-                        <span className="percentage-icon">%</span>
+                        <span className="percentage-icon absolute right-0">%</span>
                       </div>
                     </div>
                   )}
@@ -657,7 +657,7 @@ const CourseCoupon = () => {
                     <div className="flex-item">
                       <label>Discount amount</label>
                       <div
-                        className="input-group"
+                        className="input-group relative"
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         <input
@@ -669,7 +669,7 @@ const CourseCoupon = () => {
                           value={addCouponData.discount_in_amount || null}
                           style={{ marginTop: "0px" }}
                         />
-                        <span className="percentage-icon">$</span>
+                        <span className="percentage-icon absolute right-0">{setting.symbol}</span>
                       </div>
                     </div>
                   )}
@@ -796,7 +796,7 @@ const CourseCoupon = () => {
                     <div className="flex-item">
                       <label>Discount percentage</label>
                       <div
-                        className="input-group"
+                        className="input-group relative"
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         <input
@@ -807,7 +807,7 @@ const CourseCoupon = () => {
                           style={{ marginTop: "0px" }}
                           onChange={handleEditChange}
                         />
-                        <span className="percentage-icon">%</span>
+                        <span className="percentage-icon absolute right-0">%</span>
                       </div>
                     </div>
                   )}
@@ -815,7 +815,7 @@ const CourseCoupon = () => {
                     <div className="flex-item">
                       <label>Discount Amount</label>
                       <div
-                        className="input-group"
+                        className="input-group relative"
                         style={{ display: "flex", alignItems: "center" }}
                       >
                         <input
@@ -826,7 +826,7 @@ const CourseCoupon = () => {
                           style={{ marginTop: "0px" }}
                           onChange={handleEditChange}
                         />
-                        <span className="percentage-icon">$</span>
+                        <span className="percentage-icon absolute right-0">{setting.symbol}</span>
                       </div>
                     </div>
                   )}

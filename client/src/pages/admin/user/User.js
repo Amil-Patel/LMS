@@ -11,7 +11,7 @@ import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL
 
 const User = () => {
-  const { userRole, userId,setting } = useContext(userRolesContext);
+  const { userRole, userId, setting } = useContext(userRolesContext);
   const [tab, setTab] = useState("student");
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -326,26 +326,21 @@ const User = () => {
   const [allUserData, setAllUserData] = useState([]);
 
   const getAllUserData = async () => {
-    console.log("object")
     setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterData`);
       setAllUserData(res.data);
-      console.log(studentView, instructureView, adminView);
       if (studentView) {
-        console.log("student view");
         filterUserData("student", res.data);
       } else if (instructureView) {
-        console.log("instructure view");
         filterUserData("instructure", res.data);
       } else if (adminView) {
-        console.log("admin view");
         filterUserData("admin", res.data);
       } else {
-        console.log("else")
         setUserData([]);
       }
       setLoading(false);
+      setTab("student");
     } catch (error) {
       console.error("Error fetching user data:", error);
       setLoading(false);
@@ -353,7 +348,6 @@ const User = () => {
   };
 
   const filterUserData = (roleName, data = allUserData) => {
-    console.log("object", roleName);
     if (roleName) {
       const filteredData = data.filter((user) => user.role_id === roleName);
       setUserData(filteredData);
@@ -407,7 +401,7 @@ const User = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${id}`);
       const time = moment.unix(res.data.dob).tz(setting.timezone).format("YYYY-MM-DD");
-      setEditData((prev)=>({
+      setEditData((prev) => ({
         ...prev,
         ...res.data,
         dob: time
@@ -521,7 +515,6 @@ const User = () => {
 
   //status change code start
   const handleStatusChange = async (id, status) => {
-    console.log(id, status);
     setLoading(true);
     try {
       const res = await axiosInstance.put(`${port}/updatingUserMasterStatus/${id}`, {
@@ -546,7 +539,7 @@ const User = () => {
       );
     });
   }, [userData, searchQuery]);
-  
+
   return (
     <>
       <Hoc />
@@ -557,7 +550,7 @@ const User = () => {
             <h5>Users</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input id="search-bar" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+            <input id="search-bar" type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
         </div>

@@ -129,6 +129,7 @@ const CourseCategory = () => {
       if (res.data.length > 0) {
         setDeleteOpen(false);
         notifyWarning("Please delete sub category first");
+        setLoading(false);
         return;
       }
       await axiosInstance.delete(

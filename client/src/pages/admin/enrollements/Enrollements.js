@@ -63,14 +63,11 @@ function Enrollements() {
   };
 
   const filteredEnrollWithCourse = (selectedCourseId) => {
-    console.log(selectedCourseId);
-    console.log(studentData)
     const filteredStudents = studentData.filter((student) => {
       // Check if the student's course_id matches the selected course_id
       return student.course_id === selectedCourseId;
     });
-    setFilteredEnrollStudent(filteredStudents); // Update the state
-    console.log(filteredStudents);
+    setFilteredEnrollStudent(filteredStudents);
   }
 
   //get student data
@@ -117,7 +114,6 @@ function Enrollements() {
     });
     setStudentNameInput(`${student.first_name} ${student.last_name}`);
     setFilteredStudent([]);
-    console.log(addEnrollData)
   };
   const handleSubmit = async (e) => {
     e.preventDefault();

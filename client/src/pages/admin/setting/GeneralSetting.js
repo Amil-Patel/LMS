@@ -3,14 +3,18 @@ import Hoc from "../layout/Hoc";
 import Loading from '../layout/Loading';
 import axiosInstance from '../../client/utils/axiosInstance';
 import { userRolesContext } from '../layout/RoleContext';
+import { notifySuccess } from '../layout/ToastMessage';
+import useCheckRolePermission from '../layout/CheckRolePermission';
 const port = process.env.REACT_APP_URL;
 
 const GeneralSetting = () => {
     const { refreshSettings } = useContext(userRolesContext);
     const [loading, setLoading] = useState(false);
     const [timeZoneData, setTimeZoneData] = useState([]);
+    const { userRole } = useContext(userRolesContext);
     const [selectedTimeZone, setSelectedTimeZone] = useState('');  // State for selected timezone
-
+    const perm = useCheckRolePermission("Notification Setting");
+    const editNotificationPermission = perm.length > 0 && perm[0].can_edit === 1 ? 1 : 0;
     // Fetch available timezones    
     const getTimeZone = async () => {
         try {
@@ -29,7 +33,6 @@ const GeneralSetting = () => {
         setLoading(true);
         try {
             const res = await axiosInstance.get(`${port}/gettingTimezoneDataWithId`);
-            console.log(res.data)
             setSelectedTimeZone(res.data.timezone);  // Set the current timezone to state
             setLoading(false);
         } catch (error) {
@@ -41,12 +44,14 @@ const GeneralSetting = () => {
     // Update timezone
     const updateTimeZone = async () => {
         setLoading(true);
+        console.log(selectedTimeZone)
         try {
             await axiosInstance.put(`${port}/updatingTimezone`, {
-                timezonename: selectedTimeZone 
+                timezonename: selectedTimeZone
             });
             await refreshSettings();
-            getTimeZone(); 
+            getTimeZone();
+            notifySuccess("Timezone updated successfully");
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -80,8 +85,8 @@ const GeneralSetting = () => {
                             <select
                                 name="currency"
                                 id="currency"
-                                value={selectedTimeZone} 
-                                onChange={(e) => setSelectedTimeZone(e.target.value)}  
+                                value={selectedTimeZone}
+                                onChange={(e) => setSelectedTimeZone(e.target.value)}
                             >
                                 <option value="">Select Time Zone</option>
                                 {
@@ -92,7 +97,9 @@ const GeneralSetting = () => {
                             </select>
                         </div>
                     </div>
-                    <button className="primary-btn module-btn mt-5" onClick={updateTimeZone}>Save</button>
+                    {(userRole === "superAdmin" || editNotificationPermission == 1) && (
+                        <button className="primary-btn module-btn mt-5" onClick={updateTimeZone}>Save</button>
+                    )}
                 </div>
             </div>
         </>

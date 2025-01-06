@@ -448,7 +448,7 @@ input:checked+.slider:before {
 .menu-content a {
   display: block;
   color: #666;
-  padding-bottom: 5px;
+  margin-bottom: 2px;
   text-decoration: none;
 }
 
