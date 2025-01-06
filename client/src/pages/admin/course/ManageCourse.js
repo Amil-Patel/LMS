@@ -594,10 +594,10 @@ const ManageCourse = () => {
       notifyWarning("Lesson type is required.");
       return;
     }
-    if (!editLessonData.url.trim() && !editLessonData.attachment) {
-      notifyWarning("Either URL or attachment is required.");
-      return;
-    }
+    // if (!editLessonData.url.trim() && !editLessonData.attachment) {
+    //   notifyWarning("Either URL or attachment is required.");
+    //   return;
+    // }
     if (!editLessonData.description.trim()) {
       notifyWarning("Description is required.");
       return;
