@@ -1,7 +1,6 @@
 .course-video-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 10px;
   max-width: 100%;
   margin: auto;
 }
@@ -9,7 +8,7 @@
 .video-player {
   position: relative;
   width: 100%;
-  margin: 10px;
+  padding: 10px;
 }
 
 .video-element {
@@ -140,6 +139,9 @@
   .video-navbar .text-sm {
     font-size: 12px;
   }
+  .course_module_duration{
+    padding-bottom: 0;
+  }
 }
 
 @media (max-width: 768px) {
@@ -203,9 +205,5 @@
 
   .video-navbar .navbar-logo img {
     width: 85px;
-  }
-
-  .course-info .module {
-    margin-left: 10px;
   }
 }
