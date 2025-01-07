@@ -1,4 +1,4 @@
-const { Course_Coupon } = require("../../database/models/index");
+const { Course_Coupon, System_Setting } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const moment = require('moment-timezone');
@@ -17,6 +17,41 @@ const getCourseCouponData = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
+    }
+}
+
+const validateCoupon = async (req, res) => {
+    try {
+        const { couponCode } = req.body;
+        const coupon = await Course_Coupon.findOne({
+            where: { coupon_code: couponCode },
+        });
+
+        if (!coupon) {
+            return res.status(404).json({ success: false, message: 'Invalid coupon code.' });
+        }
+        //getting timezone from system setting to convert expired date
+        const setting = await System_Setting.findAll();
+        const timeZone = setting[0].timezone;
+        // Check if the coupon is expired
+        const currentDate = new Date();
+        const expiredDate = UnixNumberToDate(coupon.expired_date, timeZone);
+        if (expiredDate && new Date(expiredDate) < currentDate) {
+            return res.status(400).json({ success: false, message: 'This coupon has expired.' });
+        }
+
+        // Return the discount
+        return res.json({
+            success: true,
+            discount: coupon.discount_in_percentage ? coupon.discount_in_percentage : coupon.discount_in_amount,
+            is_percentage: coupon.discount_in_percentage ? true : false,
+            is_amount: coupon.discount_in_amount ? true : false,
+            courseIds: coupon.course_name,
+            message: 'Coupon is valid and discount applied.'
+        });
+    } catch (error) {
+        console.error('Error validating coupon:', error);
+        return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
 }
 
@@ -130,6 +165,7 @@ const deleteCourseCouponData = async (req, res) => {
 
 module.exports = {
     getCourseCouponData,
+    validateCoupon,
     getCourseCouponDataWithId,
     addCourseCouponData,
     updateCourseCouponData,

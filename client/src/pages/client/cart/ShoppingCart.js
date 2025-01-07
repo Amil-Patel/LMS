@@ -7,51 +7,65 @@ import { useCart } from "../layout/CartContext"
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from '../../admin/layout/RoleContext';
+import { notifyWarning, notifySuccess, notifyError } from "../../admin/layout/ToastMessage";
 const port = process.env.REACT_APP_URL
 
 
 const ShoppingCart = () => {
-  const { cart, removeCart } = useCart();
+  const { cart, setCart, removeCart } = useCart();
   const { stuUserId } = useContext(userRolesContext);
-  //getting default course cart data if user login 
-  const [defaultCart, setDefaultCart] = useState([]);
-  const [mergedCart, setMergedCart] = useState([]);
-  const getDefaultCart = async () => {
-    try {
-      const response = await axiosInstance.get(`${port}/gettingStudentCart/${stuUserId}`);
-      setDefaultCart(response.data);
-    } catch (error) {
-      console.error('Error loading default cart from database:', error);
-    }
-  }
-  useEffect(() => {
-    const combinedCart = [...defaultCart, ...cart];
-    const uniqueCart = combinedCart.filter(
-      (item, index, self) =>
-        index === self.findIndex((t) => t.courseId === item.courseId)
-    );
-    setMergedCart(uniqueCart);
-  }, [defaultCart, cart]);
 
-  useEffect(() => {
-    if (stuUserId) {
-      getDefaultCart();
+  const [couponCode, setCouponCode] = useState('');
+  const applyCouponDiscount = async () => {
+    if (!couponCode) {
+      notifyError("Please enter a coupon code.");
+      return;
     }
-  }, [stuUserId]);
+    try {
+      const response = await axiosInstance.post(`${port}/validateCoupon`, { couponCode });
+      if (response.data.success) {
+        const { courseIds, discount, is_percentage, is_amount } = response.data;
+
+        const parsedCourseIds = JSON.parse(courseIds);
+
+        const updatedCart = cart.map((course) => {
+          if (parsedCourseIds.includes(course.course_id)) {
+            if (is_percentage) {
+              const discountedPrice = course.course_price - (course.course_price * discount / 100);
+              return { ...course, course_price: discountedPrice, appliedDiscount: `${discount}%` };
+            } else if (is_amount) {
+              const discountedPrice = Math.max(course.course_price - discount, 0);
+              return { ...course, course_price: discountedPrice, appliedDiscount: `$${discount}` };
+            }
+          }
+          return course;
+        });
+        setCart(updatedCart);
+        notifySuccess("Coupon applied successfully.");
+      } else {
+        notifyError("Invalid coupon code.");
+      }
+
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        notifyWarning(error.response.data.message);
+      } else {
+        console.error('An unexpected error occurred:', error);
+      }
+    }
+  };
+
+
+
   const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + item.course_price, 0);
   const sumOfAllCartTax = cart.reduce((acc, item) => {
     if (item.is_inclusive == 1) {
       const disc = item.course_price - (item.course_price * item.course_discount / 100)
       const tax = disc * (item.tax_rate / 100)
-      console.log(disc)
-      console.log(tax)
       acc += tax
     }
     return acc
   }, 0)
-  // const sumOfAllCartTax = cart.reduce((accumulator, item) =>{
-  //   if (item.is_inclusive == 1) {
-  // } accumulator + item.tax_rate, 0);
   const sumOfAllDiscountPrice = cart.reduce((total, item) => {
     const discount_price = (item.course_price * item.course_discount) / 100;
     return total + discount_price;
@@ -60,10 +74,7 @@ const ShoppingCart = () => {
   // Navigate to Checkout with state
   const processToCheckout = (total) => {
     if (cart.length > 0) {
-      // const price = sumOfAllCartAmount + sumOfAllCartTax;
-      // const disc = sumOfAllCartTax;
       const id = cart.map((course) => course.id);
-      // const num = 1;
       navigate(`/checkout/`, {
         state: {
           id,
@@ -71,7 +82,7 @@ const ShoppingCart = () => {
         },
       });
     } else {
-      alert("Your cart is empty. Please add courses to proceed.");
+      notifyWarning("Your cart is empty. Please add courses to proceed.");
     }
   };
   return (
@@ -83,9 +94,8 @@ const ShoppingCart = () => {
         <div className='shopping-cart-hero-container pt-5'>
           <div className='shopping-cart-course-container'>
             {
-              mergedCart.length > 0 ? (
+              cart.length > 0 ? (
                 cart.map((course, index) => {
-                  console.log(course)
                   const discount_price = course.course_price - (course.course_price * course.course_discount / 100);
                   return (
                     <div className='horizontal-card flex justify-between py-5 border-b-2 border-border-color' key={index}>
@@ -96,15 +106,25 @@ const ShoppingCart = () => {
                         />
                         <div className="course-details-header block">
                           <h3>{course.course_title}</h3>
-                          <p className='py-2 text-base font-normal lg:pb-0'>By {""}
+                          <p className='py-2 text-base font-normal lg:pb-0'>
+                            By {""}
                             {(() => {
-                              try {
-                                // Clean up and parse the `auther` field
-                                const cleanedAuther = JSON.parse(JSON.parse(course.auther)); // Double parse to handle the nested escaping
-                                return Array.isArray(cleanedAuther) ? cleanedAuther[0] : 'Unknown Author';
-                              } catch (error) {
-                                console.error('Error parsing author:', error);
-                                return 'Unknown Author';
+
+                              let authors = course.auther;
+
+                              if (typeof authors === "string") {
+                                try {
+                                  authors = JSON.parse(authors); 
+                                } catch (error) {
+                                  console.error("Error parsing course.auther:", error);
+                                  return "Unknown"; 
+                                }
+                              }
+
+                              if (Array.isArray(authors) && authors.length > 0) {
+                                return authors.join(", "); 
+                              } else {
+                                return "Unknown";
                               }
                             })()}
                           </p>
@@ -122,7 +142,7 @@ const ShoppingCart = () => {
                           <span className='course-price'>$ {parseFloat(discount_price).toFixed(2)}</span>
                           <div className='discount-price py-2 flex items-center'>
                             <span className='mr-2'>{course.course_discount}% Off</span>
-                            <span>$ {course.course_price}</span>
+                            <span>$ {parseFloat(course.course_price).toFixed(2)}</span>
                           </div>
                         </div>
                         <button className='remove-btn' onClick={() => removeCart(course)}>Remove</button>
@@ -147,8 +167,9 @@ const ShoppingCart = () => {
                 <div className="flex w-full mt-1">
                   <input id="promo-code" type="text" placeholder=""
                     className="w-full sm:flex-1 py-2 px-4 border border-gray-300  focus:outline-none"
-                  />
-                  <button type="button" className="promo-code-apply-button py-2 xl:px-9 lg:px-4 px-4 rounded-none bg-blue-500 text-white font-semibold  hover:bg-blue-600">Apply</button>
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)} />
+                  <button type="button" className="promo-code-apply-button py-2 xl:px-9 lg:px-4 px-4 rounded-none bg-blue-500 text-white font-semibold  hover:bg-blue-600" onClick={applyCouponDiscount}>Apply</button>
                 </div>
               </div>
 

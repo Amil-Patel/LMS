@@ -49,6 +49,28 @@ const addStudentCartData = async (req, res) => {
                 is_exclusive: item.is_exclusive || 0,
                 course_discount: item.course_discount || 0,
             }));
+
+         //now i want to check that above data is already avalible in database if avalibe i do not want to add it again
+        const existingData = await student_cart.findAll({
+            where: {
+                course_id: {
+                    [Op.in]: dataArray.map((item) => item.course_id),
+                },
+                student_id: {
+                    [Op.in]: dataArray.map((item) => item.student_id),
+                },
+            },
+        })  
+
+        const existingCourseIds = existingData.map((item) => item.course_id);
+        const existingStudentIds = existingData.map((item) => item.student_id);
+
+        dataArray.forEach((item) => {
+            if (existingCourseIds.includes(item.course_id) && existingStudentIds.includes(item.student_id)) {
+                dataArray.splice(dataArray.indexOf(item), 1);
+            }
+        }) 
+        
         if (dataArray.length == 0) {
             return res.status(400).json({ message: "No valid data to insert" });
         }

@@ -67,7 +67,6 @@ export const CartProvider = ({ children }) => {
             ...course,
             studentId: stuUserId ? stuUserId : 0
         };
-        console.log(uniqueCourse)
         const updatedCart = [...cart, uniqueCourse];
         setCart(updatedCart);
         if (savedToken && stuUserId) {
@@ -107,8 +106,7 @@ export const CartProvider = ({ children }) => {
                     ...item,
                     studentId: stuUserId,
                 }));
-                console.log(savedToken, stuUserId, mergedCart);
-                if (mergedCart.length > 0) {
+                if (mergedCart?.length > 0) {
                     try {
                         await axiosInstance.post('/addingStudentCart', { cart: mergedCart }, { headers: { Authorization: `Bearer ${savedToken}` } }
                         );
@@ -124,7 +122,7 @@ export const CartProvider = ({ children }) => {
     }, [savedToken, stuUserId]);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeCart, setCart }}>
             {children}
         </CartContext.Provider>
     );
