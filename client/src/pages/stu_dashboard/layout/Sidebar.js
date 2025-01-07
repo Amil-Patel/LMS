@@ -9,9 +9,9 @@ const Sidebar = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const menus = [
-    { name: "Dashboard", link: "/student/dashboard", icon: "fa-solid fa-gauge-high" },
-    { name: "Courses", link: "/student/learning", icon: "fa-solid fa-border-all" },
-    { name: "profile", link: "/student/stu-profile", icon: "fa-regular fa-heart" },
+    { name: "Dashboard", link: "/student/dashboard", icon: "fa-solid fa-bars-progress" },
+    { name: "Courses", link: "/student/learning", icon: "fa-solid fa-graduation-cap" },
+    { name: "Profile", link: "/student/stu-profile", icon: "fa-solid fa-user-pen" },
     { name: "Purchase", link: "/student/purchase", icon: "fa-regular fa-folder-open" }
   ];
   const [userData, setUserData] = useState([]);

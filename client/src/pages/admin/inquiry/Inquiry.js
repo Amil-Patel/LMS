@@ -139,34 +139,44 @@ function Inquiry() {
             <div className="modal-container">
               <h5>Edit Status</h5>
               <form onSubmit={handleEditSubmit}>
-                <div>
-                  <label>Status:</label>
-                  <input
-                    type="radio"
-                    name="status"
-                    value="success"
-                    checked={selectedStatus === "success"}
-                    onChange={(e) => setSelectedStatus(e.target.value)}
-                    style={{ marginRight: "10px" }}
-                  />
-                  Success
-                  <input
-                    type="radio"
-                    name="status"
-                    value="pending"
-                    checked={selectedStatus === "pending"}
-                    onChange={(e) => setSelectedStatus(e.target.value)}
-                  />
-                  Pending
-                  <input
-                    type="radio"
-                    name="status"
-                    value="rejected"
-                    checked={selectedStatus === "rejected"}
-                    onChange={(e) => setSelectedStatus(e.target.value)}
-                  />
-                  Rejected
+
+                <div className="flex items-center">
+                  <label className="text-base font-semibold">Status:</label>
+                  <div className="px-2">
+                    <input className="align-middle"
+                      type="radio"
+                      id="success"
+                      name="status"
+                      value="success"
+                      checked={selectedStatus === "success"}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
+                    <label htmlFor="success">Success</label>
+                  </div>
+                  <div className="px-1">
+                    <input className="align-middle"
+                      type="radio"
+                      id="pending"
+                      name="status"
+                      value="pending"
+                      checked={selectedStatus === "pending"}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
+                    <label htmlFor="pending">Pending</label>
+                  </div>
+                  <div className="px-2">
+                    <input className="align-middle"
+                      type="radio"
+                      id="rejected"
+                      name="status"
+                      value="rejected"
+                      checked={selectedStatus === "rejected"}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
+                    <label htmlFor="rejected">Rejected</label>
+                  </div>
                 </div>
+
                 <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                   <button type="submit" className="primary-btn">Save</button>
                   <button type="button" onClick={handleCloseEditModal} className="secondary-btn">
