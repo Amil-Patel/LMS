@@ -435,19 +435,19 @@ const EditCourse = () => {
                 <div className="admin-panel-tab-bar">
                     <ul className="tab">
                         <li onClick={() => handleChangeTab("basic-info")}>
-                            <NavLink>BASIC INFO</NavLink>
+                            <NavLink className={tab === "basic-info" ? "active-tab" : ""}>BASIC INFO</NavLink>
                         </li>
                         |
                         <li onClick={() => handleChangeTab("course")}>
-                            <NavLink>COURSE DESCRIPTIONS</NavLink>
+                            <NavLink className={tab === "course" ? "active-tab" : ""}>COURSE DESCRIPTIONS</NavLink>
                         </li>
                         |
                         <li onClick={() => handleChangeTab("additional")}>
-                            <NavLink>ADDITIONAL INFO</NavLink>
+                            <NavLink className={tab === "additional" ? "active-tab" : ""}>ADDITIONAL INFO</NavLink>
                         </li>
                         |
                         <li onClick={() => handleChangeTab("seo")}>
-                            <NavLink>SEO</NavLink>
+                            <NavLink className={tab === "seo" ? "active-tab" : ""}>SEO</NavLink>
                         </li>
                     </ul>
                 </div>

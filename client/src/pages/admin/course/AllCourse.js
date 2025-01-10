@@ -190,7 +190,7 @@ const AllCourse = () => {
                   <tr key={index}>
                     <td className="id">{index + 1}</td>
                     <td>
-                      <h6><NavLink to={`/admin/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
+                      <h6><NavLink className="text-sm" to={`/admin/manage-course/${i.id}`}>{i.course_title}</NavLink></h6>
                     </td>
                     <td>{category}</td>
                     <td>{setting.position == "left" ? setting.symbol : ""}{i.course_price}{setting.position == "right" ? setting.symbol : ""}</td>

@@ -124,7 +124,7 @@ function Payment() {
                 <td className="id">{item.id}</td>
                 <td>
                   <h6>{item?.studentName?.first_name} {item?.studentName?.last_name}</h6>
-                  <p>{item?.studentName?.email}</p>
+                  <p className="lowercase">{item?.studentName?.email}</p>
                 </td>
                 <td>
                   {item?.orderDetails?.map((course, index) => (
@@ -158,7 +158,7 @@ function Payment() {
                 <div className="pay_modulhead">
                   <div>
                     <h6>{currentCourse?.studentName?.first_name} {currentCourse?.studentName?.last_name}</h6>
-                    <p className="email">{currentCourse?.studentName?.email}</p>
+                    <p className="email lowercase">{currentCourse?.studentName?.email}</p>
                   </div>
                   <div>
                     <h5 className="head_text">Amount</h5>
@@ -177,7 +177,7 @@ function Payment() {
                     <p className="email">{currentCourse?.createdAt}</p>
                   </div>{" "}
                   <div>
-                    <h5 className="head_text">Bill No (Id)</h5>
+                    <h5 className="head_text">Bill No:(ID)</h5>
                     <p className="email">{currentCourse?.id}</p>
                   </div>
                 </div>

@@ -13,6 +13,8 @@ const port = process.env.REACT_APP_URL;
 const Navbar = () => {
   const { cart } = useCart();
   const { stuUserId } = useContext(userRolesContext);
+  const [animateCart, setAnimateCart] = useState(false);
+  const previousCartLength = useRef(cart.length);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
@@ -59,6 +61,20 @@ const Navbar = () => {
   };
 
 
+  useEffect(() => {
+    if (cart.length > previousCartLength.current) {
+      // Course added
+      setAnimateCart(true);
+    } else if (cart.length < previousCartLength.current) {
+      // Course removed
+      setAnimateCart(true);
+    }
+    const timeout = setTimeout(() => setAnimateCart(false), 500); // Reset animation after 500ms
+    previousCartLength.current = cart.length; // Update previous cart length
+    return () => clearTimeout(timeout);
+  }, [cart]);
+
+
   //get user data
   const [userData, setUserData] = useState([]);
   const getUserData = async () => {
@@ -101,10 +117,11 @@ const Navbar = () => {
 
         <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
           {/*cart section  */}
-          <NavLink to="/shopping-cart" className="cart_section">
+          <NavLink to="/shopping-cart" className={`cart_section ${animateCart ? 'animate-cart' : ''}`}>
             <i className="fa-solid fa-cart-arrow-down"></i>
             <p className="p-0">{cart.length}</p>
           </NavLink>
+
           {/*cart section  */}
           {!savedToken && (
             <>
@@ -130,11 +147,11 @@ const Navbar = () => {
             style={{ top: modalPosition.top + 6, left: modalPosition.left - 223 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center mb-3">
+            <div className="flex items-center mb-5">
               <img src={`../upload/${userData?.profile}`} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
               <div>
-                <p className="font-semibold">{userData?.first_name + " " + userData?.last_name}</p>
-                <p className="text-sm text-gray-500">{userData?.email}</p>
+                <p className="font-semibold text-[15px] text-[#4880FF]">{userData?.first_name + " " + userData?.last_name}</p>
+                <p className="text-sm text-gray-500 lowercase">{userData?.email}</p>
               </div>
             </div>
             <ul className="space-y-3">

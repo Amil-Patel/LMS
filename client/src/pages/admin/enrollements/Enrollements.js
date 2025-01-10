@@ -312,7 +312,7 @@ function Enrollements() {
                 <td className="profile-img"><img src={`../upload/${enroll.user_enrollment.profile}`} alt="User" /></td>
                 <td>
                   <h6>{`${enroll.user_enrollment.first_name} ${enroll.user_enrollment.last_name}`}</h6>
-                  <p>{enroll.user_enrollment.email}</p>
+                  <p className="lowercase">{enroll.user_enrollment.email}</p>
                 </td>
                 <td>{enroll.course_master_enrollment.course_title}</td>
                 <td>

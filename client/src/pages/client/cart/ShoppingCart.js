@@ -96,7 +96,7 @@ const ShoppingCart = () => {
     <>
       <Navbar />
       <Breadcrumb />
-      <section className="checkout-section mb-10">
+      <section className="checkout-section">
         <h2>Shopping Cart</h2>
         <div className='shopping-cart-hero-container pt-5'>
           <div className='shopping-cart-course-container'>

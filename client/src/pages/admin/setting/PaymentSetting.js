@@ -296,6 +296,7 @@ function PaymentSetting() {
                 <input
                   type="radio"
                   name="status"
+                  id="disable"
                   value="0"
                   checked={formData.status == "0"}
                   onChange={handleChange}
@@ -308,20 +309,22 @@ function PaymentSetting() {
                 <input
                   type="radio"
                   name="enabled_test_mode"
+                  id="enable_test_mode"
                   value="1"
                   checked={formData.enabled_test_mode == "1"}
                   onChange={handleChange}
                   className="status_icon"
                 />
-                <label htmlFor="enable" className="s_icon">Enable</label>
+                <label htmlFor="enable_test_mode" className="s_icon">Enable</label>
                 <input
                   type="radio"
                   name="enabled_test_mode"
+                  id="disable_test_mode"
                   value="0"
                   checked={formData.enabled_test_mode == "0"}
                   onChange={handleChange}
                 />
-                <label htmlFor="disable" className="s_icon">Disable</label>
+                <label htmlFor="disable_test_mode" className="s_icon">Disable</label>
               </div>
             </div>
             {(userRole === "superAdmin" || addPaymentPermission == 1 || editPaymentPermission == 1) && (

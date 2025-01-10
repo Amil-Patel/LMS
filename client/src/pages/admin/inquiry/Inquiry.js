@@ -103,7 +103,7 @@ function Inquiry() {
                     <p>{inquiry.summery}</p>
                   </td>
                   <td>
-                    <p>Email: {inquiry.email}</p>
+                    <p>Email: <span className="lowercase">{inquiry.email}</span></p>
                     <p>Call: +{inquiry.mobile_number}</p>
                     <p>wp: {inquiry.mobile_number}</p>
                   </td>
@@ -201,13 +201,17 @@ function Inquiry() {
                     const isStatusField = key === "status";
                     const statusColor =
                       value === "success" ? "green" : value === "rejected" ? "red" : "black";
-
+                    const isEmail = key === "email";
+                    console.log(isEmail)
                     return (
                       <tr key={key}>
                         <td>
                           <strong>{displayKey}</strong>
                         </td>
-                        <td style={isStatusField ? { color: statusColor } : {}}>{value}</td>
+                        <td style={{
+                          ...isStatusField && { color: statusColor },
+                          ...isEmail && { textTransform: "lowercase" }
+                        }}>{value}</td>
                       </tr>
                     );
                   })}

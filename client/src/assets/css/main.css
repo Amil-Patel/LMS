@@ -35,6 +35,10 @@ a {
   text-decoration: none;
 }
 
+body{
+  text-transform: capitalize;
+}
+
 h1,
 h2,
 h3,
@@ -68,8 +72,8 @@ h5 {
 }
 
 h6 {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px !important;
+  font-weight: 500 !important;
   color: var(--heading-h6-color);
 }
 
@@ -94,7 +98,7 @@ table {
 
 th {
   color: var(--font-color);
-  font-weight: 700;
+  font-weight: 600;
   text-align: left;
   letter-spacing: 0.5px;
   padding: 5px;
@@ -109,9 +113,6 @@ td {
   margin-bottom: 0px !important;
 }
 
-/* tbody td {
-    padding: 12px 16px;
-  } */
 .main .main-top-bar .hero-inner-logo {
   display: flex;
 }
@@ -323,7 +324,8 @@ button {
 .modal-container h5 {
   margin-bottom: 15px;
   color: black;
-  font-size: 17px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 
@@ -673,9 +675,9 @@ button {
 }
 
 #user-tag h5 {
-  font-size: 18px;
+  font-size: 20px;
   color: black;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 325px) {
