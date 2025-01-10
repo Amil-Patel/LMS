@@ -86,10 +86,6 @@ const Profile = () => {
       notifyWarning("Please enter a valid email address.");
       return;
     }
-    if (userData.password.length < 8) {
-      notifyWarning("Password must be at least 8 characters long.");
-      return;
-    }
     if (userData.role_id === "") {
       notifyWarning("Please select a role.");
       return;

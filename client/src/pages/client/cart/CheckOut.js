@@ -3,14 +3,14 @@ import "../../../assets/css/client/checkout.css"
 import Navbar from "../layout/Navbar";
 import Breadcrumb from "../course/Breadcrumb";
 import Footer from "../layout/Footer";
-import { useLocation, useNavigate } from "react-router-dom";
-import { userRolesContext, RoleContext } from "../../admin/layout/RoleContext";
+import { useLocation } from "react-router-dom";
+import { userRolesContext } from "../../admin/layout/RoleContext";
 import Cookies from 'js-cookie';
 import axiosInstance from "../utils/axiosInstance";
 const port = process.env.REACT_APP_URL
 const CheckOut = () => {
-    
-    const { id, total } = useLocation().state;
+
+    const { courses, total } = useLocation().state;
     const savedToken = Cookies.get('student-token');
     const [infoData, setInfoData] = useState({
         name: "",
@@ -31,7 +31,6 @@ const CheckOut = () => {
         const { name, value } = e.target;
         setInfoData((prev) => ({ ...prev, [name]: value }));
     };
-    const navigate = useNavigate();
     const buyCourse = async (e) => {
         e.preventDefault();
 
@@ -41,30 +40,21 @@ const CheckOut = () => {
         }
 
         try {
-            // Simulating IDs as an array or a single value
-            let courseIds = id; // `id` can be a single ID (e.g., 19) or an array (e.g., [19, 21])
-
-            // Ensure courseIds is always an array
+            let courseIds = courses.map((item) => item.id);
             if (!Array.isArray(courseIds)) {
-                courseIds = [courseIds]; // Wrap single ID in an array
+                courseIds = [courseIds];
             }
-
             if (courseIds.length === 0) {
                 alert("No courses selected for enrollment.");
                 return;
             }
-
-            // Track enrollment success
             let allEnrollmentsSuccessful = true;
-
-            // Process enrollment for each course
             for (const courseId of courseIds) {
                 const enrollData = {
                     student_id: stuUserId,
                     course_id: courseId,
                     enrollment_mode: "online",
                 };
-
                 try {
                     const addEnrollment = await axiosInstance.post(`${port}/addingEnrollment`, enrollData);
 
@@ -80,19 +70,49 @@ const CheckOut = () => {
                 }
             }
 
+            try {
+                const order_res = await axiosInstance.post(`${port}/addingOrderData`, {
+                    user_id: stuUserId,
+                    quantity: courseIds.length,
+                    status: "pending",
+                });
+
+                if (order_res.status === 200) {
+                    var order_id = order_res.data.data.id;
+                    for (const course of courses) {
+                        await axiosInstance.post(`${port}/addingOrderDetailItem`, {
+                            order_id: order_id, // Link to the created order
+                            course_id: course.id, // Course ID
+                            course_title: course.title, // Course Title
+                            quantity: 1, // Assuming one quantity per course
+                            course_amount: course.amount, // Course Price
+                            course_tax: course.course_tax, // Tax Rate
+                            course_taxamount: course.course_taxamount, // Calculated Tax Amount
+                            discount: course.discount,
+                        });
+                    }
+                } else {
+                    console.error("Order creation failed.");
+                }
+            } catch (error) {
+                console.error("Order creation error:", error);
+            }
+
             // After enrollments, process payment once
             if (allEnrollmentsSuccessful) {
                 const paymentData = {
                     student_id: stuUserId,
-                    course_id: courseIds, // Pass all course IDs for payment processing
+                    order_id: order_id,
                     amount: total,
                     payment_mode: "online",
+                    note: "",
                     transaction_id: "",
                     bill_mobile: infoData.phone,
                     bill_name: infoData.name,
                     bill_address: infoData.bill_address,
                     bill_gst: infoData.bill_gst,
                     bill_pan: infoData.bill_pan,
+                    status: "success",
                 };
 
                 try {

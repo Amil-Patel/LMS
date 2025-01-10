@@ -26,6 +26,7 @@ const PaymentsRoute = require('./payments/PaymentsRoute');
 const QuizResultRoute = require('./course/Quiz_ResultRoute');
 const InquiryRoute = require('./inquiry/InquiryRoute');
 const Student_Cart = require('./student_cart/Student_CartRoute');
+const OrderRoute = require('./order/OrderRoute');
 
 router.use("/", UserRoleRoute);
 router.use("/", UserMasterRoute);
@@ -52,6 +53,7 @@ router.use('/', PaymentsRoute)
 router.use('/', QuizResultRoute)
 router.use('/', InquiryRoute)
 router.use('/', Student_Cart)
+router.use('/', OrderRoute)
 
 
 

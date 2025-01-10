@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   payment.init({
     student_id: DataTypes.INTEGER,
-    courses: DataTypes.TEXT,
+    order_id: DataTypes.INTEGER,
     amount: DataTypes.STRING,
     payment_mode: DataTypes.STRING,
     transiction_id: DataTypes.INTEGER,
