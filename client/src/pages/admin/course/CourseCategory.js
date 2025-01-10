@@ -618,7 +618,7 @@ const CourseCategory = () => {
                       />
                     )}
 
-                    <div style={{ display: "flex", gap: "10px" }}>
+                    <div style={{ display: "flex", gap: "10px", marginTop: "25px"}}>
                       <button type="submit" className="primary-btn">
                         Update
                       </button>

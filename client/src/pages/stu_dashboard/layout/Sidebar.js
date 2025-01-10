@@ -97,7 +97,7 @@ const Sidebar = () => {
                 <h3 className="pt-3 text-black font-semibold">
                   {`${userData.first_name} ${userData.last_name}`}
                 </h3>
-                <p>{userData.email}</p>
+                <p className="lowercase">{userData.email}</p>
               </>
             )
           )}

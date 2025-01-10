@@ -93,6 +93,7 @@
 }
 
 .profile-modal-overlay {
+  font-family: var(--exo-ff);
   position: fixed;
   top: 0;
   left: 0;
@@ -140,14 +141,15 @@
   margin-right: 0.5rem;
 }
 
-
 .cart_section {
   display: flex;
   position: relative;
+  align-items: center;
 }
 
 .cart_section p {
   position: absolute;
+  font-family: var(--exo-ff);
   color: var(--white);
   background-color: var(--icon-primary-color);
   border-radius: 50%;
@@ -160,6 +162,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: transform 0.5s ease, background-color 0.3s ease;
+}
+
+.cart_section.animate-cart p {
+  transform: scale(1.5);
+  background-color: #ef5f0c; 
 }
 
 .cart_section i {

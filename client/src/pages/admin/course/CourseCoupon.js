@@ -690,7 +690,7 @@ const CourseCoupon = () => {
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "10px" }}>
+                <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                   <button type="submit" className="primary-btn">
                     Submit
                   </button>

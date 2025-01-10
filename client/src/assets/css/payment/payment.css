@@ -14,11 +14,12 @@
 
 .pay_modulhead {
   display: flex;
+  justify-content: space-between;
 }
 
 .pay_modulhead div {
   border-right: 1px solid var(--border-color);
-  padding: 0 16px;
+  padding: 0 12px;
 }
 
 .pay_modulhead :nth-child(1) {

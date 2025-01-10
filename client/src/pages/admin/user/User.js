@@ -639,7 +639,7 @@ const User = () => {
                           <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
-                        <td>{item.email}</td>
+                        <td className="lowercase">{item.email}</td>
                         <td>{item.contact}</td>
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
@@ -731,7 +731,7 @@ const User = () => {
                           <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
-                        <td>{item.email}</td>
+                        <td className="lowercase">{item.email}</td>
                         <td>{item.contact}</td>
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
@@ -823,7 +823,7 @@ const User = () => {
                           <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
-                        <td>{item.email}</td>
+                        <td className="lowercase">{item.email}</td>
                         <td>{item.contact}</td>
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
@@ -911,7 +911,7 @@ const User = () => {
                           <img src={`../upload/${item.profile}`} />
                         </td>
                         <td>{item.first_name}</td>
-                        <td>{item.email}</td>
+                        <td className="lowercase">{item.email}</td>
                         <td>{item.contact}</td>
                         <td>{item.gender}</td>
                         <td>{item.country}</td>

@@ -200,7 +200,8 @@ const Contact = () => {
                                                 <i className="fa-solid fa-envelope"></i>
                                             </span>
                                             <span>
-                                                <a href="mailto:info@comfortsecurity.ca">info@comfortsecurity.ca</a>
+                                                <a className='lowercase' href="mailto:info@comfortsecurity.ca">
+                                                    info@comfortsecurity.ca</a>
                                             </span>
                                         </li>
                                     </ul>
