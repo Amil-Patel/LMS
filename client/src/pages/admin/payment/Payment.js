@@ -21,23 +21,23 @@ function Payment() {
       createdAt: time
     }));
 
-    if (Array.isArray(course.courseNames)) {
-      const sub_total = course.courseNames.reduce((courseSum, course) => {
-        return courseSum + (course.course_price || 0);
+    if (Array.isArray(course.orderDetails)) {
+      const sub_total = course.orderDetails.reduce((courseSum, course) => {
+        return courseSum + (course.course_amount || 0);
       }, 0);
 
       setSubTotal(sub_total);
 
-      const total_discount = course.courseNames.reduce((discountSum, course) => {
-        const discount = course?.course_price * (course?.course_discount / 100);
+      const total_discount = course.orderDetails.reduce((discountSum, course) => {
+        const discount = course?.course_amount * (course?.discount / 100);
         return discountSum + discount;
       }, 0);
 
       setTotalDiscount(total_discount);
 
-      const inclusiveTax = course.courseNames.reduce((taxSum, course) => {
+      const inclusiveTax = course.orderDetails.reduce((taxSum, course) => {
         if (course.is_inclusive == 1) {
-          const amountWithDiscount = course?.course_price - (course?.course_price * (course?.course_discount / 100));
+          const amountWithDiscount = course?.course_amount - (course?.course_amount * (course?.discount / 100));
           const tax_amount = amountWithDiscount * (course?.tax_rate / 100);
           taxSum += tax_amount;
         }
@@ -127,11 +127,11 @@ function Payment() {
                   <p>{item?.studentName?.email}</p>
                 </td>
                 <td>
-                  {item?.courseNames?.map((course, index) => (
-                    <span key={index}>{course.course_title}{index < item.courseNames.length - 1 && ', '}</span>
+                  {item?.orderDetails?.map((course, index) => (
+                    <span key={index}>{course.course_title}{index < item.orderDetails.length - 1 && ', '}</span>
                   ))}
                 </td>
-                <td>{item?.courseNames?.length}</td>
+                <td>{item?.orderDetails?.length}</td>
                 <td>{setting.position == "left" ? setting.symbol : ""}{item?.amount}{setting.position == "right" ? setting.symbol : ""}</td>
                 <td>{item?.payment_mode}</td>
                 <td>{item?.transiction_id}</td>
@@ -197,22 +197,22 @@ function Payment() {
 
                   <tbody>
                     {
-                      currentCourse?.courseNames?.map((item) => {
-                        const discount = item?.course_price * (item?.course_discount / 100);
-                        const withDiscountPrice = item.course_price - discount
-                        const tax_amount = withDiscountPrice * (item?.tax_rate / 100);
-                        const net_amount = item?.course_price - tax_amount - item?.course_discount;
+                      currentCourse?.orderDetails?.map((item) => {
+                        const discount = item?.course_amount * (item?.discount / 100);
+                        const withDiscountPrice = item.course_amount - discount;
+                        const tax_amount = withDiscountPrice * (item?.course_tax / 100);
+                        const net_amount = item?.course_amount - tax_amount - item?.discount;
                         return (
                           <tr>
                             <td>{item?.course_title}</td>
                             <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
-                            <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_price}{setting.position == "right" ? setting.symbol : ""}</td>
+                            <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_amount}{setting.position == "right" ? setting.symbol : ""}</td>
                             <td>{(item?.tax_rate) ? item?.tax_rate : 0}%</td>
                             <td>
                               {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
                             </td>
                             <td>
-                              {setting.position == "left" ? setting.symbol : ""}{discount ? discount : 0}{setting.position == "right" ? setting.symbol : ""}
+                              {setting.position == "left" ? setting.symbol : ""}{parseFloat(discount ? discount : 0).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
                             </td>
                             <td>
                               {setting.position == "left" ? setting.symbol : ""}{parseFloat(net_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}

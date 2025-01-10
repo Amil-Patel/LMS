@@ -1,6 +1,5 @@
 const { UserMaster } = require("../../database/models/index");
 const jwt = require("jsonwebtoken");
-const EncryptPassword = require("../../middleware/EncryptPassword");
 const DecryptPassword = require("../../middleware/DecryptPassword");
 const secret_key = process.env.JWT_SECRET_KEY;
 const AuthMiddleware = require("../../auth/AuthMiddleware")

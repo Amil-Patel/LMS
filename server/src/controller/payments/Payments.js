@@ -1,4 +1,4 @@
-const { payment, student_cart, UserMaster } = require("../../database/models/index");
+const { payment, order, UserMaster, order_detail } = require("../../database/models/index");
 const AuthMiddleware = require("../../auth/AuthMiddleware");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 
@@ -9,7 +9,7 @@ const addPaymentData = async (req, res) => {
     const updatedate = DateToUnixNumber(new Date(), 'America/Toronto');
     const data = {
         student_id: req.body.student_id,
-        courses: JSON.stringify(req.body.course_id),
+        order_id: req.body.order_id,
         amount: req.body.amount,
         payment_mode: req.body.payment_mode,
         transaction_id: req.body.transaction_id,
@@ -18,10 +18,10 @@ const addPaymentData = async (req, res) => {
         bill_address: req.body.bill_address,
         bill_gst: req.body.bill_gst,
         bill_pan: req.body.bill_pan,
+        status: req.body.status,
         createdAt: createdate,
         updatedAt: updatedate
     }
-    console.log(data);
     try {
         const paymentData = await payment.create(data);
         res.send(paymentData);
@@ -38,25 +38,28 @@ const getPaymentData = async (req, res) => {
 
         const detailedPayments = await Promise.all(
             paymentData.map(async (payment) => {
-                const courseIds = JSON.parse(payment.courses);
-                // Fetch course names
-                const courseNames = await student_cart.findAll({
-                    where: { id: courseIds },
-                    attributes: ['course_title','expiring_time', 'course_price', 'tax_rate', 'course_discount', 'is_inclusive', 'is_exclusive'],
+                const order_id = payment.order_id;
+                const orderData = await order.findOne({
+                    where: { id: order_id },
+                    attributes: ['user_id', 'quantity', 'status'],
                     raw: true,
                 });
-
                 // Fetch student name
+                const orderDetailData = await order_detail.findAll({
+                    where: { order_id: order_id },
+                    attributes: ['course_title', 'quantity', 'course_amount', "course_tax", "course_amount", "discount"],
+                    raw: true,
+                });
                 const studentData = await UserMaster.findOne({
-                    where: { id: payment.student_id },
+                    where: { id: orderData.user_id },
                     attributes: ['first_name', 'last_name', 'email'],
                     raw: true,
                 });
-
                 return {
                     ...payment,
-                    courseNames: courseNames.map((c) => c),
-                    studentName: studentData ? studentData : 'Unknown',
+                    orderData: orderData || {}, // Ensure it handles null/undefined
+                    orderDetails: orderDetailData || [], // Ensure it handles null/undefined
+                    studentName: studentData || {},
                 };
             })
         );

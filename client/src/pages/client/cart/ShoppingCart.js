@@ -74,10 +74,17 @@ const ShoppingCart = () => {
   // Navigate to Checkout with state
   const processToCheckout = (total) => {
     if (cart.length > 0) {
-      const id = cart.map((course) => course.id);
+      const courseDetails = cart.map((course) => ({
+        id: course.course_id,
+        title: course.course_title,
+        amount: course.course_price,
+        course_tax: course.tax_rate,
+        course_taxamount: course.course_price - (course.course_price * course.course_discount / 100),
+        discount: course.course_discount,
+      }));
       navigate(`/checkout/`, {
         state: {
-          id,
+          courses: courseDetails,
           total
         },
       });
@@ -114,15 +121,15 @@ const ShoppingCart = () => {
 
                               if (typeof authors === "string") {
                                 try {
-                                  authors = JSON.parse(authors); 
+                                  authors = JSON.parse(authors);
                                 } catch (error) {
                                   console.error("Error parsing course.auther:", error);
-                                  return "Unknown"; 
+                                  return "Unknown";
                                 }
                               }
 
                               if (Array.isArray(authors) && authors.length > 0) {
-                                return authors.join(", "); 
+                                return authors.join(", ");
                               } else {
                                 return "Unknown";
                               }
