@@ -36,9 +36,10 @@ function Payment() {
       setTotalDiscount(total_discount);
 
       const inclusiveTax = course.orderDetails.reduce((taxSum, course) => {
+        console.log(course)
         if (course.is_inclusive == 1) {
           const amountWithDiscount = course?.course_amount - (course?.course_amount * (course?.discount / 100));
-          const tax_amount = amountWithDiscount * (course?.tax_rate / 100);
+          const tax_amount = amountWithDiscount * (parseFloat(course?.course_tax) / 100);
           taxSum += tax_amount;
         }
         return taxSum;
@@ -207,7 +208,7 @@ function Payment() {
                             <td>{item?.course_title}</td>
                             <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
                             <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_amount}{setting.position == "right" ? setting.symbol : ""}</td>
-                            <td>{(item?.tax_rate) ? item?.tax_rate : 0}%</td>
+                            <td>{(parseFloat(item?.course_tax)) ? parseFloat(item?.course_tax) : 0}%</td>
                             <td>
                               {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
                             </td>

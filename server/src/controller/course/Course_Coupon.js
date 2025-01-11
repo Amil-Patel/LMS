@@ -21,6 +21,8 @@ const getCourseCouponData = async (req, res) => {
 }
 
 const validateCoupon = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     try {
         const { couponCode } = req.body;
         const coupon = await Course_Coupon.findOne({

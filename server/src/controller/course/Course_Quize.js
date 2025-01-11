@@ -128,6 +128,8 @@ const updateCourseQuizeData = async (req, res) => {
 }
 
 const updateCourseQuizStatusData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
     const id = req.params.id;
     const data = {

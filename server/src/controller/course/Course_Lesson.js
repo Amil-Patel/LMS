@@ -188,6 +188,8 @@ const updateCourseLessonData = async (req, res) => {
 };
 
 const updateCourseLessonStatus = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
     const id = req.params.id;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
