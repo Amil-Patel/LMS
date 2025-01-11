@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    watching_duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     current_watching_lesson: {
       type: DataTypes.INTEGER,
       allowNull: false
