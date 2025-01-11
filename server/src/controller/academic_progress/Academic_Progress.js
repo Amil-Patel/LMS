@@ -1,5 +1,6 @@
 const AuthMiddleware = require("../../auth/AuthMiddleware")
 const { academic_progress, enrollment, Course_Lesson, UserMaster, Course_Quize, quize_result } = require("../../database/models/index");
+const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 
 const getAcademicProgressData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -77,8 +78,6 @@ const UpdateAcademicProgressDataForViewed = async (req, res) => {
         current_watching_lesson: req.body.current_watching_lesson,
         completed_date: new Date(),
     }
-    console.log(id, stuId)
-    console.log(data)
     try {
         const userroledata = await academic_progress.update(data, {
             where: {
@@ -95,15 +94,17 @@ const UpdateAcademicProgressDataForViewed = async (req, res) => {
 const addAcedemicProgressData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
+    const completedDate = DateToUnixNumber(new Date(), "America/Toronto");
+    const createdDate = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         student_id: req.body.student_id,
         course_id: req.body.course_id,
         course_progress: 0,
-        current_watching_lesson: req.body.current_watching_lesson,
         watching_duration: 0,
+        current_watching_lesson: req.body.current_watching_lesson,
         completed_date: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: createdDate,
+        updatedAt: createdDate,
     }
     try {
         const userroledata = await academic_progress.create(data);
@@ -114,5 +115,23 @@ const addAcedemicProgressData = async (req, res) => {
         res.sendStatus(500);
     }
 }
-
-module.exports = { getAcademicProgressData, addAcedemicProgressData, getAcademicProgressDataWithCourseId, UpdateAcademicProgressDataForViewed }
+const updateWatchingDuration = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    const data = {
+        watching_duration: req.body.watchingDuration,
+    }
+    try {
+        const userroledata = await academic_progress.update(data, {
+            where: {
+                id: id,
+            }
+        });
+        res.status(200).json(userroledata);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+module.exports = { getAcademicProgressData, addAcedemicProgressData, getAcademicProgressDataWithCourseId, UpdateAcademicProgressDataForViewed,updateWatchingDuration }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../../assets/css/client/coursevideo.css";
 import { RiMenuAddLine } from "react-icons/ri";
 import { MdLockOutline } from "react-icons/md";
@@ -75,10 +75,14 @@ const CourseVideo = () => {
 
   //get or add ace_progress data
   const [courseProgress, setCourseProgress] = useState([]);
+  const [timeStamp, setTimeStamp] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${courseData.id}/${stuUserId}`);
       await setCourseProgress(res.data[0]);
+      await setTimeStamp(res.data[0].watching_duration);
+      console.log(res)
       if (res.data.length === 0 && stuUserId) {
         getModuleData();
         addcourseProgressData();
@@ -90,6 +94,51 @@ const CourseVideo = () => {
       console.log(error);
     }
   };
+  const [isTabVisible, setIsTabVisible] = useState(true);
+  useEffect(() => {
+    let timer;
+    if (isTabVisible) {
+      timer = setInterval(() => {
+        setElapsedTime((prev) => prev + 1);
+      }, 1000); // Increment every second
+    }
+    return () => clearInterval(timer);
+  }, [isTabVisible]);
+  const navigate = useNavigate()
+  const handleBack = async () => {
+    navigate('/student/learning')
+  }
+  const saveTimeToDatabase = async () => {
+    const totalTime = timeStamp + elapsedTime;
+    console.log(totalTime);
+    const payload = {
+      watchingDuration: totalTime,
+    }
+    try {
+      await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);
+      setTimeStamp(totalTime);
+      setElapsedTime(0);
+    } catch (error) {
+      console.error("Error saving time to database:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      saveTimeToDatabase();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [timeStamp, elapsedTime, courseData.id, stuUserId]);
+
+  // Convert total time to minutes
+  const totalTimeInMinutes = Math.floor((timeStamp + elapsedTime) / 60);
+  const remainingSeconds = (timeStamp + elapsedTime) % 60;
 
   const getcourseProgressDataRefresh = async () => {
     try {
@@ -119,7 +168,6 @@ const CourseVideo = () => {
     }
   }
   const addcourseProgressData = async () => {
-    console.log(id)
     const res = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
     const sectionData = res.data;
     if (sectionData.length === 0) return;
@@ -203,7 +251,6 @@ const CourseVideo = () => {
     is_count_time: "",
     description: "",
   });
-  console.log(editLessonData)
   const [editQuizData, setEditQuizData] = useState({
     title: "",
     section_id: "",
@@ -579,7 +626,7 @@ const CourseVideo = () => {
                   {/* Time Spent */}
                   <div className="mb-1.5 text-base">
                     <span className="font-semibold">Time Spent: </span>
-                    <span className="text-gray-800 text-[14px]">05:30:05</span>
+                    <span className="text-gray-800 text-[14px]">{timeStamp}</span>
                   </div>
 
                   {/* Progress */}
@@ -609,7 +656,9 @@ const CourseVideo = () => {
               {/* Time Spent */}
               <div className="text-base">
                 <span className="font-semibold">Time Spent: </span>
-                <span className="text-gray-800 text-sm">05:30:05</span>
+                <span className="text-gray-800 text-sm">
+                  {totalTimeInMinutes} minutes {remainingSeconds} seconds
+                </span>
               </div>
 
               {/* Rating & Review */}
@@ -633,10 +682,10 @@ const CourseVideo = () => {
 
             {/* Back Button */}
             <button className="back-btn">
-              <NavLink to="/student/learning">
+              <div onClick={handleBack}>
                 <i className="fa-solid fa-angle-left mr-2"></i>
                 <span>Back To Main</span>
-              </NavLink>
+              </div>
             </button>
 
           </div>
@@ -829,7 +878,7 @@ const CourseVideo = () => {
                                 }`}
                               disabled={currentQuestionIndex === 0}
                             >
-                              <i class="fa-solid fa-circle-chevron-left"></i> Previous
+                              <i className="fa-solid fa-circle-chevron-left"></i> Previous
                             </button>
 
                             {/* Next Button */}
@@ -838,14 +887,14 @@ const CourseVideo = () => {
                                 onClick={nextQuestion}
                                 className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 hover:shadow-md transition-all duration-200"
                               >
-                                Next <i class="fa-solid fa-circle-chevron-right"></i>
+                                Next <i className="fa-solid fa-circle-chevron-right"></i>
                               </button>
                             ) : (
                               <button
                                 className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-blue-400 text-white cursor-not-allowed transition-all duration-200"
                                 disabled
                               >
-                                Next <i class="fa-solid fa-circle-chevron-right"></i>
+                                Next <i className="fa-solid fa-circle-chevron-right"></i>
                               </button>
                             )}
 
@@ -985,7 +1034,7 @@ const CourseVideo = () => {
                                                   </span>
                                                 ) : lesson.lesson_type == "pdf" ? (
                                                   <span className="lesson-icon">
-                                                    <i class="fa-solid fa-file-pdf"></i>
+                                                    <i className="fa-solid fa-file-pdf"></i>
                                                   </span>
                                                 ) : (
                                                   <span className="lesson-icon">
@@ -1144,7 +1193,7 @@ const CourseVideo = () => {
                                           </span>
                                         ) : lesson.lesson_type == "pdf" ? (
                                           <span className="lesson-icon">
-                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <i className="fa-solid fa-file-pdf"></i>
                                           </span>
                                         ) : (
                                           <span className="lesson-icon">
@@ -1166,6 +1215,7 @@ const CourseVideo = () => {
                                             : "cursor-pointer"
                                             }`}
                                           checked={isCompleted}
+                                          onChange={() => !isCompleted && handleViewedLessonData()}
                                           readOnly
                                         />
                                       </div>
