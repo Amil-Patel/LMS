@@ -1,4 +1,4 @@
-const { Course_Lesson, Course_Quize } = require("../../database/models/index");
+const { Course_Lesson, Course_Quize, resource } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const path = require("path")
@@ -49,6 +49,22 @@ const getCourseLessonDataWithCourseId = async (req, res) => {
                     required: false
                 }
             ]
+        });
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+};
+const gettingCourseLessonResourceData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    try {
+        const data = await resource.findAll({
+            where: {
+                lesson_id: id
+            }
         });
         res.send(data);
     } catch (error) {
@@ -269,6 +285,7 @@ const deleteCourseLessonData = async (req, res) => {
 module.exports = {
     getCourseLessonDataWithSectionId,
     getCourseLessonDataWithId,
+    gettingCourseLessonResourceData,
     addCourseLessonData,
     updateCourseLessonData,
     updateCourseLessonStatus,

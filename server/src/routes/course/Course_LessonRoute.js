@@ -11,6 +11,7 @@ const uploadFields = upload.fields([
 
 CourseLesson.get("/gettingCourseLessonDataWithSectionId/:id", CourseLessonController.getCourseLessonDataWithSectionId);
 CourseLesson.get("/gettingCourseLessonDataWithCourseId/:id", CourseLessonController.getCourseLessonDataWithCourseId);
+CourseLesson.get("/gettingCourseLessonResourceData/:id", CourseLessonController.gettingCourseLessonResourceData);
 CourseLesson.get("/gettingCourseLessonDataWithId/:id", CourseLessonController.getCourseLessonDataWithId);
 CourseLesson.post("/addingCourseLesson/:id", uploadFields, CourseLessonController.addCourseLessonData);
 CourseLesson.put("/updatingCourseLesson/:id", uploadFields, CourseLessonController.updateCourseLessonData);

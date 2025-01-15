@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "../../assets/css/client/coursevideo.css";
 import { RiMenuAddLine } from "react-icons/ri";
 import { MdLockOutline } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../client/utils/axiosInstance";
 import { userRolesContext } from "../admin/layout/RoleContext";
+import { notifySuccess } from "../admin/layout/ToastMessage";
 const port = process.env.REACT_APP_URL;
 // Load PDF worker
 const CourseVideo = () => {
@@ -81,14 +82,13 @@ const CourseVideo = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${courseData.id}/${stuUserId}`);
       await setCourseProgress(res.data[0]);
-      await setTimeStamp(res.data[0].watching_duration);
-      console.log(res)
+      await setTimeStamp(res.data[0]?.watching_duration);
       if (res.data.length === 0 && stuUserId) {
         getModuleData();
         addcourseProgressData();
       }
-      if (res.data[0].current_watching_lesson) {
-        getLessonWithCompletedId(res.data[0].current_watching_lesson)
+      if (res.data[0]?.current_watching_lesson) {
+        getLessonWithCompletedId(res.data[0]?.current_watching_lesson)
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +110,6 @@ const CourseVideo = () => {
   }
   const saveTimeToDatabase = async () => {
     const totalTime = timeStamp + elapsedTime;
-    console.log(totalTime);
     const payload = {
       watchingDuration: totalTime,
     }
@@ -122,20 +121,24 @@ const CourseVideo = () => {
       console.error("Error saving time to database:", error);
     }
   };
-
-
+  const location = useLocation()
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      event.preventDefault();
+    const handleBeforeUnload = () => {
       saveTimeToDatabase();
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [timeStamp, elapsedTime, courseData.id, stuUserId]);
+  }, [timeStamp, elapsedTime]);
 
+  // useEffect(async () => {
+  //   // Save time when navigating away from the course video page
+  //   if (location.pathname !== `/student/coursevideo/${id}`) {
+  //     await saveTimeToDatabase();
+  //     console.log("Navigating away from course video page");
+  //   }
+  // }, [location, id]);
   // Convert total time to minutes
   const totalTimeInMinutes = Math.floor((timeStamp + elapsedTime) / 60);
   const remainingSeconds = (timeStamp + elapsedTime) % 60;
@@ -167,6 +170,17 @@ const CourseVideo = () => {
       console.log(error);
     }
   }
+  //get course lesson data with course id
+  const [lessonDataWithCourseId, setLessonDataWithCourseId] = useState([]);
+  const getCourseLessonDataWithCourseId = async () => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithCourseId/${id}`);
+      setLessonDataWithCourseId(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const addcourseProgressData = async () => {
     const res = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
     const sectionData = res.data;
@@ -215,12 +229,13 @@ const CourseVideo = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
       const lessonquizdata = res.data
-      const sortedData = lessonquizdata.sort((a, b) => a.order - b.order);
-      setLessonData(sortedData);
+      setLessonData(lessonquizdata);
+      getResourceData(lessonquizdata[0]?.id);
+      const sortedData = lessonquizdata && lessonquizdata.sort((a, b) => a.order - b.order);
       if (sortedData.length > 0) {
         if (courseProgress && stuUserId) {
           const data = {
-            current_watching_lesson: sortedData[0].id,
+            current_watching_lesson: sortedData[0]?.id,
           };
           await axiosInstance.put(
             `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
@@ -267,14 +282,27 @@ const CourseVideo = () => {
     is_skipable: "",
     instruction: "",
   })
+  const [compareLessonId, setCompareLessonId] = useState(null);
   const editLessonToggleModal = async (id, quizId, num) => {
+    await getResourceData(id)
+    setCompareLessonId(id);
     if (num === 1) {
       if (id) {
         await getLessonDataForEdit(id);
       }
       if (quizId !== null) {
-        await getQuizeDataForEdit(quizId);
+        await getQuizeDataForEdit(quizId, id);
       }
+    }
+  }
+  //resource data
+  const [resourceData, setResourceData] = useState([]);
+  const getResourceData = async (id) => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCourseLessonResourceData/${id}`);
+      setResourceData(res.data);
+    } catch (error) {
+      console.log(error);
     }
   }
   const getLessonDataForEdit = async (id) => {
@@ -301,7 +329,8 @@ const CourseVideo = () => {
       console.log(error);
     }
   }
-  const getQuizeDataForEdit = async (id) => {
+  const [ediQuizeDataId, setEdiQuizeDataId] = useState(null)
+  const getQuizeDataForEdit = async (id, comparesLessonId) => {
     setEditLessonData({
       title: "",
       duration: "",
@@ -320,8 +349,8 @@ const CourseVideo = () => {
       const res = await axiosInstance.get(`${port}/gettingCourseQuizeDataWithId/${id}`);
       const quizData = res.data;
       setEditQuizData(quizData);
-      if (courseProgress.completed_lesson_id &&
-        !JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)) {
+      if (courseProgress.completed_lesson_id && comparesLessonId &&
+        JSON.parse(courseProgress.completed_lesson_id).includes(comparesLessonId)) {
         await getQuizResultDatWithquizId(quizData.id);
       }
       if (quizData.title) {
@@ -332,16 +361,26 @@ const CourseVideo = () => {
     }
   }
   const [quizPassOrFail, setQuizPassOrFail] = useState("");
+  const [quizeResultId, setQuizeResultId] = useState("");
   const getQuizResultDatWithquizId = async (id) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingQuizResultDatWithquizId/${id}`);
       const quizResultData = res.data[0];
+      setQuizeResultId(res.data[0]);
       if (!quizResultData) {
         setAnswers({});
       }
       setQuizPassOrFail(quizResultData.result);
       const parsedAnswers = JSON.parse(quizResultData.user_answers);
       setAnswers(parsedAnswers);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const getQuizResultDat = async (id) => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingQuizResultData/${id}`);
+      setQuizeResultId(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -379,7 +418,7 @@ const CourseVideo = () => {
 
   const handleViewedLessonData = async () => {
     try {
-      let parsData = [];
+      var parsData = [];
       try {
         if (courseProgress.completed_lesson_id === null) {
           parsData = [];
@@ -393,9 +432,12 @@ const CourseVideo = () => {
       } catch (parseError) {
         parsData = [];
       }
+      setCompareLessonId(editLessonData.quiz_id);
       parsData.push(editLessonData.id);
+      const course_progress = ((parsData.length / lessonDataWithCourseId.length) * 100).toFixed(0)
       const data = {
         completed_lesson_id: JSON.stringify(parsData),
+        course_progress: course_progress,
         current_watching_lesson: editLessonData.id,
       };
       const res = await axiosInstance.put(
@@ -463,8 +505,7 @@ const CourseVideo = () => {
       userAnswersKeyValue[question.id] = answers[question.id] || null; // User's answer
       correctAnswersKeyValue[question.id] = question.correct_answer;   // Correct answer
     });
-
-    let parsData = [];
+    var parsData = [];
     try {
       if (courseProgress.completed_lesson_id === null) {
         parsData = [];
@@ -478,7 +519,17 @@ const CourseVideo = () => {
     } catch (parseError) {
       parsData = [];
     }
-    parsData.push(editQuizData.id);
+    //i want to find lessson id from lessonData with the help of editQuizData id
+    const lessonQuizId = lessonData.find((item) => item.quiz_id === editQuizData.id);
+    parsData.push(lessonQuizId.id);
+    const course_progress = ((parsData.length / lessonDataWithCourseId.length) * 100).toFixed(0)
+    const datas = {
+      course_progress: course_progress,
+    };
+    const res = await axiosInstance.put(
+      `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
+      datas
+    );
     // Check for matching answers
     const matchingAnswers = [];
 
@@ -581,8 +632,8 @@ const CourseVideo = () => {
   useEffect(() => {
     getCourseData();
     getModuleData();
+    getCourseLessonDataWithCourseId();
   }, []);
-
   useEffect(() => {
     getcourseProgressData()
   }, [courseData]);
@@ -591,6 +642,75 @@ const CourseVideo = () => {
     const match = url.match(regex);
     return match ? `https://www.youtube.com/embed/${match[1]}` : null;
   };
+  //getting review with course id
+  const [reviewWithStudentId, setReviewWithStudentId] = useState({});
+  const getReviewWithStudentId = async () => {
+    try {
+      const response = await axiosInstance.get(`${port}/gettingReviewWithStudentId/${stuUserId}`);
+      setReviewWithStudentId(response.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const [reviewData, setReviewData] = useState([]);
+  const getReviewData = async () => {
+    try {
+      const response = await axiosInstance.get(`${port}/gettingReviewWithCourseId/${id}`);
+      setReviewData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  //adding review
+  const [addReview, setAddReview] = useState({
+    student_id: stuUserId,
+    course_id: id,
+    rating: "",
+    review: "",
+  });
+  const handleReviewChange = (e) => {
+    const { name, value } = e.target;
+
+    setAddReview((prevReview) => ({
+      ...prevReview,
+      [name]: name === "rating" ? parseInt(value || 0, 10) : value,
+      student_id: stuUserId,
+    }));
+  };
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    const reviewData = { ...addReview, student_id: stuUserId };
+    try {
+      if (reviewWithStudentId && Object.keys(reviewWithStudentId).length > 0) {
+        const res = await axiosInstance.put(`${port}/updatingReview/${reviewWithStudentId.id}`, reviewData);
+        notifySuccess("Review Updated Successfully");
+      } else {
+        const res = await axiosInstance.post(`${port}/addingReview`, reviewData);
+        notifySuccess("Review Added Successfully");
+        getReviewWithStudentId();
+      }
+      getReviewData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const handleTabChange = (val) => {
+    setActiveTab(val);
+    getReviewWithStudentId();
+    getReviewData();
+  }
+  //review get with student id
+  useEffect(() => {
+    if (reviewWithStudentId) {
+      setAddReview({
+        student_id: stuUserId,
+        course_id: id,
+        rating: reviewWithStudentId.rating || 0,
+        review: reviewWithStudentId.review || "",
+      });
+    }
+  }, [reviewWithStudentId, stuUserId, id]);
+
   return (
     <>
       {loading ? (
@@ -632,18 +752,36 @@ const CourseVideo = () => {
                   {/* Progress */}
                   <div className="text-base mb-1.5">
                     <span className="font-semibold">Your Progress: </span>
-                    <span className="text-gray-800 text-[14px]">8 of 10 (80%)</span>
+                    <span className="text-gray-800 text-[14px]">
+                      {(() => {
+                        let completedLessonIds = courseProgress?.completed_lesson_id;
+
+                        try {
+                          if (!completedLessonIds) {
+                            completedLessonIds = [];
+                          } else if (typeof completedLessonIds === "string") {
+                            completedLessonIds = completedLessonIds.replace(/^"|"$/g, ""); // Remove extra surrounding quotes
+                            completedLessonIds = JSON.parse(completedLessonIds); // Parse it as JSON array
+                          }
+                        } catch (error) {
+                          console.error("Failed to parse completed_lesson_id into an array:", error.message);
+                        }
+                        return `${completedLessonIds.length} of ${lessonDataWithCourseId.length} (${((completedLessonIds.length / lessonDataWithCourseId.length) * 100).toFixed(0)}%)`;
+
+                      })()}
+                    </span>
                   </div>
 
                   {/* Rating & Review */}
-                  <div className="text-sm font-medium flex text-black mb-0.5 items-center">
-                    <span className="text-[15px] font-semibold">Leave Your Review:&nbsp;</span>
-                    <div className="flex justify-end text-orange-500 text-[12px]">
-                      <i className="fa-solid fa-star"></i>
-                      <i className="fa-solid fa-star"></i>
-                      <i className="fa-solid fa-star"></i>
-                      <i className="fa-solid fa-star"></i>
-                      <i className="fa-regular fa-star"></i>
+                  <div className="flex items-center justify-between ">
+                    <span className="text-md font-semibold">Leave Your Review:</span>
+                    <div
+                      className="flex text-orange-500 space-x-1 cursor-pointer"
+                      onClick={() => handleTabChange("review")}
+                    >
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <i key={star} className="fa-solid fa-star"></i>
+                      ))}
                     </div>
                   </div>
 
@@ -662,21 +800,38 @@ const CourseVideo = () => {
               </div>
 
               {/* Rating & Review */}
-              <div className="text-sm font-medium text-black">
-                <div className="flex justify-end text-orange-500 text-sm mb-0.5">
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-regular fa-star"></i>
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-semibold">Leave Your Review:</span>
+                <div
+                  className="flex text-orange-500 space-x-1 cursor-pointer"
+                >
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <i key={star} className="fa-solid fa-star"></i>
+                  ))}
                 </div>
-                <span className="text-sm font-normal">Leave Your Review</span>
               </div>
 
               {/* Progress */}
               <div className="text-base">
                 <span className="font-semibold">Your Progress: </span>
-                <span className="text-gray-800 text-sm">8 of 10 (80%)</span>
+                <span className="text-gray-800 text-sm">
+                  {(() => {
+                    let completedLessonIds = courseProgress?.completed_lesson_id;
+
+                    try {
+                      if (!completedLessonIds) {
+                        completedLessonIds = [];
+                      } else if (typeof completedLessonIds === "string") {
+                        completedLessonIds = completedLessonIds.replace(/^"|"$/g, ""); // Remove extra surrounding quotes
+                        completedLessonIds = JSON.parse(completedLessonIds); // Parse it as JSON array
+                      }
+                    } catch (error) {
+                      console.error("Failed to parse completed_lesson_id into an array:", error.message);
+                    }
+                    return `${completedLessonIds.length} of ${lessonDataWithCourseId.length} (${((completedLessonIds.length / lessonDataWithCourseId.length) * 100).toFixed(0)}%)`;
+
+                  })()}
+                </span>
               </div>
             </div>
 
@@ -802,7 +957,7 @@ const CourseVideo = () => {
                             <h2 className="text-lg font-semibold text-gray-700 mb-4">
                               <span className="mr-2 font-extrabold">{currentQuestionIndex + 1}.)</span>
                               {quizQuestionData[currentQuestionIndex]?.title}
-                              {courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) && (
+                              {quizeResultId && quizeResultId.quiz_id == editLessonData.quiz_id && (
                                 <span className="ml-2 font-extrabold">({quizPassOrFail ? quizPassOrFail : ""})</span>
                               )}
                             </h2>
@@ -811,7 +966,7 @@ const CourseVideo = () => {
                                 {JSON.parse(quizQuestionData[currentQuestionIndex].options).map((option, index) => (
                                   option &&
                                   <li key={index}>
-                                    {courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) ? (
+                                    {quizeResultId && quizeResultId.quiz_id == editLessonData.quiz_id ? (
                                       <label
                                         className={`block px-4 py-3 rounded-lg ${answers[quizQuestionData[currentQuestionIndex].id] ===
                                           index
@@ -899,16 +1054,48 @@ const CourseVideo = () => {
                             )}
 
                             {/* Submit Button */}
-                            {courseProgress.completed_lesson_id && JSON.parse(courseProgress.completed_lesson_id).includes(editQuizData.id) ? (
-                              ""
-                            ) : (
-                              <button
-                                onClick={handleSubmitQuizAnswer}
-                                className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
-                              >
-                                Submit
-                              </button>
-                            )}
+                            {(() => {
+                              let completedLessonIds = courseProgress?.completed_lesson_id;
+
+                              try {
+                                if (!completedLessonIds) {
+                                  completedLessonIds = [];
+                                } else if (typeof completedLessonIds === "string") {
+                                  completedLessonIds = completedLessonIds.replace(/^"|"$/g, ""); // Remove extra surrounding quotes
+                                  completedLessonIds = JSON.parse(completedLessonIds); // Parse it as JSON array
+                                }
+                              } catch (error) {
+                                console.error("Failed to parse completed_lesson_id into an array:", error.message);
+                              }
+                              if (completedLessonIds && completedLessonIds.includes(compareLessonId)) {
+                                return (
+                                  ""
+                                )
+
+                              } else {
+                                return (
+                                  <button
+                                    onClick={handleSubmitQuizAnswer}
+                                    className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
+                                  >
+                                    Submit
+                                  </button>
+                                )
+
+                              }
+                            })()}
+                            {/* {
+                              lessonDataWithCourseId &&
+                                lessonDataWithCourseId.some((item) => item.quiz_id === editQuizData.id) ? (
+                                ""
+                              ) : (
+                                <button
+                                  onClick={handleSubmitQuizAnswer}
+                                  className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
+                                >
+                                  Submit
+                                </button>
+                              )} */}
                           </footer>
                         </>
                       )}
@@ -943,12 +1130,14 @@ const CourseVideo = () => {
               {/* Tab Bar */}
               <div>
                 <div className="tabs flex flex-wrap gap-2 justify-start md:justify-start">
-                  <button className={activeTab === "overview" ? "active" : ""} onClick={() => setActiveTab("overview")} >
+                  <button className={activeTab === "overview" ? "active" : ""} onClick={() => handleTabChange("overview")} >
                     Overview </button>
-                  <button className={`md:hidden block ${activeTab === "content" ? "active" : ""} `} onClick={() => setActiveTab("content")} >
+                  <button className={`md:hidden block ${activeTab === "content" ? "active" : ""} `} onClick={() => handleTabChange("content")} >
                     Course Content </button>
-                  <button className={activeTab === "resource" ? "active" : ""} onClick={() => setActiveTab("resource")} >
+                  <button className={activeTab === "resource" ? "active" : ""} onClick={() => handleTabChange("resource")} >
                     Resource </button>
+                  <button className={activeTab === "review" ? "active" : ""} onClick={() => handleTabChange("review")} >
+                    Reviews </button>
                 </div>
                 {activeTab === "content" && (
                   <>
@@ -990,19 +1179,14 @@ const CourseVideo = () => {
                                           var isCompleted =
                                             courseProgress &&
                                             courseProgress.completed_lesson_id &&
-                                            JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.id) ||
-                                            JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.quiz_id);
+                                            JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.id)
                                         }
                                         const canAccess =
                                           (courseProgress &&
                                             courseProgress.completed_lesson_id &&
                                             JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id)) ||
                                           (courseProgress &&
-                                            courseProgress.completed_lesson_id &&
-                                            JSON.parse(courseProgress.completed_lesson_id).includes(lesson.quiz_id)) ||
-                                          (courseProgress &&
                                             courseProgress.current_watching_lesson === lesson.id);
-
                                         return (
                                           <div
                                             className={`module-content ${!canAccess ? "cursor-not-allowed" : ""
@@ -1106,8 +1290,117 @@ const CourseVideo = () => {
                   </>
                 )}
                 {activeTab === "resource" && (
-                  <p>Data not found</p>
+                  <>
+                    <div className="resource-list rounded-lg p-6 md:p-8">
+                      <h2 className="font-bold mb-6 text-2xl text-gray-800 border-b pb-2 border-gray-200">
+                        Resources
+                      </h2>
+                      <ul className="list-none space-y-4">
+                        {resourceData.length > 0 ? (
+                          resourceData.map((resource, index) => (
+                            <li key={index} className="group">
+                              <NavLink
+                                to={resource.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 p-3 rounded-md bg-white shadow-sm hover:shadow-md hover:bg-blue-50 hover:text-blue-600 text-gray-700 transition-all duration-300"
+                              >
+                                <span className="flex-shrink-0 w-10 h-10 bg-blue-100 text-blue-500 flex items-center justify-center rounded-full text-xl font-semibold group-hover:bg-blue-600 group-hover:text-white">
+                                  {resource.title.charAt(0).toUpperCase()}
+                                </span>
+                                <span className="truncate">{resource.title}</span>
+                              </NavLink>
+                            </li>
+                          ))
+                        ) : (
+                          <p className="text-gray-500 italic">No resource available</p>
+                        )}
+                      </ul>
+                    </div>
+
+                  </>
                 )}
+                {
+                  activeTab === "review" && (
+                    <>
+                      <div className="p-5">
+                        {/* User Review Section */}
+                        <div className="mb-6">
+                          <h2 className="text-2xl font-bold mb-4">
+                            {reviewWithStudentId ? "Update Your Review" : "Write Your Review"}
+                          </h2>
+                          <form onSubmit={handleSubmitReview}>
+                            {/* Star Rating */}
+
+                            <div className="flex items-center space-x-2 mb-4">
+                              {[...Array(5)].map((_, index) => (
+                                <i
+                                  key={index}
+                                  className={`cursor-pointer text-2xl ${index < addReview.rating
+                                    ? "fa-solid fa-star text-orange-500"
+                                    : "fa-regular fa-star text-gray-300"
+                                    }`}
+                                  onClick={() =>
+                                    setAddReview((prevReview) => ({
+                                      ...prevReview,
+                                      rating: index + 1, // Update rating based on star clicked
+                                    }))
+                                  }
+                                ></i>
+                              ))}
+                            </div>
+                            {/* Review Text */}
+                            <textarea
+                              className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              rows="5"
+                              name="review"
+                              placeholder="Share your experience about this course..."
+                              value={addReview.review}
+                              onChange={handleReviewChange}
+                            ></textarea>
+                            <button
+                              type="submit"
+                              className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                            >
+                              {reviewWithStudentId ? "Update Review" : "Submit Review"}
+                            </button>
+                          </form>
+                        </div>
+
+                        {/* All Reviews Section */}
+                        <div>
+                          <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+                          {reviewData.length > 0 ? (
+                            <div className="space-y-4">
+                              {reviewData.map((review) => (
+                                <div
+                                  key={review.id}
+                                  className="bg-gray-100 p-4 rounded-lg shadow-sm"
+                                >
+                                  <div className="flex items-center mb-2">
+                                    {[...Array(5)].map((_, index) => (
+                                      <i
+                                        key={index}
+                                        className={`text-lg ${index < review.rating
+                                          ? "fa-solid fa-star text-orange-500"
+                                          : "fa-regular fa-star text-gray-300"
+                                          }`}
+                                      ></i>
+                                    ))}
+                                  </div>
+                                  <p className="text-gray-700 mb-1">{review?.review}</p>
+                                  <small className="text-gray-500">{review?.student?.first_name} {review?.student?.last_name}</small>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-gray-500">No reviews yet. Be the first!</p>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )
+                }
               </div>
             </div>
 
@@ -1149,19 +1442,14 @@ const CourseVideo = () => {
                                   var isCompleted =
                                     courseProgress &&
                                     courseProgress.completed_lesson_id &&
-                                    JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.id) ||
-                                    JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.quiz_id);
+                                    JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.id)
                                 }
                                 const canAccess =
                                   (courseProgress &&
                                     courseProgress.completed_lesson_id &&
                                     JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id)) ||
                                   (courseProgress &&
-                                    courseProgress.completed_lesson_id &&
-                                    JSON.parse(courseProgress.completed_lesson_id).includes(lesson.quiz_id)) ||
-                                  (courseProgress &&
                                     courseProgress.current_watching_lesson === lesson.id);
-
                                 return (
                                   <div
                                     className={`module-content ${!canAccess ? "cursor-not-allowed" : ""

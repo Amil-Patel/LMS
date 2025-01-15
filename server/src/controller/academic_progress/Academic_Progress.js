@@ -75,6 +75,7 @@ const UpdateAcademicProgressDataForViewed = async (req, res) => {
     const stuId = req.params.stuId;
     const data = {
         completed_lesson_id: JSON.stringify(req.body.completed_lesson_id),
+        course_progress: req.body.course_progress,
         current_watching_lesson: req.body.current_watching_lesson,
         completed_date: new Date(),
     }
@@ -111,7 +112,6 @@ const addAcedemicProgressData = async (req, res) => {
         res.status(200).json(userroledata);
     } catch (error) {
         console.log(error);
-        console.log(res.message + " ll");
         res.sendStatus(500);
     }
 }
