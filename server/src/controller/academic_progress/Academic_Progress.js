@@ -1,5 +1,6 @@
+const { where } = require("sequelize");
 const AuthMiddleware = require("../../auth/AuthMiddleware")
-const { academic_progress, enrollment, Course_Lesson, UserMaster, Course_Quize, quize_result } = require("../../database/models/index");
+const { academic_progress, enrollment, Course_Lesson, UserMaster, Course_Quize, quize_result, Course_Master } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 
 const getAcademicProgressData = async (req, res) => {
@@ -50,6 +51,145 @@ const getAcademicProgressData = async (req, res) => {
         res.sendStatus(500);
     }
 }
+const getAcademicProgressDataForManageCourse = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+
+    const course_id = req.params.course_id;
+
+    try {
+        // Fetch enrollment data
+        const enrollData = await enrollment.findAll({
+            attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status', 'createdAt', 'updatedAt'],
+            where: {
+                course_id: course_id
+            }
+        });
+
+        // Fetch lesson and quiz data (common for all enrollments in the same course)
+        const lessonData = await Course_Lesson.findAll({
+            attributes: ['id', 'title'],
+            where: {
+                course_id: course_id,
+                quiz_id: null
+            }
+        });
+
+        const quizeData = await Course_Quize.findAll({
+            attributes: ['id', 'title'],
+            where: {
+                course_id: course_id
+            }
+        });
+
+        // Initialize grouped data
+        const mainData = {
+            enroll: [],
+            userMaster: [],
+            academicData: [],
+            lessonData,
+            quizeData
+        };
+
+        // Use a Set to keep track of processed student IDs
+        const processedStudents = new Set();
+
+        // Map through enrollment data to populate the grouped arrays
+        for (const enroll of enrollData) {
+            mainData.enroll.push(enroll);
+
+            // Check if the student ID has already been processed
+            if (!processedStudents.has(enroll.student_id)) {
+                const userMaster = await UserMaster.findOne({
+                    attributes: ['id', 'first_name', 'last_name'],
+                    where: {
+                        id: enroll.student_id
+                    }
+                });
+
+                if (userMaster) {
+                    mainData.userMaster.push(userMaster);
+                    processedStudents.add(enroll.student_id); // Mark this student ID as processed
+                }
+            }
+
+            const academicData = await academic_progress.findAll({
+                attributes: ['id', 'completed_lesson_id', 'course_progress', 'watching_duration', 'current_watching_lesson', 'completed_date', 'createdAt', 'updatedAt'],
+                where: {
+                    student_id: enroll.student_id,
+                    course_id: course_id
+                }
+            });
+
+            mainData.academicData.push(...academicData); // Spread academic data for each student
+        }
+
+        // Wrap mainData in an array to match the desired format
+        res.send([mainData]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: "An error occurred while fetching academic progress data." });
+    }
+};
+const getAcademicProgressDataForManageCourseQuizDisplay = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const course_id = req.params.course_id;
+    const stu_id = req.params.stu_id;
+    console.log(course_id, stu_id)
+    try {
+        const userMaster = await UserMaster.findOne({
+            attributes: ['id', 'first_name', 'last_name'],
+            where: {
+                id: stu_id
+            }
+        });
+        const courseMaster = await Course_Master.findOne({
+            attributes: ['id', 'course_title'],
+            where: {
+                id: course_id
+            }
+        })
+        const academicData = await academic_progress.findAll({
+            attributes: ['id', 'completed_lesson_id', 'course_progress', 'watching_duration', 'current_watching_lesson', 'completed_date', 'createdAt', 'updatedAt'],
+            where: {
+                student_id: stu_id,
+                course_id: course_id
+            }
+        });
+        // const quizeData = await Course_Quize.findAll({
+        //     attributes: ['id', 'title', 'total_marks', 'passing__marks', 'no_of_q_retakes', 'createdAt', 'updatedAt'],
+        //     where: {
+        //         course_id: course_id
+        //     }
+        // })
+        const quizResultData = await quize_result.findAll({
+            attributes: ['id', 'quize_id', 'user_answers', 'correct_answers', 'result', 'createdAt', 'updatedAt'],
+            where: {
+                student_id: stu_id,
+                course_id: course_id  // Use the first quiz id if available
+            }
+        });
+        // Extracting quiz IDs from quizResultData
+        const quizIds = quizResultData.map(result => result.quiz_id);
+
+        // Fetching quiz data where quiz IDs match
+        let quizData = [];
+        if (quizIds.length > 0) {
+            quizData = await Course_Quize.findAll({
+                attributes: ['id', 'title', 'total_marks', 'passing_marks', 'no_of_q_retakes', 'createdAt', 'updatedAt'],
+                where: {
+                    id: quizIds // Matching with extracted quiz IDs
+                }
+            });
+        }
+        const data = { userMaster, courseMaster, academicData, quizData, quizResultData };
+        console.log(data)
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
 const getAcademicProgressDataWithCourseId = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -73,11 +213,12 @@ const UpdateAcademicProgressDataForViewed = async (req, res) => {
     if (!isAuthenticated) return;
     const id = req.params.id;
     const stuId = req.params.stuId;
+    const completeDate = DateToUnixNumber(new Date(), 'America/Toronto');
     const data = {
         completed_lesson_id: JSON.stringify(req.body.completed_lesson_id),
         course_progress: req.body.course_progress,
         current_watching_lesson: req.body.current_watching_lesson,
-        completed_date: new Date(),
+        completed_date: completeDate,
     }
     try {
         const userroledata = await academic_progress.update(data, {
@@ -134,4 +275,4 @@ const updateWatchingDuration = async (req, res) => {
         res.sendStatus(500);
     }
 }
-module.exports = { getAcademicProgressData, addAcedemicProgressData, getAcademicProgressDataWithCourseId, UpdateAcademicProgressDataForViewed,updateWatchingDuration }
+module.exports = { getAcademicProgressData, addAcedemicProgressData, getAcademicProgressDataWithCourseId, UpdateAcademicProgressDataForViewed, updateWatchingDuration, getAcademicProgressDataForManageCourse, getAcademicProgressDataForManageCourseQuizDisplay }

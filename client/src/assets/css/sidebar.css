@@ -434,7 +434,6 @@ input:checked+.slider:before {
 
 .menu-container.active .menu-content {
   display: block;
-  border: 1px dotted black;
   padding: 5px 10px;
   position: absolute;
   top: 40%;
