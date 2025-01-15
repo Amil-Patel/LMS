@@ -14,12 +14,6 @@ function RolesList() {
     setRollName(itemName);
     getRolePermissionData(itemName);
   };
-
-  const tableData = [
-    { id: 1, name: "Admin", type: "System", count: 5 },
-    { id: 2, name: "Instrunctor", type: "System", count: 10 },
-  ];
-
   //get pemssion group and permission category data 
   const [permissionData, setPermissionData] = useState([]);
   const getPermissionData = async () => {
@@ -116,6 +110,26 @@ function RolesList() {
   };
 
 
+  //user data
+  const [adminData, setAdminData] = useState([])
+  const [instructureData, setInstructureData] = useState([])
+  const [studentData, setStudentData] = useState([])
+  const [superAdminData, setSuperAdminData] = useState([])
+  const getAllUserData = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get(`${port}/gettingUserMasterData`);
+      setAdminData(res.data.filter(user => user.role_id === "admin"));
+      setInstructureData(res.data.filter(user => user.role_id === "instrunctor"));
+      setStudentData(res.data.filter(user => user.role_id === "student"));
+      setSuperAdminData(res.data.filter(user => user.role_id === "superAdmin"));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setLoading(false);
+    }
+  };
+
   //edit code start
   const handleEdit = async () => {
     setLoading(true);
@@ -136,9 +150,16 @@ function RolesList() {
     }
   }
 
+  const tableData = [
+    { name: "Admin", type: "System", count: adminData.length },
+    { name: "Instrunctor", type: "System", count: instructureData.length },
+    { name: "Student", type: "", count: studentData.length },
+    { name: "Super Admin", type: "", count: superAdminData.length },
+  ];
 
   useEffect(() => {
-    getPermissionData()
+    getPermissionData();
+    getAllUserData();
   }, [])
 
   return (
@@ -171,20 +192,18 @@ function RolesList() {
               <tbody>
                 {tableData.map((item, index) => (
                   <tr key={index}>
-                    <td>{item.id}</td>
+                    <td>{index + 1}</td>
                     <td>{item.name}</td>
                     <td>{item.type}</td>
                     <td>{item.count}</td>
                     <td>
-                      <span className="list" onClick={() => assignRoles(item.name)}>
-                        <i className="fa-solid fa-list-check"></i>
-                      </span>
-                      {/* <span className="edit">
-                        <i className="fa-solid fa-pencil"></i>
-                      </span>
-                      <span className="xmark edit">
-                        <i className="fa-solid fa-xmark"></i>
-                      </span> */}
+                      {item.name === "Instrunctor" || item.name === "Admin" ? (
+                        <span className="list" onClick={() => assignRoles(item.name)}>
+                          <i className="fa-solid fa-list-check"></i>
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -210,7 +229,7 @@ function RolesList() {
                     </span>
                   </div>
                 </div>
-                <table style={{marginBottom: "0px"}}>
+                <table style={{ marginBottom: "0px" }}>
                   <thead>
                     <tr>
                       <th>Modules</th>
