@@ -35,13 +35,14 @@ const Sidebar = () => {
   const viewAdminData = adminData.length > 0 && adminData[0].can_view === 1 ? 1 : 0;
   // List of paths where "Course" should be highlighted
   const coursePaths = [
-    "/all-course",
-    "/add-course",
-    "/course-category",
-    "/course-coupon",
+    "/admin/all-course",
+    "/admin/add-course",
+    "/admin/course-category",
+    "/admin/course-coupon",
+    "/admin/edit-course/*",
   ];
 
-  const settingPathes = ["/payment-setting", "/notification-setting"];
+  const settingPathes = ["/admin/payment-setting", "/admin/notification-setting"];
 
   const isCourseActive = coursePaths.includes(location.pathname);
   const isSettingActive = settingPathes.includes(location.pathname);

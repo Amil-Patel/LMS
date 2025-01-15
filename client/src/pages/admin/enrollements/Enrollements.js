@@ -361,27 +361,28 @@ function Enrollements() {
                   type="text"
                   name="studentname"
                   id="studentname"
-                  className="col12input"
+                  className={`col12input ${filteredStudent.length > 0 ? "rounded-b-none border-b-0" : ""}`}
                   placeholder="Enter Student Name"
                   value={studentNameInput}
                   onChange={handleStudentNameChange}
                 />
                 {filteredStudent.length > 0 && (
-                  <div className="filtered-student">
-                    <ul className="filtered-student-list">
+                  <div className="rounded-lg rounded-t-none border border-gray-200 border-t-0 shadow-lg bg-white overflow-hidden">
+                    <ul className="max-h-28 overflow-y-auto">
                       {filteredStudent.map((student, index) => (
                         <li
                           key={index}
-                          className={addEnrollData.students[0] === student.id ? "selected" : ""}
+                          className={`cursor-pointer p-2 hover:bg-blue-100 ${addEnrollData.students[0] === student.id ? "bg-blue-200" : ""}`}
                           onClick={() => handleStudentSelection(student)}
-                          style={{
-                            cursor: "pointer",
-                            backgroundColor: addEnrollData.students[0] === student.id
-                              ? "#d3f8e2"
-                              : "transparent", // Highlight the last selected student
-                          }}
                         >
-                          {student.first_name} {student.last_name}
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium text-sm text-gray-800">
+                              {student.first_name} {student.last_name}
+                            </span>
+                            {addEnrollData.students[0] === student.id && (
+                              <span className="text-xs text-blue-700">Selected</span>
+                            )}
+                          </div>
                         </li>
                       ))}
                     </ul>
