@@ -39,12 +39,13 @@ const Sidebar = () => {
     "/admin/add-course",
     "/admin/course-category",
     "/admin/course-coupon",
-    "/admin/edit-course/*",
+    "/admin/edit-course",
+    "/admin/manage-course",
   ];
 
   const settingPathes = ["/admin/payment-setting", "/admin/notification-setting"];
 
-  const isCourseActive = coursePaths.includes(location.pathname);
+  const isCourseActive = coursePaths.some(path => location.pathname.startsWith(path));
   const isSettingActive = settingPathes.includes(location.pathname);
 
   const toggleDropdown = (menu, event) => {

@@ -5,8 +5,6 @@ const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
 const getCourseQuizeQuestionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-
-    const DateToUnixNumber = require('../../middleware/DateToUnixNumber');
     const id = req.params.id
     try {
         const data = await Course_Quize_Question.findAll({
@@ -43,13 +41,20 @@ const addCourseQuizeQuestionData = async (req, res) => {
     if (!isAuthenticated) return;
     const quizId = req.params.id;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
+
+    const getdata = await Course_Quize_Question.findAll({
+        where: {
+            quize_id: quizId,
+            section_id: req.body.section_id,
+        }
+    })
     const data = {
         title: req.body.title,
         question_type: null,
         no_of_option: null,
         options: JSON.stringify(req.body.options),
         correct_answer: JSON.stringify(req.body.correct_answer),
-        order: 0,
+        order: getdata.length + 1,
         quize_id: quizId,
         section_id: req.body.section_id,
         course_id: req.body.course_id,

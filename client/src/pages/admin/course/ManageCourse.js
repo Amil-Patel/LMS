@@ -22,14 +22,11 @@ const ManageCourse = () => {
   const [quizOpen, setQuizOpen] = useState(false); // state for open quiz modal
   const [questionOpen, setQuestionOpen] = useState(false); // state for open question modal
   const [addquestionOpen, setAddQuestionOpen] = useState(false); // state for open add question modal
-  const [editquestionOpen, setEditQuestionOpen] = useState(false); // state for open edit question modal
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [editquestionOpen, setEditQuestionOpen] = useState(false);
   const [openQuizIndex, setOpenQuizIndex] = useState(0);
   const [timeLimit, setTimeLimit] = useState(false);
   const [maxAttempts, setMaxAttempts] = useState(false);
-  const [sortedData, setSortedData] = useState([]); // acedemic student name
-  const [openQuizResult, setopenQuizResult] = useState(false); // state for open quiz result modal
-  const [quizDocumentOpen, setQuizDocumentOpen] = useState(false); // state for open quiz document modal
+  const [openQuizResult, setopenQuizResult] = useState(false);
   // Function to change the currently active tab
   const handleChangeTab = (tabName) => {
     setTab(tabName);
@@ -247,13 +244,6 @@ const ManageCourse = () => {
   const openQuizResultmodule = () => {
     setopenQuizResult(!openQuizResult); // Correctly toggling openQuizResult state
   };
-
-  // Function to toggle visibility of quiz document modal
-  const quizDocumentToggleModal = (stuId) => {
-    getProgressQuizData(stuId);
-    setQuizDocumentOpen(!quizDocumentOpen); // Fixed the state variable name
-  };
-
   //module section start
   //get module data
   const getModuleData = async () => {
@@ -430,7 +420,6 @@ const ManageCourse = () => {
 
   const handleAddLessonSubmit = async (e) => {
     e.preventDefault();
-    console.log(addLesson);
     // Validation checks for required fields
     if (!addLesson.lesson_type) {
       notifyWarning("Select The Lesson Type.");
@@ -1030,19 +1019,6 @@ const ManageCourse = () => {
     setOpenQuizIndex(index === openQuizIndex ? null : index);
   };
 
-  // Array of initial data for student progress
-  const initialData = [
-    {
-      Student_name: "Hlimon Sorey",
-      Enroll_Date: "27-12-2024",
-      Completed_Date: "27-12-2024",
-      Time_Spent: "37:09:32",
-      Progress: "80%",
-      Completed_Lesson: "50 out of 60",
-      Last_Seen: "27-12-2024",
-      Quiz_Passed: "2/9 ",
-    },
-  ];
   // start
   const [progressData, setProgressData] = useState([]);
   const getProgressData = async () => {
@@ -1050,6 +1026,7 @@ const ManageCourse = () => {
       const res = await axiosInstance.get(`${port}/getAcademicProgressDataForManageCourse/${id}`);
       const progressData = res.data;
       await setProgressData(progressData);
+      console.log(progressData);
     } catch (error) {
       console.log(error);
     }
@@ -1064,74 +1041,22 @@ const ManageCourse = () => {
   };
 
   const [progressQuiz, setProgressQuiz] = useState([]);
-  const getProgressQuizData = async (stuId) => {
+  const [enrollDisplayId, setEnrollDisplayId] = useState(null);
+  const getProgressQuizData = async (stuId, enrollId) => {
+    setEnrollDisplayId(enrollId)
     try {
       const res = await axiosInstance.get(`${port}/getAcademicProgressDataForManageCourseQuizDisplay/${id}/${stuId}`);
       const progressData = res.data;
-      await setProgressQuiz(progressData);
+      await setProgressQuiz(progressData[0]);
       setopenQuizResult(!openQuizResult);
-      console.log(progressData)
     } catch (error) {
       console.log(error);
     }
   }
-  // end
-  // useEffect hook to set sorted data when the component mounts or when `setSortedData` changes
-  useEffect(() => {
-    setSortedData(initialData);
-  }, [setSortedData]);
 
   useEffect(() => {
     getProgressData()
   }, [])
-  // Quiz Result Table Data
-  const data = [
-    {
-      id: 1,
-      title: "Quiz 1",
-      totalMarks: 100,
-      passMarks: 33,
-      obtainMarks: 80,
-      attempts: 1,
-      result: "Pass",
-    },
-    {
-      id: 2,
-      title: "Quiz 2",
-      totalMarks: 100,
-      passMarks: 33,
-      obtainMarks: 60,
-      attempts: 2,
-      result: "Pass",
-    },
-    {
-      id: 3,
-      title: "Quiz 3",
-      totalMarks: 100,
-      passMarks: 33,
-      obtainMarks: 20,
-      attempts: 1,
-      result: "Fail",
-    },
-  ];
-
-  // Quiz Document Table Data
-  const document_data = [
-    {
-      id: 1,
-      doc_category: "General",
-      doc_title: "Title",
-      date_upload: "27-04-2024",
-      description: "Description",
-    },
-    {
-      id: 2,
-      doc_category: "Course : Course Name",
-      doc_title: "Title",
-      date_upload: "27-04-2024",
-      description: "Description",
-    },
-  ];
 
   return (
     <>
@@ -1334,17 +1259,13 @@ const ManageCourse = () => {
               </thead>
 
               <tbody>
-                {progressData && progressData.length !== 0 ? (
+                {/* {progressData && progressData.length !== 0 ? (
                   progressData.map((i, index) => {
-                    console.log(i)
                     const time = moment.unix(i.enroll[0].createdAt).tz(setting.timezone).format("DD-MM-YYYY");
                     const completeDate = moment.unix(i.academicData[0]?.completed_date).tz(setting.timezone).format("DD-MM-YYYY");
-                    // Step 1: Parse the completed_lesson_id string into an array
-                    console.log(i.academicData)
                     let completedLessons;
-                    if (i.academicData[0]?.completed_lesson_id === null) {
+                    if (i.academicData[0]?.completed_lesson_id !== null) {
                       completedLessons = JSON.parse(i?.academicData[0]?.completed_lesson_id);
-                      console.log(completedLessons)
                       if (typeof completedLessons === 'string') {
                         completedLessons = JSON.parse(completedLessons);
                       }
@@ -1375,14 +1296,14 @@ const ManageCourse = () => {
                         <td>{completeDate}</td>
                         <td style={{ textAlign: "center" }}>
                           {i.Quiz_Passed}
-                          <span className="view" onClick={() => { getProgressQuizData(i.userMaster[0].id) }} >
+                          <span className="view" onClick={() => { getProgressQuizData(i.userMaster[0].id, i.enroll[0].id) }} >
                             <i className="fa-regular fa-eye"></i>
                           </span>
                         </td>
                         <td>
                           <button
                             className="resource-btn module-btn"
-                            onClick={openQuizResultmodule}
+                          // onClick={openQuizResultmodule}
                           >
                             <i
                               className="fa-regular fa-file"
@@ -1396,7 +1317,78 @@ const ManageCourse = () => {
                   })
                 ) : (
                   ""
+                )} */}
+                {progressData && progressData.length !== 0 ? (
+                  progressData.map((studentData, studentIndex) => {
+                    console.log(studentData);
+                    // Ensure enroll data exists
+                    const enroll = studentData.enrollment && studentData.enrollment;
+                    const academicData = studentData.academicData && studentData.academicData[0];
+                    const userMaster = studentData.userMaster && studentData.userMaster;
+                    console.log(userMaster)
+                    if (!enroll || !userMaster) {
+                      return null; // Skip this student if essential data is missing
+                    }
+                    console.log("object")
+                    // Format dates safely
+                    const time = enroll.createdAt
+                      ? moment.unix(enroll.createdAt).tz(setting.timezone).format("DD-MM-YYYY")
+                      : "N/A";
+                    const completeDate = academicData?.completed_date
+                      ? moment.unix(academicData.completed_date).tz(setting.timezone).format("DD-MM-YYYY")
+                      : "N/A";
+
+                    // Calculate completed lessons and progress percentage
+                    let completedLessons = [];
+                    if (academicData?.completed_lesson_id) {
+                      completedLessons = JSON.parse(academicData.completed_lesson_id);
+                      if (typeof completedLessons === "string") {
+                        completedLessons = JSON.parse(completedLessons);
+                      }
+                    }
+
+                    const lessonIds = studentData.lessonData.map(lesson => lesson.id);
+                    const commonLessonIds = completedLessons.filter(id => lessonIds.includes(id));
+                    const progressPercentage = Math.round((commonLessonIds.length / studentData.lessonData.length) * 100) || 0;
+
+                    return (
+                      <tr key={studentIndex}>
+                        <td className="id">{studentIndex + 1}</td>
+                        <td>
+                          <h6>{userMaster.first_name} {userMaster.last_name}</h6>
+                        </td>
+                        <td>{time}</td>
+                        <td>{completeDate}</td>
+                        <td>{secondsToHMS(academicData?.watching_duration || 0)}</td>
+                        <td>{progressPercentage}%</td>
+                        <td>{commonLessonIds.length} out of {studentData.lessonData.length}</td>
+                        <td>{completeDate}</td>
+                        <td className="text-center">
+                          <span className="view" onClick={() => getProgressQuizData(userMaster.id, enroll.id)}>
+                            <i className="fa-regular fa-eye"></i>
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            className="resource-btn module-btn"
+                          // onClick={openQuizResultmodule}
+                          >
+                            <i
+                              className="fa-regular fa-file"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                            Document
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan="8" style={{ textAlign: "center" }}>No data available</td>
+                  </tr>
                 )}
+
 
               </tbody>
             </table>
@@ -2492,7 +2484,7 @@ const ManageCourse = () => {
                   </div>
                   <div>
                     <strong>Enrollment Id :</strong>
-                    <span> 12453</span>
+                    <span> {enrollDisplayId ? enrollDisplayId : "N/A"}</span>
                   </div>
                   <div>
                     <strong>Course Name :</strong>
@@ -2508,117 +2500,47 @@ const ManageCourse = () => {
                       <th>Total Marks</th>
                       <th>Pass Marks</th>
                       <th>Obtain Marks</th>
-                      <th>Max Attempts</th>
-                      <th>Attempts</th>
                       <th>Result </th>
-                      <th></th>
-                      <th></th>
                     </tr>
                   </thead>
-
                   <tbody>
-                    {progressQuiz.quizeData.map((item, index) => {
-                      console.log(item)
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>
-                            <h6>{item?.title}</h6>
-                          </td>
-                          <td>{item?.total_marks}</td>
-                          <td>{item?.passing__marks}</td>
-                          <td>0</td>
-                          <td>-</td>
-                          <td>{item.attempts}</td>
-                          <td>{item.result}</td>
-                          <td>
-                            <span className="view">
-                              <i className="fa-regular fa-eye"></i>
-                            </span>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )
-        }
-
-        {/* Quiz Document Modal  */}
-        {
-          quizDocumentOpen && (
-            <div className="modal">
-              <div className="add-lesson-container" style={{ width: "70%" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    borderBottom: "2px solid #dfdfe1",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <h5 style={{ paddingBottom: "5px" }}>Documents</h5>
-                  <div
-                    onClick={quizDocumentToggleModal}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <i className="fa-solid fa-xmark"></i>
-                  </div>
-                </div>
-
-                <div className="student-details">
-                  <div>
-                    <strong>Student :</strong>
-                    <span> Student Name With link</span>
-                  </div>
-                  <div>
-                    <strong>Enrollment Id :</strong>
-                    <span> 12453</span>
-                  </div>
-                  <div>
-                    <strong>Course Name :</strong>
-                    <span> Course Name Name With link</span>
-                  </div>
-                </div>
-
-                <table style={{ margin: "10px 0" }}>
-                  <thead className="academic-table">
-                    <tr>
-                      <th>ID</th>
-                      <th>Doc Catagory</th>
-                      <th>Document Title</th>
-                      <th>Date Upload</th>
-                      <th>Description</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {document_data.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.id}</td>
-                        <td>
-                          <h6>{item.doc_category}</h6>
-                        </td>
-                        <td>{item.doc_title}</td>
-                        <td>{item.date_upload}</td>
-                        <td>{item.description}</td>
-                        <td>
-                          <label className="switch">
-                            <input type="checkbox" readOnly />
-                            <span className="slider"></span>
-                          </label>
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          <span className="view">
-                            <i className="fa-regular fa-eye"></i>
-                          </span>
-                        </td>
+                    {progressQuiz.quizData.length !== 0 ? (
+                      progressQuiz.quizData?.map((item, index) => {
+                        const result = progressQuiz.quizResultData?.find(
+                          (res) => res.quize_id === item.id
+                        );
+                        let obtainedMarks = 0;
+                        if (result) {
+                          const userAnswers = JSON.parse(result.user_answers || "{}");
+                          const correctAnswers = JSON.parse(result.correct_answers || "{}");
+                          for (const questionId in correctAnswers) {
+                            if (correctAnswers.hasOwnProperty(questionId)) {
+                              const correctAnswer = JSON.parse(correctAnswers[questionId]);
+                              const userAnswer = userAnswers[questionId];
+                              if (Array.isArray(correctAnswer) && correctAnswer.includes(userAnswer)) {
+                                obtainedMarks += item.total_marks / Object.keys(correctAnswers).length;
+                              }
+                            }
+                          }
+                        }
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>
+                              <h6>{item?.title}</h6>
+                            </td>
+                            <td>{item?.total_marks}</td>
+                            <td>{item?.passing__marks}</td>
+                            <td>{obtainedMarks ? obtainedMarks : 0}</td>
+                            <td>{result.result}</td>
+                          </tr>
+                        )
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={6} className="text-center">No Data Found</td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>

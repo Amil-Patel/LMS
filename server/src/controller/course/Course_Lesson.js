@@ -105,6 +105,12 @@ const addCourseLessonData = async (req, res) => {
     if (req.files.attachment != undefined) {
         attachment = req.files.attachment[0].filename;
     }
+    const getdata = await Course_Lesson.findAll({
+        where: {
+            course_id: req.body.course_id,
+            section_id: sectionId
+        }
+    });
     const data = {
         title: req.body.title,
         duration: req.body.duration,
@@ -122,7 +128,7 @@ const addCourseLessonData = async (req, res) => {
         description: req.body.description,
         minimum_duration: null,
         drip_content: null,
-        order: 0,
+        order: getdata.length + 1,
         createdAt: date,
         updatedAt: date,
     }
