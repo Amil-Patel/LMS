@@ -232,17 +232,17 @@ const CourseVideo = () => {
       setLessonData(lessonquizdata);
       getResourceData(lessonquizdata[0]?.id);
       const sortedData = lessonquizdata && lessonquizdata.sort((a, b) => a.order - b.order);
-      if (sortedData.length > 0) {
-        if (courseProgress && stuUserId) {
-          const data = {
-            current_watching_lesson: sortedData[0]?.id,
-          };
-          await axiosInstance.put(
-            `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
-            data
-          );
-        }
-      }
+      // if (sortedData.length > 0) {
+      //   if (courseProgress && stuUserId) {
+      //     const data = {
+      //       current_watching_lesson: sortedData[0]?.id,
+      //     };
+      //     await axiosInstance.put(
+      //       `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
+      //       data
+      //     );
+      //   }
+      // }
       setLessonLoading(false);
       return sortedData;
     } catch (error) {
