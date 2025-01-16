@@ -539,7 +539,6 @@ const User = () => {
       );
     });
   }, [userData, searchQuery]);
-
   return (
     <>
       <Hoc />
@@ -1382,7 +1381,7 @@ const User = () => {
                     <label htmlFor="role_id">User Roll</label>
                     <select id="role_id" className="col12input" name="role_id" value={editData?.role_id || ""} onChange={handleEditChange}>
                       <option value="">Select Role</option>
-                      {roleName === "SuperAdmin" && (
+                      {roleName === "superAdmin" && (
                         <>
                           <option value="student">Student</option>
                           <option value="admin">Admin</option>

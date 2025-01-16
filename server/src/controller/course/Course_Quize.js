@@ -65,7 +65,12 @@ const addCourseQuizeData = async (req, res) => {
     };
 
     const t = await sequelize.transaction();
-
+    const getdata = await Course_Lesson.findAll({
+        where: {
+            course_id: req.body.course_id,
+            section_id: sectionId
+        }
+    });
     try {
         const courseQuiz = await Course_Quize.create(data, { transaction: t });
         const quizeId = courseQuiz.id;
@@ -75,7 +80,7 @@ const addCourseQuizeData = async (req, res) => {
             section_id: sectionId,
             course_id: courseId,
             quiz_id: quizeId,
-            order: 0,
+            order: getdata.length + 1,
         };
 
         await Course_Lesson.create(lessonData, { transaction: t });
