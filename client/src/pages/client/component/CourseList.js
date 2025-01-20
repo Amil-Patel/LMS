@@ -30,7 +30,6 @@ const CourseList = ({ courses, category }) => {
                 // Find the category title for the course
                 const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
                 const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory;
-                // console.log(cart)
                 if (cart) {
                     var isInCart = cart?.some((item) => {
                         if (savedToken) {

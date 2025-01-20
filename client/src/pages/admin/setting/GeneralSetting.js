@@ -44,7 +44,6 @@ const GeneralSetting = () => {
     // Update timezone
     const updateTimeZone = async () => {
         setLoading(true);
-        console.log(selectedTimeZone)
         try {
             await axiosInstance.put(`${port}/updatingTimezone`, {
                 timezonename: selectedTimeZone

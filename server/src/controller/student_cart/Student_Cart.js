@@ -30,8 +30,6 @@ const addStudentCartData = async (req, res) => {
         if (!Array.isArray(cartData)) {
             cartData = [cartData];
         }
-
-        console.log(cartData)
         // Prepare the data for bulk insertion
         const dataArray = cartData
             .filter((item) => item.id && item.course_title && item.studentId) // Ensure required fields are present
@@ -88,7 +86,6 @@ const addStudentCartData = async (req, res) => {
 
 const removeStudentCartData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
-    console.log("Authenticated:", isAuthenticated);
     if (!isAuthenticated) return;
     const courseId = parseInt(req.query.course_id);
     const id = parseInt(req.query.id);

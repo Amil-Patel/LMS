@@ -67,6 +67,26 @@ function Inquiry() {
     }
   };
 
+  const [deleteId, setDeleteId] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const deleteToggleModal = (index) => {
+    setDeleteOpen(!deleteOpen);
+    setDeleteId(index);
+  };
+
+  const handledeleteClick = async () => {
+    setLoading(true);
+    try {
+      await axiosInstance.delete(`${port}/deleteInquiry/${deleteId}`);
+      getInquiryData();
+      setDeleteOpen(false);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error deleting inquiry", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Hoc />
@@ -104,8 +124,7 @@ function Inquiry() {
                   </td>
                   <td>
                     <p>Email: <span className="lowercase">{inquiry.email}</span></p>
-                    <p>Call: +{inquiry.mobile_number}</p>
-                    <p>wp: {inquiry.mobile_number}</p>
+                    <p>Call: {inquiry.mobile_number}</p>
                   </td>
                   <td>{inquiry.country}</td>
                   <td className="inq_message">
@@ -123,6 +142,12 @@ function Inquiry() {
                       onClick={() => handleEditClick(inquiry)}
                     >
                       <i className="fa-solid fa-pencil"></i>
+                    </span>
+                    <span
+                      className="edit"
+                      onClick={() => deleteToggleModal(inquiry.id)}
+                    >
+                      <i className="fa-regular fa-trash-can"></i>
                     </span>
                   </td>
                 </tr>
@@ -202,7 +227,6 @@ function Inquiry() {
                     const statusColor =
                       value === "success" ? "green" : value === "rejected" ? "red" : "black";
                     const isEmail = key === "email";
-                    console.log(isEmail)
                     return (
                       <tr key={key}>
                         <td>
@@ -219,6 +243,23 @@ function Inquiry() {
                 </tbody>
               </table>
               <button onClick={handleCloseViewModal} className="secondary-btn">Close</button>
+            </div>
+          </div>
+        )}
+        {/* delete modal */}
+        {deleteOpen && (
+          <div className="modal">
+            <div className="modal-container">
+              <h5>Delete Inquiry</h5>
+              <p>Are you sure you want to delete this Inquiry?</p>
+              <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                <button className="primary-btn" onClick={handledeleteClick}>
+                  Delete
+                </button>
+                <button onClick={deleteToggleModal} className="secondary-btn">
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         )}

@@ -1,6 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react';
+import axiosInstance from '../../admin/utils/axiosInstance';
+import { notifySuccess } from '../../admin/layout/ToastMessage';
+const port = process.env.REACT_APP_URL
 
 const Contact = () => {
+    const [formState, setFormState] = useState({
+        name: '',
+        email: '',
+        mobile_number: '',
+        message: '',
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormState((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axiosInstance.post(`${port}/addingInquiry`, formState);
+            setFormState({
+                name: '',
+                email: '',
+                mobile_number: '',
+                message: '',
+            });
+            notifySuccess("Message sent successfully");
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
     return (
         <div className='client_section'>
             <div className="cus-course-growth-section">
@@ -46,13 +76,12 @@ const Contact = () => {
 
                 <div className="cus-contact-form">
                     <h6>Get In Touch With Us</h6>
-                    <input type="text" className="cus-full-name" placeholder="Full Name:" />
-                    <input type="text" className="cus-Email" placeholder="Email Address:" />
-                    <input type="text" className="cus-phone-no" placeholder="Phone No:" />
-                    <input type="text" className="cus-select-program" placeholder="Select Program" />
-                    <textarea name="message" className="cus-message-box" placeholder="Message..."></textarea>
+                    <input type="text" name='name' onChange={handleInputChange} value={formState.name} className="cus-full-name" placeholder="Full Name:" />
+                    <input type="text" name='email' onChange={handleInputChange} value={formState.email} className="cus-Email" placeholder="Email Address:" />
+                    <input type="text" name='mobile_number' onChange={handleInputChange} value={formState.mobile_number} className="cus-phone-no" placeholder="Phone No:" />
+                    <textarea name="message" onChange={handleInputChange} value={formState.message} className="cus-message-box" placeholder="Message..."></textarea>
                     <div className="cus-submit-btn">
-                        <button>Submit Now</button>
+                        <button onClick={handleSubmit}>Submit Now</button>
                     </div>
                 </div>
             </div>

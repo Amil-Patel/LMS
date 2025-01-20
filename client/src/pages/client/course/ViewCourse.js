@@ -299,7 +299,6 @@ const ViewCourse = () => {
                       const totalMinutes = lessonTime + quizeTime;
                       const hours = Math.floor(totalMinutes / 60);
                       const minutes = totalMinutes % 60;
-                      console.log(totalMinutes)
                       const formattedTime = `${hours} hours and ${minutes} minutes`;
                       return (
                         <div className="module" key={index}>

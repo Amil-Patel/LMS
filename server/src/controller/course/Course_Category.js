@@ -123,7 +123,6 @@ const updateCourseCategoryData = async (req, res) => {
     if (!isAuthenticated) return;
     const updateddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const id = req.params.id;
-
     const curentcoursecate = await Course_Category.findOne({ where: { id } });
     if (!curentcoursecate) {
         return res.status(404).json({ message: 'Course_Category not found' });
@@ -138,10 +137,9 @@ const updateCourseCategoryData = async (req, res) => {
         }
     }
 
-    // Prepare the data for updating the course category
     const data = {
         cate_title: req.body.cate_title,
-        cate_parent_id: req.body.cate_parent_id === 'null' || !req.body.cate_parent_id ? null : parseInt(req.body.cate_parent_id),
+        cate_parent_id: req.body.cate_parent_id === 'NULL' || !req.body.cate_parent_id ? null : parseInt(req.body.cate_parent_id),
         cate_thumbnail: req.file ? req.file.filename : curentcoursecate.cate_thumbnail,
         status: 1,
         updated_by: req.body.updated_by || 0,

@@ -89,6 +89,8 @@ const CheckOut = () => {
                             course_tax: course.course_tax, // Tax Rate
                             course_taxamount: course.course_taxamount, // Calculated Tax Amount
                             discount: course.discount,
+                            is_inclusive: course.is_inclusive,
+                            is_exclusive: course.is_exclusive
                         });
                     }
                 } else {

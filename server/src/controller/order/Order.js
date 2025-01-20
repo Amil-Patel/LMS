@@ -39,6 +39,8 @@ const addingOrderDetailItems = async (req, res) => {
             course_tax: req.body.course_tax,
             course_taxamount: req.body.course_taxamount,
             discount: req.body.discount,
+            is_inclusive: req.body.is_inclusive,
+            is_exclusive: req.body.is_exclusive,
             createdAt: createdDate,
             updatedAt: createdDate
         }

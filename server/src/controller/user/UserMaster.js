@@ -39,7 +39,6 @@ const getUserMasterDataWithId = async (req, res) => {
 const getAllStudentData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    console.log("object")
     try {
         const data = await UserMaster.findAll({
             where: {

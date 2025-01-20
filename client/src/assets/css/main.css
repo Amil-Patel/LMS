@@ -35,7 +35,7 @@ a {
   text-decoration: none;
 }
 
-body{
+body {
   text-transform: capitalize;
 }
 
@@ -322,7 +322,7 @@ button {
 }
 
 .modal-container h5 {
-  margin-bottom: 15px;
+  margin-bottom: 7px;
   color: black;
   font-size: 16px;
   font-weight: 500;
@@ -688,7 +688,9 @@ button {
 }
 
 /* client spinners */
-.lesson_loader, .lesson_loader:before, .lesson_loader:after {
+.lesson_loader,
+.lesson_loader:before,
+.lesson_loader:after {
   border-radius: 50%;
   width: 2.5em;
   height: 2.5em;
@@ -724,7 +726,10 @@ button {
 }
 
 @keyframes bblFadInOut {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     box-shadow: 0 2.5em 0 -1.3em;
   }
 
@@ -750,7 +755,7 @@ button {
 }
 
 .client_loader:before,
-  .client_loader:after {
+.client_loader:after {
   content: '';
   display: block;
   position: absolute;
@@ -790,6 +795,7 @@ button {
 }
 
 @keyframes spin {
+
   0%,
   100% {
     box-shadow: .2em 0px 0 0px currentcolor;

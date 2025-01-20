@@ -49,7 +49,7 @@ const getPaymentData = async (req, res) => {
                 // Fetch student name
                 const orderDetailData = await order_detail.findAll({
                     where: { order_id: order_id },
-                    attributes: ['course_title', 'quantity', 'course_amount', "course_tax", "course_amount", "discount"],
+                    attributes: ['course_title', 'quantity', 'course_amount', "course_tax", "course_amount", "discount", "is_inclusive", "is_exclusive"],
                     raw: true,
                 });
                 const studentData = await UserMaster.findOne({

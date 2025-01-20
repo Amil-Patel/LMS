@@ -151,7 +151,6 @@ const deleteCourseCouponData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const id = req.params.id;
-    console.log(id)
     try {
         const data = await Course_Coupon.destroy({
             where: {

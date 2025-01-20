@@ -101,7 +101,6 @@ const addCourseMasterData = async (req, res) => {
         createdAt: createddate,
         updatedAt: createddate,
     }
-    console.log(data)
     try {
         const courseCatedate = await Course_Master.create(data);
         res.status(200).json(courseCatedate);
