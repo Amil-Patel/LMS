@@ -56,7 +56,6 @@ const PurchaseHistory = () => {
             setTotalDiscount(total_discount);
 
             const inclusiveTax = course.orderDetails.reduce((taxSum, course) => {
-                console.log(course)
                 if (course.is_inclusive == 1) {
                     const amountWithDiscount = course?.course_amount - (course?.course_amount * (course?.discount / 100));
                     const tax_amount = amountWithDiscount * (parseFloat(course?.course_tax) / 100);

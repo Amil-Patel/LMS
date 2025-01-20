@@ -15,7 +15,6 @@ const addQuizResultData = async (req, res) => {
         createdAt: DateToUnixNumber(new Date(), "America/Toronto"),
         updatedAt: DateToUnixNumber(new Date(), "America/Toronto"),
     };
-    console.log(data)
     try {
         const result = await quize_result.create(data);
         res.status(200).json(result);
@@ -30,7 +29,6 @@ const getQuizResultDatWithquizId = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const id = req.params.id;
-    console.log(id)
     try {
         const result = await quize_result.findAll({ where: { quize_id: id } });
         res.status(200).json(result);

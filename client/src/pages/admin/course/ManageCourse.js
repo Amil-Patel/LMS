@@ -1385,11 +1385,9 @@ const ManageCourse = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="8" style={{ textAlign: "center" }}>No data available</td>
+                    <td colSpan="10" style={{ textAlign: "center" }}>No data available</td>
                   </tr>
                 )}
-
-
               </tbody>
             </table>
           )}

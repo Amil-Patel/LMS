@@ -81,6 +81,8 @@ const ShoppingCart = () => {
         course_tax: course.tax_rate,
         course_taxamount: course.course_price - (course.course_price * course.course_discount / 100),
         discount: course.course_discount,
+        is_inclusive: course.is_inclusive,
+        is_exclusive: course.is_exclusive
       }));
       navigate(`/checkout/`, {
         state: {

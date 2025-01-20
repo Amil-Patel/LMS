@@ -49,7 +49,6 @@ const addCourseResourceData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
-    console.log(req.body)
     try {
         const result = await resource.create({
             module_id: req.body.module_id,

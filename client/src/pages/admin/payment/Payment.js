@@ -7,7 +7,7 @@ import "../../../assets/css/payment/payment.css";
 import Loading from "../layout/Loading";
 const port = process.env.REACT_APP_URL;
 
-function Payment() {
+const Payment = () => {
   const { setting } = useContext(userRolesContext);
   const [viewOpen, setViewOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -23,21 +23,18 @@ function Payment() {
 
     if (Array.isArray(course.orderDetails)) {
       const sub_total = course.orderDetails.reduce((courseSum, course) => {
-        return courseSum + (course.course_amount || 0);
+        return courseSum + parseFloat(course.course_amount || 0);
       }, 0);
-
       setSubTotal(sub_total);
 
       const total_discount = course.orderDetails.reduce((discountSum, course) => {
         const discount = course?.course_amount * (course?.discount / 100);
         return discountSum + discount;
       }, 0);
-
       setTotalDiscount(total_discount);
 
       const inclusiveTax = course.orderDetails.reduce((taxSum, course) => {
-        console.log(course)
-        if (course.is_inclusive == 1) {
+        if (course.is_inclusive  == 1) {
           const amountWithDiscount = course?.course_amount - (course?.course_amount * (course?.discount / 100));
           const tax_amount = amountWithDiscount * (parseFloat(course?.course_tax) / 100);
           taxSum += tax_amount;
@@ -163,7 +160,7 @@ function Payment() {
                   </div>
                   <div>
                     <h5 className="head_text">Amount</h5>
-                    <p className="email">{setting.position == "left" ? setting.symbol : ""}{currentCourse?.amount}{setting.position == "right" ? setting.symbol : ""}</p>
+                    <p className="email">{setting.position == "left" ? setting.symbol : ""}{parseFloat(Number(currentCourse?.amount || 0) + Number(inclusiveTax || 0)).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}</p>
                   </div>
                   <div>
                     <h5 className="head_text">Transaction Id</h5>
@@ -191,6 +188,8 @@ function Payment() {
                       <th>Amount</th>
                       <th>Tax</th>
                       <th>Tax Amt</th>
+                      <th>Inclusive</th>
+                      <th>Exclusive</th>
                       <th>Discount</th>
                       <th>Net Amt</th>
                     </tr>
@@ -198,13 +197,15 @@ function Payment() {
 
                   <tbody>
                     {
-                      currentCourse?.orderDetails?.map((item) => {
+                      currentCourse?.orderDetails?.map((item, index) => {
                         const discount = item?.course_amount * (item?.discount / 100);
                         const withDiscountPrice = item.course_amount - discount;
                         const tax_amount = withDiscountPrice * (item?.course_tax / 100);
                         const net_amount = item?.course_amount - tax_amount - item?.discount;
+                        const isInclusive = item?.is_inclusive == 1 ? "Yes" : "No";
+                        const isExcusive = item?.is_exclusive == 1 ? "Yes" : "No";
                         return (
-                          <tr>
+                          <tr key={index + 1}>
                             <td>{item?.course_title}</td>
                             <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
                             <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_amount}{setting.position == "right" ? setting.symbol : ""}</td>
@@ -212,6 +213,8 @@ function Payment() {
                             <td>
                               {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
                             </td>
+                            <td>{isInclusive}</td>
+                            <td>{isExcusive}</td>
                             <td>
                               {setting.position == "left" ? setting.symbol : ""}{parseFloat(discount ? discount : 0).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
                             </td>

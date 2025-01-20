@@ -59,7 +59,7 @@
 }
 
 .payment_view_table tbody :nth-child(1) {
-  width: 34%;
+  width: 20%;
 }
 
 .payment_2table {
@@ -81,6 +81,7 @@
 .customer-info-table th {
   text-align: right;
   border-collapse: collapse;
+  width: 30%;
 }
 
 .customer-info-table td:last-child {

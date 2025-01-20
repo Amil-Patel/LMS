@@ -26,7 +26,6 @@ const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
             if (res.status === 200) {
                 setStuUserRole(res.data.role);
                 setStuUserId(res.data.id);
-                console.log(res.data.role, res.data.id)
                 Cookies.set('student-token', res.data.token, { expires: 10 });
                 notifySuccess(res.data.message);
                 toggleLoginForm();

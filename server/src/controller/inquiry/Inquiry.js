@@ -12,9 +12,9 @@ const addInquiryData = async (req, res) => {
             email: req.body.email,
             mobile_number: req.body.mobile_number,
             whatsapp_number: req.body.mobile_number,
-            country: req.body.country,
+            country: req.body.country || null,
             message: req.body.message,
-            summery: req.body.address,
+            summery: req.body.address || null,
             status: 'pending',
             createdAt: createdDate,
             updatedAt: createdDate
@@ -63,6 +63,23 @@ const updateInquiryStatus = async (req, res) => {
     }
 };
 
+const deleteInquiryData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    const id = req.params.id;
+    try {
+        const data = await inquiry.destroy({
+            where: {
+                id: id
+            }
+        });
+        res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
 
 
-module.exports = { addInquiryData, getInquiryData,updateInquiryStatus };
+module.exports = { addInquiryData, getInquiryData, updateInquiryStatus, deleteInquiryData };
