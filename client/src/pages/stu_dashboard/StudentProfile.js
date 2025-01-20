@@ -3,11 +3,12 @@ import { userRolesContext } from '../admin/layout/RoleContext';
 import axiosInstance from '../client/utils/axiosInstance';
 import Navbar from '../client/layout/Navbar'
 import Sidebar from './layout/Sidebar'
+import moment from "moment-timezone";
 import { notifySuccess } from '../admin/layout/ToastMessage';
 const port = process.env.REACT_APP_URL;
 
 const StudentProfile = () => {
-  const { stuUserId } = useContext(userRolesContext);
+  const { stuUserId, setting } = useContext(userRolesContext);
   const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
   const [fileName, setFileName] = useState("");
 
@@ -34,14 +35,17 @@ const StudentProfile = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [sameNumber, setSameNumber] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [dob, setDob] = useState("");
   const getUserData = async () => {
     if (!stuUserId) return
     try {
       const response = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${stuUserId}`);
       setUserData(response.data);
+      console.log(response.data)
       setOldPassword(response.data.password);
       setImageSrc(response.data.profile);
       setFileName(response.data.profile);
+      setDob(moment.unix(response.data.dob).tz(setting.timezone).format("YYYY-MM-DD"))
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +66,10 @@ const StudentProfile = () => {
       ...prev,
       [name]: value,
     }));
+    if (name === 'dob') {
+      setDob(value)
+      setUserData((prev) => ({ ...prev, dob: value }));
+    }
   };
 
   //password hide & show
@@ -112,7 +120,6 @@ const StudentProfile = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getUserData();
   }, [stuUserId]);
@@ -152,13 +159,12 @@ const StudentProfile = () => {
                     id="middle_name"
                     type="text"
                     name="middle_name"
-                    value={userData.middle_name}
+                    value={userData.middle_name !== "NULL" ? userData.middle_name : ""}
                     onChange={handleChange}
                     placeholder="Enter Middle Name"
                     className="col12input"
                   />
                 </div>
-
                 <div className="form-group mb-0" style={{ width: "32%" }}>
                   <label htmlFor="last_name">
                     Last Name<span className="required">*</span>
@@ -277,7 +283,7 @@ const StudentProfile = () => {
                       type="date"
                       id="dob"
                       name="dob"
-                      value={userData.dob}
+                      value={dob}
                       onChange={handleChange}
                       placeholder="Enter Course Title"
                       className="col12input"
