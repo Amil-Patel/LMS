@@ -5,11 +5,12 @@
 }
 
 .client_section {
+  max-width: 1400px;
+  margin: 0 auto;
     /* font-family: var(--tp-ff-body); */
   font-family: var(--inter-ff);
     /* font-family: var(--jost-ff); */
     /* font-family: var(--exo-ff); */
-  ;
 }
 
 .client_section label {
@@ -45,12 +46,13 @@
 
 .cus-hero-container {
   width: 100%;
+  padding-left: calc((100% - 1400px) / 2);
+  background-color: var(--Primary-background);
   display: flex;
 }
 
 .cus-hero-text {
   width: 49%;
-  background-color: var(--Primary-background);
   padding: 5% 4% 5% 10%;
 }
 
@@ -97,16 +99,16 @@
 
 /* -----------courses-section--------------- */
 
-.cus-courses-section {
-  padding: 6% 8%;
-  justify-content: space-evenly;
+.cus-courses-section {    
+  padding: 6% 10%;
+  justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
 }
 
 .cus-mid-content1 {
-  width: 26%;
-  padding: 28px;
+  width: 28%;
+  padding: 30px;
   background-color: var(--content1-background);
   border-radius: 10px;
 }
@@ -139,15 +141,15 @@
 }
 
 .cus-mid-content2 {
-  width: 26%;
-  padding: 28px;
+  width: 28%;
+  padding: 30px;
   background-color: var(--Primary-background);
   border-radius: 10px;
 }
 
 .cus-mid-content3 {
-  width: 26%;
-  padding: 28px;
+  width: 28%;
+  padding: 30px;
   background-color: var(--content3-background);
   border-radius: 10px;
 }
@@ -201,8 +203,7 @@
 /* -------------Enroll-section-------------- */
 
 .cus-Enroll-section {
-  background-color: var(--Primary-background);
-  padding: 4% 9% 4% 10%;
+  padding: 4% 10%;
   margin-top: 9%;
 }
 
@@ -241,7 +242,7 @@
 
 .cus-course-growth-section {
   background-color: var(--secondary-background);
-  padding: 3% 8%;
+  padding: 3% 10%;
 }
 
 .cus-course-growth-section p {
@@ -264,7 +265,7 @@
 .cus-course-growth-section-text {
   display: flex;
   margin-top: 25px;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .cus-inner-text {
