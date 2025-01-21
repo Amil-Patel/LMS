@@ -109,6 +109,7 @@ const CourseVideo = () => {
     navigate('/student/learning')
   }
   const saveTimeToDatabase = async () => {
+    console.log("called")
     const totalTime = timeStamp + elapsedTime;
     const payload = {
       watchingDuration: totalTime,
@@ -121,16 +122,18 @@ const CourseVideo = () => {
       console.error("Error saving time to database:", error);
     }
   };
-  const location = useLocation()
+
   useEffect(() => {
-    const handleBeforeUnload = () => {
+    console.log("ll")
+    // Set up interval to call the function every 10 seconds
+    const intervalId = setInterval(() => {
+      console.log("kk")
       saveTimeToDatabase();
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [timeStamp, elapsedTime]);
+    }, 10000);
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   // useEffect(async () => {
   //   // Save time when navigating away from the course video page
@@ -846,13 +849,13 @@ const CourseVideo = () => {
           </div>
           <div className="course-video-container">
             {/* Video Section */}
-            <div className="video-player h-[calc(100vh-5px)] overflow-y-scroll">
+            <div className="video-player p-2">
               <div className={editLessonData.lesson_type == "text" || editLessonData.lesson_type == "pdf" ? "thumbnail-container" : "thumbnail-other-type-container"}>
                 {editLessonData?.title || editQuizData?.title ? (
-                  <div className="edit-content">
+                  <div className="edit-content border-2 rounded-md">
                     {editLessonData?.title && (
                       <>
-                        <div className="md:flex block justify-between items-center mb-2">
+                        <div className="md:flex block justify-between items-center border-b p-2 " style={{backgroundColor:"#F5F6FA"}}>
                           <div className="flex">
                             <h2 className="font-bold flex text-xl text-black">{editLessonData.title}
                             </h2>
@@ -873,10 +876,12 @@ const CourseVideo = () => {
                           ></iframe>
                         )}
                         {editLessonData.lesson_type === "text" && (
-                          <div className="long-desc mt-4">
-                            <p className="max-h-[300px] scrollbar overflow-y-scroll ">
-                              {editLessonData.text_content || "No Text available"}
-                            </p>
+                          <div className="long-desc p-3" >
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: editLessonData?.text_content,
+                              }}
+                            ></p>
                           </div>
                         )}
                         {editLessonData.lesson_type === "pdf" && (
@@ -903,7 +908,7 @@ const CourseVideo = () => {
                           </div>
                         )}
                         <div className="long-desc mt-4">
-                          <p id="description_bottom">
+                          <p id="description_bottom" className="p-3">
                             {editLessonData.description || "No description available"}
                           </p>
                         </div>

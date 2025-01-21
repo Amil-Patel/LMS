@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 .course-video-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -7,8 +9,10 @@
 
 .video-player {
   position: relative;
+  overflow-y: scroll;
+  height: calc(100vh - 10px);
+  scrollbar-width: none;
   width: 100%;
-  padding: 10px;
 }
 
 .video-element {
@@ -18,12 +22,11 @@
 
 .thumbnail-container {
   position: relative;
-  max-width: 650px;
   margin: 0 auto;
 }
 
-#description_bottom{
-  padding-bottom: 0px;
+#description_bottom {
+  padding-bottom: 12px;
 }
 
 .play-button-overlay {
@@ -125,6 +128,15 @@
   font-size: 14px;
 }
 
+.course-video-container .long-desc p {
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: #31374d;
+}
+
 @media (max-width: 1200px) {
   .video-navbar .md\\:hidden {
     display: block;
@@ -139,7 +151,7 @@
   .video-navbar .text-sm {
     font-size: 12px;
   }
-  .course_module_duration{
+  .course_module_duration {
     padding-bottom: 0;
   }
 }
