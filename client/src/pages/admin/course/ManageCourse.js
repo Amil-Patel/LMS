@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
@@ -7,9 +7,11 @@ import { userRolesContext } from "../layout/RoleContext";
 import { notifySuccess, notifyWarning } from "../layout/ToastMessage";
 import { NavLink, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
+import { Editor } from "@tinymce/tinymce-react";
 import moment from "moment-timezone";
 import SortTable from "../layout/SortTable";
 const port = process.env.REACT_APP_URL
+const EditorApi = process.env.NEXT_PUBLIC_EDITOR_API;
 
 const ManageCourse = () => {
   const { id } = useParams();
@@ -39,6 +41,7 @@ const ManageCourse = () => {
     setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
     getLessonData(id);
   };
+
 
   // Function to toggle visibility of module modal
   const moduleToggleModal = () => {
@@ -383,6 +386,14 @@ const ManageCourse = () => {
       [name]: type === "checkbox" ? (checked ? 1 : 0) : value
     });
   }
+  // editor
+  const editorRef = useRef(null);
+  const handleEditorChange = (content, editor) => {
+    setAddLesson((prevData) => ({
+      ...prevData,
+      text_content: content,
+    }));
+  };
 
   const handleAddLessonFileChange = (e) => {
     const { name, files } = e.target;
@@ -430,10 +441,6 @@ const ManageCourse = () => {
       return;
     }
     if (addLesson.lesson_type === 'pdf') {
-      if (!addLesson.url.trim()) {
-        notifyWarning("URL is required.");
-        return;
-      }
       if (!addLesson.attachment) {
         notifyWarning("Attachment is required.");
         return;
@@ -559,6 +566,12 @@ const ManageCourse = () => {
       [name]: type === "checkbox" ? (checked ? 1 : 0) : value
     })
   }
+  const handleEditorEditChange = (content, editor) => {
+    setEditLessonData((prevData) => ({
+      ...prevData,
+      text_content: content,
+    }));
+  };
   const handleEditLessonFileChange = (e) => {
     const { name, files } = e.target;
     if (files.length === 0) {
@@ -1630,13 +1643,50 @@ const ManageCourse = () => {
 
                   <div className="form-group">
                     <label>Text</label>
-                    <textarea
+                    {/* <textarea
                       placeholder="Text Description rich text Box"
                       className="col12input"
                       name="text_content"
                       onChange={handleAddLessonChange}
                       value={addLesson.text_content}
-                    ></textarea>
+                    ></textarea> */}
+                    <Editor
+                      apiKey='1ufup43ij0id27vrhewjb9ez5hf6ico9fpkd8qwsxje7r5bo'
+                      onInit={(evt, editor) => (editorRef.current = editor)}
+                      init={{
+                        height: 500,
+                        menubar: true,
+                        plugins: [
+                          "advlist",
+                          "autolink",
+                          "lists",
+                          "link",
+                          "image",
+                          "charmap",
+                          "preview",
+                          "anchor",
+                          "searchreplace",
+                          "visualblocks",
+                          "code",
+                          "fullscreen",
+                          "insertdatetime",
+                          "media",
+                          "table",
+                          "code",
+                          "help",
+                          "wordcount",
+                        ],
+                        toolbar:
+                          "undo redo | blocks | " +
+                          "bold italic forecolor | alignleft aligncenter " +
+                          "alignright alignjustify | bullist numlist outdent indent | " +
+                          "removeformat | help",
+                      }}
+                      onEditorChange={(content, editor) => {
+                        handleEditorChange(content, editor)
+                      }
+                      }
+                    />
                   </div>
 
                   <div className="form-group">
@@ -1957,13 +2007,44 @@ const ManageCourse = () => {
 
                         <div className="form-group">
                           <label>Text</label>
-                          <textarea
-                            placeholder="Text Description rich text Box"
-                            className="col12input"
-                            name="text_content"
-                            onChange={handleEditLessonChange}
-                            value={editLessonData.text_content}
-                          ></textarea>
+                          <Editor
+                            apiKey='1ufup43ij0id27vrhewjb9ez5hf6ico9fpkd8qwsxje7r5bo'
+                            onInit={(evt, editor) => (editorRef.current = editor)}
+                            value={editLessonData?.text_content}
+                            init={{
+                              height: 500,
+                              menubar: true,
+                              plugins: [
+                                "advlist",
+                                "autolink",
+                                "lists",
+                                "link",
+                                "image",
+                                "charmap",
+                                "preview",
+                                "anchor",
+                                "searchreplace",
+                                "visualblocks",
+                                "code",
+                                "fullscreen",
+                                "insertdatetime",
+                                "media",
+                                "table",
+                                "code",
+                                "help",
+                                "wordcount",
+                              ],
+                              toolbar:
+                                "undo redo | blocks | " +
+                                "bold italic forecolor | alignleft aligncenter " +
+                                "alignright alignjustify | bullist numlist outdent indent | " +
+                                "removeformat | help",
+                            }}
+                            onEditorChange={(content, editor) => {
+                              handleEditorEditChange(content, editor)
+                            }
+                            }
+                          />
                         </div>
 
                         <div className="form-group">

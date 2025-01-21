@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     text_content: {
-      type: DataTypes.TEXT('long'),
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     is_preview: {
