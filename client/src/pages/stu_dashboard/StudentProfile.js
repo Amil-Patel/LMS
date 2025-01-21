@@ -5,6 +5,7 @@ import Navbar from '../client/layout/Navbar'
 import Sidebar from './layout/Sidebar'
 import moment from "moment-timezone";
 import { notifySuccess } from '../admin/layout/ToastMessage';
+import '../../../src/assets/css/stuprofile.css'
 const port = process.env.REACT_APP_URL;
 
 const StudentProfile = () => {

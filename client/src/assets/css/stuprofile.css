@@ -1,0 +1,118 @@
+.course-form-container {
+  border-radius: 0;
+}
+.course-form-container .flex-row {
+  gap: 10px;
+}
+
+.course-form-container .flex-row .form-group {
+  width: 32%;
+  padding-bottom: 10px;
+}
+
+.course-form-container .email-password .form-group {
+  width: 32%;
+}
+
+.course-form-container .email-password .contact {
+  width: 23%;
+}
+
+.course-form-container .email-password .chekbox {
+  width: 16%;
+}
+
+.course-form-container .email-password .whatsapp {
+  width: 23%;
+}
+
+.course-form-container .addr-country .form-group {
+  width: 48%;
+}
+
+.course-form-container .gender-div {
+  display: flex;
+}
+
+.course-form-container .gender-div .flex-row {
+  width: 50%;
+}
+
+.course-form-container .gender-div .form-group {
+  width: 48%;
+}
+
+.course-form-container .new-pass {
+  width: 70%;
+}
+
+.course-form-container .new-pass div {
+  width: 47%;
+  margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+  .main.static.p-0 {
+    width: 100%;
+    margin-left: 70px;
+  }
+}
+
+@media only screen and (max-width: 424px) {
+  .main.static.p-0 {
+    width: 100%;
+    margin-left: 0px;
+  }
+
+  section.main_stu_dashboard_sidebar.flex {
+    display: none;
+  }
+
+  .course-form-container {
+    padding: 0;
+  }
+
+  .course-form-container .flex-row {
+    display: block;
+  }
+
+  .course-form-container .flex-row .form-group {
+    width: 100%;
+  }
+
+  .course-form-container .email-password .contact {
+    width: 100%;
+  }
+
+  .course-form-container .email-password .chekbox {
+    width: 100%;
+  }
+
+  .course-form-container .email-password .whatsapp {
+    width: 100%;
+  }
+
+  .course-form-container .addr-country .form-group {
+    width: 100%;
+  }
+
+  .course-form-container .gender-div {
+    display: block;
+  }
+
+  .course-form-container .gender-div .flex-row {
+    width: 100%;
+  }
+
+  .course-form-container .gender-div .flex-row .form-group {
+    width: 100%;
+  }
+
+  .course-form-container .new-pass {
+    width: 100%;
+  }
+
+  .course-form-container .new-pass div {
+    width: 100%;
+  }
+}
