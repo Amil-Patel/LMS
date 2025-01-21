@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Hoc from "../layout/Hoc";
 import "../../../assets/css/course/addcourse.css";
 import "../../../assets/css/main.css";
@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
 import Loading from "../layout/Loading";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
 const port = process.env.REACT_APP_URL
 
 const AddCourse = () => {
@@ -114,7 +115,13 @@ const AddCourse = () => {
   const handleAddFaq = () => {
     setAddCourse((prev) => ({ ...prev, course_faqs: [...prev.course_faqs, { question: "", answer: "" }] }));
   };
-
+  const editorRef = useRef(null);
+  const handleEditorChange = (content, editor) => {
+    setAddCourse((prevData) => ({
+      ...prevData,
+      long_desc: content,
+    }));
+  };
   const handleRemoveFaq = (index) => {
     const values = [...addCourse.course_faqs];
     values.splice(index, 1);
@@ -238,7 +245,7 @@ const AddCourse = () => {
 
   };
 
-  
+
 
   const navigate = useNavigate()
   const handleSubmit = async (e) => {
@@ -257,9 +264,9 @@ const AddCourse = () => {
     formData.append('publish_date', addCourse.publish_date);
     formData.append('is_top_course', addCourse.is_top_course);
     formData.append('featured_course', addCourse.featured_course);
-    formData.append('course_faqs',addCourse.course_faqs);
-    formData.append('course_topics',addCourse.course_topics);
-    formData.append('course_requirenment',addCourse.course_requirenment);
+    formData.append('course_faqs', addCourse.course_faqs);
+    formData.append('course_topics', addCourse.course_topics);
+    formData.append('course_requirenment', addCourse.course_requirenment);
     formData.append('course_price', addCourse.course_price);
     formData.append('course_discount', addCourse.course_discount);
     formData.append('is_tax', isTax);
@@ -267,13 +274,13 @@ const AddCourse = () => {
     formData.append('tax_rate', addCourse.tax_rate);
     formData.append('is_inclusive', addCourse.is_inclusive);
     formData.append('is_exclusive', addCourse.is_exclusive);
-    formData.append('auther',addCourse.auther);
+    formData.append('auther', addCourse.auther);
     formData.append('expiring_time', addCourse.expiring_time);
     formData.append('no_of_month', addCourse.no_of_month);
     formData.append('course_overview_link', addCourse.course_overview_link);
     formData.append('course_thumbnail', newImage);
-    formData.append('meta_tag',addCourse.meta_tag);
-    formData.append('meta_keyword',addCourse.meta_keyword);
+    formData.append('meta_tag', addCourse.meta_tag);
+    formData.append('meta_keyword', addCourse.meta_keyword);
     formData.append('meta_desc', addCourse.meta_desc);
     formData.append('canonical_url', addCourse.canonical_url);
     formData.append('title_tag', addCourse.title_tag)
@@ -656,16 +663,45 @@ const AddCourse = () => {
           {/* Course Description TAB */}
           {tab == "course" && (
             <div className="description-container">
-              <label htmlFor="courseDescription" className="description-label">
+              <label htmlFor="courseDescription" className="description-label mb-2">
                 Long Description
               </label>
-              <textarea
-                className="description-textarea col12input"
-                id="courseDescription"
-                placeholder="Enter Course Title"
-                name="long_desc"
-                onChange={handleChange}
-                value={addCourse.long_desc}
+              <Editor
+                apiKey='1ufup43ij0id27vrhewjb9ez5hf6ico9fpkd8qwsxje7r5bo'
+                onInit={(evt, editor) => (editorRef.current = editor)}
+                init={{
+                  height: 500,
+                  menubar: true,
+                  plugins: [
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
+                  ],
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                }}
+                onEditorChange={(content, editor) => {
+                  handleEditorChange(content, editor)
+                }
+                }
               />
             </div>
           )}
