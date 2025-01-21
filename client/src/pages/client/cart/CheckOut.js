@@ -138,7 +138,6 @@ const CheckOut = () => {
     };
 
 
-
     return (
         <>
             <Navbar />

@@ -742,7 +742,7 @@ const CourseVideo = () => {
 
               {/* Dropdown */}
               {isDropdownOpen && (
-                <div className="absolute right-0 top-9 bg-white border rounded shadow-md p-3 w-60 z-10">
+                <div className="absolute right-0 top-9 bg-white border rounded shadow-md p-3 w-[270px] z-10">
                   {/* Time Spent */}
                   <div className="mb-1.5 text-base">
                     <span className="font-semibold">Time Spent: </span>
@@ -776,7 +776,7 @@ const CourseVideo = () => {
                   <div className="flex items-center justify-between ">
                     <span className="text-md font-semibold">Leave Your Review:</span>
                     <div
-                      className="flex text-orange-500 space-x-1 cursor-pointer"
+                      className="flex text-orange-500 cursor-pointer"
                       onClick={() => handleTabChange("review")}
                     >
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -801,9 +801,9 @@ const CourseVideo = () => {
 
               {/* Rating & Review */}
               <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">Leave Your Review:</span>
+                <span className="text-base font-semibold">Leave Your Review : </span>
                 <div
-                  className="flex text-orange-500 space-x-1 cursor-pointer"
+                  className="flex text-orange-500 cursor-pointer"
                 >
                   {[1, 2, 3, 4, 5].map((star) => (
                     <i key={star} className="fa-solid fa-star"></i>
@@ -846,7 +846,7 @@ const CourseVideo = () => {
           </div>
           <div className="course-video-container">
             {/* Video Section */}
-            <div className="video-player">
+            <div className="video-player h-[calc(100vh-5px)] overflow-y-scroll">
               <div className={editLessonData.lesson_type == "text" || editLessonData.lesson_type == "pdf" ? "thumbnail-container" : "thumbnail-other-type-container"}>
                 {editLessonData?.title || editQuizData?.title ? (
                   <div className="edit-content">
