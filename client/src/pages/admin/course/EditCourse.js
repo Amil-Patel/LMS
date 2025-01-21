@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Hoc from '../layout/Hoc';
 import { userRolesContext } from "../layout/RoleContext";
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import Loading from '../layout/Loading';
+import { Editor } from "@tinymce/tinymce-react";
 import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL
 
@@ -207,7 +208,13 @@ const EditCourse = () => {
         setCourseData(updatedFields);
     };
 
-
+    const editorRef = useRef(null);
+    const handleEditorChange = (content, editor) => {
+        setCourseData((prevData) => ({
+            ...prevData,
+            long_desc: content,
+        }));
+    };
     const handleTax = () => {
         setIsTax(!isTax);
     }
@@ -768,14 +775,46 @@ const EditCourse = () => {
                     {/* Course Description TAB */}
                     {tab == "course" && (
                         <div className="description-container">
-                            <label htmlFor="courseDescription" className="description-label">
+                            <label htmlFor="courseDescription" className="description-label mb-2">
                                 Long Description
                             </label>
-                            <textarea
-                                className="description-textarea col12input"
-                                name="long_desc"
-                                onChange={handleChange}
+                            <Editor
+                                apiKey='1ufup43ij0id27vrhewjb9ez5hf6ico9fpkd8qwsxje7r5bo'
+                                onInit={(evt, editor) => (editorRef.current = editor)}
                                 value={courseData.long_desc}
+                                init={{
+                                    height: 500,
+                                    menubar: true,
+                                    plugins: [
+                                        "advlist",
+                                        "autolink",
+                                        "lists",
+                                        "link",
+                                        "image",
+                                        "charmap",
+                                        "preview",
+                                        "anchor",
+                                        "searchreplace",
+                                        "visualblocks",
+                                        "code",
+                                        "fullscreen",
+                                        "insertdatetime",
+                                        "media",
+                                        "table",
+                                        "code",
+                                        "help",
+                                        "wordcount",
+                                    ],
+                                    toolbar:
+                                        "undo redo | blocks | " +
+                                        "bold italic forecolor | alignleft aligncenter " +
+                                        "alignright alignjustify | bullist numlist outdent indent | " +
+                                        "removeformat | help",
+                                }}
+                                onEditorChange={(content, editor) => {
+                                    handleEditorChange(content, editor)
+                                }
+                                }
                             />
                         </div>
                     )}
