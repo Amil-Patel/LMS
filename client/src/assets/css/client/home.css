@@ -41,6 +41,11 @@
   padding-bottom: 15px;
 }
 
+.max-width {
+  max-width: 1300px;
+  text-align: center;
+}
+
 /* ------------hero-container-------------- */
 
 .cus-hero-container {
