@@ -21,12 +21,6 @@
   font-family: var(--inter-ff);
 }
 
-.client_section h3 {
-  font-size: 35px;
-  font-weight: 700;
-  color: var(--black);
-}
-
 .client_section h1,
 .client_section h2,
 .client_section h3,
@@ -209,7 +203,7 @@
 
 .cus-Enroll-section {
   padding: 4% 10%;
-  margin-top: 9%;
+  margin-top: 7%;
 }
 
 .cus-caption h4 {
@@ -294,7 +288,7 @@
 
 .cus-contact-section {
   display: flex;
-  padding: 5% 10%;
+  padding: 5%;
 }
 
 .cus-contact-inner-section {
@@ -336,7 +330,7 @@
 .cus-contact-form {
   width: 40%;
   margin-left: 10%;
-  padding: 3%;
+  padding: 7%;
   border-radius: 25px;
   background-color: var(--icon-background);
   height: auto;
@@ -843,7 +837,7 @@
   }
 
   .cus-contact-section {
-    padding: 5% 10%;
+    padding: 5%;
   }
 
   .cus-contact-form input {

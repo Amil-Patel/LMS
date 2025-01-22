@@ -167,7 +167,7 @@
 
 .cart_section.animate-cart p {
   transform: scale(1.5);
-  background-color: #ef5f0c; 
+  background-color: #ef5f0c;
 }
 
 .cart_section i {
@@ -176,6 +176,11 @@
   font-size: 20px;
   color: var(--button-primary-color);
   width: 32px;
+}
+
+.course-added-quantity {
+  font-size: 12px !important;
+  padding-bottom: 0px !important;
 }
 
 /* Responsive Design */
@@ -227,9 +232,8 @@
 }
 
 @media screen and (max-width: 426px) {
-
   .navbar-login-section.notdisplay,
-    .navbar-logo-section.notdisplay {
+  .navbar-logo-section.notdisplay {
     display: none;
   }
 

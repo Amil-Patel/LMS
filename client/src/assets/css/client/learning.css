@@ -13,7 +13,11 @@
 }
 
 .main_stu_dashboard .content img {
-  height: 165px;
+  object-fit: cover;
+  max-width: 250px;
+  min-width: 250px;
+  max-height: 165px;
+  min-height: 165px;
 }
 
 .main_stu_dashboard .content h1 {
@@ -80,12 +84,6 @@
     padding-left: 40px;
   }
 
-  .course-details .course-icon-section {
-    display: grid;
-    gap: 5px;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .main_stu_dashboard .content img {
     height: 155px;
   }
@@ -104,6 +102,12 @@
     z-index: 90;
     transition: width 0.3s ease-in-out;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .course-details .course-icon-section {
+    display: grid;
+    gap: 5px;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .main_stu_dashboard .content {
@@ -131,8 +135,12 @@
     padding-left: 22%;
   }
 
-  .course-details .course-icon-section {
-    grid-template-columns: repeat(2, 1fr);
+  .main_stu_dashboard .content img {
+    margin-bottom: 15px;
+    max-width: -webkit-fill-available;
+    min-width: -webkit-fill-available;
+    min-height: 175px;
+    max-height: 175px;
   }
 
   .main_stu_dashboard .content h1 {

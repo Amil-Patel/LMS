@@ -79,7 +79,8 @@ const PurchaseHistory = () => {
     return (
         <>
             <Navbar />
-            {loading && <Loading />}
+            <div className='client_section'>
+            {loading && <Loading />} 
             <div className='main_stu_dashboard'>
                 <Sidebar />
                 <div className='content pl-4'>
@@ -286,6 +287,7 @@ const PurchaseHistory = () => {
                         </div>
                     </div>
                 )}
+            </div>
             </div>
         </>
     )

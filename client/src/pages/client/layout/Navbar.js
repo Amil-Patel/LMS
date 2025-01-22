@@ -92,6 +92,7 @@ const Navbar = () => {
   }, [stuUserId]);
   return (
     <>
+    <div className='client_section'>
       <nav className='navbar-section'>
         <div className={`navbar-logo-section ${isMenuOpen ? 'notdisplay' : ''}`}>
           <div className='navbar-logo'>
@@ -118,7 +119,7 @@ const Navbar = () => {
           {/*cart section  */}
           <NavLink to="/shopping-cart" className={`cart_section ${animateCart ? 'animate-cart' : ''}`}>
             <i className="fa-solid fa-cart-arrow-down"></i>
-            <p className="p-0">{cart.length}</p>
+            <p className="course-added-quantity">{cart.length}</p>
           </NavLink>
 
           {/*cart section  */}
@@ -139,6 +140,7 @@ const Navbar = () => {
           {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
         </div>
       </nav>
+      </div>
       {isModalOpen && (
         <div className="profile-modal-overlay" onClick={closeModal}>
           <div

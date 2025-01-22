@@ -4,6 +4,7 @@
 
 .checkout-section-main-div {
   display: flex;
+  justify-content: space-between;
   padding-top: 4%;
 }
 
@@ -17,8 +18,7 @@
 }
 
 .checkout-section .form-container {
-  width: 43%;
-  margin-right: 8%;
+  width: 50%;
   background-color: var(--white);
   border-radius: 8px;
 }
@@ -78,7 +78,7 @@
 }
 
 .checkout-section .checkout-review-cart-section {
-  width: 38%;
+  width: 40%;
   background-color: var(--bg-color);
   padding: 3% 4%;
 }
@@ -207,7 +207,6 @@
 @media screen and (max-width: 1200px) {
   .checkout-section .form-container {
     width: 50%;
-    margin-right: 6%;
   }
 
   .checkout-section .checkout-review-cart-section {
@@ -236,7 +235,9 @@
   .checkout-section .checkout-review-cart-section {
     margin-right: 0;
     width: 60%;
-    margin-top: 4%;
+    margin: 0 auto;
+    margin-top: 5%;
+
   }
 }
 

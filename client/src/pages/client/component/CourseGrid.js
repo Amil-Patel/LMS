@@ -53,8 +53,9 @@ const CourseGrid = ({ courses, category }) => {
                     return (
                         <div key={course.id} className="course-content">
                             {/* Course Thumbnail */}
-                            <img src={`../upload/${course.course_thumbnail}`} alt={course.course_title} />
-
+                            <div className="allcourses-course-image" >
+                                <img src={`../upload/${course.course_thumbnail}`} alt={course.course_title} />
+                            </div>
                             {/* Course Details */}
                             <div className="course-inner-content">
                                 {/* Course Title */}
