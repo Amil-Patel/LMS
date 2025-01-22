@@ -187,7 +187,7 @@ const ViewCourse = () => {
         </div>
       ) : (
         <div className="client_section">
-          <div className="main-section p-4 sm:p-8 md:p-12 lg:p-16 gap-4 sm:gap-8 md:gap-12 lg:gap-20 2xl:flex xl:flex lg:flex block">
+          <div className="main-section p-4 sm:p-8 md:p-12 lg:p-16 lg:gap-16 2xl:flex xl:flex lg:flex block">
             <div className="header-content 2xl:w-8/12 xl:w-8/12 lg:w-8/12 w-full">
               <div className="mini-title px-2 py-1 text-xs rounded inline-block mb-4">
                 {courseCategory?.cate_title}
@@ -541,7 +541,7 @@ const ViewCourse = () => {
 
             <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
               <img
-                className="w-full mb-6"
+                className="view-course-thumbnail w-full mb-6"
                 src={`../upload/${courseData.course_thumbnail}`}
                 alt="Course Thumbnail"
               />

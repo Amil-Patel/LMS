@@ -42,7 +42,9 @@ const CourseList = ({ courses, category }) => {
 
                 return (
                     <div key={course.id} className="course-main-div">
-                        <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
+                        <div className="allcourses-course-image" >
+                            <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
+                        </div>
                         <div className="course-details">
                             <div className="course-details-header">
                                 <h3>

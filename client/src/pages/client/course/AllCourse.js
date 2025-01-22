@@ -95,6 +95,7 @@ const AllCourse = () => {
 
   return (
     <>
+    <div className="client_section">
       {loading ? (
         <div className="client_loading_container">
           <div className="client_loader"></div>
@@ -183,6 +184,7 @@ const AllCourse = () => {
           </div>
         </section>
       )}
+       </div>
     </>
   );
 };

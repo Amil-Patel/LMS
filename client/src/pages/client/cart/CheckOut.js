@@ -142,70 +142,71 @@ const CheckOut = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <section className="checkout-section">
-                <h2>Checkout</h2>
-                <div className="checkout-section-main-div">
-                    <div className="form-container">
-                        <form>
-                            <div className="form-group">
-                                <label htmlFor="name">Full name<span className="required"> *</span></label>
-                                <input type="text" id="name" name="name" onChange={handleChange} placeholder="Enter full name" required />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email">Email address<span className="required"> *</span></label>
-                                <input type="email" id="email" name="email" onChange={handleChange} placeholder="Enter email address" required />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="phone">Phone number<span className="required"> *</span></label>
-                                <input type="tel" id="phone" name="phone" onChange={handleChange} placeholder="Enter phone number" required />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="country">Country<span className="required"> *</span></label>
-                                <select id="country" name="country" onChange={handleChange} required>
-                                    <option value="">Choose country</option>
-                                    <option value="india">India</option>
-                                    <option value="usa">United States</option>
-                                    <option value="cananda">Canada</option>
-                                </select>
-                            </div>
-                            <div className="form-group-grid">
+            <div className="client_section">
+                <section className="checkout-section">
+                    <h2>Checkout</h2>
+                    <div className="checkout-section-main-div">
+                        <div className="form-container">
+                            <form>
                                 <div className="form-group">
-                                    <label htmlFor="enter-city">City</label>
-                                    <input type="text" id="enter-city" name="city" onChange={handleChange} placeholder="Enter city" required />
+                                    <label htmlFor="name">Full name<span className="required"> *</span></label>
+                                    <input type="text" id="name" name="name" onChange={handleChange} placeholder="Enter full name" required />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="state">State</label>
-                                    <input type="text" id="state" name="state" onChange={handleChange} placeholder="Enter state" required />
+                                    <label htmlFor="email">Email address<span className="required"> *</span></label>
+                                    <input type="email" id="email" name="email" onChange={handleChange} placeholder="Enter email address" required />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="zip-code">Zip Code</label>
-                                    <input type="text" id="zip-code" name="pincode" onChange={handleChange} placeholder="Enter ZIP code" required />
+                                    <label htmlFor="phone">Phone number<span className="required"> *</span></label>
+                                    <input type="tel" id="phone" name="phone" onChange={handleChange} placeholder="Enter phone number" required />
                                 </div>
+                                <div className="form-group">
+                                    <label htmlFor="country">Country<span className="required"> *</span></label>
+                                    <select id="country" name="country" onChange={handleChange} required>
+                                        <option value="">Choose country</option>
+                                        <option value="india">India</option>
+                                        <option value="usa">United States</option>
+                                        <option value="cananda">Canada</option>
+                                    </select>
+                                </div>
+                                <div className="form-group-grid">
+                                    <div className="form-group">
+                                        <label htmlFor="enter-city">City</label>
+                                        <input type="text" id="enter-city" name="city" onChange={handleChange} placeholder="Enter city" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="state">State</label>
+                                        <input type="text" id="state" name="state" onChange={handleChange} placeholder="Enter state" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="zip-code">Zip Code</label>
+                                        <input type="text" id="zip-code" name="pincode" onChange={handleChange} placeholder="Enter ZIP code" required />
+                                    </div>
 
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="bill_address">Bill Address</label>
-                                <input type="text" id="bill_address" name="bill_address" onChange={handleChange} placeholder="Enter Bill Address" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="bill_gst">Bill GST Number</label>
-                                <input type="text" id="bill_gst" name="bill_gst" onChange={handleChange} placeholder="Enter Bill GST Number" />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="bill_pan">Bill Pan Number</label>
-                                <input type="text" id="bill_pan" name="bill_pan" onChange={handleChange} placeholder="Enter Bill Pan Number" />
-                            </div>
-                            <div className="checkbox-group">
-                                <input type="checkbox" id="terms" name="terms" onChange={(e) => setIsChecked(e.target.checked)} required />
-                                <label htmlFor="terms">I have read and agree to the Terms and Conditions.</label>
-                            </div>
-                        </form>
-                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="bill_address">Bill Address</label>
+                                    <input type="text" id="bill_address" name="bill_address" onChange={handleChange} placeholder="Enter Bill Address" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="bill_gst">Bill GST Number</label>
+                                    <input type="text" id="bill_gst" name="bill_gst" onChange={handleChange} placeholder="Enter Bill GST Number" />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="bill_pan">Bill Pan Number</label>
+                                    <input type="text" id="bill_pan" name="bill_pan" onChange={handleChange} placeholder="Enter Bill Pan Number" />
+                                </div>
+                                <div className="checkbox-group">
+                                    <input type="checkbox" id="terms" name="terms" onChange={(e) => setIsChecked(e.target.checked)} required />
+                                    <label htmlFor="terms">I have read and agree to the Terms and Conditions.</label>
+                                </div>
+                            </form>
+                        </div>
 
-                    <div className="checkout-review-cart-section">
-                        <div className="cart-container">
-                            <h3>Your cart</h3>
-                            {/* <div className="course-cart-content">
+                        <div className="checkout-review-cart-section">
+                            <div className="cart-container">
+                                <h3>Your cart</h3>
+                                {/* <div className="course-cart-content">
                                 <img
                                     src={require("../../../assets/image/course-thumbnail.png")}
                                     alt="logo"
@@ -216,14 +217,14 @@ const CheckOut = () => {
                                     <div className="course-cart-price pt-4 font-semibold">$20.00</div>
                                 </div>
                             </div> */}
-                            <div className="course-payment-section">
-                                {/* <div className="discount-code">
+                                <div className="course-payment-section">
+                                    {/* <div className="discount-code">
                                     <i className="fa-solid fa-ticket"></i>
                                     <input type="text" placeholder="Discount code" />
                                     <button className="course-payment-btn">Apply</button>
                                 </div> */}
-                                <div className="price-summary">
-                                    {/* <div className="price-row">
+                                    <div className="price-summary">
+                                        {/* <div className="price-row">
                                         <span>Subtotal</span>
                                         <span className="subtotal-price">${price}.00</span>
                                     </div>
@@ -231,24 +232,25 @@ const CheckOut = () => {
                                         <span>Discount</span>
                                         <span className="discount-price">${(price * disc) / 100}</span>
                                     </div> */}
-                                    <div className="price-row total">
-                                        <span>Total</span>
-                                        <span>${total}</span>
+                                        <div className="price-row total">
+                                            <span>Total</span>
+                                            <span>${total}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="pay-now-btn">
-                                    <button disabled={!isChecked} onClick={(e) => buyCourse(e)}>Pay Now</button>
-                                </div>
-                                <div className="secure-checkout">
-                                    <span><i className="fa-solid fa-lock"></i>Secure Checkout - SSL Encrypted</span>
-                                    <p>Ensuring your financial and personal details are secure
-                                        during every transaction.</p>
+                                    <div className="pay-now-btn">
+                                        <button disabled={!isChecked} onClick={(e) => buyCourse(e)}>Pay Now</button>
+                                    </div>
+                                    <div className="secure-checkout">
+                                        <span><i className="fa-solid fa-lock"></i>Secure Checkout - SSL Encrypted</span>
+                                        <p>Ensuring your financial and personal details are secure
+                                            during every transaction.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
             <Footer />
         </>
     );
