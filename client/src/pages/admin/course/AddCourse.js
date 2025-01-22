@@ -245,6 +245,7 @@ const AddCourse = () => {
 
   };
 
+  const [showMessage, setShowMessage] = useState(false);
 
 
   const navigate = useNavigate()
@@ -633,6 +634,7 @@ const AddCourse = () => {
                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
                     <label htmlFor="auther">Author</label>
+                    {showMessage && <small className="text-muted ms-2">(↵ Press Enter to add author)</small>}
                     <input
                       type="text"
                       id="auther"
@@ -640,6 +642,8 @@ const AddCourse = () => {
                       placeholder="Enter One Or More Author"
                       className="col12input"
                       onKeyDown={handleAddAuther}
+                      onFocus={() => setShowMessage(true)} // Show the message on focus
+                      onBlur={() => setShowMessage(false)}
                     />
                     <div className="tag-container">
                       {addCourse.auther.map((keyword, index) => (

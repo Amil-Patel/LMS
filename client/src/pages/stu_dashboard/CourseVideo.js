@@ -6,7 +6,7 @@ import { MdLockOutline } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../client/utils/axiosInstance";
 import { userRolesContext } from "../admin/layout/RoleContext";
-import { notifySuccess } from "../admin/layout/ToastMessage";
+import { notifySuccess, notifyWarning } from "../admin/layout/ToastMessage";
 const port = process.env.REACT_APP_URL;
 // Load PDF worker
 const CourseVideo = () => {
@@ -16,6 +16,7 @@ const CourseVideo = () => {
   const [loading, setLoading] = useState(true);
   const [lessonLoading, setLessonLoading] = useState(false);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   const toggleContent = (index, id, type) => {
     setLessonLoading(true)
     setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -109,39 +110,44 @@ const CourseVideo = () => {
     navigate('/student/learning')
   }
   const saveTimeToDatabase = async () => {
-    console.log("called")
-    const totalTime = timeStamp + elapsedTime;
-    const payload = {
-      watchingDuration: totalTime,
-    }
+    const totalTime = Number(timeStamp) + Number(elapsedTime);
+    const payload = { watchingDuration: totalTime };
     try {
       await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);
-      setTimeStamp(totalTime);
-      setElapsedTime(0);
+      setTimeStamp((prevTimeStamp) => {
+        const newTimeStamp = prevTimeStamp + elapsedTime;
+        localStorage.setItem("timeStamp", newTimeStamp);
+        return newTimeStamp;
+      });
+      // setElapsedTime(0);
+      // localStorage.setItem("elapsedTime", 0);
     } catch (error) {
       console.error("Error saving time to database:", error);
     }
   };
+  useEffect(() => {
+    const savedTimeStamp = localStorage.getItem("timeStamp");
+    const savedElapsedTime = localStorage.getItem("elapsedTime");
+    if (savedTimeStamp && savedElapsedTime) {
+      setTimeStamp(Number(savedTimeStamp));
+      setElapsedTime(Number(savedElapsedTime));
+    }
+  }, []);
 
   useEffect(() => {
-    console.log("ll")
+    localStorage.setItem("timeStamp", timeStamp);
+    localStorage.setItem("elapsedTime", elapsedTime);
+  }, [timeStamp, elapsedTime]);
+
+  useEffect(() => {
     // Set up interval to call the function every 10 seconds
     const intervalId = setInterval(() => {
-      console.log("kk")
       saveTimeToDatabase();
     }, 10000);
 
     // Cleanup the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []);
-
-  // useEffect(async () => {
-  //   // Save time when navigating away from the course video page
-  //   if (location.pathname !== `/student/coursevideo/${id}`) {
-  //     await saveTimeToDatabase();
-  //     console.log("Navigating away from course video page");
-  //   }
-  // }, [location, id]);
   // Convert total time to minutes
   const totalTimeInMinutes = Math.floor((timeStamp + elapsedTime) / 60);
   const remainingSeconds = (timeStamp + elapsedTime) % 60;
@@ -501,6 +507,7 @@ const CourseVideo = () => {
       console.error("Error in handleViewedLessonData:", error);
     }
   };
+
   const handleSubmitQuizAnswer = async () => {
     const correctAnswersKeyValue = {};
     const userAnswersKeyValue = {};
@@ -635,6 +642,7 @@ const CourseVideo = () => {
   useEffect(() => {
     getCourseData();
     getModuleData();
+    getReviewWithStudentId();
     getCourseLessonDataWithCourseId();
   }, []);
   useEffect(() => {
@@ -646,20 +654,12 @@ const CourseVideo = () => {
     return match ? `https://www.youtube.com/embed/${match[1]}` : null;
   };
   //getting review with course id
-  const [reviewWithStudentId, setReviewWithStudentId] = useState({});
+  const [reviewWithStudentId, setReviewWithStudentId] = useState([]);
   const getReviewWithStudentId = async () => {
     try {
       const response = await axiosInstance.get(`${port}/gettingReviewWithStudentId/${stuUserId}`);
-      setReviewWithStudentId(response.data[0]);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  const [reviewData, setReviewData] = useState([]);
-  const getReviewData = async () => {
-    try {
-      const response = await axiosInstance.get(`${port}/gettingReviewWithCourseId/${id}`);
-      setReviewData(response.data);
+      setReviewWithStudentId(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -683,6 +683,14 @@ const CourseVideo = () => {
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     const reviewData = { ...addReview, student_id: stuUserId };
+    if (reviewData.rating === 0) {
+      notifyWarning("Please Enter Rating");
+      return;
+    }
+    if (reviewData.review === '') {
+      notifyWarning("Please Enter Review");
+      return
+    }
     try {
       if (reviewWithStudentId && Object.keys(reviewWithStudentId).length > 0) {
         const res = await axiosInstance.put(`${port}/updatingReview/${reviewWithStudentId.id}`, reviewData);
@@ -692,7 +700,7 @@ const CourseVideo = () => {
         notifySuccess("Review Added Successfully");
         getReviewWithStudentId();
       }
-      getReviewData();
+      setIsReviewOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -700,7 +708,7 @@ const CourseVideo = () => {
   const handleTabChange = (val) => {
     setActiveTab(val);
     getReviewWithStudentId();
-    getReviewData();
+    getReviewWithStudentId();
   }
   //review get with student id
   useEffect(() => {
@@ -749,7 +757,7 @@ const CourseVideo = () => {
                   {/* Time Spent */}
                   <div className="mb-1.5 text-base">
                     <span className="font-semibold">Time Spent: </span>
-                    <span className="text-gray-800 text-[14px]">{timeStamp}</span>
+                    <span className="text-gray-800 text-[14px]">{totalTimeInMinutes}:{remainingSeconds}</span>
                   </div>
 
                   {/* Progress */}
@@ -777,17 +785,8 @@ const CourseVideo = () => {
 
                   {/* Rating & Review */}
                   <div className="flex items-center justify-between ">
-                    <span className="text-md font-semibold">Leave Your Review:</span>
-                    <div
-                      className="flex text-orange-500 cursor-pointer"
-                      onClick={() => handleTabChange("review")}
-                    >
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <i key={star} className="fa-solid fa-star"></i>
-                      ))}
-                    </div>
+                    <span className="text-md font-semibold">Leave Your Review</span>
                   </div>
-
                 </div>
               )}
             </div>
@@ -798,21 +797,61 @@ const CourseVideo = () => {
               <div className="text-base">
                 <span className="font-semibold">Time Spent: </span>
                 <span className="text-gray-800 text-sm">
-                  {totalTimeInMinutes} minutes {remainingSeconds} seconds
+                  {totalTimeInMinutes}:{remainingSeconds}
                 </span>
               </div>
 
               {/* Rating & Review */}
               <div className="flex items-center justify-between">
-                <span className="text-base font-semibold">Leave Your Review : </span>
-                <div
-                  className="flex text-orange-500 cursor-pointer"
-                >
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <i key={star} className="fa-solid fa-star"></i>
-                  ))}
-                </div>
+                <button className="text-xs font-semibold" onClick={() => setIsReviewOpen(true)}>Leave Your Reviews</button>
               </div>
+              {/* Rating & Review Dropdown */}
+              {isReviewOpen && (
+                <div className="absolute top-1/4 right-1/3 z-10 bg-[#F5F6FA] p-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-xl font-bold text-black">
+                      {reviewWithStudentId.length !== 0 ? "Update Your Review" : "Write Your Review"}
+                    </h2>
+                    <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark"></i></button>
+                  </div>
+                  <form onSubmit={handleSubmitReview}>
+                    {/* Star Rating */}
+
+                    <div className="flex items-center space-x-2 mb-2">
+                      {[...Array(5)].map((_, index) => (
+                        <i
+                          key={index}
+                          className={`cursor-pointer text-base ${index < addReview.rating
+                            ? "fa-solid fa-star text-orange-500"
+                            : "fa-regular fa-star text-gray-300"
+                            }`}
+                          onClick={() =>
+                            setAddReview((prevReview) => ({
+                              ...prevReview,
+                              rating: index + 1, // Update rating based on star clicked
+                            }))
+                          }
+                        ></i>
+                      ))}
+                    </div>
+                    {/* Review Text */}
+                    <textarea
+                      className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows="5"
+                      name="review"
+                      placeholder="Share your experience about this course..."
+                      value={addReview.review}
+                      onChange={handleReviewChange}
+                    ></textarea>
+                    <button
+                      type="submit"
+                      className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                    >
+                      {reviewWithStudentId.length !== 0 ? "Update Review" : "Submit Review"}
+                    </button>
+                  </form>
+                </div>
+              )}
 
               {/* Progress */}
               <div className="text-base">
@@ -855,7 +894,7 @@ const CourseVideo = () => {
                   <div className="edit-content border-2 rounded-md">
                     {editLessonData?.title && (
                       <>
-                        <div className="md:flex block justify-between items-center border-b p-2 " style={{backgroundColor:"#F5F6FA"}}>
+                        <div className="md:flex block justify-between items-center border-b p-2 " style={{ backgroundColor: "#F5F6FA" }}>
                           <div className="flex">
                             <h2 className="font-bold flex text-xl text-black">{editLessonData.title}
                             </h2>
@@ -1370,37 +1409,6 @@ const CourseVideo = () => {
                               {reviewWithStudentId ? "Update Review" : "Submit Review"}
                             </button>
                           </form>
-                        </div>
-
-                        {/* All Reviews Section */}
-                        <div>
-                          <h2 className="text-2xl font-bold mb-4">Reviews</h2>
-                          {reviewData.length > 0 ? (
-                            <div className="space-y-4">
-                              {reviewData.map((review) => (
-                                <div
-                                  key={review.id}
-                                  className="bg-gray-100 p-4 rounded-lg shadow-sm"
-                                >
-                                  <div className="flex items-center mb-2">
-                                    {[...Array(5)].map((_, index) => (
-                                      <i
-                                        key={index}
-                                        className={`text-lg ${index < review.rating
-                                          ? "fa-solid fa-star text-orange-500"
-                                          : "fa-regular fa-star text-gray-300"
-                                          }`}
-                                      ></i>
-                                    ))}
-                                  </div>
-                                  <p className="text-gray-700 mb-1">{review?.review}</p>
-                                  <small className="text-gray-500">{review?.student?.first_name} {review?.student?.last_name}</small>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-gray-500">No reviews yet. Be the first!</p>
-                          )}
                         </div>
                       </div>
                     </>

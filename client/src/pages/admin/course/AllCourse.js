@@ -32,6 +32,7 @@ const AllCourse = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
+      console.log(res.data)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -177,14 +178,25 @@ const AllCourse = () => {
             <tbody>
               {filteredData.map((i, index) => {
                 let auther = i.auther;
+                console.log(auther)
+                let formattedData = "Invalid data";
+
+                // Attempt to parse the auther field if it's a string
                 try {
-                  if (typeof auther == 'string') {
-                    auther = JSON.parse(auther);
+                  if (typeof auther === "string") {
+                    auther = auther.replace(/^"|"$/g, ""); // Remove surrounding quotes
+                    auther = JSON.parse(auther); // Parse the string to get the actual value
+                  }
+
+                  // Handle auther as an array or a single string
+                  if (Array.isArray(auther)) {
+                    formattedData = auther.join(", "); // Join multiple authors
+                  } else if (typeof auther === "string" && auther.trim() !== "") {
+                    formattedData = auther; // Display single author
                   }
                 } catch (e) {
-                  auther = "Invalid data";
+                  formattedData = "Invalid data";
                 }
-                const formattedData = Array.isArray(auther) ? auther.join(", ") : "Invalid data";
                 const category = courseCategory?.find((cat) => cat.id === i.course_cate)?.cate_title || 'Unknown Category';
                 return (
                   <tr key={index}>

@@ -52,14 +52,18 @@ const CourseList = ({ courses, category }) => {
                             </div>
                             <p>{truncatedDesc}</p>
                             <div className="course-icon-section">
-                                <span className="capitalize">
-                                    <i className="fa-solid fa-graduation-cap"></i> {course.course_language}
-                                </span>
-                                <span className="capitalize">
-                                    <i className="fa-solid fa-signal"></i> {course.course_level}
-                                </span>
+                                {course.course_language && (
+                                    <span className="capitalize">
+                                        <i className="fa-solid fa-graduation-cap"></i> {course.course_language}
+                                    </span>
+                                )}
+                                {course.course_level && (
+                                    <span className="capitalize">
+                                        <i className="fa-solid fa-signal"></i> {course.course_level}
+                                    </span>
+                                )}
                             </div>
-                            <div className="course-rating">4.7 ***** (255)</div>
+                            {/* <div className="course-rating">4.7 ***** (255)</div> */}
                             <div className="course-btn">
                                 <button className="security-button">{truncateCate}</button>
                                 <button

@@ -84,7 +84,7 @@ const ShoppingCart = () => {
         is_inclusive: course.is_inclusive,
         is_exclusive: course.is_exclusive
       }));
-      navigate(`/checkout/`, {
+      navigate(`/checkout`, {
         state: {
           courses: courseDetails,
           total
