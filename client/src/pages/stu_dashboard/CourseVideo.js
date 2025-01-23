@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../../assets/css/client/coursevideo.css";
 import { RiMenuAddLine } from "react-icons/ri";
 import { MdLockOutline } from "react-icons/md";
@@ -10,7 +10,6 @@ import { notifySuccess, notifyWarning } from "../admin/layout/ToastMessage";
 const port = process.env.REACT_APP_URL;
 // Load PDF worker
 const CourseVideo = () => {
-  const [activeTab, setActiveTab] = useState("overview");
   const { id } = useParams();
   const { stuUserId } = useContext(userRolesContext);
   const [loading, setLoading] = useState(true);
@@ -84,6 +83,8 @@ const CourseVideo = () => {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${courseData.id}/${stuUserId}`);
       await setCourseProgress(res.data[0]);
       await setTimeStamp(res.data[0]?.watching_duration);
+      setElapsedTime(0);
+      console.log(timeStamp)
       if (res.data.length === 0 && stuUserId) {
         getModuleData();
         addcourseProgressData();
@@ -95,55 +96,39 @@ const CourseVideo = () => {
       console.log(error);
     }
   };
-  const [isTabVisible, setIsTabVisible] = useState(true);
-  useEffect(() => {
-    let timer;
-    if (isTabVisible) {
-      timer = setInterval(() => {
-        setElapsedTime((prev) => prev + 1);
-      }, 1000); // Increment every second
-    }
-    return () => clearInterval(timer);
-  }, [isTabVisible]);
+
   const navigate = useNavigate()
   const handleBack = async () => {
     navigate('/student/learning')
   }
+
   const saveTimeToDatabase = async () => {
-    const totalTime = Number(timeStamp) + Number(elapsedTime);
+    const totalTime = timeStamp + elapsedTime;
+    console.log("call time update")
     const payload = { watchingDuration: totalTime };
     try {
       await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);
-      setTimeStamp((prevTimeStamp) => {
-        const newTimeStamp = prevTimeStamp + elapsedTime;
-        localStorage.setItem("timeStamp", newTimeStamp);
-        return newTimeStamp;
-      });
-      // setElapsedTime(0);
-      // localStorage.setItem("elapsedTime", 0);
+      setTimeStamp(totalTime); // Update timestamp with the saved total time
+      setElapsedTime(0); // Reset elapsed time after saving
     } catch (error) {
       console.error("Error saving time to database:", error);
     }
   };
-  useEffect(() => {
-    const savedTimeStamp = localStorage.getItem("timeStamp");
-    const savedElapsedTime = localStorage.getItem("elapsedTime");
-    if (savedTimeStamp && savedElapsedTime) {
-      setTimeStamp(Number(savedTimeStamp));
-      setElapsedTime(Number(savedElapsedTime));
-    }
-  }, []);
 
   useEffect(() => {
-    localStorage.setItem("timeStamp", timeStamp);
-    localStorage.setItem("elapsedTime", elapsedTime);
-  }, [timeStamp, elapsedTime]);
-
-  useEffect(() => {
-    // Set up interval to call the function every 10 seconds
+    // Save to database every 10 seconds
     const intervalId = setInterval(() => {
       saveTimeToDatabase();
     }, 10000);
+
+    // Cleanup the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [timeStamp, elapsedTime]);
+  useEffect(() => {
+    // Increment elapsedTime every second for local updates
+    const intervalId = setInterval(() => {
+      setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
+    }, 1000);
 
     // Cleanup the interval when the component unmounts
     return () => clearInterval(intervalId);
@@ -239,7 +224,6 @@ const CourseVideo = () => {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
       const lessonquizdata = res.data
       setLessonData(lessonquizdata);
-      getResourceData(lessonquizdata[0]?.id);
       const sortedData = lessonquizdata && lessonquizdata.sort((a, b) => a.order - b.order);
       // if (sortedData.length > 0) {
       //   if (courseProgress && stuUserId) {
@@ -293,7 +277,6 @@ const CourseVideo = () => {
   })
   const [compareLessonId, setCompareLessonId] = useState(null);
   const editLessonToggleModal = async (id, quizId, num) => {
-    await getResourceData(id)
     setCompareLessonId(id);
     if (num === 1) {
       if (id) {
@@ -304,16 +287,7 @@ const CourseVideo = () => {
       }
     }
   }
-  //resource data
-  const [resourceData, setResourceData] = useState([]);
-  const getResourceData = async (id) => {
-    try {
-      const res = await axiosInstance.get(`${port}/gettingCourseLessonResourceData/${id}`);
-      setResourceData(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
   const getLessonDataForEdit = async (id) => {
     setEditQuizData({
       title: "",
@@ -338,7 +312,6 @@ const CourseVideo = () => {
       console.log(error);
     }
   }
-  const [ediQuizeDataId, setEdiQuizeDataId] = useState(null)
   const getQuizeDataForEdit = async (id, comparesLessonId) => {
     setEditLessonData({
       title: "",
@@ -382,14 +355,6 @@ const CourseVideo = () => {
       setQuizPassOrFail(quizResultData.result);
       const parsedAnswers = JSON.parse(quizResultData.user_answers);
       setAnswers(parsedAnswers);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  const getQuizResultDat = async (id) => {
-    try {
-      const res = await axiosInstance.get(`${port}/gettingQuizResultData/${id}`);
-      setQuizeResultId(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -642,9 +607,12 @@ const CourseVideo = () => {
   useEffect(() => {
     getCourseData();
     getModuleData();
-    getReviewWithStudentId();
     getCourseLessonDataWithCourseId();
   }, []);
+  useEffect(() => {
+    getReviewWithStudentId();
+  }, [stuUserId])
+
   useEffect(() => {
     getcourseProgressData()
   }, [courseData]);
@@ -656,10 +624,10 @@ const CourseVideo = () => {
   //getting review with course id
   const [reviewWithStudentId, setReviewWithStudentId] = useState([]);
   const getReviewWithStudentId = async () => {
+    if (!stuUserId) return;
     try {
       const response = await axiosInstance.get(`${port}/gettingReviewWithStudentId/${stuUserId}`);
-      setReviewWithStudentId(response.data);
-      console.log(response.data);
+      setReviewWithStudentId(response.data[0]);
     } catch (error) {
       console.log(error);
     }
@@ -705,11 +673,6 @@ const CourseVideo = () => {
       console.log(error);
     }
   }
-  const handleTabChange = (val) => {
-    setActiveTab(val);
-    getReviewWithStudentId();
-    getReviewWithStudentId();
-  }
   //review get with student id
   useEffect(() => {
     if (reviewWithStudentId) {
@@ -721,7 +684,7 @@ const CourseVideo = () => {
       });
     }
   }, [reviewWithStudentId, stuUserId, id]);
-
+ 
   return (
     <>
       {loading ? (
@@ -785,7 +748,7 @@ const CourseVideo = () => {
 
                   {/* Rating & Review */}
                   <div className="flex items-center justify-between ">
-                    <span className="text-md font-semibold">Leave Your Review</span>
+                    <button className="text-base font-semibold" onClick={() => setIsReviewOpen(true)}>Leave Your Review</button>
                   </div>
                 </div>
               )}
@@ -795,64 +758,16 @@ const CourseVideo = () => {
             <div className="hidden xl:flex items-center space-x-6">
               {/* Time Spent */}
               <div className="text-base">
-                <span className="font-semibold">Time Spent: </span>
+                <span className="font-semibold">Time Spentkk: </span>
                 <span className="text-gray-800 text-sm">
-                  {totalTimeInMinutes}:{remainingSeconds}
+                  {Math.floor((timeStamp + elapsedTime) / 60)}:{(timeStamp + elapsedTime) % 60}
                 </span>
               </div>
 
               {/* Rating & Review */}
               <div className="flex items-center justify-between">
-                <button className="text-xs font-semibold" onClick={() => setIsReviewOpen(true)}>Leave Your Reviews</button>
+                <button className="text-base font-semibold" onClick={() => setIsReviewOpen(true)}>Leave Your Reviews</button>
               </div>
-              {/* Rating & Review Dropdown */}
-              {isReviewOpen && (
-                <div className="absolute top-1/4 right-1/3 z-10 bg-[#F5F6FA] p-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-xl font-bold text-black">
-                      {reviewWithStudentId.length !== 0 ? "Update Your Review" : "Write Your Review"}
-                    </h2>
-                    <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark"></i></button>
-                  </div>
-                  <form onSubmit={handleSubmitReview}>
-                    {/* Star Rating */}
-
-                    <div className="flex items-center space-x-2 mb-2">
-                      {[...Array(5)].map((_, index) => (
-                        <i
-                          key={index}
-                          className={`cursor-pointer text-base ${index < addReview.rating
-                            ? "fa-solid fa-star text-orange-500"
-                            : "fa-regular fa-star text-gray-300"
-                            }`}
-                          onClick={() =>
-                            setAddReview((prevReview) => ({
-                              ...prevReview,
-                              rating: index + 1, // Update rating based on star clicked
-                            }))
-                          }
-                        ></i>
-                      ))}
-                    </div>
-                    {/* Review Text */}
-                    <textarea
-                      className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      rows="5"
-                      name="review"
-                      placeholder="Share your experience about this course..."
-                      value={addReview.review}
-                      onChange={handleReviewChange}
-                    ></textarea>
-                    <button
-                      type="submit"
-                      className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-                    >
-                      {reviewWithStudentId.length !== 0 ? "Update Review" : "Submit Review"}
-                    </button>
-                  </form>
-                </div>
-              )}
-
               {/* Progress */}
               <div className="text-base">
                 <span className="font-semibold">Your Progress: </span>
@@ -1173,249 +1088,174 @@ const CourseVideo = () => {
 
               {/* Tab Bar */}
               <div>
-                <div className="tabs flex flex-wrap gap-2 justify-start md:justify-start">
-                  <button className={activeTab === "overview" ? "active" : ""} onClick={() => handleTabChange("overview")} >
-                    Overview </button>
-                  <button className={`md:hidden block ${activeTab === "content" ? "active" : ""} `} onClick={() => handleTabChange("content")} >
-                    Course Content </button>
-                  <button className={activeTab === "resource" ? "active" : ""} onClick={() => handleTabChange("resource")} >
-                    Resource </button>
-                  <button className={activeTab === "review" ? "active" : ""} onClick={() => handleTabChange("review")} >
-                    Reviews </button>
-                </div>
-                {activeTab === "content" && (
-                  <>
-                    <div className="md:hidden block course-info md:ml-2">
-                      {moduleData.length > 0 ? (
-                        moduleData.map((module, moduleIndex) => {
-                          return (
-                            <div className="module" key={moduleIndex}>
-                              <div
-                                className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
-                                onClick={() =>
-                                  toggleContent(
-                                    module.id,
-                                    module.id,
-                                    activeModuleIndex === module.id ? null : module.id
-                                  )
-                                }
-                              >
-                                <span className="module-title">
-                                  MODULE-{moduleIndex + 1} : {module.title}
-                                </span>
-                                <div className="module-controls">
-                                  <button className="check-btn">
-                                    <i
-                                      className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
-                                        }`}
-                                    ></i>
-                                  </button>
-                                </div>
-                              </div>
-                              {activeModuleIndex === module.id && (
-                                <>
-                                  <div className="module-list">
-                                    {lessonLoading ? (
-                                      <div className="lesson_loader"></div>
-                                    ) : lessonData.length > 0 ? (
-                                      lessonData.map((lesson, lessonIndex) => {
-                                        if (courseProgress) {
-                                          var isCompleted =
-                                            courseProgress &&
-                                            courseProgress.completed_lesson_id &&
-                                            JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.id)
-                                        }
-                                        const canAccess =
-                                          (courseProgress &&
-                                            courseProgress.completed_lesson_id &&
-                                            JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id)) ||
-                                          (courseProgress &&
-                                            courseProgress.current_watching_lesson === lesson.id);
-                                        return (
-                                          <div
-                                            className={`module-content ${!canAccess ? "cursor-not-allowed" : ""
-                                              }`}
-                                            key={lessonIndex}
-                                          >
-                                            <div className="module-lesson">
-                                              <div
-                                                className={`lesson-title ${!canAccess
-                                                  ? "cursor-not-allowed"
-                                                  : "cursor-pointer"
-                                                  }`}
-                                                onClick={() =>
-                                                  canAccess &&
-                                                  editLessonToggleModal(lesson.id, lesson.quiz_id, 1)
-                                                }
-                                              >
-                                                {lesson.quiz_id ? (
-                                                  <span className="quiz-icon">
-                                                    <i className="fa-regular fa-circle-question"></i>
-                                                  </span>
-                                                ) : lesson.lesson_type == "video" ? (
-                                                  <span className="lesson-icon">
-                                                    <i className="fa-solid fa-circle-play"></i>
-                                                  </span>
-                                                ) : lesson.lesson_type == "youtube-video" ? (
-                                                  <span className="lesson-icon">
-                                                    <i className="fa-brands fa-youtube"></i>
-                                                  </span>
-                                                ) : lesson.lesson_type == "pdf" ? (
-                                                  <span className="lesson-icon">
-                                                    <i className="fa-solid fa-file-pdf"></i>
-                                                  </span>
-                                                ) : (
-                                                  <span className="lesson-icon">
-                                                    <i className="fa-solid fa-file-lines"></i>
-                                                  </span>
-                                                )}
-                                                {lesson.quiz_id != null
-                                                  ? lesson.course_quize_lesson.title
-                                                  : lesson.title}
-                                              </div>
-                                              <span className="mr-2">
-                                                {!canAccess && <MdLockOutline />}
-                                              </span>
-                                              <div className="lesson-time">
-                                                <input
-                                                  type="checkbox"
-                                                  className={`checkbox-class ${!canAccess
-                                                    ? "cursor-not-allowed"
-                                                    : "cursor-pointer"
-                                                    }`}
-                                                  checked={isCompleted}
-                                                  readOnly
-                                                />
-                                              </div>
-                                            </div>
-                                          </div>
-                                        );
-                                      })
-                                    ) : (
-                                      <h6>No data available 😂</h6>
-                                    )}
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <p>No Module data available</p>
-                      )}
-                    </div>
-                  </>
-                )}
-                {activeTab === "overview" && (
-                  <>
-                    <div className="long-desc">
-                      <p>
-                        {courseData?.long_desc}
-                      </p>
-                    </div>
-                    <div className="learning-list">
-                      <h2 className="font-bold mb-4 text-2xl text-black"> What you'll learn </h2>
-                      <ul className="block sm:hidden">
-                        {Array.isArray(courseData.course_topics) && courseData.course_topics.map((keyword, index) => (
-                          <li key={index}>{keyword}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="prerequisites">
-                      <h2 className="font-bold mb-4 text-2xl text-black"> Prerequisites </h2>
-                      <ul className="list-disc pl-4 md:pl-6 space-y-2">
-                        {Array.isArray(courseData.course_requirenment) && courseData.course_requirenment.map((keyword, index) => (
-                          <li className="pl-4 md:pl-0" key={index}>
-                            {keyword}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </>
-                )}
-                {activeTab === "resource" && (
-                  <>
-                    <div className="resource-list rounded-lg p-6 md:p-8">
-                      <h2 className="font-bold mb-6 text-2xl text-gray-800 border-b pb-2 border-gray-200">
-                        Resources
-                      </h2>
-                      <ul className="list-none space-y-4">
-                        {resourceData.length > 0 ? (
-                          resourceData.map((resource, index) => (
-                            <li key={index} className="group">
-                              <NavLink
-                                to={resource.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-3 p-3 rounded-md bg-white shadow-sm hover:shadow-md hover:bg-blue-50 hover:text-blue-600 text-gray-700 transition-all duration-300"
-                              >
-                                <span className="flex-shrink-0 w-10 h-10 bg-blue-100 text-blue-500 flex items-center justify-center rounded-full text-xl font-semibold group-hover:bg-blue-600 group-hover:text-white">
-                                  {resource.title.charAt(0).toUpperCase()}
-                                </span>
-                                <span className="truncate">{resource.title}</span>
-                              </NavLink>
-                            </li>
-                          ))
-                        ) : (
-                          <p className="text-gray-500 italic">No resource available</p>
-                        )}
-                      </ul>
-                    </div>
-
-                  </>
-                )}
-                {
-                  activeTab === "review" && (
-                    <>
-                      <div className="p-5">
-                        {/* User Review Section */}
-                        <div className="mb-6">
-                          <h2 className="text-2xl font-bold mb-4">
-                            {reviewWithStudentId ? "Update Your Review" : "Write Your Review"}
-                          </h2>
-                          <form onSubmit={handleSubmitReview}>
-                            {/* Star Rating */}
-
-                            <div className="flex items-center space-x-2 mb-4">
-                              {[...Array(5)].map((_, index) => (
+                <div className="md:hidden block course-info md:ml-2 my-2.5 m-0">
+                  {moduleData.length > 0 ? (
+                    moduleData.map((module, moduleIndex) => {
+                      return (
+                        <div className="module" key={moduleIndex}>
+                          <div
+                            className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
+                            onClick={() =>
+                              toggleContent(
+                                module.id,
+                                module.id,
+                                activeModuleIndex === module.id ? null : module.id
+                              )
+                            }
+                          >
+                            <span className="module-title">
+                              MODULE-{moduleIndex + 1} : {module.title}
+                            </span>
+                            <div className="module-controls">
+                              <button className="check-btn">
                                 <i
-                                  key={index}
-                                  className={`cursor-pointer text-2xl ${index < addReview.rating
-                                    ? "fa-solid fa-star text-orange-500"
-                                    : "fa-regular fa-star text-gray-300"
+                                  className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
                                     }`}
-                                  onClick={() =>
-                                    setAddReview((prevReview) => ({
-                                      ...prevReview,
-                                      rating: index + 1, // Update rating based on star clicked
-                                    }))
-                                  }
                                 ></i>
-                              ))}
+                              </button>
                             </div>
-                            {/* Review Text */}
-                            <textarea
-                              className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              rows="5"
-                              name="review"
-                              placeholder="Share your experience about this course..."
-                              value={addReview.review}
-                              onChange={handleReviewChange}
-                            ></textarea>
-                            <button
-                              type="submit"
-                              className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-                            >
-                              {reviewWithStudentId ? "Update Review" : "Submit Review"}
-                            </button>
-                          </form>
+                          </div>
+                          {activeModuleIndex === module.id && (
+                            <>
+                              <div className="module-list">
+                                {lessonLoading ? (
+                                  <div className="lesson_loader"></div>
+                                ) : lessonData.length > 0 ? (
+                                  lessonData.map((lesson, lessonIndex) => {
+                                    if (courseProgress) {
+                                      var isCompleted =
+                                        courseProgress &&
+                                        courseProgress.completed_lesson_id &&
+                                        JSON.parse(courseProgress.completed_lesson_id)?.includes(lesson.id)
+                                    }
+                                    const canAccess =
+                                      (courseProgress &&
+                                        courseProgress.completed_lesson_id &&
+                                        JSON.parse(courseProgress.completed_lesson_id).includes(lesson.id)) ||
+                                      (courseProgress &&
+                                        courseProgress.current_watching_lesson === lesson.id);
+                                    return (
+                                      <div
+                                        className={`module-content ${!canAccess ? "cursor-not-allowed" : ""
+                                          }`}
+                                        key={lessonIndex}
+                                      >
+                                        <div className="module-lesson">
+                                          <div
+                                            className={`lesson-title ${!canAccess
+                                              ? "cursor-not-allowed"
+                                              : "cursor-pointer"
+                                              }`}
+                                            onClick={() =>
+                                              canAccess &&
+                                              editLessonToggleModal(lesson.id, lesson.quiz_id, 1)
+                                            }
+                                          >
+                                            {lesson.quiz_id ? (
+                                              <span className="quiz-icon">
+                                                <i className="fa-regular fa-circle-question"></i>
+                                              </span>
+                                            ) : lesson.lesson_type == "video" ? (
+                                              <span className="lesson-icon">
+                                                <i className="fa-solid fa-circle-play"></i>
+                                              </span>
+                                            ) : lesson.lesson_type == "youtube-video" ? (
+                                              <span className="lesson-icon">
+                                                <i className="fa-brands fa-youtube"></i>
+                                              </span>
+                                            ) : lesson.lesson_type == "pdf" ? (
+                                              <span className="lesson-icon">
+                                                <i className="fa-solid fa-file-pdf"></i>
+                                              </span>
+                                            ) : (
+                                              <span className="lesson-icon">
+                                                <i className="fa-solid fa-file-lines"></i>
+                                              </span>
+                                            )}
+                                            {lesson.quiz_id != null
+                                              ? lesson.course_quize_lesson.title
+                                              : lesson.title}
+                                          </div>
+                                          <span className="mr-2">
+                                            {!canAccess && <MdLockOutline />}
+                                          </span>
+                                          <div className="lesson-time">
+                                            <input
+                                              type="checkbox"
+                                              className={`checkbox-class ${!canAccess
+                                                ? "cursor-not-allowed"
+                                                : "cursor-pointer"
+                                                }`}
+                                              checked={isCompleted}
+                                              readOnly
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })
+                                ) : (
+                                  <h6>No data available 😂</h6>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </div>
-                      </div>
-                    </>
-                  )
-                }
+                      );
+                    })
+                  ) : (
+                    <p>No Module data available</p>
+                  )}
+                </div>
               </div>
             </div>
+            {/* Rating & Review Dropdown */}
+            {isReviewOpen && (
+              <div className="absolute rounded-md md:top-1/4 top-10 md:right-1/3 right-4 z-10 bg-[#F5F6FA] p-5">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-xl font-bold text-black">
+                    {reviewWithStudentId.length !== 0 ? "Update Your Review" : "Write Your Review"}
+                  </h2>
+                  <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark"></i></button>
+                </div>
+                <form onSubmit={handleSubmitReview}>
+                  {/* Star Rating */}
+
+                  <div className="flex items-center space-x-2 mb-2">
+                    {[...Array(5)].map((_, index) => (
+                      <i
+                        key={index}
+                        className={`cursor-pointer text-base ${index < addReview.rating
+                          ? "fa-solid fa-star text-orange-500"
+                          : "fa-regular fa-star text-gray-300"
+                          }`}
+                        onClick={() =>
+                          setAddReview((prevReview) => ({
+                            ...prevReview,
+                            rating: index + 1, // Update rating based on star clicked
+                          }))
+                        }
+                      ></i>
+                    ))}
+                  </div>
+                  {/* Review Text */}
+                  <textarea
+                    className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="2"
+                    name="review"
+                    placeholder="Share your experience about this course..."
+                    value={addReview.review}
+                    onChange={handleReviewChange}
+                  ></textarea>
+                  <button
+                    type="submit"
+                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    {reviewWithStudentId.length !== 0 ? "Update Review" : "Submit Review"}
+                  </button>
+                </form>
+              </div>
+            )}
 
             <div className="md:block hidden course-info md:ml-2">
               {moduleData.length > 0 ? (

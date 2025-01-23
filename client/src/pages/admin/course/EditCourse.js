@@ -380,7 +380,6 @@ const EditCourse = () => {
         formData.append('canonical_url', courseData.canonical_url);
         formData.append('title_tag', courseData.title_tag)
         formData.append('updated_by', courseData.updated_by)
-
         try {
             const res = await axiosInstance.put(`${port}/updatingCourseMaster/${id}`, courseData, {
                 headers: {
