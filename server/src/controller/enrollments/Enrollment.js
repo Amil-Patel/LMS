@@ -1,4 +1,4 @@
-const { enrollment, Course_Master, UserMaster } = require("../../database/models/index");
+const { enrollment, Course_Master, UserMaster, academic_progress, Course_Quize, Course_Lesson } = require("../../database/models/index");
 const AuthMiddleware = require("../../auth/AuthMiddleware");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const { where } = require("sequelize");
@@ -117,7 +117,48 @@ const getEnrollWithStuId = async (req, res) => {
             return res.status(404).json({ message: 'No enrollments found for the student' });
         }
 
-        res.status(200).json(enrollments);
+        const enrichedEnrollments = await Promise.all(
+            enrollments.map(async (enrollment) => {
+                const totalLesson = await Course_Lesson.count({
+                    where: { course_id: enrollment.course_id },
+                });
+                const allLessonData = await Course_Lesson.findAll({
+                    where: { course_id: enrollment.course_id },
+                    include: [
+                        {
+                            model: Course_Quize,
+                            as: 'course_quize_lesson',
+                            attributes: ['id', 'title', 'instruction', 'quize_duration', 'status'],
+                            required: false
+                        }
+                    ]
+                })
+                const progress = await academic_progress.findOne({
+                    where: { course_id: enrollment.course_id, student_id: studentId },
+                });
+                const completedLessons = progress?.completed_lesson_id
+                    ? Array.isArray(JSON.parse(progress.completed_lesson_id.replace(/^"(.*)"$/, '$1')))  // Strip out the extra quotes
+                        ? JSON.parse(progress.completed_lesson_id.replace(/^"(.*)"$/, '$1')).length
+                        : 0
+                    : 0;
+                const progressPercentage = totalLesson
+                    ? Math.round((completedLessons / totalLesson) * 100)
+                    : 0;
+                console.log(progressPercentage)
+                const totalEnroll = await enrollment.constructor.count({
+                    where: { course_id: enrollment.course_id },
+                })
+                return {
+                    ...enrollment.toJSON(),
+                    allLessonData,
+                    totalLesson, // Add lesson count to the enrollment object
+                    totalEnroll,
+                    progressPercentage,
+                };
+            })
+        );
+
+        res.status(200).json(enrichedEnrollments);
     } catch (error) {
         console.error('Error fetching enrollments:', error.message);
         res.status(500).json({ message: 'Internal Server Error', error: error.message });

@@ -95,6 +95,7 @@ const ViewCourse = () => {
       const response = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
       const data = await response.data;
       setCourseData(data);
+      console.log(data)
       // setup for auther
       let auther = response.data.auther;
       try {
@@ -199,18 +200,9 @@ const ViewCourse = () => {
                 {courseData?.short_desc}
               </p>
               <div className="rating-author">
-                <span className="courses-reviews">
-                  4.5
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-solid fa-star"></i>
-                  <i className="fa-regular fa-star"></i>
-                  <span className="customer-review-number"> (3,902) </span>
-                </span>
-                {Array.isArray(courseData.auther) && courseData.auther.map((keyword, index) => (
-                  <p className="author-name mt-2" key={index}>By {keyword}</p>
-                ))}
+                <p className="author-name mt-2">
+                  By {courseData?.auther?.map((author, index) => `${author}`).join(', ')}
+                </p>
               </div>
               <div className="course-icon-section">
                 <span>

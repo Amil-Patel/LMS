@@ -111,6 +111,7 @@ const addCourseLessonData = async (req, res) => {
             section_id: sectionId
         }
     });
+    console.log(getdata.length)
     const data = {
         title: req.body.title,
         duration: req.body.duration,
@@ -128,7 +129,7 @@ const addCourseLessonData = async (req, res) => {
         description: req.body.description,
         minimum_duration: null,
         drip_content: null,
-        order: getdata.length + 1,
+        order: getdata.length === 0 ? 0 : getdata.length,
         createdAt: date,
         updatedAt: date,
     }
