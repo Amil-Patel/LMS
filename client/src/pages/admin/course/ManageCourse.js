@@ -1039,7 +1039,6 @@ const ManageCourse = () => {
       const res = await axiosInstance.get(`${port}/getAcademicProgressDataForManageCourse/${id}`);
       const progressData = res.data;
       await setProgressData(progressData);
-      console.log(progressData);
     } catch (error) {
       console.log(error);
     }
@@ -1333,16 +1332,13 @@ const ManageCourse = () => {
                 )} */}
                 {progressData && progressData.length !== 0 ? (
                   progressData.map((studentData, studentIndex) => {
-                    console.log(studentData);
                     // Ensure enroll data exists
                     const enroll = studentData.enrollment && studentData.enrollment;
                     const academicData = studentData.academicData && studentData.academicData[0];
                     const userMaster = studentData.userMaster && studentData.userMaster;
-                    console.log(userMaster)
                     if (!enroll || !userMaster) {
                       return null; // Skip this student if essential data is missing
                     }
-                    console.log("object")
                     // Format dates safely
                     const time = enroll.createdAt
                       ? moment.unix(enroll.createdAt).tz(setting.timezone).format("DD-MM-YYYY")

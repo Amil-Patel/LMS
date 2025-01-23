@@ -32,7 +32,6 @@ const AllCourse = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseMasterData`);
       setCourseData(res.data);
-      console.log(res.data)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -178,7 +177,6 @@ const AllCourse = () => {
             <tbody>
               {filteredData.map((i, index) => {
                 let auther = i.auther;
-                console.log(auther)
                 let formattedData = "Invalid data";
 
                 // Attempt to parse the auther field if it's a string

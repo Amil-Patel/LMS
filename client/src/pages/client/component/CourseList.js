@@ -45,36 +45,40 @@ const CourseList = ({ courses, category }) => {
                         <div className="allcourses-course-image" >
                             <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
                         </div>
-                        <div className="course-details">
-                            <div className="course-details-header">
-                                <h3>
-                                    <NavLink to={`/view-course/${course.id}`}>{truncatedTitle}</NavLink>
-                                </h3>
-                                <span>$ {course.course_price}</span>
-                            </div>
-                            <p>{truncatedDesc}</p>
-                            <div className="course-icon-section">
-                                {course.course_language && (
-                                    <span className="capitalize">
-                                        <i className="fa-solid fa-graduation-cap"></i> {course.course_language}
-                                    </span>
-                                )}
-                                {course.course_level && (
-                                    <span className="capitalize">
-                                        <i className="fa-solid fa-signal"></i> {course.course_level}
-                                    </span>
-                                )}
+                        <div className="course-details flex justify-between flex-col">
+                            <div>
+                                <div className="course-details-header">
+                                    <h3>
+                                        <NavLink to={`/view-course/${course.id}`}>{truncatedTitle}</NavLink>
+                                    </h3>
+                                    <span>$ {course.course_price}</span>
+                                </div>
+                                <p>{truncatedDesc}</p>
+                                <div className="course-icon-section">
+                                    {course.course_language && (
+                                        <span className="capitalize">
+                                            <i className="fa-solid fa-graduation-cap"></i> {course.course_language}
+                                        </span>
+                                    )}
+                                    {course.course_level && (
+                                        <span className="capitalize">
+                                            <i className="fa-solid fa-signal"></i> {course.course_level}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             {/* <div className="course-rating">4.7 ***** (255)</div> */}
-                            <div className="course-btn">
-                                <button className="security-button">{truncateCate}</button>
-                                <button
-                                    className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
-                                    onClick={() => addToCart(course)}
-                                    disabled={isInCart}
-                                >
-                                    {isInCart ? 'Added to Cart' : 'Add to Cart'}
-                                </button>
+                            <div>
+                                <div className="course-btn">
+                                    <button className="security-button">{truncateCate}</button>
+                                    <button
+                                        className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
+                                        onClick={() => addToCart(course)}
+                                        disabled={isInCart}
+                                    >
+                                        {isInCart ? 'Added to Cart' : 'Add to Cart'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
