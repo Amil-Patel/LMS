@@ -803,7 +803,7 @@ const CourseVideo = () => {
 
               {/* Rating & Review */}
               <div className="flex items-center justify-between">
-                <button className="text-xs font-semibold" onClick={() => setIsReviewOpen(true)}>Leave Your Reviews</button>
+                <button className="text-sm font-semibold" onClick={() => setIsReviewOpen(true)}>Leave Your Reviews</button>
               </div>
               {/* Rating & Review Dropdown */}
               {isReviewOpen && (

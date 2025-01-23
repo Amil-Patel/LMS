@@ -45,7 +45,6 @@
 
 .cus-hero-container {
   width: 100%;
-  padding-left: calc((100% - 1400px) / 2);
   background-color: var(--Primary-background);
   display: flex;
 }
@@ -88,6 +87,7 @@
 
 .cus-hero-image {
   width: 51%;
+  padding-right: 10%;
   height: 511px;
 }
 
@@ -131,6 +131,11 @@
 
 .cus-content h3 {
   font-size: 20px;
+  padding-bottom: 10px;
+  font-weight: 700;
+}
+
+.cus-content img{
   padding-bottom: 10px;
 }
 
@@ -288,7 +293,7 @@
 
 .cus-contact-section {
   display: flex;
-  padding: 5%;
+  padding: 5% 10%;
 }
 
 .cus-contact-inner-section {
@@ -455,6 +460,13 @@
   color: var(--black);
 }
 
+@media screen and (max-width:1536px) {
+
+  .cus-hero-image {
+    padding-right: 0%;
+  }
+
+}
 @media screen and (max-width:1025px) {
   .cus-course-overview-section {
     padding: 0 5%;
@@ -508,6 +520,10 @@
 
   .cus-hero-text {
     padding: 25px;
+  }
+
+  .cus-hero-text h1{
+    font-size: 37px;
   }
 
   h1 {
