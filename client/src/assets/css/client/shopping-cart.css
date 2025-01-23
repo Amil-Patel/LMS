@@ -193,6 +193,8 @@
   }
 
   .shopping-cart-course-content h3 {
+    overflow: hidden;
+    
     font-size: 18px;
   }
 
