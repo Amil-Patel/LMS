@@ -1,8 +1,9 @@
-.client_section h1 {
+.client_section .cus-hero-text h1 {
   font-size: 44px;
   color: var(--black);
   font-weight: 800;
 }
+ 
 
 .client_section {
   max-width: 1400px;

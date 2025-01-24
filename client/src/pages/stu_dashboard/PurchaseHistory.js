@@ -80,214 +80,214 @@ const PurchaseHistory = () => {
         <>
             <Navbar />
             <div className='client_section'>
-            {loading && <Loading />} 
-            <div className='main_stu_dashboard'>
-                <Sidebar />
-                <div className='content pl-4'>
-                    <h1 className='pb-2'>Purchase History</h1>
-                    <div className='purchase_history_content overflow-x-auto'>
-                        <table className='w-max xl:w-full'>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Course Name</th>
-                                    <th>Total Courses</th>
-                                    <th>Amount</th>
-                                    <th>Pay Mode</th>
-                                    <th>Transaction ID</th>
-                                    <th>Date</th>
-                                    <th>View</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    paymentData.length > 0 ? (
-                                        paymentData.map((item, index) => {
-                                            const time = moment.unix(item?.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
-                                            return (
-                                                <tr key={index}>
-                                                    <td className='py-3'>{index + 1}</td>
-                                                    <td>
-                                                        {item?.orderDetails?.map((course, index) => (
-                                                            <span key={index}>{course.course_title}{index < item.orderDetails.length - 1 && ', '}</span>
-                                                        ))}
-                                                    </td>
-                                                    <td>{item?.orderDetails?.length}</td>
-                                                    <td>{setting.position == "left" ? setting.symbol : ""}{item?.amount}{setting.position == "right" ? setting.symbol : ""}</td>
-                                                    <td>{item?.payment_mode}</td>
-                                                    <td>#12542554</td>
-                                                    <td>{time}</td>
-                                                    <td className='text-lg cursor-pointer' onClick={() => handleViewClick(item)}><ImTicket /></td>
-                                                </tr>
-                                            )
-                                        })
-                                    ) : (
-                                        <p>No Purchase history Fount</p>
-                                    )
-                                }
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {/* View Modal */}
-                {viewOpen && currentCourse && (
-                    <div className="modal">
-                        <div
-                            className="modal-container"
-                            style={{ width: "60%", border: "1px solid #F0F0F0" }}
-                        >
-                            <form className="coupon-form">
-                                <div className="pay_modulhead">
-                                    <div>
-                                        <h6>{currentCourse?.studentName?.first_name} {currentCourse?.studentName?.last_name}</h6>
-                                        <p className="email lowercase">{currentCourse?.studentName?.email}</p>
-                                    </div>
-                                    <div>
-                                        <h5 className="head_text">Amount</h5>
-                                        <p className="email">{setting.position == "left" ? setting.symbol : ""}{currentCourse?.amount}{setting.position == "right" ? setting.symbol : ""}</p>
-                                    </div>
-                                    <div>
-                                        <h5 className="head_text">Transaction Id</h5>
-                                        <p className="email">{currentCourse?.transiction_id}</p>
-                                    </div>
-                                    <div>
-                                        <h5 className="head_text">Payment Mode</h5>
-                                        <p className="email">{currentCourse?.payment_mode}</p>
-                                    </div>
-                                    <div>
-                                        <h5 className="head_text">Purchase Date</h5>
-                                        <p className="email">{currentCourse?.createdAt}</p>
-                                    </div>{" "}
-                                    <div>
-                                        <h5 className="head_text">Bill No:(ID)</h5>
-                                        <p className="email">{currentCourse?.id}</p>
-                                    </div>
-                                </div>
-
-                                <table className="payment_view_table">
-                                    <thead>
-                                        <tr>
-                                            <th>Course Name</th>
-                                            <th>Validity</th>
-                                            <th>Amount</th>
-                                            <th>Tax</th>
-                                            <th>Tax Amt</th>
-                                            <th>Discount</th>
-                                            <th>Net Amt</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {
-                                            currentCourse?.orderDetails?.map((item) => {
-                                                const discount = item?.course_amount * (item?.discount / 100);
-                                                const withDiscountPrice = item.course_amount - discount;
-                                                const tax_amount = withDiscountPrice * (item?.course_tax / 100);
-                                                const net_amount = item?.course_amount - tax_amount - item?.discount;
+                {loading && <Loading />}
+                <div className='main_stu_dashboard'>
+                    <Sidebar />
+                    <div className='content pl-4'>
+                        <h1 className='pb-2'>Purchase History</h1>
+                        <div className='purchase_history_content '>
+                            <table className='w-max xl:w-full'>
+                                <thead className='bg-[#F7F7FA]'>
+                                    <tr>
+                                        <th style={{ width:'5%',paddingLeft:'10px' }}>ID</th>
+                                        <th style={{width:'35%'}}>Course Name</th>
+                                        <th style={{width:'12%'}}>Total Courses</th>
+                                        <th style={{width:'8%'}}>Amount</th>
+                                        <th style={{width:'10%'}}>Pay Mode</th>
+                                        <th style={{width:'13%'}}>Transaction ID</th>
+                                        <th style={{width:'12%'}}>Date</th>
+                                        <th style={{width:'5%'}}>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        paymentData.length > 0 ? (
+                                            paymentData.map((item, index) => {
+                                                const time = moment.unix(item?.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
                                                 return (
-                                                    <tr>
-                                                        <td>{item?.course_title}</td>
-                                                        <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
-                                                        <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_amount}{setting.position == "right" ? setting.symbol : ""}</td>
-                                                        <td>{(parseFloat(item?.course_tax)) ? parseFloat(item?.course_tax) : 0}%</td>
+                                                    <tr key={index}>
+                                                        <td className='py-3 pl-3'>{index + 1}</td>
                                                         <td>
-                                                            {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                            {item?.orderDetails?.map((course, index) => (
+                                                                <span key={index}>{course.course_title}{index < item.orderDetails.length - 1 && ', '}</span>
+                                                            ))}
                                                         </td>
-                                                        <td>
-                                                            {setting.position == "left" ? setting.symbol : ""}{parseFloat(discount ? discount : 0).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                        </td>
-                                                        <td>
-                                                            {setting.position == "left" ? setting.symbol : ""}{parseFloat(net_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                        </td>
+                                                        <td>{item?.orderDetails?.length}</td>
+                                                        <td>{setting.position == "left" ? setting.symbol : ""}{item?.amount}{setting.position == "right" ? setting.symbol : ""}</td>
+                                                        <td>{item?.payment_mode}</td>
+                                                        <td>#12542554</td>
+                                                        <td>{time}</td>
+                                                        <td className='text-lg cursor-pointer' onClick={() => handleViewClick(item)}><ImTicket /></td>
                                                     </tr>
-                                                );
+                                                )
                                             })
-                                        }
-                                    </tbody>
-                                </table>
+                                        ) : (
+                                            <p>No Purchase history Found</p>
+                                        )
+                                    }
 
-                                <div className="payment_2table">
-                                    <table className="customer-info-table">
-                                        <tbody>
-                                            <tr>
-                                                <th>Mobile</th>
-                                                <td>{currentCourse?.bill_mobile}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Cust Name</th>
-                                                <td>{currentCourse?.bill_name}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Address</th>
-                                                <td>{currentCourse?.bill_address}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>GSTIN</th>
-                                                <td>{currentCourse?.bill_gst}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>PAN</th>
-                                                <td>{currentCourse?.bill_pan}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                    <table className="amount-details-table">
-                                        <tbody>
-                                            <tr>
-                                                <th>Sub Total</th>
-                                                <th>
-                                                    {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td>Discount</td>
-                                                <td>
-                                                    {setting.position == "left" ? setting.symbol : ""}{parseFloat(totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total Amount</th>
-                                                <th>
-                                                    {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal - totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Tax (Inc.)</td>
-                                                <td>
-                                                    {setting.position == "left" ? setting.symbol : ""}{parseFloat(inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                </td>
-                                            </tr>
-                                            <tr className="net-amount-row">
-                                                <th>Net Amount</th>
-                                                <th>
-                                                    {setting.position == "left" ? setting.symbol : ""}{parseFloat((subTotal - totalDiscount) + inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div
-                                    style={{
-                                        marginTop: "20px",
-                                        display: "flex",
-                                        justifyContent: "flex-end",
-                                    }}
-                                >
-                                    <button
-                                        type="button"
-                                        onClick={handleCloseEditModal}
-                                        className="secondary-btn module-btn"
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                            </form>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                )}
-            </div>
+                    {/* View Modal */}
+                    {viewOpen && currentCourse && (
+                        <div className="modal">
+                            <div
+                                className="modal-container"
+                                style={{ border: "1px solid #F0F0F0" }}
+                            >
+                                <form className="coupon-form">
+                                    <div className="pay_modulhead">
+                                        <div>
+                                            <h6>{currentCourse?.studentName?.first_name} {currentCourse?.studentName?.last_name}</h6>
+                                            <p className="email lowercase">{currentCourse?.studentName?.email}</p>
+                                        </div>
+                                        <div>
+                                            <h5 className="head_text">Amount</h5>
+                                            <p className="email">{setting.position == "left" ? setting.symbol : ""}{currentCourse?.amount}{setting.position == "right" ? setting.symbol : ""}</p>
+                                        </div>
+                                        <div>
+                                            <h5 className="head_text">Transaction Id</h5>
+                                            <p className="email">{currentCourse?.transiction_id}</p>
+                                        </div>
+                                        <div>
+                                            <h5 className="head_text">Payment Mode</h5>
+                                            <p className="email">{currentCourse?.payment_mode}</p>
+                                        </div>
+                                        <div>
+                                            <h5 className="head_text">Purchase Date</h5>
+                                            <p className="email">{currentCourse?.createdAt}</p>
+                                        </div>{" "}
+                                        <div>
+                                            <h5 className="head_text">Bill No:(ID)</h5>
+                                            <p className="email">{currentCourse?.id}</p>
+                                        </div>
+                                    </div>
+
+                                    <table className="payment_view_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Course Name</th>
+                                                <th>Validity</th>
+                                                <th>Amount</th>
+                                                <th>Tax</th>
+                                                <th>Tax Amt</th>
+                                                <th>Discount</th>
+                                                <th>Net Amt</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {
+                                                currentCourse?.orderDetails?.map((item) => {
+                                                    const discount = item?.course_amount * (item?.discount / 100);
+                                                    const withDiscountPrice = item.course_amount - discount;
+                                                    const tax_amount = withDiscountPrice * (item?.course_tax / 100);
+                                                    const net_amount = item?.course_amount - tax_amount - item?.discount;
+                                                    return (
+                                                        <tr>
+                                                            <td>{item?.course_title}</td>
+                                                            <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
+                                                            <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_amount}{setting.position == "right" ? setting.symbol : ""}</td>
+                                                            <td>{(parseFloat(item?.course_tax)) ? parseFloat(item?.course_tax) : 0}%</td>
+                                                            <td>
+                                                                {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                            </td>
+                                                            <td>
+                                                                {setting.position == "left" ? setting.symbol : ""}{parseFloat(discount ? discount : 0).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                            </td>
+                                                            <td>
+                                                                {setting.position == "left" ? setting.symbol : ""}{parseFloat(net_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                    <div className="payment_2table">
+                                        <table className="customer-info-table">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Mobile</th>
+                                                    <td>{currentCourse?.bill_mobile}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Cust Name</th>
+                                                    <td>{currentCourse?.bill_name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Address</th>
+                                                    <td>{currentCourse?.bill_address}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>GSTIN</th>
+                                                    <td>{currentCourse?.bill_gst}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>PAN</th>
+                                                    <td>{currentCourse?.bill_pan}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <table className="amount-details-table">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Sub Total</th>
+                                                    <th>
+                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Discount</td>
+                                                    <td>
+                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Total Amount</th>
+                                                    <th>
+                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal - totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tax (Inc.)</td>
+                                                    <td>
+                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                    </td>
+                                                </tr>
+                                                <tr className="net-amount-row">
+                                                    <th>Net Amount</th>
+                                                    <th>
+                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat((subTotal - totalDiscount) + inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div
+                                        style={{
+                                            marginTop: "20px",
+                                            display: "flex",
+                                            justifyContent: "flex-end",
+                                        }}
+                                    >
+                                        <button
+                                            type="button"
+                                            onClick={handleCloseEditModal}
+                                            className="secondary-btn module-btn"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </>
     )

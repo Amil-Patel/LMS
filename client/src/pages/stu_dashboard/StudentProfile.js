@@ -130,16 +130,16 @@ const StudentProfile = () => {
       <div className='client_section'>
         <div className='main_stu_dashboard'>
           <Sidebar />
-          <div className="main static p-0 " >
+          <div className="main static bg-[white] ml-[30px] p-0" style={{ scrollbarWidth: "none" }} >
             <div className="course-form-container shadow-none pt-0">
-              <div className='flex items-center bg-white justify-between mb-5'>
-                <h1 className='font-bold text-3xl sticky top-0 left-0 bg-white z-10 text-black'>Profile</h1>
+              <div className='profile_header_title flex items-center bg-white justify-between'>
+                <h1 className='student_dashboard_profile_header_title'>Profile</h1>
                 <button onClick={handleSubmit} className="primary-btn module-btn">Save</button>
               </div>
-              <form>
+              <form className='student_profile_form'>
                 {/* first / middle / last  name */}
-                <div className="flex-row">
-                  <div className="form-group mb-0" style={{ width: "32%" }}>
+                <div className="flex-row name">
+                  <div className="form-group mb-0">
                     <label htmlFor="first_name">
                       First Name<span className="required">*</span>
                     </label>
@@ -154,7 +154,7 @@ const StudentProfile = () => {
                     />
                   </div>
 
-                  <div className="form-group mb-0" style={{ width: "32%" }}>
+                  <div className="form-group mb-0">
                     <label htmlFor="middle_name">Middle Name</label>
                     <input
                       id="middle_name"
@@ -166,7 +166,7 @@ const StudentProfile = () => {
                       className="col12input"
                     />
                   </div>
-                  <div className="form-group mb-0" style={{ width: "32%" }}>
+                  <div className="form-group mb-0">
                     <label htmlFor="last_name">
                       Last Name<span className="required">*</span>
                     </label>
@@ -183,8 +183,8 @@ const StudentProfile = () => {
                 </div>
 
                 {/* email / password */}
-                <div className="flex-row" style={{ gap: "30px" }}>
-                  <div className="form-group mb-0" style={{ width: "38%" }}>
+                <div className="flex-row email" style={{ gap: "30px" }}>
+                  <div className="form-group mb-0">
                     <label htmlFor="email">
                       Email<span className="required">*</span>
                     </label>

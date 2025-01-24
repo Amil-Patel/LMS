@@ -50,7 +50,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <section className="main_stu_dashboard_sidebar flex">
+    <section className="main_stu_dashboard_sidebar h-screen flex">
       <aside
         className={`bg-[#F9F9FB] duration-500 ${isMobile
           ? open
