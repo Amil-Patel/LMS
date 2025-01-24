@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserMaster.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: false
+    },
     first_name: {
       type: DataTypes.STRING,
       allowNull: false

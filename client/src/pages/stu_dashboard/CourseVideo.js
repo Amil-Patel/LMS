@@ -84,7 +84,6 @@ const CourseVideo = () => {
       await setCourseProgress(res.data[0]);
       await setTimeStamp(res.data[0]?.watching_duration);
       setElapsedTime(0);
-      console.log(timeStamp)
       if (res.data.length === 0 && stuUserId) {
         getModuleData();
         addcourseProgressData();
@@ -104,7 +103,6 @@ const CourseVideo = () => {
 
   const saveTimeToDatabase = async () => {
     const totalTime = timeStamp + elapsedTime;
-    console.log("call time update")
     const payload = { watchingDuration: totalTime };
     try {
       await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);

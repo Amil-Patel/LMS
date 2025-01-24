@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Sidebar from './layout/Sidebar'
 import Navbar from '../client/layout/Navbar'
-import Footer from '../client/layout/Footer'
 import { userRolesContext } from '../admin/layout/RoleContext';
 import '../../assets/css/client/learning.css'
 import axiosInstance from '../client/utils/axiosInstance';
@@ -18,7 +17,6 @@ const Learning = () => {
         try {
             const response = await axiosInstance.get(`${port}/gettingEnrollWithStuId/${stuUserId}`);
             const data = await response.data;
-            console.log(data)
             setEnrollCourse(data);
             const allLessons = data
                 .map((course) => course.allLessonData)
@@ -59,11 +57,14 @@ const Learning = () => {
                                 text-blue-600 text-base border-blue-600 
                                 hover:bg-blue-500 hover:text-white" onClick={() => { navigate(`/student/coursevideo/${item.course_id}`) }}>View</button>
                                             </div>
-                                            <span className="author-name text-sm">By {JSON.parse(item.course_master_enrollment.auther).join(', ')}</span>
+                                            {item.course_master_enrollment.auther && (
+                                                <span className="author-name text-sm">By {JSON.parse(item.course_master_enrollment.auther).join(', ')}</span>
+                                            )}
                                             <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> {item.totalLesson} Lessons</span>
                                                 <span><i className="fa-solid fa-clock"></i> {totalTime ? totalTime : 0} Hours</span>
                                                 <span><i className="fa-solid fa-graduation-cap"></i> {item.totalEnroll} Students</span>
-                                                <span><i className="fa-solid fa-signal"></i>{item.course_master_enrollment.course_level}</span></div>
+                                                <span><i className="fa-solid fa-signal"></i>{item.course_master_enrollment.course_level}</span>
+                                            </div>
                                         </div>
                                         <div>
                                             <div className="w-full bg-gray-200 h-1.5 rounded-sm">
@@ -80,7 +81,6 @@ const Learning = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

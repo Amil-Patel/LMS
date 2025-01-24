@@ -1150,9 +1150,9 @@ const ManageCourse = () => {
                 return (
                   <div div className="module" key={index}>
                     <div className="module-header" onClick={() => toggleContent(index, module.id)}>
-                      <span className="module-title">
+                      <p className="module-title max-w-xl">
                         MODULE-{index + 1} : {module.title}
-                      </span>
+                      </p>
                       <span className="module-duration">{formattedTime}</span>
                       <span className="module-status green-dot"></span>
                       <div className="module-controls">

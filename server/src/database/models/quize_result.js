@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   quize_result.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: false
+    },
     quize_id: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -45,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    result:{
+    result: {
       type: DataTypes.TEXT,
       allowNull: false
     },

@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 const ToastMessage = () => {
-  return <ToastContainer />;
+  return <ToastContainer position="bottom-right" />;
 };
 
 export const notifySuccess = (message) => {
@@ -19,7 +19,7 @@ export const notifyInfo = (message) => {
 };
 
 export const notifyWarning = (message) => {
-    toast.warning(message);
-  };
+  toast.warning(message);
+};
 
 export default ToastMessage;

@@ -3,11 +3,12 @@ import axiosInstance from '../utils/axiosInstance';
 import { userRolesContext } from '../../admin/layout/RoleContext';
 import { notifySuccess, notifyInfo } from '../../admin/layout/ToastMessage';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 const port = process.env.REACT_APP_URL;
 
 const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
     const { setStuUserId, setStuUserRole } = useContext(userRolesContext);
-
+    const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
@@ -28,6 +29,7 @@ const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
                 setStuUserId(res.data.id);
                 Cookies.set('student-token', res.data.token, { expires: 10 });
                 notifySuccess(res.data.message);
+                navigate('/student/learning');
                 toggleLoginForm();
             }
         } catch (error) {

@@ -95,7 +95,6 @@ const ViewCourse = () => {
       const response = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
       const data = await response.data;
       setCourseData(data);
-      console.log(data)
       // setup for auther
       let auther = response.data.auther;
       try {
