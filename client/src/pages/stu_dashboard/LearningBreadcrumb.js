@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-const DashboardBreadcrumb = () => {
+const LearningBreadcrumb = () => {
   return (
     <>
       <div style={{ backgroundColor: '#F9F9FB' }}>
@@ -9,7 +9,7 @@ const DashboardBreadcrumb = () => {
           <nav className="breadcrumb">
             <NavLink to="/" className="breadcrumb-item">Home</NavLink>
             <span className="breadcrumb-divider"><i className="fa-solid fa-angle-right"></i></span>
-            <NavLink to="/student/dashboard" className="breadcrumb-item">Dashboard</NavLink>
+            <NavLink to="/student/learning" className="breadcrumb-item">Courses</NavLink>
           </nav>
         </div>
       </div >
@@ -17,4 +17,4 @@ const DashboardBreadcrumb = () => {
   )
 }
 
-export default DashboardBreadcrumb
+export default LearningBreadcrumb
