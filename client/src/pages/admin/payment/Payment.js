@@ -105,21 +105,21 @@ const Payment = () => {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Student name</th>
-              <th>Courses Name</th>
-              <th>Total Courses</th>
-              <th>Amount</th>
-              <th>Pay Mode</th>
-              <th>Transaction Id</th>
-              <th>View</th>
+              <th style={{width:'3%', paddingLeft:'15px'}}>ID</th>
+              <th style={{width:'17%'}}>Student name</th>
+              <th style={{width:'33%'}}>Courses Name</th>
+              <th style={{width:'12%'}}>Total Courses</th>
+              <th style={{width:'6%'}}>Amount</th>
+              <th style={{width:'10%'}}>Pay Mode</th>
+              <th style={{width:'14%'}}>Transaction Id</th>
+              <th style={{width:'5%'}}>View</th>
             </tr>
           </thead>
 
           <tbody>
             {filteredData.map((item) => (
               <tr key={item.id}>
-                <td className="id">{item.id}</td>
+                <td className="id pl-4">{item.id}</td>
                 <td>
                   <h6>{item?.studentName?.first_name} {item?.studentName?.last_name}</h6>
                   <p className="lowercase">{item?.studentName?.email}</p>

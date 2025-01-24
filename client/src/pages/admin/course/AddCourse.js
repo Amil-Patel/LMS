@@ -348,7 +348,7 @@ const AddCourse = () => {
           </ul>
         </div>
 
-        <div className="course-form-container">
+        <div className="admin_course-form-container">
           {/* Basic Info Tab */}
           {tab == "basic-info" && (
             <form>

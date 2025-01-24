@@ -1,6 +1,6 @@
 .main_stu_dashboard {
   display: flex;
-  padding: 3% 5% 3% 5%;
+  padding: 3% 5% 0 5%;
 }
 
 .main_stu_dashboard .content {
@@ -8,7 +8,7 @@
   height: calc(100vh);
   overflow-y: auto;
   scrollbar-width: none;
-  padding-left: 50px;
+  padding-left: 30px;
   font-family: var(--inter-ff);
 }
 
