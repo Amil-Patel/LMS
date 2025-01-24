@@ -17,3 +17,64 @@
   z-index: 10;
   color: var(--black);
 }
+
+.gender-profile{
+  display: flex;
+}
+
+.pro-image{
+  width: 50%;
+  border: none;
+  margin-left: 30px;
+  align-items: end;
+  gap:20px;
+  justify-content: normal,
+}
+
+
+@media (max-width: 901px) and (min-width: 600px) {
+  .main.static {
+    width: 100%;
+    margin-left: 90px;
+  }
+  .pro-image{
+    gap: 7px;
+    margin-left: 0px;
+  }
+}
+
+
+
+@media only screen and (max-width: 600px) {
+  .main.static {
+    width: 100%;
+    margin-left: 80px;
+  }
+  .student_profile_form {
+    padding: 10px;
+  }
+  .flex-row{
+    margin-bottom: 10px;
+    display: block;
+  }
+  .gender-profile{
+    display: block;
+  }
+
+  .pro-image{
+    width: 100%;
+    border: none;
+    margin-left: 0;
+    align-items: end;
+    gap:20px;
+    justify-content: normal,
+  }
+
+  .course-form-container form input, select#gender {
+    margin-bottom: 10px;
+  }
+
+  .student_dashboard_profile_header_title{
+    font-size: 26px;
+  }
+}

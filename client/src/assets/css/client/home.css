@@ -191,12 +191,12 @@
   box-shadow: 0 10px 30px var(--box-shadow);
 }
 
-.cus-inner-header-section p {
-  padding-bottom: 25px;
-}
+
 
 .cus-inner-header-section h3 {
   padding-bottom: 20px;
+  font-size: 30px;
+  font-weight: 800;
 }
 
 .cus-inner-header-section ul li {
@@ -214,7 +214,8 @@
 
 .cus-caption h4 {
   font-size: 35px;
-  padding-bottom: 18px;
+  font-weight: 700;
+  padding-bottom: 15px;
 }
 
 .cus-content-part {
@@ -223,6 +224,7 @@
 
 .cus-caption-text p {
   font-size: 14px;
+  padding-bottom: 30px;
 }
 
 .cus-content-part {
@@ -294,6 +296,7 @@
 
 .cus-contact-section {
   display: flex;
+  align-items: center;
   padding: 5% 10%;
 }
 
@@ -302,7 +305,7 @@
 }
 
 .cus-contact-inner-section h5 {
-  font-size: 38px;
+  font-size: 35px;
   margin-bottom: 10px;
   font-weight: 700;
 }
@@ -336,14 +339,14 @@
 .cus-contact-form {
   width: 40%;
   margin-left: 10%;
-  padding: 7%;
-  border-radius: 25px;
+  padding: 5%;
+  border-radius: 10px;
   background-color: var(--icon-background);
   height: auto;
 }
 
 .cus-contact-form h6 {
-  font-size: 20px;
+  font-size: 20px !important;
   padding-bottom: 25px;
   text-align: center;
   color: var(--black);
@@ -354,7 +357,7 @@
   width: 100%;
   border: none;
   margin-bottom: 20px;
-  border-radius: 25px;
+  border-radius: 3px;
   padding: 2.5% 7% 2.5% 7%;
   font-size: 15px;
 }
@@ -365,7 +368,7 @@
   margin-bottom: 15px;
   padding: 3% 7% 3% 7%;
   border: none;
-  border-radius: 25px;
+  border-radius: 3px;
   font-size: 15px;
 }
 
@@ -373,7 +376,6 @@
   display: flex;
   justify-content: center;
   color: var(--white);
-  padding-bottom: 15%;
 }
 
 .cus-submit-btn button {

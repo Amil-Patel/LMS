@@ -138,7 +138,7 @@ const StudentProfile = () => {
               </div>
               <form className='student_profile_form'>
                 {/* first / middle / last  name */}
-                <div className="flex-row name">
+                <div className="flex-row name gap-4">
                   <div className="form-group mb-0">
                     <label htmlFor="first_name">
                       First Name<span className="required">*</span>
@@ -199,7 +199,7 @@ const StudentProfile = () => {
                     />
                   </div>
 
-                  <div className="form-group mb-0" style={{ width: "23%" }}>
+                  <div className="form-group mb-0 w-full md:w-[23%]">
                     <label htmlFor="contact">
                       Contact Number<span className="required">*</span>
                     </label>
@@ -213,12 +213,12 @@ const StudentProfile = () => {
                       className="col12input"
                     />
                   </div>
-                  <div className="chekbox" style={{ width: "16%" }}>
+                  <div className="chekbox  w-full md:w-[16%]">
                     <input id="same_whatsapp" type="checkbox" checked={sameNumber} onChange={handleSameNumberChange} />
                     <label htmlFor="same_whatsapp">Same WhatsApp</label>
                   </div>
 
-                  <div className="form-group mb-0" style={{ width: "23%" }}>
+                  <div className="form-group mb-0  w-full md:w-[23%]">
                     <label htmlFor="whatsapp_number">
                       WhatsApp
                       <label htmlFor="whatsapp_number">
@@ -238,8 +238,8 @@ const StudentProfile = () => {
                 </div>
 
                 {/* address / country */}
-                <div className="flex-row flex-row80">
-                  <div className="form-group mb-0" style={{ width: "48%" }}>
+                <div className="flex-row">
+                  <div className="form-group mb-0 w-full md:w-[48%]">
                     <label htmlFor="address">Address</label>
                     <input
                       type="text"
@@ -252,7 +252,7 @@ const StudentProfile = () => {
                     />
                   </div>
 
-                  <div className="form-group mb-0" style={{ width: "48%" }}>
+                  <div className="form-group mb-0 w-full md:w-[48%]">
                     <label htmlFor="country">Country</label>
                     <input
                       id="country"
@@ -267,9 +267,9 @@ const StudentProfile = () => {
                 </div>
 
                 {/* gender / DOB / profile image */}
-                <div style={{ display: "flex" }}>
-                  <div className="flex-row" style={{ width: "45%" }}>
-                    <div className="form-group mb-0" style={{ width: "48%" }}>
+                <div className="gender-profile">
+                  <div className="flex-row w-full md:w-[45%]">
+                    <div className="form-group mb-0 w-full md:w-[48%]">
                       <label htmlFor="gender">Gender</label>
                       <select id="gender" name="gender" value={userData.gender} onChange={handleChange} className="col12input">
                         <option value="male">Male</option>
@@ -278,7 +278,7 @@ const StudentProfile = () => {
                       </select>
                     </div>
 
-                    <div className="form-group mb-0" style={{ width: "48%" }}>
+                    <div className="form-group mb-0 w-full md:w-[48%]">
                       <label htmlFor="dob">DOB</label>
                       <input
                         type="date"
@@ -292,18 +292,8 @@ const StudentProfile = () => {
                     </div>
                   </div>
 
-                  <div
-                    className="flex-row"
-                    style={{
-                      width: "50%",
-                      border: "none",
-                      marginLeft: "30px",
-                      alignItems: "end",
-                      gap: "20px",
-                      justifyContent: "normal",
-                    }}
-                  >
-                    <div className="form-group mb-0" style={{ width: "50%" }}>
+                  <div className="flex-row pro-image">
+                    <div className="form-group mb-0 w-full md:w-[54%]">
                       <label htmlFor="profile_picture">
                         Profile Picture <span className="required">*</span>
                       </label>
@@ -371,7 +361,7 @@ const StudentProfile = () => {
                   </div>
                 </div>
 
-                <div style={{ width: "30%" }}>
+                <div className="w-full md:w-[30%]">
                   <label htmlFor="old_password">Old Password</label>
                   <input
                     id="old_password"
@@ -387,10 +377,10 @@ const StudentProfile = () => {
                 {/* new Password  */}
 
                 <div
-                  className="flex-row gap-6 flex-row80"
-                  style={{ border: "none", width: "70%", padding: "20px 0 0 0" }}
+                  className="flex-row gap-6 flex-row80 w-full md:w-[70%]"
+                  style={{ border: "none", padding: "10px 0 0 0" }}
                 >
-                  <div style={{ width: "47%", position: "relative" }}>
+                  <div className="w-full md:w-[47%]" style={{position: "relative" }}>
                     <label htmlFor="new_password">New Password</label>
                     <input
                       name="password"
@@ -422,7 +412,7 @@ const StudentProfile = () => {
                     />
                   </div>
                 </div>
-              </form>
+              </form>              
             </div>
           </div>
         </div>
