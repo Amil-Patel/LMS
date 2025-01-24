@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   enrollment.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: false
+    },
     student_id: {
       type: DataTypes.INTEGER,
       allowNull: false

@@ -2,7 +2,8 @@ const { UserMaster } = require("../../database/models/index");
 const jwt = require("jsonwebtoken");
 const DecryptPassword = require("../../middleware/DecryptPassword");
 const secret_key = process.env.JWT_SECRET_KEY;
-const AuthMiddleware = require("../../auth/AuthMiddleware")
+const AuthMiddleware = require("../../auth/AuthMiddleware");
+const { where } = require("sequelize");
 
 const getLogin = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -20,7 +21,7 @@ const getLogin = async (req, res) => {
         }
 
         const decryptedPassword = DecryptPassword(user.password);
-
+        console.log(decryptedPassword)
         if (decryptedPassword !== password) {
             // Return an error if the password doesn't match
             return res.status(401).json({
@@ -50,6 +51,7 @@ const getStudentLogin = async (req, res) => {
     try {
         const user = await UserMaster.findOne({
             where: { email: email },
+            // where: { role_id: "student" },
         });
 
         if (!user) {

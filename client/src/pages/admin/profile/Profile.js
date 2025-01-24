@@ -31,7 +31,6 @@ const Profile = () => {
         ...res.data,
         dob: time,
       }));
-      console.log(res.data)
       setOldPassword(res.data.password);
       setImageSrc(res.data.profile);
       setFileName(res.data.profile);

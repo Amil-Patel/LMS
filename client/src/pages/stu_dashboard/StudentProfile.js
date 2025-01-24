@@ -42,7 +42,6 @@ const StudentProfile = () => {
     try {
       const response = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${stuUserId}`);
       setUserData(response.data);
-      console.log(response.data)
       setOldPassword(response.data.password);
       setImageSrc(response.data.profile);
       setFileName(response.data.profile);

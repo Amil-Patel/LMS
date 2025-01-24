@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Course_Quize_Question.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: false
+    },
     title: DataTypes.TEXT,
     question_type: DataTypes.STRING,
     no_of_option: DataTypes.INTEGER,

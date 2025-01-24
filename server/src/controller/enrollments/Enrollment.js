@@ -144,7 +144,6 @@ const getEnrollWithStuId = async (req, res) => {
                 const progressPercentage = totalLesson
                     ? Math.round((completedLessons / totalLesson) * 100)
                     : 0;
-                console.log(progressPercentage)
                 const totalEnroll = await enrollment.constructor.count({
                     where: { course_id: enrollment.course_id },
                 })

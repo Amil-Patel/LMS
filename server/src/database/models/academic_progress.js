@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   academic_progress.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: false
+    },
     student_id: {
       type: DataTypes.INTEGER,
       allowNull: false
