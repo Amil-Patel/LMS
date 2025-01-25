@@ -6,6 +6,7 @@ import Sidebar from './layout/Sidebar'
 import moment from "moment-timezone";
 import { notifySuccess } from '../admin/layout/ToastMessage';
 import '../../../src/assets/css/stuprofile.css'
+import ProfileBreadcrumb from './ProfileBreadcrumb';
 const port = process.env.REACT_APP_URL;
 
 const StudentProfile = () => {
@@ -127,6 +128,7 @@ const StudentProfile = () => {
   return (
     <>
       <Navbar />
+      <ProfileBreadcrumb/>
       <div className='client_section'>
         <div className='main_stu_dashboard'>
           <Sidebar />

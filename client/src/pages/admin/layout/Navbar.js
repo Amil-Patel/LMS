@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { userRolesContext } from "./RoleContext";
 import axiosInstance from "../utils/axiosInstance";
 const port = process.env.REACT_APP_URL;
+
 const Navbar = () => {
   const { userId, userRole } = useContext(userRolesContext);
   const [userData, setUserData] = useState([]);
+
   //get user data
   const getUserData = async () => {
     if (!userId) return;
@@ -19,6 +21,12 @@ const Navbar = () => {
   useEffect(() => {
     getUserData();
   }, [userId]);
+
+  const navigate = useNavigate();
+  const handleClick = () =>{
+    navigate("/admin/profile")
+  }
+
   return (
     <>
       <nav className="navbar">
@@ -42,7 +50,7 @@ const Navbar = () => {
               <p>English</p>
               <i className="fa-solid fa-angle-down"></i>
             </span>
-            <span className="nav-right-section profile-box">
+            <span className="nav-right-section profile-box cursor-pointer " onClick={handleClick} >
               <img src={`../../upload/${userData?.profile}`} alt="profile" />
               <p>
                 <b>{userData?.first_name}</b>

@@ -14,7 +14,7 @@ body i {
 .navbar {
   display: flex;
   align-items: center;
-  padding: 0.6% 2%;
+  padding: 8px 17px;
   font-family: var(--tp-ff-body);
 }
 
@@ -58,7 +58,7 @@ input#btn {
 
 .search-container input {
   width: 27vw;
-  padding: 6px 5px 6px 35px;
+  padding: 6px 5px 6px 40px;
   border-radius: 20px;
   background: var(--search-bg);
   font-size: 14px;
@@ -93,7 +93,7 @@ input#btn {
 
 .profile-box p {
   font-size: 13px;
-  padding: 0 12px;
+  padding-left: 8px;
 }
 
 .profile-box img {
@@ -103,12 +103,11 @@ input#btn {
   object-fit: cover;
 }
 
-
 /* sidebar-start*/
 
 .sidebar {
   position: absolute;
-  top: 53px;
+  top: 56px;
   left: 0;
   width: 230px;
   padding: 0% 0 1% 0;

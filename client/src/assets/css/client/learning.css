@@ -81,7 +81,6 @@
 
   .main_stu_dashboard .content {
     width: calc(100% - 260px);
-    padding-left: 40px;
   }
 
   .main_stu_dashboard .content img {

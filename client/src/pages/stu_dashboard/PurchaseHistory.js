@@ -6,6 +6,7 @@ import axiosInstance from '../client/utils/axiosInstance';
 import { userRolesContext } from "../admin/layout/RoleContext";
 import moment from "moment-timezone";
 import Loading from "../admin/layout/Loading";
+import PurchaseHistoryBreadcrumb from './PurchaseHistoryBreadcrumb';
 const port = process.env.REACT_APP_URL;
 
 const PurchaseHistory = () => {
@@ -79,6 +80,7 @@ const PurchaseHistory = () => {
     return (
         <>
             <Navbar />
+            <PurchaseHistoryBreadcrumb/>
             <div className='client_section'>
                 {loading && <Loading />}
                 <div className='main_stu_dashboard'>
@@ -86,7 +88,7 @@ const PurchaseHistory = () => {
                     <div className='content pl-4'>
                         <h1 className='pb-2'>Purchase History</h1>
                         <div className='purchase_history_content '>
-                            <table className='w-max xl:w-full'>
+                            <table className='w-[942px]'>
                                 <thead className='bg-[#F7F7FA]'>
                                     <tr>
                                         <th style={{ width:'5%',paddingLeft:'10px' }}>ID</th>

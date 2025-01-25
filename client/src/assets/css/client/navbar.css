@@ -107,6 +107,7 @@
 
 .profile-modal-overlay .modal {
   background-color: white;
+  border: 1px dotted var(--hover-color);
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 16rem;

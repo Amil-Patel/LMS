@@ -5,6 +5,7 @@ import { userRolesContext } from '../admin/layout/RoleContext';
 import '../../assets/css/client/learning.css'
 import axiosInstance from '../client/utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import LearningBreadcrumb from './LearningBreadcrumb';
 const port = process.env.REACT_APP_URL;
 
 const Learning = () => {
@@ -39,6 +40,7 @@ const Learning = () => {
     return (
         <>
             <Navbar />
+            <LearningBreadcrumb/>
             <div className='client_section'>
                 <div className='main_stu_dashboard'>
                     <Sidebar />
