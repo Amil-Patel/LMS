@@ -136,16 +136,15 @@ const updateCourseCategoryData = async (req, res) => {
             }
         }
     }
-
     const data = {
         cate_title: req.body.cate_title,
-        cate_parent_id: req.body.cate_parent_id === 'NULL' || !req.body.cate_parent_id ? null : parseInt(req.body.cate_parent_id),
+        cate_parent_id: req.body.cate_parent_id === 'null' || !req.body.cate_parent_id ? null : req.body.cate_parent_id,
         cate_thumbnail: req.file ? req.file.filename : curentcoursecate.cate_thumbnail,
         status: 1,
         updated_by: req.body.updated_by || 0,
         updatedAt: updateddate,
     };
-
+    console.log(data)
     try {
         const courseCatedate = await Course_Category.update(data, {
             where: { id: id }

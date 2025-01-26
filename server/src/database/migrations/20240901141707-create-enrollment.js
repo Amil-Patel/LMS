@@ -11,17 +11,9 @@ module.exports = {
       },
       student_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'usermasters',
-          key: 'id'
-        },
       },
       course_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'course_masters',
-          key: 'id'
-        },
       },
       enrollment_mode: {
         type: Sequelize.STRING
