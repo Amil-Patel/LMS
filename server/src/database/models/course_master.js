@@ -38,10 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'course_id',
         as: 'course_master_quize_result'
       });
-      Course_Master.hasMany(models.enrollment, {
-        foreignKey: 'course_id',
-        as: 'course_master_enrollment'
-      });
     }
   }
   Course_Master.init({
@@ -106,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT
     },
     course_price: {
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     course_discount: {
       type: DataTypes.INTEGER
