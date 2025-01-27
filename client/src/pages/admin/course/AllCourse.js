@@ -209,7 +209,7 @@ const AllCourse = () => {
                     <td>
                       {formattedData}
                     </td>
-                    <td>
+                    <td className="align-bottom">
                       <label className="switch">
                         <input
                           type="checkbox"
@@ -241,8 +241,8 @@ const AllCourse = () => {
                                     style={{ cursor: "pointer" }}
                                   >
                                     <NavLink to={`/admin/edit-course/${i.id}`}>
-                                      <p>
-
+                                      <p className="border-b border-[#DDDDDD]">
+                                      <i class="fa-solid fa-pencil"></i>
                                         Edit
                                       </p>
                                     </NavLink>
@@ -255,6 +255,7 @@ const AllCourse = () => {
                                     onClick={() => deleteToggleModal(i.id)}
                                     className="cursor-pointer"
                                   >
+                                    <i class="fa-solid fa-trash"></i>
                                     Delete
                                   </p>
                                 )

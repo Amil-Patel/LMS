@@ -2,16 +2,16 @@
   font-size: 44px;
   color: var(--black);
   font-weight: 800;
+  padding-bottom: 20px;
 }
- 
 
 .client_section {
   max-width: 1400px;
   margin: 0 auto;
-    /* font-family: var(--tp-ff-body); */
+  /* font-family: var(--tp-ff-body); */
   font-family: var(--inter-ff);
-    /* font-family: var(--jost-ff); */
-    /* font-family: var(--exo-ff); */
+  /* font-family: var(--jost-ff); */
+  /* font-family: var(--exo-ff); */
 }
 
 .client_section label {
@@ -55,10 +55,6 @@
   padding: 5% 4% 5% 10%;
 }
 
-.cus-hero-text h1 {
-  padding-bottom: 20px;
-}
-
 .cus-hero-text p {
   padding-bottom: 6%;
   font-size: 17px;
@@ -99,7 +95,7 @@
 
 /* -----------courses-section--------------- */
 
-.cus-courses-section {    
+.cus-courses-section {
   padding: 6% 10%;
   justify-content: space-between;
   display: flex;
@@ -136,7 +132,7 @@
   font-weight: 700;
 }
 
-.cus-content img{
+.cus-content img {
   padding-bottom: 10px;
 }
 
@@ -183,15 +179,13 @@
 .cus-course-overview-Text {
   width: 44%;
   background: var(--white);
-  top: 10%;
+  top: 13%;
   left: 46%;
   position: absolute;
   padding: 40px 65px;
   border-radius: 20px;
   box-shadow: 0 10px 30px var(--box-shadow);
 }
-
-
 
 .cus-inner-header-section h3 {
   padding-bottom: 20px;
@@ -209,7 +203,7 @@
 
 .cus-Enroll-section {
   padding: 4% 10%;
-  margin-top: 7%;
+  margin-top: 6%;
 }
 
 .cus-caption h4 {
@@ -395,82 +389,77 @@
   background-color: transparent;
 }
 
+.cus-policy-text{
+  display: flex;
+  gap: 15px;
+}
+
 /* -------------footer-section-------------- */
 
 .cus-footer-section {
-  display: flex;
-  padding: 0 9%;
-  align-items: center;
-  gap: 14%;
+  padding: 2% 10%;
+}
+
+.cus-footer-up-section {
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 15px;
-  border-bottom: 2px solid var(--footer-bottom-background);
 }
 
-.cus-footer-section img {
-  width: 14%;
-  height: fit-content;
-}
-
-.cus-footer-inner-text {
+.cus-footer-up-section,
+.cus-footer-down-section {
   display: flex;
-  width: 35%;
   align-items: center;
+  justify-content: space-between;
+}
+
+.cus-footer-up-section img {
+  max-height: 70px;
 }
 
 .cus-footer-inner-text a {
-  margin: 0 5%;
-  text-decoration: none;
-  color: var(--black);
+  margin: 0 12px;
+  font-family: var(--exo-ff);
+  font-weight: 600;
 }
 
-.cus-footer-icon {
+.cus-footer-inner-text a.active {
+  color: var(--button-primary-color);
+  border-bottom: 1.7px solid var(--button-primary-color);
+}
+
+.cus-footer-social-icon {
   display: flex;
-  gap: 8%;
-  align-items: center;
+  gap: 12px;
 }
 
-.cus-footer-icon i {
+.cus-footer-social-icon i {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: var(--black);
+  font-size: 18px;
+  height: 35px;
+  width: 35px;
+  background-color: var(--icon-background);
+}
+
+.cus-footer-social-icon i:hover {
   background-color: var(--button-primary-color);
   color: var(--white);
-  width: 56px;
-  height: 42px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid var(--button-primary-color);
 }
 
-.cus-footer-icon i:hover {
-  border: 1px solid var(--button-primary-color);
-  color: var(--button-primary-color);
-  background-color: transparent;
+.cus-footer-down-section p {
+  padding-bottom: 0;
 }
 
-.cus-footer-border-bottom-text {
-  display: flex;
-  justify-content: space-between;
-  padding: 1% 10%;
-}
-
-.cus-policy-text {
-  display: flex;
-}
-
-.cus-policy-text a {
-  margin-left: 15px;
-  text-decoration: none;
-  color: var(--black);
-}
-
-@media screen and (max-width:1536px) {
-
+@media screen and (max-width: 1536px) {
   .cus-hero-image {
     padding-right: 0%;
   }
-
 }
-@media screen and (max-width:1025px) {
+@media screen and (max-width: 1025px) {
   .cus-course-overview-section {
     padding: 0 5%;
   }
@@ -485,8 +474,8 @@
   }
 
   .cus-mid-content1,
-    .cus-mid-content2,
-    .cus-mid-content3 {
+  .cus-mid-content2,
+  .cus-mid-content3 {
     width: 32%;
     padding: 15px;
   }
@@ -505,28 +494,18 @@
     padding: 2.5% 26% 2.5% 7%;
   }
 
-  .cus-footer-section {
-    gap: 9%;
-    padding: 0 5%;
-  }
-
-  .cus-contact-section {
-    padding: 5%;
-  }
-
-  .cus-footer-inner-text {
-    width: 40%;
+  .cus-footer-up-section img {
+    max-height: 60px;
   }
 }
 
-@media screen and (max-width:821px) {
-
+@media screen and (max-width: 821px) {
   .cus-hero-text {
     padding: 25px;
   }
 
-  .cus-hero-text h1{
-    font-size: 37px;
+  .cus-hero-text h1 {
+    font-size: 37px !important;
   }
 
   h1 {
@@ -543,10 +522,10 @@
   }
 
   h1,
-    h2,
-    h3,
-    h4,
-    h5 {
+  h2,
+  h3,
+  h4,
+  h5 {
     line-height: 1.1em;
   }
 
@@ -556,7 +535,7 @@
   }
 
   .cus-hero-btn1,
-    .cus-hero-btn2 {
+  .cus-hero-btn2 {
     padding: 8px 10px;
     font-size: 13px;
   }
@@ -567,8 +546,8 @@
   }
 
   .cus-mid-content1,
-    .cus-mid-content2,
-    .cus-mid-content3 {
+  .cus-mid-content2,
+  .cus-mid-content3 {
     width: 32%;
     padding: 15px;
   }
@@ -697,68 +676,39 @@
     padding-bottom: 10%;
   }
 
-  .cus-footer-section {
-    padding: 0 5%;
-    gap: 4%;
-    padding-bottom: 10px;
-  }
-
-  .cus-footer-inner-text {
-    width: 50%;
-    padding-left: 3%;
-  }
-
-  .cus-footer-inner-text a {
-    font-size: 14px;
-  }
-
-  .cus-footer-icon i {
-    padding: 10px;
-  }
-
-  .cus-footer-border-bottom-text {
-    padding: 2% 3%;
-  }
-
-  .cus-footer-border-bottom-text p,
-    .cus-footer-border-bottom-text a {
-    font-size: 13px;
+  .cus-policy-text{
+    display: block;
+    gap: 0;
   }
 }
 
-@media screen and (max-width:426px) {
-
+@media screen and (max-width: 426px) {
   .cus-hero-text,
-    .cus-caption h4,
-    .cus-inner-text {
+  .cus-caption h4,
+  .cus-inner-text {
     text-align: center;
   }
 
-  .cus-footer-icon i {
-    width: 46px;
-    height: 42px;
-  }
-
   .cus-hero-container,
-    .cus-hero-text,
-    .cus-hero-image,
-    .cus-course-overview-Text,
-    .cus-caption,
-    .cus-caption-text,
-    .cus-review-section-text,
-    .cus-review-section-header,
-    .cus--text,
-    .cus-contact-inner-section,
-    .cus-contact-form,
-    .cus-content-part1,
-    .cus-content-part2,
-    .cus-left-content,
-    .cus-right-content {
+  .cus-hero-text,
+  .cus-hero-image,
+  .cus-course-overview-Text,
+  .cus-caption,
+  .cus-caption-text,
+  .cus-review-section-text,
+  .cus-review-section-header,
+  .cus--text,
+  .cus-contact-inner-section,
+  .cus-contact-form,
+  .cus-content-part1,
+  .cus-content-part2,
+  .cus-left-content,
+  .cus-right-content {
     width: 100%;
   }
 
   .cus-hero-container,
-    .cus-contact-section {
+  .cus-contact-section {
     display: block;
   }
 
@@ -776,8 +726,8 @@
   }
 
   .cus-mid-content1,
-    .cus-mid-content2,
-    .cus-mid-content3 {
+  .cus-mid-content2,
+  .cus-mid-content3 {
     width: 100%;
     margin: 5% 0;
     padding: 10px;
@@ -814,7 +764,7 @@
   }
 
   .cus-left-content,
-    .cus-right-content {
+  .cus-right-content {
     padding-bottom: 10px;
   }
 
@@ -871,43 +821,15 @@
     padding: 3% 7% 10% 7%;
   }
 
-  .cus-footer-section {
-    display: block;
+  .cus-footer-up-section, .cus-footer-down-section{
     text-align: center;
+    flex-direction: column;
+    gap: 20px;
   }
 
-  .cus-footer-section img {
-    height: 50%;
-    width: 50%;
-  }
-
-  .cus-footer-inner-text {
-    width: 100%;
-    padding: 5% 0 3% 0;
-    justify-content: space-evenly;
-  }
-
-  .cus-footer-icon {
-    justify-content: center;
-    padding: 3% 0;
-  }
-
-  .cus-footer-border-bottom-text {
-    display: block;
-    text-align: center;
-  }
-
-  .cus-footer-border-bottom-text p {
-    font-size: 12px;
-  }
-
-  .cus-policy-text {
-    justify-content: center;
-  }
 }
 
-@media screen and (max-width:321px) {
-
+@media screen and (max-width: 321px) {
   .cus-contact-form input {
     padding: 2.5% 25% 2.5% 7%;
   }
