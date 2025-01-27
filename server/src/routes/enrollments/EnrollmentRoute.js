@@ -11,6 +11,7 @@ Enrollment.post("/addingEnrollment", EnrollmentController.addEnrollmentData);
 Enrollment.put("/updattingEnrollStatus/:id", EnrollmentController.updateEnrollStatus);
 Enrollment.put("/updattingEnrollData/:id", EnrollmentController.updateEnrollData);
 Enrollment.delete("/deletingEnrollment/:id", EnrollmentController.deleteEnrollmentData);
+Enrollment.get("/gettingEnrollesCourseData/:id", EnrollmentController.getEnrollesCourseData);
 
 
 

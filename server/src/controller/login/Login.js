@@ -17,7 +17,7 @@ const getLogin = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(404).json({ message: "Invalid email or password", status: 404 });
+            return res.status(404).json({ message: "Email does not exist", status: 404 });
         }
 
         const decryptedPassword = DecryptPassword(user.password);

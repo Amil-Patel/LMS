@@ -246,8 +246,9 @@ const ViewCourse = () => {
               {activeTab === "overview" && (
                 <>
                   <div className="long-desc">
-                    <p>
-                      {courseData?.long_desc}
+                    <p dangerouslySetInnerHTML={{
+                      __html: courseData?.long_desc,
+                    }}>
                     </p>
                   </div>
                   <div className="learning-list">

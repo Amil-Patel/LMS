@@ -71,22 +71,33 @@ const deleteEnrollmentData = async (req, res) => {
     }
 }
 
-const getEnrollAndCourseData = async () => {
+const getEnrollesCourseData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    const enrollments = await enrollment.findAll({
-        attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Columns from `enrollments` table
-        include: [
-            {
-                model: Course_Master,
-                attributes: ['title', 'expiring_time'], // Columns from `course_master` table
-            },
-            {
-                model: UserMaster,
-                attributes: ['fname', 'lname', 'email', 'image'], // Columns from `user_master` table
+    const id = req.params.id;
+    console.log(id)
+    try {
+        const enrollments = await enrollment.findAll({
+            attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Columns from `enrollments` table
+            include: [
+                {
+                    model: Course_Master,
+                    as: 'course_master_enrollment', // Ensure alias matches Sequelize associations
+                    attributes: ['id', 'course_title'], // Add more attributes if needed
+                    required: true, // Ensures only records with a matching course_master record are returned
+                },
+            ],
+            where: {
+                student_id: id
             }
-        ]
-    });
+        });
+        console.log(enrollments)
+        return res.status(200).json(enrollments);
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+
 }
 const getEnrollWithStuId = async (req, res) => {
     try {
@@ -97,7 +108,7 @@ const getEnrollWithStuId = async (req, res) => {
         if (!studentId) {
             return res.status(400).json({ message: 'Student ID is required' });
         }
-
+        console.log(studentId)
         const enrollments = await enrollment.findAll({
             attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Attributes from `enrollment` table
             include: [
@@ -156,6 +167,7 @@ const getEnrollWithStuId = async (req, res) => {
                 };
             })
         );
+        console.log(enrichedEnrollments)
 
         res.status(200).json(enrichedEnrollments);
     } catch (error) {
@@ -236,5 +248,5 @@ const updateEnrollData = async (req, res) => {
         res.sendStatus(500);
     }
 }
-module.exports = { getEnrollmentData, deleteEnrollmentData, getEnrollWithCourseId, addEnrollmentData, getEnrollAndCourseData, getEnrollWithStuId, updateEnrollStatus, getEnrollDataWithId, updateEnrollData }
+module.exports = { getEnrollmentData, deleteEnrollmentData, getEnrollWithCourseId, addEnrollmentData, getEnrollesCourseData, getEnrollWithStuId, updateEnrollStatus, getEnrollDataWithId, updateEnrollData }
 

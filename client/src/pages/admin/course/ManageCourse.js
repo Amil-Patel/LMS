@@ -29,6 +29,7 @@ const ManageCourse = () => {
   const [timeLimit, setTimeLimit] = useState(false);
   const [maxAttempts, setMaxAttempts] = useState(false);
   const [openQuizResult, setopenQuizResult] = useState(false);
+  const [openUserDocument, setOpenUserDocument] = useState(false);
   // Function to change the currently active tab
   const handleChangeTab = (tabName) => {
     setTab(tabName);
@@ -47,7 +48,9 @@ const ManageCourse = () => {
   const moduleToggleModal = () => {
     setModuleOpen(!moduleOpen);
   };
-
+  const openUserDocumentmodule = () => {
+    setOpenUserDocument(!openUserDocument);
+  }
   // Function to toggle visibility of edit module modal
   const editModuleToggleModal = async (id) => {
     if (id) {
@@ -76,7 +79,18 @@ const ManageCourse = () => {
     getQuizQuestionData(id);
     setQuizQuestionId(id);
   };
-
+  const [userDocumentData, setUserDocumentData] = useState([]);
+  const getUserDocumentData = async (userId, id) => {
+    console.log(userId, id)
+    try {
+      const res = await axiosInstance.get(`${port}/gettingUserDocumentWithStuIdAndCourseId/${userId}/${id}`);
+      setOpenUserDocument(true);
+      console.log(res.data)
+      setUserDocumentData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   // resource model open-close function
   const [resourceOpen, setResourceOpen] = useState(false);
   const [resouceData, setResouceData] = useState([]);
@@ -229,6 +243,20 @@ const ManageCourse = () => {
       console.log(err);
     }
   }
+  const handleEditDocumentSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const updatedData = { status: selectedStatus, message: message };
+      const res = await axiosInstance.put(`/updatingCourseDocumentStatus/${currentDocument.id}`, updatedData);
+      if (res.status === 200) {
+        handleEditDocumentClose();
+        getUserDocumentData(userDocumentData.userMaster?.id, id);
+        notifySuccess("Document updated successfully");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   // Function to toggle visibility of add question modal
   const addQuestionToggleModal = () => {
@@ -291,6 +319,44 @@ const ManageCourse = () => {
       notifySuccess("Module added successfully");
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const [currentDocument, setCurrentDocument] = useState(null);
+  const [editDocumentOpen, setEditDocumentOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("pending");
+  const [message, setMessage] = useState('');
+  const handleEditDocumentClick = (inquiry) => {
+    setCurrentDocument(inquiry);
+    setSelectedStatus(inquiry.status || "pending");
+    setMessage(inquiry.message);
+    setEditDocumentOpen(true);
+  };
+  const [deleteDocumentOpen, setDeleteDocumentOpen] = useState(false);
+  const [currentDocumentId, setCurrentDocumentId] = useState(null);
+  const handleDeleteDocumentClick = (id) => {
+    setDeleteDocumentOpen(true);
+    setCurrentDocumentId(id);
+  }
+  const handleDeleteDocumentOpen = () => {
+    setDeleteDocumentOpen(false);
+    setCurrentDocumentId(null)
+  }
+  const handleEditDocumentClose = () => {
+    setCurrentDocument(null);
+    setSelectedStatus("pending");
+    setEditDocumentOpen(false);
+  }
+  const handleDocumentDelete = async () => {
+    try {
+      const res = await axiosInstance.delete(`${port}/deletingUserDocument/${currentDocumentId}`);
+      if (res.status === 200) {
+        handleDeleteDocumentOpen();
+        getUserDocumentData(userDocumentData.userMaster?.id, id);
+        notifySuccess("Document deleted successfully");
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
   //edit module
@@ -1380,7 +1446,7 @@ const ManageCourse = () => {
                         <td>
                           <button
                             className="resource-btn module-btn"
-                          // onClick={openQuizResultmodule}
+                            onClick={() => getUserDocumentData(userMaster.id, id)}
                           >
                             <i
                               className="fa-regular fa-file"
@@ -2622,6 +2688,145 @@ const ManageCourse = () => {
             </div>
           )
         }
+
+        {/* Quiz Result Modal  */}
+        {
+          openUserDocument && (
+            <div className="modal">
+              <div className="add-lesson-container" style={{ width: "70%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    borderBottom: "2px solid #dfdfe1",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <h5 style={{ paddingBottom: "5px" }}>User Document</h5>
+                  <div
+                    onClick={openUserDocumentmodule}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i className="fa-solid fa-xmark"></i>
+                  </div>
+                </div>
+
+                <div className="student-details">
+                  <div>
+                    <strong>Student :</strong>
+                    <span> {userDocumentData.userMaster?.first_name} {userDocumentData.userMaster?.last_name}</span>
+                  </div>
+                  <div>
+                    <strong>Course :</strong>
+                    <span> {userDocumentData.courseMaster?.course_title}</span>
+                  </div>
+                </div>
+
+                <table style={{ margin: "10px 0" }}>
+                  <thead className="academic-table">
+                    <tr>
+                      <th>ID</th>
+                      <th>Attachment</th>
+                      <th>Status</th>
+                      <th>Message</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userDocumentData.document.length !== 0 ? (
+                      userDocumentData.document?.map((item, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>
+                              <a href={`../../upload/${item?.attachment}`} target="_blank" rel="noopener noreferrer">
+                                View
+                              </a>
+                            </td>
+                            <td>{item?.status}</td>
+                            <td>{item?.message}</td>
+                            <td>
+                              <button className="btn btn-primary me-3" onClick={() => handleEditDocumentClick(item)}>
+                                <i className="fa-solid fa-pencil"></i>
+                              </button>
+                              <button className="btn btn-primary" onClick={() => handleDeleteDocumentClick(item.id)}>
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      }
+                      )
+                    ) : (
+                      <tr>
+                        <td colSpan={6} className="text-center">No Data Found</td>
+                      </tr>
+                    )
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )
+        }
+        {/* Edit Modal */}
+        {editDocumentOpen && currentDocument && (
+          <div className="modal">
+            <div className="modal-container">
+              <h5>Edit Document Status</h5>
+              <form onSubmit={handleEditDocumentSubmit}>
+
+                <div className="flex items-center">
+                  <label className="text-base font-semibold">Status:</label>
+                  <div className="px-2">
+                    <input className="align-middle"
+                      type="radio"
+                      id="success"
+                      name="status"
+                      value="success"
+                      checked={selectedStatus === "success"}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
+                    <label htmlFor="success">Success</label>
+                  </div>
+                  <div className="px-1">
+                    <input className="align-middle"
+                      type="radio"
+                      id="pending"
+                      name="status"
+                      value="pending"
+                      checked={selectedStatus === "pending"}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
+                    <label htmlFor="pending">Pending</label>
+                  </div>
+                  <div className="px-2">
+                    <input className="align-middle"
+                      type="radio"
+                      id="rejected"
+                      name="status"
+                      value="rejected"
+                      checked={selectedStatus === "rejected"}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                    />
+                    <label htmlFor="rejected">Rejected</label>
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="message">Write Message:</label>
+                  <textarea className="col12input" name="message" id="message" value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
+                </div>
+
+                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                  <button type="submit" className="primary-btn">Save</button>
+                  <button type="button" onClick={handleEditDocumentClose} className="secondary-btn">
+                    Close
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
         {/* resource model */}
         {
           resourceOpen && (
@@ -2777,6 +2982,23 @@ const ManageCourse = () => {
                 Delete
               </button>
               <button onClick={handleDeleteResourceOpen} className="secondary-btn">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* delete user document model */}
+      {deleteDocumentOpen && (
+        <div className="modal">
+          <div className="modal-container">
+            <h5>Delete</h5>
+            <p>Are you sure you want to delete this Document?</p>
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+              <button className="primary-btn" onClick={handleDocumentDelete}>
+                Delete
+              </button>
+              <button onClick={handleDeleteDocumentOpen} className="secondary-btn">
                 Cancel
               </button>
             </div>

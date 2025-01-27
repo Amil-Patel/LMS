@@ -13,6 +13,7 @@
   border-radius: 5px;
   background: var(--white);
   border: 2px solid var(--button-primary-color);
+  font-family: var(--tp-ff-body);
 }
 
 .login input {

@@ -32,8 +32,12 @@ const Login = () => {
             notifyWarning("Please accept cookies to log in.");
             return;
         }
-        if (!data.email || !data.password) {
-            notifyInfo("Please enter email and password");
+        if (!data.email) {
+            notifyInfo("Please enter email");
+            return;
+        }
+        if (!data.password) {
+            notifyInfo("Please enter password");
             return;
         }
         axiosInstance.post(`${port}/login`, data)
@@ -44,7 +48,7 @@ const Login = () => {
                     Cookies.set('token', res.data.token, { expires: 7 });
                     navigate("/admin/dashboard");
                 } else {
-                    notifyInfo("Invalid email or password");
+                    notifyInfo(res.data.message);
                 }
             })
             .catch((err) => {
@@ -66,7 +70,7 @@ const Login = () => {
                 <p>Please log in</p>
                 <input type="text" placeholder="Email" name='email' value={data.email} autoComplete='off' onChange={handleChange} />
                 <input type="password" placeholder="Password" name='password' value={data.password} onChange={handleChange} />
-                <input type="submit" value="Log In" />
+                <input type="submit" className='cursor-pointer' value="Log In" />
             </form>
         </>
     );
