@@ -81,9 +81,9 @@ const Contact = () => {
 
                     <div className="cus-contact-form">
                         <h6>Get In Touch With Us</h6>
-                        <input type="text" name='name' onChange={handleInputChange} value={formState.name} className="cus-full-name" placeholder="Full Name:" />
-                        <input type="text" name='email' onChange={handleInputChange} value={formState.email} className="cus-Email" placeholder="Email Address:" />
-                        <input type="text" name='mobile_number' onChange={handleInputChange} value={formState.mobile_number} className="cus-phone-no" placeholder="Phone No:" />
+                        <input type="text" name='name' onChange={handleInputChange} value={formState.name} className="cus-full-name" placeholder="Full Name" />
+                        <input type="text" name='email' onChange={handleInputChange} value={formState.email} className="cus-Email" placeholder="Email Address" />
+                        <input type="text" name='mobile_number' onChange={handleInputChange} value={formState.mobile_number} className="cus-phone-no" placeholder="Phone No" />
                         <textarea name="message" onChange={handleInputChange} value={formState.message} className="cus-message-box" placeholder="Message..."></textarea>
                         <div className="cus-submit-btn">
                             <button onClick={handleSubmit}>Submit Now</button>

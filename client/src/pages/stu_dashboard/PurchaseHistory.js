@@ -134,160 +134,181 @@ const PurchaseHistory = () => {
                     </div>
                     {/* View Modal */}
                     {viewOpen && currentCourse && (
-                        <div className="modal">
-                            <div
-                                className="modal-container"
-                                style={{ border: "1px solid #F0F0F0" }}
-                            >
-                                <form className="coupon-form">
-                                    <div className="pay_modulhead">
-                                        <div>
-                                            <h6>{currentCourse?.studentName?.first_name} {currentCourse?.studentName?.last_name}</h6>
-                                            <p className="email lowercase">{currentCourse?.studentName?.email}</p>
-                                        </div>
-                                        <div>
-                                            <h5 className="head_text">Amount</h5>
-                                            <p className="email">{setting.position == "left" ? setting.symbol : ""}{currentCourse?.amount}{setting.position == "right" ? setting.symbol : ""}</p>
-                                        </div>
-                                        <div>
-                                            <h5 className="head_text">Transaction Id</h5>
-                                            <p className="email">{currentCourse?.transiction_id}</p>
-                                        </div>
-                                        <div>
-                                            <h5 className="head_text">Payment Mode</h5>
-                                            <p className="email">{currentCourse?.payment_mode}</p>
-                                        </div>
-                                        <div>
-                                            <h5 className="head_text">Purchase Date</h5>
-                                            <p className="email">{currentCourse?.createdAt}</p>
-                                        </div>{" "}
-                                        <div>
-                                            <h5 className="head_text">Bill No:(ID)</h5>
-                                            <p className="email">{currentCourse?.id}</p>
-                                        </div>
-                                    </div>
-
-                                    <table className="payment_view_table">
-                                        <thead>
-                                            <tr>
-                                                <th>Course Name</th>
-                                                <th>Validity</th>
-                                                <th>Amount</th>
-                                                <th>Tax</th>
-                                                <th>Tax Amt</th>
-                                                <th>Discount</th>
-                                                <th>Net Amt</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            {
-                                                currentCourse?.orderDetails?.map((item) => {
-                                                    const discount = item?.course_amount * (item?.discount / 100);
-                                                    const withDiscountPrice = item.course_amount - discount;
-                                                    const tax_amount = withDiscountPrice * (item?.course_tax / 100);
-                                                    const net_amount = item?.course_amount - tax_amount - item?.discount;
-                                                    return (
-                                                        <tr>
-                                                            <td>{item?.course_title}</td>
-                                                            <td>{item?.expiring_time == 'limited_time' ? 'Limited Time' : 'Life Time'}</td>
-                                                            <td>{setting.position == "left" ? setting.symbol : ""}{item?.course_amount}{setting.position == "right" ? setting.symbol : ""}</td>
-                                                            <td>{(parseFloat(item?.course_tax)) ? parseFloat(item?.course_tax) : 0}%</td>
-                                                            <td>
-                                                                {setting.position == "left" ? setting.symbol : ""}{parseFloat(tax_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                            </td>
-                                                            <td>
-                                                                {setting.position == "left" ? setting.symbol : ""}{parseFloat(discount ? discount : 0).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                            </td>
-                                                            <td>
-                                                                {setting.position == "left" ? setting.symbol : ""}{parseFloat(net_amount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-
-                                    <div className="payment_2table">
-                                        <table className="customer-info-table">
-                                            <tbody>
-                                                <tr>
-                                                    <th>Mobile</th>
-                                                    <td>{currentCourse?.bill_mobile}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Cust Name</th>
-                                                    <td>{currentCourse?.bill_name}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Address</th>
-                                                    <td>{currentCourse?.bill_address}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>GSTIN</th>
-                                                    <td>{currentCourse?.bill_gst}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>PAN</th>
-                                                    <td>{currentCourse?.bill_pan}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                        <table className="amount-details-table">
-                                            <tbody>
-                                                <tr>
-                                                    <th>Sub Total</th>
-                                                    <th>
-                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Discount</td>
-                                                    <td>
-                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total Amount</th>
-                                                    <th>
-                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(subTotal - totalDiscount).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>Tax (Inc.)</td>
-                                                    <td>
-                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat(inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                    </td>
-                                                </tr>
-                                                <tr className="net-amount-row">
-                                                    <th>Net Amount</th>
-                                                    <th>
-                                                        {setting.position == "left" ? setting.symbol : ""}{parseFloat((subTotal - totalDiscount) + inclusiveTax).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}
-                                                    </th>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div
-                                        style={{
-                                            marginTop: "20px",
-                                            display: "flex",
-                                            justifyContent: "flex-end",
-                                        }}
-                                    >
-                                        <button
-                                            type="button"
-                                            onClick={handleCloseEditModal}
-                                            className="secondary-btn module-btn"
-                                        >
-                                            Close
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                       <div className="modal fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+                       <div className="modal-container bg-white rounded-lg shadow-lg max-w-4xl w-full sm:w-11/12 p-6">
+                         <form className="coupon-form">
+                           <div className="pay_modulehead grid grid-cols-1 md:grid-cols-2 mb-6">
+                             <div>
+                               <h6 className="text-lg font-semibold">
+                                 {currentCourse?.studentName?.first_name} {currentCourse?.studentName?.last_name}
+                               </h6>
+                               <p className="text-sm text-gray-600 lowercase">
+                                 {currentCourse?.studentName?.email}
+                               </p>
+                             </div>
+                             <div>
+                               <h5 className="text-sm font-medium text-gray-800">Amount</h5>
+                               <p className="text-sm text-gray-600">
+                                 {setting.position === "left" ? setting.symbol : ""}
+                                 {currentCourse?.amount}
+                                 {setting.position === "right" ? setting.symbol : ""}
+                               </p>
+                             </div>
+                             <div>
+                               <h5 className="text-sm font-medium text-gray-800">Transaction Id</h5>
+                               <p className="text-sm text-gray-600">{currentCourse?.transiction_id}</p>
+                             </div>
+                             <div>
+                               <h5 className="text-sm font-medium text-gray-800">Payment Mode</h5>
+                               <p className="text-sm text-gray-600">{currentCourse?.payment_mode}</p>
+                             </div>
+                             <div>
+                               <h5 className="text-sm font-medium text-gray-800">Purchase Date</h5>
+                               <p className="text-sm text-gray-600">{currentCourse?.createdAt}</p>
+                             </div>
+                             <div>
+                               <h5 className="text-sm font-medium text-gray-800">Bill No:(ID)</h5>
+                               <p className="text-sm text-gray-600">{currentCourse?.id}</p>
+                             </div>
+                           </div>
+                     
+                           <table className="payment_view_table w-full text-left text-sm mb-6 border border-gray-300">
+                             <thead className="bg-gray-100">
+                               <tr>
+                                 <th className="py-2">Course Name</th>
+                                 <th className="py-2">Validity</th>
+                                 <th className="py-2">Amount</th>
+                                 <th className="py-2">Tax</th>
+                                 <th className="py-2">Tax Amt</th>
+                                 <th className="py-2">Discount</th>
+                                 <th className="py-2">Net Amt</th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               {currentCourse?.orderDetails?.map((item, index) => {
+                                 const discount = item?.course_amount * (item?.discount / 100);
+                                 const withDiscountPrice = item.course_amount - discount;
+                                 const tax_amount = withDiscountPrice * (item?.course_tax / 100);
+                                 const net_amount = item?.course_amount - tax_amount - item?.discount;
+                     
+                                 return (
+                                   <tr key={index} className="border-t border-gray-200">
+                                     <td className="px-4 py-2">{item?.course_title}</td>
+                                     <td className="px-4 py-2">
+                                       {item?.expiring_time === "limited_time" ? "Limited Time" : "Life Time"}
+                                     </td>
+                                     <td className="px-4 py-2">
+                                       {setting.position === "left" ? setting.symbol : ""}
+                                       {item?.course_amount}
+                                       {setting.position === "right" ? setting.symbol : ""}
+                                     </td>
+                                     <td className="px-4 py-2">{parseFloat(item?.course_tax) || 0}%</td>
+                                     <td className="px-4 py-2">
+                                       {setting.position === "left" ? setting.symbol : ""}
+                                       {parseFloat(tax_amount).toFixed(2)}
+                                       {setting.position === "right" ? setting.symbol : ""}
+                                     </td>
+                                     <td className="px-4 py-2">
+                                       {setting.position === "left" ? setting.symbol : ""}
+                                       {parseFloat(discount || 0).toFixed(2)}
+                                       {setting.position === "right" ? setting.symbol : ""}
+                                     </td>
+                                     <td className="px-4 py-2">
+                                       {setting.position === "left" ? setting.symbol : ""}
+                                       {parseFloat(net_amount).toFixed(2)}
+                                       {setting.position === "right" ? setting.symbol : ""}
+                                     </td>
+                                   </tr>
+                                 );
+                               })}
+                             </tbody>
+                           </table>
+                     
+                           <div className="payment_2table grid grid-cols-1 md:grid-cols-2 gap-6">
+                             <table className="customer-info-table w-full text-sm border border-gray-300">
+                               <tbody>
+                                 <tr className="border-b border-gray-200">
+                                   <th className="px-4 py-2 text-gray-800">Mobile</th>
+                                   <td className="px-4 py-2 text-gray-600">{currentCourse?.bill_mobile}</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                   <th className="px-4 py-2 text-gray-800">Cust Name</th>
+                                   <td className="px-4 py-2 text-gray-600">{currentCourse?.bill_name}</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                   <th className="px-4 py-2 text-gray-800">Address</th>
+                                   <td className="px-4 py-2 text-gray-600">{currentCourse?.bill_address}</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                   <th className="px-4 py-2 text-gray-800">GSTIN</th>
+                                   <td className="px-4 py-2 text-gray-600">{currentCourse?.bill_gst}</td>
+                                 </tr>
+                                 <tr>
+                                   <th className="px-4 py-2 text-gray-800">PAN</th>
+                                   <td className="px-4 py-2 text-gray-600">{currentCourse?.bill_pan}</td>
+                                 </tr>
+                               </tbody>
+                             </table>
+                     
+                             <table className="amount-detail-table w-full text-sm border border-gray-300">
+                               <tbody>
+                                 <tr className="border-b border-gray-200">
+                                   <th className="px-4 py-2 text-gray-800">Sub Total</th>
+                                   <th className="px-4 py-2 text-gray-600">
+                                     {setting.position === "left" ? setting.symbol : ""}
+                                     {parseFloat(subTotal).toFixed(2)}
+                                     {setting.position === "right" ? setting.symbol : ""}
+                                   </th>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                   <td className="px-4 py-2 text-gray-800">Discount</td>
+                                   <td className="px-4 py-2 text-gray-600">
+                                     {setting.position === "left" ? setting.symbol : ""}
+                                     {parseFloat(totalDiscount).toFixed(2)}
+                                     {setting.position === "right" ? setting.symbol : ""}
+                                   </td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                   <th className="px-4 py-2 text-gray-800">Total Amount</th>
+                                   <th className="px-4 py-2 text-gray-600">
+                                     {setting.position === "left" ? setting.symbol : ""}
+                                     {parseFloat(subTotal - totalDiscount).toFixed(2)}
+                                     {setting.position === "right" ? setting.symbol : ""}
+                                   </th>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                   <td className="px-4 py-2 text-gray-800">Tax (Inc.)</td>
+                                   <td className="px-4 py-2 text-gray-600">
+                                     {setting.position === "left" ? setting.symbol : ""}
+                                     {parseFloat(inclusiveTax).toFixed(2)}
+                                     {setting.position === "right" ? setting.symbol : ""}
+                                   </td>
+                                 </tr>
+                                 <tr className="net-amount-row">
+                                   <th className="px-4 py-2 text-gray-800">Net Amount</th>
+                                   <th className="px-4 py-2 text-gray-600">
+                                     {setting.position === "left" ? setting.symbol : ""}
+                                     {parseFloat(subTotal - totalDiscount + inclusiveTax).toFixed(2)}
+                                     {setting.position === "right" ? setting.symbol : ""}
+                                   </th>
+                                 </tr>
+                               </tbody>
+                             </table>
+                           </div>
+                     
+                           <div className="flex justify-end">
+                             <button
+                               type="button"
+                               onClick={handleCloseEditModal}
+                               className="primary-btn module-btn px-6 py-2 text-white rounded-lg hover:bg-gray-600"
+                             >
+                               Close
+                             </button>
+                           </div>
+                         </form>
+                       </div>
+                     </div>
+                                         
                     )}
                 </div>
             </div>
