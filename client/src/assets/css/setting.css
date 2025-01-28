@@ -1,0 +1,237 @@
+.main_pay_sec {
+  background-color: var(--white);
+  width: 99%;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  height: auto;
+  padding: 30px;
+}
+
+.currency_page {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  width: 70%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px;
+}
+
+.currency_input {
+  width: 60%;
+}
+
+.currency_page button {
+  height: fit-content;
+}
+
+.currency_input select,
+.currency_input2 select {
+  border-radius: 5px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  margin-top: 10px;
+  padding: 5px 10px;
+  width: 98%;
+}
+
+.cur_sel {
+  margin-top: 10px;
+  margin-right: 2px;
+}
+
+#right {
+  margin-left: 15px;
+}
+
+.text1 {
+  position: relative;
+  top: -2px;
+}
+
+.strip_page {
+  border: 1px solid var(--border-color);
+  margin-top: 30px;
+  width: 50%;
+  border-radius: 5px;
+  height: auto;
+  padding: 20px 30px;
+}
+
+#strip_cur {
+  margin-top: 30px;
+}
+
+.str_text {
+  color: var(--dropdown-bg-color);
+  font-weight: 600;
+}
+
+.priv p {
+  margin-top: 20px;
+}
+
+.status {
+  display: flex;
+}
+
+#test {
+  margin-top: 10px;
+}
+
+.status_icon {
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+.s_icon {
+  margin-right: 8px;
+}
+
+.status_test {
+  border: 1px solid var(--border-color);
+  margin: 20px 0;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.carrency_div select {
+  width: 60% !important;
+}
+
+.currency_title {
+  font-weight: 500;
+}
+
+@media only screen and (max-width: 426px) {
+  .currency_page {
+    flex-wrap: wrap;
+    width: 100% !important;
+  }
+
+  .currency_input {
+    width: 100%;
+  }
+
+  .cur_posi {
+    margin-top: 10px !important;
+  }
+}
+
+@media only screen and (max-width: 769px) {
+  .main_pay_sec {
+    padding: 20px;
+  }
+
+  .currency_page {
+    width: 48%;
+    padding: 5px 10px;
+  }
+
+  .currency_input select {
+    width: 84%;
+    padding: 4px;
+  }
+
+  .cur_posi {
+    margin: 0;
+  }
+
+  .strip_page {
+    padding: 10px 16px;
+  }
+
+  #currency {
+    width: 100%;
+  }
+
+  #strip_cur {
+    margin-top: 15px;
+  }
+}
+
+@media only screen and (min-width: 770px) and (max-width: 1025px) {
+  .currency_page {
+    width: 61%;
+  }
+}
+
+/* emailsetting */
+
+.admin-panel-tab-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 10px 0px;
+}
+
+.admin-panel-tab-bar .tab {
+  display: flex;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.admin-panel-tab-bar .tab li {
+  margin: 0 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.admin-panel-tab-bar .tab li:nth-child(1) {
+  margin-left: 0;
+}
+
+.admin-panel-tab-bar .tab li a {
+  color: var(--black);
+  text-decoration: none;
+}
+
+.admin-panel-tab-bar .tab li>a.active-tab {
+  color: var(--hover-color);
+}
+
+#not_bt {
+  margin: 0;
+  margin-right: 35px;
+}
+
+#etc {
+  margin-left: 10px;
+  color: var(--sidebar-pages-color);
+}
+
+#pro_2 {
+  margin-top: 10px;
+}
+
+/* Email template css  */
+
+.id {
+  padding-left: 5px;
+}
+
+.h5 {
+  /* font-size: 13px; */
+  color: var(--dropdown-bg-color);
+}
+
+.lesson {
+  padding: 10px;
+  width: 30%;
+}
+
+#edit {
+  padding-left: 50px;
+}
+
+@media only screen and (max-width: 426px) {
+  .admin-panel-tab-bar .tab {
+    flex-wrap: wrap;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #action {
+    padding-right: 70px;
+  }
+}

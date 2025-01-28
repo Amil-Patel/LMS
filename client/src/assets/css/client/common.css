@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    /* font family declaration */
+  --inter-ff: "Inter", sans-serif;
+  --jost-ff: "Jost", sans-serif;
+  --exo-ff: "Exo", sans-serif;
+    /* color declaration */
+  --active-link: #F9F9FB;
+  --border-color: #EAEAEA;
+  --bg-color: #F9F9FB;
+  --light-gray-text: #9D9D9D;
+  --icon-primary-color: #FF782D;
+  --secondary-btn-color: #D9D9D9;
+  --light-gray-bg-color: #DDDDDD;
+  --Primary-background: #EDF6F9;
+  --content1-background: #FFEEF3;
+  --content3-background: #F2EEFF;
+  --box-shadow: rgba(0, 0, 0, 0.2);
+  --content-border-color: blueviolet;
+  --icon-background: #E8EFF1;
+  --review-section-border: rgb(223, 222, 222);
+  --secondary-background: #17262C;
+  --step-button-background: #455156;
+  --footer-bottom-background: #f5f9f9;
+}
+/* breadcump */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  background-color: var(--bg-color);
+  padding: 2.5% 5%;
+  gap: 3px;
+}
+
+.breadcrumb-item {
+  text-decoration: none;
+}
+
+a.breadcrumb-item.active{
+  color: #aaa;
+}
+
+.breadcrumb i {
+  font-size: 14px;
+}
+
+.breadcrumb-item:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-divider {
+  margin: 0 8px;
+  color: #aaa;
+}
+
+.rating i, .metadata i {
+  color: #ff782d;
+  font-size: 14px;
+}
+
+.content .learning-cards .card-view-btn:hover {
+  background-color: var(--button-primary-color);
+  color: var(--white);
+}
+
+.course-video-container {
+  font-family: var(--inter-ff);
+}
+
+
