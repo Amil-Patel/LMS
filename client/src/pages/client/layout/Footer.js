@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <>
             <div className='client_section'>
-                <div className='cus-footer-section'>
+                <div className='cus-footer-section padding-side'>
                     <div className='cus-footer-up-section'>
                         <img src={require('../../../assets/image/web logo.png')} />
                         <div className="cus-footer-inner-text">

@@ -242,7 +242,7 @@ const AllCourse = () => {
                                   >
                                     <NavLink to={`/admin/edit-course/${i.id}`}>
                                       <p className="border-b border-[#DDDDDD]">
-                                      <i class="fa-solid fa-pencil"></i>
+                                        <i class="fa-solid fa-pencil"></i>
                                         Edit
                                       </p>
                                     </NavLink>

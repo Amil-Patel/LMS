@@ -36,30 +36,17 @@
   margin-bottom: 3px !important;
 }
 
+.payment_view-table_main_div{
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
 .payment_view_table {
-  border-collapse: inherit;
-  margin-top: 10px;
   width: 100%;
   margin-bottom: 20px;
 }
 
-.payment_view_table td {
-  border-bottom: 2px dotted var(--border-color);
-}
-
 .payment_view_table th {
-  font-size: 13px;
-  background-color: var(--white);
-  border-bottom: 2px dotted var(--border-color);
-}
-
-.payment_view_table tbody td {
-  padding: 5px;
-  font-size: 13px;
-}
-
-.payment_view_table tbody :nth-child(1) {
-  width: 20%;
+  font-size: 14px;
 }
 
 .payment_2table {

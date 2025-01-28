@@ -7,6 +7,10 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.main_stu_dashboard .course-form-container{
+  padding: 0;
+}
+
 .flex-row {
   display: flex;
   justify-content: space-between;

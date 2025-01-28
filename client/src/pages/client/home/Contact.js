@@ -35,10 +35,10 @@ const Contact = () => {
         <>
             <div style={{ backgroundColor: '#17262C' }}>
                 <div className='client_section'>
-                    <div className="cus-course-growth-section">
+                    <div className="cus-course-growth-section padding-main">
                         <div className="cus-course-growth-header">
-                            <h4>How To Get Started</h4>
-                            <p>Follow These Simple Steps To Enroll In Our Courses And Begin Your Journey<br />To Professional Growth.</p>
+                            <h4><b>How To Get Started</b></h4>
+                            <p>Follow These Simple Steps To Enroll In Our Courses And Begin Your Journey To Professional Growth.</p>
                         </div>
                         <div className="cus-course-growth-section-text">
                             <div className="cus-inner-text">
@@ -63,7 +63,7 @@ const Contact = () => {
             {/* <!-------------contact-section--------------> */}
 
             <div className='client_section'>
-                <div className="cus-contact-section" >
+                <div className="cus-contact-section  padding-main" >
                     <div className="cus-contact-inner-section">
                         <div className="cus-information-section">
                             <h5>Contact Us For More Information</h5>

@@ -4,7 +4,7 @@ const EnrollSection = () => {
     return (
         <div style={{ backgroundColor: "#EDF6F9" }}>
             <div className='client_section'>
-                <div className="cus-Enroll-section">
+                <div className="cus-Enroll-section padding-main">
                     <div className="cus-caption">
                         <h4>Top Reasons To Enroll In Our Training Programs</h4>
                         <p>Understand The Unique Advantages Of Our Security Services Training And Why We're The<br /> Best Choice For

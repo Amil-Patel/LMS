@@ -4,7 +4,7 @@ const CardSection = () => {
     return (
         <>
             <div className='client_section'>
-                <div className="cus-courses-section">
+                <div className="cus-courses-section padding-main">
                     <div className="cus-mid-content1">
                         <div className="cus-content">
                             <img src={require('../../../assets/image/icon1.png')} alt="icon1" />
@@ -42,7 +42,7 @@ const CardSection = () => {
 
                 {/* course-overview-section */}
 
-                <div className="cus-course-overview-section">
+                <div className="cus-course-overview-section padding-side">
                     <div className="cus-mid-overview-image">
                         <img src={require('../../../assets/image/mid-section-image.png')} alt="mid-section-image" />
                     </div>

@@ -101,7 +101,7 @@ const AllCourse = () => {
           <div className="client_loader"></div>
         </div>
       ) : (
-        <section className="course-hero-container lg:text-truncate">
+        <section className="course-hero-container course_main_padding lg:text-truncate">
           <div className="course-category">
             {isMobileView && (
               <button className="filter-button" onClick={toggleFilter}>

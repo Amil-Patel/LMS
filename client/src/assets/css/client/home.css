@@ -52,7 +52,6 @@
 
 .cus-hero-text {
   width: 49%;
-  padding: 5% 4% 5% 10%;
 }
 
 .cus-hero-text p {
@@ -84,7 +83,7 @@
 
 .cus-hero-image {
   width: 51%;
-  padding-right: 10%;
+  padding-right: 5%;
   height: 511px;
 }
 
@@ -96,7 +95,6 @@
 /* -----------courses-section--------------- */
 
 .cus-courses-section {
-  padding: 6% 10%;
   justify-content: space-between;
   display: flex;
   flex-wrap: wrap;
@@ -155,10 +153,6 @@
   border-radius: 10px;
 }
 
-.cus-course-overview-section {
-  padding: 0 10%;
-}
-
 .cus-mid-overview-image {
   width: 58%;
   height: 650px;
@@ -180,7 +174,7 @@
   width: 44%;
   background: var(--white);
   top: 13%;
-  left: 46%;
+  left: 51%;
   position: absolute;
   padding: 40px 65px;
   border-radius: 20px;
@@ -189,7 +183,7 @@
 
 .cus-inner-header-section h3 {
   padding-bottom: 20px;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
 }
 
@@ -202,7 +196,6 @@
 /* -------------Enroll-section-------------- */
 
 .cus-Enroll-section {
-  padding: 4% 10%;
   margin-top: 6%;
 }
 
@@ -243,7 +236,6 @@
 
 .cus-course-growth-section {
   background-color: var(--secondary-background);
-  padding: 3% 10%;
 }
 
 .cus-course-growth-section p {
@@ -291,7 +283,6 @@
 .cus-contact-section {
   display: flex;
   align-items: center;
-  padding: 5% 10%;
 }
 
 .cus-contact-inner-section {
@@ -351,7 +342,7 @@
   width: 100%;
   border: none;
   margin-bottom: 20px;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 2.5% 7% 2.5% 7%;
   font-size: 15px;
 }
@@ -362,7 +353,7 @@
   margin-bottom: 15px;
   padding: 3% 7% 3% 7%;
   border: none;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 15px;
 }
 
@@ -395,10 +386,6 @@
 }
 
 /* -------------footer-section-------------- */
-
-.cus-footer-section {
-  padding: 2% 10%;
-}
 
 .cus-footer-up-section {
   border-bottom: 2px solid var(--border-color);
@@ -454,23 +441,15 @@
   padding-bottom: 0;
 }
 
-@media screen and (max-width: 1536px) {
-  .cus-hero-image {
-    padding-right: 0%;
-  }
-}
 @media screen and (max-width: 1025px) {
-  .cus-course-overview-section {
-    padding: 0 5%;
+
+  .cus-hero-image{
+    padding-right: 0;
   }
 
   .cus-mid-overview- {
     width: 60%;
     height: 550px;
-  }
-
-  .cus-courses-section {
-    padding: 4%;
   }
 
   .cus-mid-content1,
@@ -483,11 +462,7 @@
   .cus-course-overview-Text {
     width: 52%;
     left: 43%;
-    top: 5%;
-  }
-
-  .cus-Enroll-section {
-    padding: 4% 6%;
+    top: 11%;
   }
 
   .cus-contact-form input {
@@ -500,9 +475,6 @@
 }
 
 @media screen and (max-width: 821px) {
-  .cus-hero-text {
-    padding: 25px;
-  }
 
   .cus-hero-text h1 {
     font-size: 37px !important;
@@ -553,7 +525,6 @@
   }
 
   .cus-courses-section {
-    padding: 6% 2%;
     justify-content: space-around;
   }
 
@@ -575,13 +546,9 @@
     height: 550px;
   }
 
-  .cus-course-overview-section {
-    padding: 0 6%;
-  }
-
   .cus-course-overview-Text {
     width: 60%;
-    top: 6%;
+    top: 5%;
     left: 35%;
     padding: 20px 30px;
     border-radius: 20px;
@@ -597,7 +564,6 @@
 
   .cus-Enroll-section {
     margin-top: 2%;
-    padding: 5%;
   }
 
   .cus-caption {
@@ -613,10 +579,6 @@
     font-size: 15px;
   }
 
-  .cus-course-growth-section {
-    padding: 5% 4%;
-  }
-
   .cus-course-growth-header p {
     padding-top: 10px;
   }
@@ -629,10 +591,6 @@
   .cus-inner-text .btn1 {
     padding: 2px 20px;
     font-size: 15px;
-  }
-
-  .cus-contact-section {
-    padding: 5%;
   }
 
   .cus-contact-inner-section {
@@ -722,7 +680,6 @@
 
   .cus-courses-section {
     display: block;
-    padding: 5%;
   }
 
   .cus-mid-content1,
@@ -735,7 +692,6 @@
 
   .cus-course-overview-section {
     display: block;
-    padding: 0 5%;
   }
 
   .cus-mid-overview-image {
@@ -803,10 +759,6 @@
 
   .cus-contact-form {
     margin: 10% 0;
-  }
-
-  .cus-contact-section {
-    padding: 5%;
   }
 
   .cus-contact-form input {

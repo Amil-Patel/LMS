@@ -143,7 +143,7 @@ const CheckOut = () => {
             <Navbar />
             <Breadcrumb />
             <div className="client_section">
-                <section className="checkout-section">
+                <section className="checkout-section course_main_padding">
                     <h2>Checkout</h2>
                     <div className="checkout-section-main-div">
                         <div className="form-container">

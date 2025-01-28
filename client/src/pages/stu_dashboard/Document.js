@@ -107,7 +107,7 @@ const Document = () => {
                             </div>
                             <form className='student_profile_form' onSubmit={saveUSerDocument}>
                                 {/* first / middle / last  name */}
-                                <div className="flex-row name gap-4">
+                                <div className="flex-row name gap-4 mb-0">
                                     <div className="form-group mb-0">
                                         <label htmlFor="course_select">
                                             Select Course<span className="required">*</span>
@@ -136,7 +136,7 @@ const Document = () => {
                                 </div>
                             </form>
                             <div className="table-responsive">
-                                <table className="table table-striped table-hover">
+                            <table className="table table-striped table-hover mt-8">
                                     <thead>
                                         <tr>
                                             <th>Sr.No</th>
