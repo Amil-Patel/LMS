@@ -92,54 +92,58 @@ const Navbar = () => {
   }, [stuUserId]);
   return (
     <>
-    <div className='client_section'>
-      <nav className='navbar-section'>
-        <div className={`navbar-logo-section ${isMenuOpen ? 'notdisplay' : ''}`}>
-          <div className='navbar-logo'>
-            <NavLink to="/">
-              <img src={require("../../../assets/image/Logo.png")} alt="logo" />
-            </NavLink>
-          </div>
-        </div>
-        <div className={`navbar-pages ${isMenuOpen ? 'active' : ''}`}>
-          <ul>
-            <li>
-              <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/all-course" onClick={() => setIsMenuOpen(false)}>Courses</NavLink>
-            </li>
-            <li>
-              <NavLink to="/contact-us" onClick={() => setIsMenuOpen(false)}>Contact Us</NavLink>
-            </li>
-          </ul>
-        </div>
-
-        <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
-          {/*cart section  */}
-          <NavLink to="/shopping-cart" className={`cart_section ${animateCart ? 'animate-cart' : ''}`}>
-            <i className="fa-solid fa-cart-arrow-down"></i>
-            <p className="course-added-quantity">{cart.length}</p>
-          </NavLink>
-
-          {/*cart section  */}
-          {!savedToken && (
-            <>
-              <button className="login_btn" onClick={toggleLoginForm}>Login</button>
-              <button className="signup_btn" onClick={toggleSignupForm}>Register</button>
-            </>
-          )}
-          {savedToken && (
-            <div className="profile-section relative" ref={profileRef} onClick={toggleModal}>
-              <img src={`../upload/${userData?.profile}`} alt="Profile" />
+      <div className='client_section'>
+        <nav className='navbar-section'>
+          <div className={`navbar-logo-section ${isMenuOpen ? 'notdisplay' : ''}`}>
+            <div className='navbar-logo'>
+              <NavLink to="/">
+                <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+              </NavLink>
             </div>
-          )}
-        </div>
-        {/* Hamburger Icon */}
-        <div className="hamburger" onClick={toggleMenu}>
-          {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
-        </div>
-      </nav>
+          </div>
+          <div className={`navbar-pages ${isMenuOpen ? 'active' : ''}`}>
+            <ul>
+              <li>
+                <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
+              </li>
+              <li>
+                <NavLink to="/all-course" onClick={() => setIsMenuOpen(false)}>Courses</NavLink>
+              </li>
+              <li>
+                <NavLink to="/contact-us" onClick={() => setIsMenuOpen(false)}>Contact Us</NavLink>
+              </li>
+            </ul>
+          </div>
+
+          <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
+            {/*cart section  */}
+            <NavLink to="/shopping-cart" className={`cart_section ${animateCart ? 'animate-cart' : ''}`}>
+              <i className="fa-solid fa-cart-arrow-down"></i>
+              <p className="course-added-quantity">{cart.length}</p>
+            </NavLink>
+
+            {/*cart section  */}
+            {!savedToken && (
+              <>
+                <button className="login_btn" onClick={toggleLoginForm}>Login</button>
+                <button className="signup_btn" onClick={toggleSignupForm}>Register</button>
+              </>
+            )}
+            {savedToken && (
+              <div className="profile-section relative" ref={profileRef} onClick={toggleModal}>
+                {userData?.profile ? (
+                  <img src={`../upload/${userData?.profile}`} alt="Profile" />
+                ) : (
+                  <img src={require("../../../assets/image/default-profile.png")} alt="Profile" />
+                )}
+              </div>
+            )}
+          </div>
+          {/* Hamburger Icon */}
+          <div className="hamburger" onClick={toggleMenu}>
+            {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
+          </div>
+        </nav>
       </div>
       {isModalOpen && (
         <div className="profile-modal-overlay" onClick={closeModal}>
@@ -149,7 +153,11 @@ const Navbar = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center mb-5">
-              <img src={`../upload/${userData?.profile}`} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
+              {userData?.profile ? (
+                <img src={`../upload/${userData?.profile}`} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
+              ) : (
+                <img src={require("../../../assets/image/default-profile.png")} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
+              )}
               <div>
                 <p className="font-semibold text-[15px] text-[#4880FF]">{userData?.first_name + " " + userData?.last_name}</p>
                 <p className="text-sm text-gray-500 lowercase">{userData?.email}</p>

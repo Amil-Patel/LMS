@@ -58,6 +58,7 @@ const addCourseSectionData = async (req, res) => {
     const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
+        time: req.body.time,
         course_id: parseInt(req.body.course_id),
         order: 0,
         status: req.body.status,
@@ -80,6 +81,7 @@ const updateCourseSectionData = async (req, res) => {
     const date = DateToUnixNumber(new Date(), "America/Toronto");
     const data = {
         title: req.body.title,
+        time: req.body.time,
         status: req.body.status,
         updatedAt: date,
     }

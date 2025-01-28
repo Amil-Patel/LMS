@@ -76,12 +76,14 @@ const Sidebar = () => {
                 }`}></div>
             </div>
           ) : (
-            <img
-              src={`../upload/${userData.profile}`}
-              alt="profile"
-              className={`mx-auto rounded-full duration-500 ${open ? "w-20 h-20" : "w-10 h-10"
-                }`}
-            />
+            userData?.profile ? (
+              < img
+                src={`../upload/${userData.profile}`}
+                alt="profile"
+                className={`mx-auto rounded-full duration-500 ${open ? "w-20 h-20" : "w-10 h-10"}`} />
+            ) : (
+              <img src={require("../../../assets/image/default-profile.png")} alt="Profile" className={`mx-auto rounded-full duration-500 ${open ? "w-20 h-20" : "w-10 h-10"}`} />
+            )
           )}
           {open && (
             loading ? (

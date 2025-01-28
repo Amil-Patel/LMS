@@ -14,7 +14,6 @@ const AddCourse = () => {
   const [tab, setTab] = useState("basic-info");
   const [isTax, setIsTax] = useState(false);
   const [isLimited, setIsLimited] = useState(false);
-  const [imageSrc] = useState("https://via.placeholder.com/150");
   const [loading, setLoading] = useState(false);
   //get not null category data
   const [notNullCourseCategory, setNotNullCourseCategory] = useState([]);
@@ -68,7 +67,18 @@ const AddCourse = () => {
   });
 
 
-
+  const [userData, setUserData] = useState([]);
+  const getUserData = async () => {
+    try {
+      const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
+      console.log(res.data)
+      setUserData(res.data);
+      setAddCourse((prev) => ({ ...prev, auther: [...prev.auther, res.data.role_id] }));
+      console.log(addCourse)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleTax = () => {
     setIsTax(!isTax);
@@ -90,6 +100,7 @@ const AddCourse = () => {
 
   useEffect(() => {
     getNullCourseCategoryData()
+    getUserData();
   }, [])
 
   const handleButtonClick = () => {
@@ -244,9 +255,6 @@ const AddCourse = () => {
     setAddCourse(updatedFields);
 
   };
-
-  const [showMessage, setShowMessage] = useState(false);
-
 
   const navigate = useNavigate()
   const handleSubmit = async (e) => {
@@ -593,7 +601,7 @@ const AddCourse = () => {
                       </div>
                     ) : (
                       <div>
-                        <img src={imageSrc} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
+                        <img src={require("../../../assets/image/default-thumbnail.png")} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
                       </div>
                     )
                   }
@@ -634,7 +642,7 @@ const AddCourse = () => {
                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                   <div className="form-group mb-0" style={{ width: "90%" }}>
                     <label htmlFor="auther">Author</label>
-                    {showMessage && <small className="text-muted ms-2">(↵ Press Enter to add author)</small>}
+                    <small className="text-muted ms-2">(↵ Press Enter to add author)</small>
                     <input
                       type="text"
                       id="auther"
@@ -642,19 +650,21 @@ const AddCourse = () => {
                       placeholder="Enter One Or More Author"
                       className="col12input"
                       onKeyDown={handleAddAuther}
-                      onFocus={() => setShowMessage(true)} // Show the message on focus
-                      onBlur={() => setShowMessage(false)}
                     />
                     <div className="tag-container">
                       {addCourse.auther.map((keyword, index) => (
                         <div className="tag" key={index}>
                           <span>{keyword}</span>
-                          <span
-                            className="tag-close"
-                            onClick={() => handleRemoveAuther(index)}
-                          >
-                            <i className="fa-solid fa-xmark"></i>
-                          </span>
+                          {userData?.role_id == keyword ?
+                            ""
+                            : (
+                              <span
+                                onClick={() => handleRemoveAuther(index)}
+                                className="tag-close"
+                              >
+                                <i className="fa-solid fa-xmark"></i>
+                              </span>
+                            )}
                         </div>
                       ))}
                     </div>

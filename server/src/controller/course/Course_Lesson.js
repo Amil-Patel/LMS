@@ -197,16 +197,16 @@ const updateCourseLessonData = async (req, res) => {
         order: 0,
         updatedAt: date,
     };
-
-    try {
-        const updatedLesson = await Course_Lesson.update(data, {
-            where: { id }
-        });
-        res.status(200).json(updatedLesson);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message });
-    }
+    console.log(data)
+    // try {
+    //     const updatedLesson = await Course_Lesson.update(data, {
+    //         where: { id }
+    //     });
+    //     res.status(200).json(updatedLesson);
+    // } catch (error) {
+    //     console.log(error);
+    //     res.status(500).json({ message: error.message });
+    // }
 };
 
 const updateCourseLessonStatus = async (req, res) => {

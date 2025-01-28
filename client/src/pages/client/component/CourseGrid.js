@@ -8,6 +8,7 @@ const CourseGrid = ({ courses, category }) => {
     const { cart, addToCart } = useCart();
 
     const savedToken = Cookies.get('student-token');
+    console.log(courses)
     return (
         <>
             {courses?.length === 0 && (
@@ -32,11 +33,7 @@ const CourseGrid = ({ courses, category }) => {
                     } catch (error) {
                         console.error("Error parsing author JSON:", error);
                     }
-                    const firstAuthor = authors[0] || "Unknown Author";
-                    const displayAuthor =
-                        firstAuthor.length > 10
-                            ? `${firstAuthor.slice(0, 10)}...`
-                            : firstAuthor;
+                    const firstAuthor = authors ? authors[0] || "Unknown Author" : "Unknown Author";
 
                     // Find the category title for the course
                     const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
@@ -54,7 +51,11 @@ const CourseGrid = ({ courses, category }) => {
                         <div key={course.id} className="course-content">
                             {/* Course Thumbnail */}
                             <div className="allcourses-course-image" >
-                                <img src={`../upload/${course.course_thumbnail}`} alt={course.course_title} />
+                                {course.course_thumbnail === null ?
+                                    <img src={require('../../../assets/image/default-thumbnail.png')} alt="course_image" />
+                                    :
+                                    <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
+                                }
                             </div>
                             {/* Course Details */}
                             <div className="course-inner-content">
@@ -65,18 +66,7 @@ const CourseGrid = ({ courses, category }) => {
 
                                 {/* Author and Rating */}
                                 <div className="author-and-rating">
-                                    <span className="author-name">By {displayAuthor}</span>
-                                    <span className="courses-reviews">
-                                        4.5
-                                        <i className="fa-solid fa-star"></i>
-                                        <i className="fa-solid fa-star"></i>
-                                        <i className="fa-solid fa-star"></i>
-                                        <i className="fa-solid fa-star"></i>
-                                        <i className="fa-solid fa-star"></i>
-                                        <span className="customer-review-number">
-                                            (166)
-                                        </span>
-                                    </span>
+                                    <span className="author-name">By {firstAuthor}</span>
                                 </div>
                                 <button className="security-button">{truncateCate}</button>
                             </div>

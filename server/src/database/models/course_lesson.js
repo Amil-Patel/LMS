@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     text_content: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.JSON,
       allowNull: true
     },
     is_preview: {
