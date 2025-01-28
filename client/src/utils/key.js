@@ -1,0 +1,3 @@
+const stripekey="pk_test_51PbFm5RstJFOySLKEcDD74Gnen4RG3T5epxakYYlfHfYhxiKBMtlbajQnQm1fp6lQqcnrCBessrSOzhg8IcksP3800LDRennzw";
+
+export default stripekey;

@@ -1,0 +1,66 @@
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.coupon-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  display: flex;
+  margin-top: 8px;
+}
+
+input[type="radio"] {
+  margin-right: 3px;
+}
+
+.discount-box {
+  display: flex;
+}
+
+.generate-btn {
+  background-color: var( --button-primary-color);
+  color: var(--white);
+  width: 30%;
+  border: none;
+  border-radius: 0px 4px 4px 0px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.percentage-icon {
+  border: 1px solid var(--border-color);
+  background-color: #eee;
+  padding: 8.5px 12px;
+  border-radius: 0 4px 4px 0;
+  margin-left: -5px;
+  border-left: none;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.required {
+  color: red;
+}
+
+.code-coupon-input {
+  font-size: 14px;
+  width: 70%;
+  padding: 7px 10px;
+  border: 1px solid var(--border-color);
+}
+
+.input-group {
+  display: flex;
+}
+
+.flex-item {
+  width: 50%;
+}

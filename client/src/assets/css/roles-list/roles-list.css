@@ -1,0 +1,22 @@
+.roll-container {
+  width: 50%;
+  height: 30%;
+  background-color: var(--module-list-bg);
+  padding: 15px;
+}
+
+.roll-container h5 {
+  margin-bottom: 20px;
+}
+
+.roll-btn {
+  float: inline-end;
+}
+
+.list-data {
+  width: 100%;
+}
+
+.assign-checkbox {
+  padding-left: 15px;
+}

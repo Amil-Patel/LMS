@@ -1,0 +1,108 @@
+.payment_modal {
+  width: 55%;
+}
+
+.email {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--font-color);
+}
+
+.priv {
+  margin-bottom: 7px;
+}
+
+.pay_modulhead {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pay_modulhead div {
+  border-right: 1px solid var(--border-color);
+  padding: 0 12px;
+}
+
+.pay_modulhead :nth-child(1) {
+  padding-left: 0;
+}
+
+.pay_modulhead :nth-child(6) {
+  border: none;
+}
+
+.head_text {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 3px !important;
+}
+
+.payment_view_table {
+  border-collapse: inherit;
+  margin-top: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.payment_view_table td {
+  border-bottom: 2px dotted var(--border-color);
+}
+
+.payment_view_table th {
+  font-size: 13px;
+  background-color: var(--white);
+  border-bottom: 2px dotted var(--border-color);
+}
+
+.payment_view_table tbody td {
+  padding: 5px;
+  font-size: 13px;
+}
+
+.payment_view_table tbody :nth-child(1) {
+  width: 20%;
+}
+
+.payment_2table {
+  display: flex;
+  justify-content: space-between;
+}
+
+.customer-info-table {
+  width: 49%;
+  margin-bottom: 0px;
+  box-shadow: rgba(217, 217, 250, 0.2) 0px 7px 29px 0px;
+}
+
+.customer-info-table td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+}
+
+.customer-info-table th {
+  text-align: right;
+  border-collapse: collapse;
+  width: 30%;
+}
+
+.customer-info-table td:last-child {
+  text-align: left;
+}
+
+.amount-details-table {
+  width: 30%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.amount-details-table th {
+  border-right: 1px solid var(--border-color);
+}
+
+.amount-details-table td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+}
+
+.net-amount-row {
+  background-color: var(--net-amount-row-color);
+}
