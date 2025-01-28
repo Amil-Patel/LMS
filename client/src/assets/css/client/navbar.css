@@ -8,14 +8,13 @@
 .navbar-section {
   font-family: var(--exo-ff);
   display: flex;
-  padding: 0 5%;
   align-items: center;
   justify-content: space-between;
   position: relative;
 }
 
 .navbar-logo img {
-  width: 140px;
+  max-width: 120px;
 }
 
 .navbar-pages ul {
@@ -186,10 +185,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .navbar-section {
-    padding: 15px 12px;
-  }
-
   .navbar-logo img {
     width: 110px;
   }

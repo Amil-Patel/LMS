@@ -171,17 +171,17 @@ const PurchaseHistory = () => {
                                <p className="text-sm text-gray-600">{currentCourse?.id}</p>
                              </div>
                            </div>
-                     
-                           <table className="payment_view_table w-full text-left text-sm mb-6 border border-gray-300">
-                             <thead className="bg-gray-100">
+                     <div className='payment_view-table_main_div'>
+                           <table className="payment_view_table block w-[848px] text-left text-sm mb-6 border border-gray-300">
+                             <thead className="payment_view_table_model_header ">
                                <tr>
-                                 <th className="py-2">Course Name</th>
-                                 <th className="py-2">Validity</th>
-                                 <th className="py-2">Amount</th>
-                                 <th className="py-2">Tax</th>
-                                 <th className="py-2">Tax Amt</th>
-                                 <th className="py-2">Discount</th>
-                                 <th className="py-2">Net Amt</th>
+                                 <th style={{ width:'45%'}} className="py-2">Course Name</th>
+                                 <th style={{ width:'10%'}} className="py-2">Validity</th>
+                                 <th style={{ width:'9%'}} className="py-2">Amount</th>
+                                 <th style={{ width:'8%'}} className="py-2">Tax</th>
+                                 <th style={{ width:'10%'}} className="py-2">Tax Amt</th>
+                                 <th style={{ width:'8%'}} className="py-2">Discount</th>
+                                 <th style={{ width:'10%'}} className="py-2">Net Amt</th>
                                </tr>
                              </thead>
                              <tbody>
@@ -192,7 +192,7 @@ const PurchaseHistory = () => {
                                  const net_amount = item?.course_amount - tax_amount - item?.discount;
                      
                                  return (
-                                   <tr key={index} className="border-t border-gray-200">
+                                   <tr key={index} className="border border-gray-200">
                                      <td className="px-4 py-2">{item?.course_title}</td>
                                      <td className="px-4 py-2">
                                        {item?.expiring_time === "limited_time" ? "Limited Time" : "Life Time"}
@@ -223,7 +223,7 @@ const PurchaseHistory = () => {
                                })}
                              </tbody>
                            </table>
-                     
+                           </div>
                            <div className="payment_2table grid grid-cols-1 md:grid-cols-2 gap-6">
                              <table className="customer-info-table w-full text-sm border border-gray-300">
                                <tbody>
@@ -300,7 +300,7 @@ const PurchaseHistory = () => {
                              <button
                                type="button"
                                onClick={handleCloseEditModal}
-                               className="primary-btn module-btn px-6 py-2 text-white rounded-lg hover:bg-gray-600"
+                               className="primary-btn module-btn px-6 py-2"
                              >
                                Close
                              </button>
@@ -308,7 +308,7 @@ const PurchaseHistory = () => {
                          </form>
                        </div>
                      </div>
-                                         
+
                     )}
                 </div>
             </div>

@@ -5,7 +5,7 @@ const HeroSection = () => {
         <>
         <div className="cus-hero-container">
             <div className='client_section md:flex block'>
-                    <div className="cus-hero-text">
+                    <div className="cus-hero-text padding-main">
                         <h1>Jumpstart Your Career As A Security Guard Professional</h1>
                         <p>Join Our Top-Tier Online Training Program Designed To Prepare You For A Successful And Fulfilling Career
                             In The Security Industry.</p>

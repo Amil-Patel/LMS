@@ -1,6 +1,5 @@
 .course-hero-container {
   display: flex;
-  padding: 3% 5% 3% 5%;
 }
 
 .course-category {
@@ -275,10 +274,6 @@
 }
 
 @media screen and (max-width: 1100px) {
-  .course-hero-container {
-    padding: 3% 2% 0.2% 2%;
-  }
-
   .course-details {
     padding-left: 15px;
     width: -webkit-fill-available;
@@ -335,10 +330,6 @@
 }
 
 @media screen and (max-width: 851px) {
-
-  .course-hero-container {
-    padding: 3% 3.5% 0.2% 3.5%;
-  }
 
   .course-hero-container {
     display: block;
@@ -429,10 +420,6 @@
 }
 
 @media screen and (max-width: 500px) {
-  .course-hero-container {
-    padding: 3% 5% 0.2% 5%;
-  }
-
   .course-inner-content h3 {
     width: 87%;
   }

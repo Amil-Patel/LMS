@@ -99,7 +99,7 @@ const ShoppingCart = () => {
       <Navbar />
       <Breadcrumb />
       <div className='client_section'>
-        <section className="checkout-section">
+        <section className="checkout-section course_main_padding">
           <h2>Shopping Cart</h2>
           <div className='shopping-cart-hero-container pt-5'>
             <div className='shopping-cart-course-container'>

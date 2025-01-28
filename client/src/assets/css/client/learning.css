@@ -75,6 +75,11 @@
 }
 
 @media (max-width: 1200px) and (min-width: 900px) {
+
+  .main_stu_dashboard {
+    padding: 3% 4% 0 4%;
+  }
+
   .main_stu_dashboard aside {
     width: 260px;
   }
@@ -89,6 +94,11 @@
 }
 
 @media screen and (max-width: 900px) {
+
+  .main_stu_dashboard {
+    padding: 5% 3%;
+}
+
   .main_stu_dashboard_sidebar {
     position: relative;
   }

@@ -73,7 +73,7 @@ const CourseList = ({ courses, category }) => {
                             </div>
                             {/* <div className="course-rating">4.7 ***** (255)</div> */}
                             <div>
-                                <div className="course-btn">
+                                <div className="course-btn mt-3">
                                     <button className="security-button">{truncateCate}</button>
                                     <button
                                         className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}

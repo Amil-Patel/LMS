@@ -122,6 +122,65 @@ td {
   height: 400px;
 }
 
+/* -------client-side-padding------- */
+
+.padding-main{
+  padding: 5%;
+}
+
+.padding-side{
+  padding: 0.5% 5%;
+}
+
+.breadcrumb_padding{
+  padding: 2.5% 5%;
+}
+
+.course_main_padding{
+  padding: 4% 5%;
+}
+
+@media screen and (max-width:1280px) {
+  .padding-main{
+    padding: 5% 4% ;
+  }
+  
+  .padding-side{
+    padding: 0.5% 4%;
+  }
+  
+  .breadcrumb_padding{
+    padding: 2.5% 4%;
+  }
+  
+  .course_main_padding{
+    padding: 4%;
+  }
+}
+@media screen and (max-width:900px) {
+  .padding-main{
+    padding: 5% 3%;
+  }
+  
+  .padding-side{
+    padding: 1% 3%;
+  }
+  
+  .breadcrumb_padding{
+    padding: 2.5% 3%;
+  }
+  
+  .course_main_padding{
+    padding: 4% 3%;
+  }
+}
+
+@media screen and (max-width:500px){
+  .padding-side{
+    padding: 2% 3%;
+  }
+}
+
 /* common class name */
 
 .main-top-bar {
@@ -276,6 +335,7 @@ button {
 .module-btn {
   padding: 5px 12px !important;
   width: auto;
+  height: fit-content;
 }
 
 /* i-con css  */

@@ -9,11 +9,10 @@ const Sidebar = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   const menus = [
-    { name: "Dashboard", link: "/student/dashboard", icon: "fa-solid fa-bars-progress" },
     { name: "Courses", link: "/student/learning", icon: "fa-solid fa-graduation-cap" },
-    { name: "Documents", link: "/student/documents", icon: "fa-solid fa-folder-open" },
+    { name: "Documents", link: "/student/documents", icon: "fa-regular fa-folder-open" },
     { name: "Profile", link: "/student/stu-profile", icon: "fa-solid fa-user-pen" },
-    { name: "Purchase", link: "/student/purchase", icon: "fa-regular fa-folder-open" }
+    { name: "Purchase", link: "/student/purchase", icon: "fa-solid fa-money-bill-1-wave" }
   ];
   const [userData, setUserData] = useState([]);
   const getUserData = async () => {
@@ -51,7 +50,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <section className="main_stu_dashboard_sidebar h-screen flex">
+    <section className="main_stu_dashboard_sidebar flex">
       <aside
         className={`bg-[#F9F9FB] duration-500 ${isMobile
           ? open

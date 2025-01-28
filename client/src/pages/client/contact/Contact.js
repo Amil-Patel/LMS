@@ -39,7 +39,7 @@ const Contact = () => {
     return (
         <>
             <div className='client_section'>
-                <div className="min-h-screen flex items-center justify-center py-12 px-4">
+                <div className="min-h-screen flex items-center justify-center padding-main">
                     <div className="container border-none max-w-4xl mx-auto">
                         <div className="text-center mb-12">
                             <h1 className="text-4xl font-bold text-gray-800 mb-4">Contact Us</h1>
