@@ -386,11 +386,19 @@ const Profile = () => {
                       alt="Selected Thumbnail"
                     />
                   ) : (
-                    <img
-                      src={`../upload/${imageSrc}` || 'https://via.placeholder.com/150'} // Show existing image or placeholder
-                      style={{ width: "67px", maxHeight: "67px" }}
-                      alt="Profile Thumbnail"
-                    />
+                    imageSrc ? (
+                      <img
+                        src={`../upload/${imageSrc}`} // Show existing image or placeholder
+                        style={{ width: "67px", maxHeight: "67px" }}
+                        alt="Profile Thumbnail"
+                      />
+                    ) : (
+                      <img
+                        src={require('../../../assets/image/default-profile.png')} // Show existing image or placeholder
+                        style={{ width: "67px", maxHeight: "67px" }}
+                        alt="Profile Thumbnail"
+                      />
+                    )
                   )}
                 </div>
               </div>

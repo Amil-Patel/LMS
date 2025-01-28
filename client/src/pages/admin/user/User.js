@@ -17,7 +17,6 @@ const User = () => {
   const [loading, setLoading] = useState(false);
   const [addUserOpen, setAddUserOpen] = useState(false);
   const [editUserOpen, setEditUserOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
   const [sameNumber, setSameNumber] = useState(false);
   const [sameNumberForedit, setSameNumberForedit] = useState(false);
   const handleSameNumberChange = (e) => {
@@ -635,7 +634,11 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`../upload/${item.profile}`} />
+                          {item.profile ? (
+                            <img src={`../upload/${item.profile}`} />
+                          ) : (
+                            <img src={require('../../../assets/image/default-profile.png')} alt="User" />
+                          )}
                         </td>
                         <td>{item.first_name}</td>
                         <td className="lowercase">{item.email}</td>
@@ -727,7 +730,11 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`../upload/${item.profile}`} />
+                          {item.profile ? (
+                            <img src={`../upload/${item.profile}`} />
+                          ) : (
+                            <img src={require('../../../assets/image/default-profile.png')} alt="User" />
+                          )}
                         </td>
                         <td>{item.first_name}</td>
                         <td className="lowercase">{item.email}</td>
@@ -819,7 +826,11 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`../upload/${item.profile}`} />
+                          {item.profile ? (
+                            <img src={`../upload/${item.profile}`} />
+                          ) : (
+                            <img src={require('../../../assets/image/default-profile.png')} alt="User" />
+                          )}
                         </td>
                         <td>{item.first_name}</td>
                         <td className="lowercase">{item.email}</td>
@@ -907,7 +918,11 @@ const User = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td className="profile-img">
-                          <img src={`../upload/${item.profile}`} />
+                          {item.profile ? (
+                            <img src={`../upload/${item.profile}`} />
+                          ) : (
+                            <img src={require('../../../assets/image/default-profile.png')} alt="User" />
+                          )}
                         </td>
                         <td>{item.first_name}</td>
                         <td className="lowercase">{item.email}</td>
@@ -1250,7 +1265,7 @@ const User = () => {
                           <img src={URL.createObjectURL(newImage)} style={{ width: "67px", maxHeight: "67px" }} alt="Selected Thumbnail" />
                         ) : (
                           <img
-                            src={imageSrc}
+                            src={require("../../../assets/image/default-profile.png")}
                             style={{ width: "67px", maxHeight: "67px" }}
                             alt="Selected Thumbnail"
                           />

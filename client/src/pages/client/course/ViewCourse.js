@@ -532,11 +532,18 @@ const ViewCourse = () => {
             </div>
 
             <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
-              <img
-                className="view-course-thumbnail w-full mb-6"
-                src={`../upload/${courseData.course_thumbnail}`}
-                alt="Course Thumbnail"
-              />
+              {courseData.course_thumbnail === null ? (
+                <img
+                  src={require("../../../assets/image/default-thumbnail.png")}
+                  alt="course_thumbnail"
+                />
+              ) : (
+                <img
+                  className="view-course-thumbnail w-full mb-6"
+                  src={`../upload/${courseData.course_thumbnail}`}
+                  alt="Course Thumbnail"
+                />
+              )}
               <div className="price mb-8">
                 <h3>
                   ${courseData.course_price - (courseData.course_price * courseData.course_discount) / 100} <span className="discount line-through">${courseData.course_price}</span>

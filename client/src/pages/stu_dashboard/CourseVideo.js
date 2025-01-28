@@ -683,7 +683,7 @@ const CourseVideo = () => {
       });
     }
   }, [reviewWithStudentId, stuUserId, id]);
- 
+
   return (
     <>
       {loading ? (
@@ -849,16 +849,25 @@ const CourseVideo = () => {
                           </div>
                         )}
                         {editLessonData.lesson_type === "video" && (
-                          <div className="pdf-container">
-                            <video
-                              controls
-                              className="video-element max-h-[420px]"
-                              poster={`../../upload/${editLessonData.thumbnail_preview_image_url}`}
-                            >
-                              <source src={`../../upload/${editLessonData.attachment}`} type="video/mp4" />
-                              Your browser does not support the video tag.
-                            </video>
-                          </div>
+                          <>
+                            <div className="pdf-container">
+                              <video
+                                controls
+                                className="video-element max-h-[420px]"
+                                poster={`../../upload/${editLessonData.thumbnail_preview_image_url}`}
+                              >
+                                <source src={`../../upload/${editLessonData.attachment}`} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                            </div>
+                            <div className="long-desc p-3" >
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html: editLessonData?.text_content,
+                                }}
+                              ></p>
+                            </div>
+                          </>
                         )}
                         <div className="long-desc mt-4">
                           <p id="description_bottom" className="p-3">

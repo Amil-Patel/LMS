@@ -9,13 +9,12 @@ import moment from "moment-timezone";
 const port = process.env.REACT_APP_URL
 
 const EditCourse = () => {
-    const { userRole, userId, setting } = useContext(userRolesContext);
+    const { userId, setting } = useContext(userRolesContext);
     const [loading, setLoading] = useState(false)
     const { id } = useParams()
     const [tab, setTab] = useState("basic-info");
     const [isTax, setIsTax] = useState(false);
     const [isLimited, setIsLimited] = useState(false);
-    const [imageSrc] = useState("https://via.placeholder.com/150");
     const [notNullCourseCategory, setNotNullCourseCategory] = useState([]);
     const getNullCourseCategoryData = async () => {
         setLoading(true)
@@ -66,6 +65,15 @@ const EditCourse = () => {
         updated_by: userId
     })
 
+    const [userData, setUserData] = useState([]);
+    const getUserData = async () => {
+        try {
+            const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
+            setUserData(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const getCourseData = async () => {
         setLoading(true)
         try {
@@ -398,6 +406,7 @@ const EditCourse = () => {
     useEffect(() => {
         getCourseData();
         getNullCourseCategoryData();
+        getUserData();
     }, [])
 
 
@@ -706,7 +715,7 @@ const EditCourse = () => {
                                             />
                                         ) : (
                                             <img
-                                                src={imageSrc}
+                                                src={require("../../../assets/image/default-thumbnail.png")}
                                                 style={{ width: "67px", maxHeight: "67px" }}
                                                 alt="Default Thumbnail"
                                             />
@@ -748,6 +757,7 @@ const EditCourse = () => {
                                 <div className="flex-row flex-row40" style={{ border: "none" }}>
                                     <div className="form-group mb-0" style={{ width: "90%" }}>
                                         <label>Author</label>
+                                        <small className="text-muted ms-2">(↵ Press Enter to add author)</small>
                                         <input
                                             type="text"
                                             name="auther"
@@ -759,9 +769,16 @@ const EditCourse = () => {
                                             {Array.isArray(courseData.auther) && courseData.auther.map((keyword, index) => (
                                                 <div className="tag" key={index}>
                                                     <span>{keyword}</span>
-                                                    <span className="tag-close" onClick={() => handleRemoveAuther(index)}>
-                                                        <i className="fa-solid fa-xmark"></i>
-                                                    </span>
+                                                    {userData?.role_id == keyword ?
+                                                        ""
+                                                        : (
+                                                            <span
+                                                                onClick={() => handleRemoveAuther(index)}
+                                                                className="tag-close"
+                                                            >
+                                                                <i className="fa-solid fa-xmark"></i>
+                                                            </span>
+                                                        )}
                                                 </div>
                                             ))}
                                         </div>
