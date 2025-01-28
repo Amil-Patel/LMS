@@ -128,7 +128,7 @@ const StudentProfile = () => {
   return (
     <>
       <Navbar />
-      <ProfileBreadcrumb/>
+      <ProfileBreadcrumb />
       <div className='client_section'>
         <div className='main_stu_dashboard'>
           <Sidebar />
@@ -337,11 +337,19 @@ const StudentProfile = () => {
                           alt="Selected Profile"
                         />
                       ) : (
-                        <img
-                          src={`../upload/${imageSrc}` || 'https://via.placeholder.com/150'} // Show existing image or placeholder
-                          style={{ width: "67px", maxHeight: "67px" }}
-                          alt="Profile Thumbnail"
-                        />
+                        imageSrc ? (
+                          <img
+                            src={`../upload/${imageSrc}`} // Show existing image or placeholder
+                            style={{ width: "67px", maxHeight: "67px" }}
+                            alt="Profile Thumbnail"
+                          />
+                        ) : (
+                          <img
+                            src={require('../../assets/image/default-profile.png')} // Show existing image or placeholder
+                            style={{ width: "67px", maxHeight: "67px" }}
+                            alt="Profile Thumbnail"
+                          />
+                        )
                       )}
                     </div>
                   </div>
@@ -382,7 +390,7 @@ const StudentProfile = () => {
                   className="flex-row gap-6 flex-row80 w-full md:w-[70%]"
                   style={{ border: "none", padding: "10px 0 0 0" }}
                 >
-                  <div className="w-full md:w-[47%]" style={{position: "relative" }}>
+                  <div className="w-full md:w-[47%]" style={{ position: "relative" }}>
                     <label htmlFor="new_password">New Password</label>
                     <input
                       name="password"
@@ -414,7 +422,7 @@ const StudentProfile = () => {
                     />
                   </div>
                 </div>
-              </form>              
+              </form>
             </div>
           </div>
         </div>

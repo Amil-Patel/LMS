@@ -177,7 +177,7 @@ const AllCourse = () => {
             <tbody>
               {filteredData.map((i, index) => {
                 let auther = i.auther;
-                let formattedData = "Invalid data";
+                let formattedData = "-";
 
                 // Attempt to parse the auther field if it's a string
                 try {
@@ -193,7 +193,7 @@ const AllCourse = () => {
                     formattedData = auther; // Display single author
                   }
                 } catch (e) {
-                  formattedData = "Invalid data";
+                  formattedData = "-";
                 }
                 const category = courseCategory?.find((cat) => cat.id === i.course_cate)?.cate_title || 'Unknown Category';
                 return (

@@ -9,18 +9,18 @@ const getEnrollmentData = async (req, res) => {
     try {
         // Fetch enrollment data with related course and user data
         const data = await enrollment.findAll({
-            attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Attributes from `enrollment` table
+            attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Attributes from enrollment table
             include: [
                 {
                     model: Course_Master,
                     as: 'course_master_enrollment',
-                    attributes: ['course_title', 'expiring_time', 'no_of_month'], // Columns from `course_master` table
+                    attributes: ['course_title', 'expiring_time', 'no_of_month'], // Columns from course_master table
                     required: true
                 },
                 {
                     model: UserMaster,
                     as: 'user_enrollment',
-                    attributes: ['first_name', 'last_name', 'email', 'profile'], // Columns from `user_master` table
+                    attributes: ['first_name', 'last_name', 'email', 'profile'], // Columns from user_master table
                     required: true
                 }
             ]
@@ -75,15 +75,15 @@ const getEnrollAndCourseData = async () => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const enrollments = await enrollment.findAll({
-        attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Columns from `enrollments` table
+        attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Columns from enrollments table
         include: [
             {
                 model: Course_Master,
-                attributes: ['title', 'expiring_time'], // Columns from `course_master` table
+                attributes: ['title', 'expiring_time'], // Columns from course_master table
             },
             {
                 model: UserMaster,
-                attributes: ['fname', 'lname', 'email', 'image'], // Columns from `user_master` table
+                attributes: ['fname', 'lname', 'email', 'image'], // Columns from user_master table
             }
         ]
     });
@@ -99,12 +99,12 @@ const getEnrollWithStuId = async (req, res) => {
         }
 
         const enrollments = await enrollment.findAll({
-            attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Attributes from `enrollment` table
+            attributes: ['id', 'student_id', 'course_id', 'enrollment_mode', 'status'], // Attributes from enrollment table
             include: [
                 {
                     model: Course_Master,
                     as: 'course_master_enrollment',
-                    attributes: ['course_title', 'course_thumbnail', 'auther', 'course_level', 'course_language'], // Columns from `course_master` table
+                    attributes: ['course_title', 'course_thumbnail', 'auther', 'course_level', 'course_language'], // Columns from course_master table
                     required: true
                 },
             ],
@@ -237,4 +237,3 @@ const updateEnrollData = async (req, res) => {
     }
 }
 module.exports = { getEnrollmentData, deleteEnrollmentData, getEnrollWithCourseId, getEnrollAndCourseData, getEnrollWithStuId, updateEnrollStatus, getEnrollDataWithId, updateEnrollData }
-

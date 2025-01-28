@@ -43,7 +43,7 @@ const addProcessedPaymentData = async (req, res) => {
     let orders;
     let paymentData;
     let session;
-
+    const total_amount = parseInt(req.body.total_amount)
     try {
         // Calculate total amount with discount and tax adjustments
         let totalAmount = 0;
@@ -55,8 +55,16 @@ const addProcessedPaymentData = async (req, res) => {
         session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: courses.map((course) => {
-                // Final price for the course
-                const finalAmount = course.discount_amount + course.course_taxamount;
+                const discountAmount = parseFloat(course.discount_amount) || 0;
+                const taxAmount = parseFloat(course.course_taxamount) || 0;
+            
+                // Calculate the final amount in smallest currency unit (e.g., cents for INR)
+                const finalAmount = discountAmount + taxAmount;
+            
+                if (isNaN(finalAmount)) {
+                  throw new Error(`Invalid amount for course: ${JSON.stringify(course)}`);
+                }
+            
 
                 return {
                     price_data: {

@@ -4,6 +4,7 @@ import "../../../assets/css/course/course.css";
 import "../../../assets/css/main.css";
 import "../../../assets/css/sidebar.css";
 import { userRolesContext } from "../layout/RoleContext";
+import Loading from "../layout/Loading";
 import { notifySuccess, notifyWarning } from "../layout/ToastMessage";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
@@ -27,6 +28,7 @@ const ManageCourse = () => {
   const [editquestionOpen, setEditQuestionOpen] = useState(false);
   const [openQuizIndex, setOpenQuizIndex] = useState(0);
   const [timeLimit, setTimeLimit] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [maxAttempts, setMaxAttempts] = useState(false);
   const [openQuizResult, setopenQuizResult] = useState(false);
   const [openUserDocument, setOpenUserDocument] = useState(false);
@@ -303,19 +305,23 @@ const ManageCourse = () => {
   //module section start
   //get module data
   const getModuleData = async () => {
+    setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
       const sectionData = res.data;
       const sortedData = sectionData.sort((a, b) => a.order - b.order);
       setModuleData(sortedData);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   }
 
   //add module 
   const [addModule, setAddModule] = useState({
     title: "",
+    time: "",
     course_id: id,
     status: 1,
   });
@@ -422,6 +428,7 @@ const ManageCourse = () => {
   //edit module
   const [editModule, setEditModule] = useState({
     title: "",
+    time: "",
     course_id: id,
     status: '',
   })
@@ -583,7 +590,7 @@ const ManageCourse = () => {
       }
     }
     if (addLesson.lesson_type === 'video') {
-      if (!addLesson.attachment.trim()) {
+      if (!addLesson.attachment) {
         notifyWarning("Attachment is required.");
         return;
       }
@@ -1160,13 +1167,31 @@ const ManageCourse = () => {
 
   // start
   const [progressData, setProgressData] = useState([]);
+  const [originalProgressData, setOriginalProgressData] = useState([]);
   const getProgressData = async () => {
+    setLoading(true);
     try {
       const res = await axiosInstance.get(`${port}/getAcademicProgressDataForManageCourse/${id}`);
       const progressData = res.data;
       await setProgressData(progressData);
+      setOriginalProgressData(progressData)
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
+    }
+  }
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+
+    if (value.trim() === '') {
+      // Reset to original data if search value is empty
+      setProgressData(originalProgressData);
+    } else {
+      const filteredData = originalProgressData.filter((item) =>
+        item.userMaster.first_name.toLowerCase().includes(value.toLowerCase())
+      );
+      setProgressData(filteredData);
     }
   }
   const secondsToHMS = (seconds) => {
@@ -1193,19 +1218,22 @@ const ManageCourse = () => {
   }
 
   useEffect(() => {
-    getProgressData()
-  }, [])
+    if (tab == "academic-progress" && progressData.length == 0) {
+      getProgressData()
+    }
+  }, [tab])
 
   return (
     <>
       <Hoc />
       <div className="main">
+        {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
             <h5>Courses</h5>
           </div>
           <div id="search-inner-hero-section">
-            <input type="text" placeholder="Search" />
+            <input id="search-bar" onChange={handleSearchChange} type="text" placeholder="Search" />
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
           <div className="hero-inner-logo">
@@ -1539,14 +1567,24 @@ const ManageCourse = () => {
                     <label>Module Title</label>
                     <input
                       type="text"
-                      placeholder="Lesson Type"
+                      placeholder="Module Title"
                       className="col12input"
                       name="title"
                       onChange={hadnleAddMouleChange}
                       value={addModule.title}
                     />
                   </div>
-
+                  <div className="form-group">
+                    <label>Module Time</label>
+                    <input
+                      type="number"
+                      placeholder="Enter Time"
+                      className="col12input"
+                      name="time"
+                      onChange={hadnleAddMouleChange}
+                      value={addModule.time}
+                    />
+                  </div>
                   <div className="form-group">
                     <div style={{ display: "flex" }}>
                       <div>
@@ -1593,7 +1631,17 @@ const ManageCourse = () => {
                       value={editModule.title}
                     />
                   </div>
-
+                  <div className="form-group">
+                    <label>Module Time</label>
+                    <input
+                      type="number"
+                      placeholder="Enter Time"
+                      className="col12input"
+                      name="time"
+                      onChange={hadnleEditMouleChange}
+                      value={editModule.time}
+                    />
+                  </div>
                   <div className="form-group">
                     <div style={{ display: "flex" }}>
                       <div>

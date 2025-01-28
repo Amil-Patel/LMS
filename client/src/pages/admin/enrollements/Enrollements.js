@@ -309,15 +309,25 @@ function Enrollements() {
             {filterData.map((enroll, index) => (
               <tr key={enroll.id}>
                 <td>{index + 1}</td>
-                <td className="profile-img"><img src={`../upload/${enroll.user_enrollment.profile}`} alt="User" /></td>
+                <td className="profile-img">
+                  {enroll.user_enrollment.profile ? (
+                    <img src={`../upload/${enroll.user_enrollment.profile}`} alt="User" />
+                  ) : (
+                    <img src={require('../../../assets/image/default-profile.png')} alt="User" />
+                  )}
+                </td>
                 <td>
                   <h6>{`${enroll.user_enrollment.first_name} ${enroll.user_enrollment.last_name}`}</h6>
                   <p className="lowercase">{enroll.user_enrollment.email}</p>
                 </td>
                 <td>{enroll.course_master_enrollment.course_title}</td>
                 <td>
-                  <p>{enroll.course_master_enrollment.expiring_time}</p>
-                  <p>{enroll.course_master_enrollment.expiring_time === "life_time" ? "" : enroll.course_master_enrollment.no_of_month + " month"}</p>
+                  {enroll.course_master_enrollment.expiring_time ?
+                    <p>{enroll.course_master_enrollment.expiring_time === "life_time" ? "" : enroll.course_master_enrollment.no_of_month + " month"}</p>
+                    :
+                    "-"
+                  }
+
                 </td>
                 <td>{enroll.enrollment_mode}</td>
                 {(userRole === "superAdmin" || editEnrollPermission == 1) && (

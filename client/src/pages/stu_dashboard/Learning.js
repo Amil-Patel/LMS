@@ -40,7 +40,7 @@ const Learning = () => {
     return (
         <>
             <Navbar />
-            <LearningBreadcrumb/>
+            <LearningBreadcrumb />
             <div className='client_section'>
                 <div className='main_stu_dashboard'>
                     <Sidebar />
@@ -50,7 +50,14 @@ const Learning = () => {
                         {enrollCourse?.map((item, index) => {
                             return (
                                 <div className="course-main-div" key={index}>
-                                    <img src={`../upload/${item.course_master_enrollment.course_thumbnail}`} alt="learning" />
+                                    {item.course_master_enrollment.course_thumbnail === null ? (
+                                        <img
+                                            src={require("../../assets/image/default-thumbnail.png")}
+                                            alt="course_thumbnail"
+                                        />
+                                    ) : (
+                                        <img src={`../upload/${item.course_master_enrollment.course_thumbnail}`} alt="learning" />
+                                    )}
                                     <div className="course-details flex justify-between flex-col">
                                         <div>
                                             <div className="course-details-header pb-1">

@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     long_desc: {
-      type: DataTypes.TEXT,
+      type: DataTypes.JSON,
       allowNull: false
     },
     course_cate: {

@@ -14,7 +14,4 @@ Enrollment.delete("/deletingEnrollment/:id", EnrollmentController.deleteEnrollme
 
 
 
-module.exports = Enrollment
-
-
-
+module.exports = Enrollment

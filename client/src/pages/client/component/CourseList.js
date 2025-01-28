@@ -43,7 +43,11 @@ const CourseList = ({ courses, category }) => {
                 return (
                     <div key={course.id} className="course-main-div">
                         <div className="allcourses-course-image" >
-                            <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
+                            {course.course_thumbnail === null ?
+                                <img src={require('../../../assets/image/default-thumbnail.png')} alt="course_image" />
+                                :
+                                <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
+                            }
                         </div>
                         <div className="course-details flex justify-between flex-col">
                             <div>

@@ -110,10 +110,16 @@ const ShoppingCart = () => {
                     return (
                       <div className='horizontal-card flex justify-between py-5 border-b-2 border-border-color' key={index}>
                         <div className='shopping-cart-course-content flex'>
-                          <img
-                            src={`../upload/${course.course_thumbnail}`}
-                            alt="course_thumbnail"
-                          />
+                          {course.course_thumbnail === null ? (
+                            <img
+                              src={require("../../../assets/image/default-thumbnail.png")}
+                              alt="course_thumbnail"
+                            />
+                          ) : (
+                            <img src={`../upload/${course.course_thumbnail}`}
+                              alt="course_thumbnail"
+                            />
+                          )}
                           <div className="course-details-header block">
                             <h3>{course.course_title}</h3>
                             <p className='py-2 text-base font-normal lg:pb-0'>

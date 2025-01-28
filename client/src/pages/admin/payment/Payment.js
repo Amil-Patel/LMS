@@ -34,7 +34,7 @@ const Payment = () => {
       setTotalDiscount(total_discount);
 
       const inclusiveTax = course.orderDetails.reduce((taxSum, course) => {
-        if (course.is_inclusive  == 1) {
+        if (course.is_inclusive == 1) {
           const amountWithDiscount = course?.course_amount - (course?.course_amount * (course?.discount / 100));
           const tax_amount = amountWithDiscount * (parseFloat(course?.course_tax) / 100);
           taxSum += tax_amount;
@@ -105,14 +105,14 @@ const Payment = () => {
         <table>
           <thead>
             <tr>
-              <th style={{width:'3%', paddingLeft:'15px'}}>ID</th>
-              <th style={{width:'17%'}}>Student name</th>
-              <th style={{width:'33%'}}>Courses Name</th>
-              <th style={{width:'12%'}}>Total Courses</th>
-              <th style={{width:'6%'}}>Amount</th>
-              <th style={{width:'10%'}}>Pay Mode</th>
-              <th style={{width:'14%'}}>Transaction Id</th>
-              <th style={{width:'5%'}}>View</th>
+              <th style={{ width: '3%', paddingLeft: '15px' }}>ID</th>
+              <th style={{ width: '17%' }}>Student name</th>
+              <th style={{ width: '33%' }}>Courses Name</th>
+              <th style={{ width: '12%' }}>Total Courses</th>
+              <th style={{ width: '6%' }}>Amount</th>
+              <th style={{ width: '10%' }}>Pay Mode</th>
+              <th style={{ width: '14%' }}>Transaction Id</th>
+              <th style={{ width: '5%' }}>View</th>
             </tr>
           </thead>
 
@@ -132,7 +132,7 @@ const Payment = () => {
                 <td>{item?.orderDetails?.length}</td>
                 <td>{setting.position == "left" ? setting.symbol : ""}{item?.amount}{setting.position == "right" ? setting.symbol : ""}</td>
                 <td>{item?.payment_mode}</td>
-                <td>{item?.transiction_id}</td>
+                <td>{item.transiction_id ? item.transiction_id : "-"}</td>
                 <td>
                   <span
                     className="view"
@@ -202,8 +202,8 @@ const Payment = () => {
                         const withDiscountPrice = item.course_amount - discount;
                         const tax_amount = withDiscountPrice * (item?.course_tax / 100);
                         const net_amount = item?.course_amount - tax_amount - item?.discount;
-                        const isInclusive = item?.is_inclusive == 1 ? "Yes" : "No";
-                        const isExcusive = item?.is_exclusive == 1 ? "Yes" : "No";
+                        const isInclusive = item?.is_inclusive == 1 ? "Yes" : "-";
+                        const isExcusive = item?.is_exclusive == 1 ? "Yes" : "-";
                         return (
                           <tr key={index + 1}>
                             <td>{item?.course_title}</td>
@@ -233,23 +233,23 @@ const Payment = () => {
                     <tbody>
                       <tr>
                         <th>Mobile</th>
-                        <td>{currentCourse?.bill_mobile}</td>
+                        <td>{currentCourse.bill_mobile ? currentCourse.bill_mobile : "-"}</td>
                       </tr>
                       <tr>
                         <th>Cust Name</th>
-                        <td>{currentCourse?.bill_name}</td>
+                        <td>{currentCourse.bill_name ? currentCourse.bill_name : "-"}</td>
                       </tr>
                       <tr>
                         <th>Address</th>
-                        <td>{currentCourse?.bill_address}</td>
+                        <td>{currentCourse.bill_address ? currentCourse.bill_address : "-"}</td>
                       </tr>
                       <tr>
                         <th>GSTIN</th>
-                        <td>{currentCourse?.bill_gst}</td>
+                        <td>{currentCourse.bill_gst ? currentCourse.bill_gst : "-"}</td>
                       </tr>
                       <tr>
                         <th>PAN</th>
-                        <td>{currentCourse?.bill_pan}</td>
+                        <td>{currentCourse.bill_pan ? currentCourse.bill_pan : "-"}</td>
                       </tr>
                     </tbody>
                   </table>

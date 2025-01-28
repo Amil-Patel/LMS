@@ -1,4 +1,4 @@
-const { Course_Master,enrollment,Course_Lesson } = require("../../database/models/index");
+const { Course_Master, enrollment, Course_Lesson } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const path = require("path");
@@ -86,7 +86,7 @@ const addCourseMasterData = async (req, res) => {
         tax_rate: parseInt(req.body.tax_rate) || null,
         is_inclusive: req.body.is_inclusive || null,
         is_exclusive: req.body.is_exclusive || null,
-        auther: JSON.stringify(req.body.auther),
+        auther: Array.isArray(req.body.auther) ? req.body.auther : [req.body.auther || ""],
         expiring_time: req.body.expiring_time,
         no_of_month: req.body.expiring_time == "limited_time" ? (req.body.no_of_month || null) : null,
         course_overview_link: req.body.course_overview_link,

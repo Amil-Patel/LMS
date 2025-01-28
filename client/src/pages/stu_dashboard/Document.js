@@ -13,9 +13,8 @@ const Document = () => {
         if (!stuUserId) {
             return;
         }
-        console.log(stuUserId)
         try {
-            const response = await axiosInstance.get(`${port}/gettingEnrollesCourseData/${stuUserId}`);
+            const response = await axiosInstance.get(`${port}/gettingEnrollWithStuId/${stuUserId}`);
             setEnrolledCourses(response.data);
         }
         catch (error) {
@@ -29,7 +28,6 @@ const Document = () => {
         if (!stuUserId) {
             return;
         }
-        console.log(stuUserId)
         try {
             const response = await axiosInstance.get(`${port}/gettingUserDocumentWithStuId/${stuUserId}`);
             setDocumentData(response.data);
@@ -114,9 +112,9 @@ const Document = () => {
                                         </label>
                                         <select className="col12input" id="course_select" name="course_id" onChange={handleChange}>
                                             <option value="">Select Course</option>
-                                            <option value="1">Course 1</option>
-                                            <option value="2">Course 2</option>
-                                            <option value="3">Course 3</option>
+                                            {enrolledCourses.map((course) => (
+                                                <option key={course.course_id} value={course.course_id}>{course.course_master_enrollment.course_title}</option>
+                                            ))}
                                         </select>
                                     </div>
                                     <div className="form-group mb-0">

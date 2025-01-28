@@ -23,7 +23,7 @@ const Navbar = () => {
   }, [userId]);
 
   const navigate = useNavigate();
-  const handleClick = () =>{
+  const handleClick = () => {
     navigate("/admin/profile")
   }
 
@@ -51,7 +51,11 @@ const Navbar = () => {
               <i className="fa-solid fa-angle-down"></i>
             </span>
             <span className="nav-right-section profile-box cursor-pointer " onClick={handleClick} >
-              <img src={`../../upload/${userData?.profile}`} alt="profile" />
+              {userData?.profile ?
+                <img src={`../../upload/${userData?.profile}`} alt="profile" />
+                :
+                <img src={require("../../../assets/image/default-profile.png")} alt="profile" />
+              }
               <p>
                 <b>{userData?.first_name}</b>
                 <br />
