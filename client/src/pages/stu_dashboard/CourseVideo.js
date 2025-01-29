@@ -81,9 +81,10 @@ const CourseVideo = () => {
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${id}/${stuUserId}`);
+      const fetchedTimeStamp = res.data[0]?.watching_duration;
       await setCourseProgress(res.data[0]);
-      await setTimeStamp(res.data[0]?.watching_duration);
-      setElapsedTime(0);
+      await setTimeStamp(fetchedTimeStamp);
+      // setElapsedTime(0);
       if (res.data.length === 0 && stuUserId) {
         getModuleData();
         addcourseProgressData();
@@ -101,36 +102,52 @@ const CourseVideo = () => {
     navigate('/student/learning')
   }
 
-  const saveTimeToDatabase = async () => {
-    const totalTime = timeStamp + elapsedTime;
-    const payload = { watchingDuration: totalTime };
-    try {
-      await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);
-      setTimeStamp(totalTime); // Update timestamp with the saved total time
-      setElapsedTime(0); // Reset elapsed time after saving
-    } catch (error) {
-      console.error("Error saving time to database:", error);
-    }
-  };
 
   useEffect(() => {
     // Save to database every 10 seconds
     const intervalId = setInterval(() => {
       saveTimeToDatabase();
-    }, 10000);
+    }, 10000); // 10-second interval
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [timeStamp, elapsedTime]);
-  useEffect(() => {
-    // Increment elapsedTime every second for local updates
-    const intervalId = setInterval(() => {
-      setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
-    }, 1000);
+    // This interval will run every 1 second, incrementing elapsedTime
+    const intervalOneSecond = setInterval(async () => {
+      await setElapsedTime((prevElapsedTime) => {
+        const newElapsedTime = prevElapsedTime + 1;
+        return newElapsedTime;
+      });
+    }, 1000); // 1-second interval
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, []);
+    // Cleanup function to clear intervals when the component unmounts
+    return () => {
+      clearInterval(intervalId); // Clean up the 10-second interval
+      clearInterval(intervalOneSecond); // Clean up the 1-second interval
+    };
+  }, [courseProgress]);
+  const saveTimeToDatabase = async () => {
+    setElapsedTime(async (prevElapsedTime) => {
+      const totalTime = timeStamp + prevElapsedTime;
+      const payload = { watchingDuration: totalTime };
+
+      try {
+        await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);
+        setTimeStamp(totalTime); // Update timestamp with the saved total time
+        setElapsedTime(0); // Reset elapsed time after saving
+      } catch (error) {
+        console.error("Error saving time to database:", error);
+      }
+
+      return prevElapsedTime; // Return the previous elapsedTime to avoid directly mutating state
+    });
+  };
+  // useEffect(() => {
+  //   // Increment elapsedTime every second for local updates
+  //   const intervalId = setInterval(() => {
+  //     setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
+  //   }, 1000);
+
+  //   // Cleanup the interval when the component unmounts
+  //   return () => clearInterval(intervalId);
+  // }, []);
   // Convert total time to minutes
   const totalTimeInMinutes = Math.floor((timeStamp + elapsedTime) / 60);
   const remainingSeconds = (timeStamp + elapsedTime) % 60;
@@ -627,6 +644,7 @@ const CourseVideo = () => {
     try {
       const response = await axiosInstance.get(`${port}/gettingReviewWithStudentId/${stuUserId}`);
       setReviewWithStudentId(response.data[0]);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -662,6 +680,7 @@ const CourseVideo = () => {
       if (reviewWithStudentId && Object.keys(reviewWithStudentId).length > 0) {
         const res = await axiosInstance.put(`${port}/updatingReview/${reviewWithStudentId.id}`, reviewData);
         notifySuccess("Review Updated Successfully");
+        getReviewWithStudentId();
       } else {
         const res = await axiosInstance.post(`${port}/addingReview`, reviewData);
         notifySuccess("Review Added Successfully");
@@ -759,7 +778,7 @@ const CourseVideo = () => {
               <div className="text-base">
                 <span className="font-semibold">Time Spent: </span>
                 <span className="text-gray-800 text-sm">
-                  {Math.floor((timeStamp + elapsedTime) / 60)}:{(timeStamp + elapsedTime) % 60}
+                  {totalTimeInMinutes}:{remainingSeconds}
                 </span>
               </div>
 
@@ -1099,6 +1118,10 @@ const CourseVideo = () => {
                 <div className="md:hidden block course-info md:ml-2 my-2.5 m-0">
                   {moduleData.length > 0 ? (
                     moduleData.map((module, moduleIndex) => {
+                      const totalSeconds = module.time;
+                      const totalMinutes = totalSeconds / 60;
+                      const minutes = totalMinutes % 60;
+                      const formattedTime = `${parseFloat(minutes.toFixed(2))} minutes`;
                       return (
                         <div className="module" key={moduleIndex}>
                           <div
@@ -1114,6 +1137,7 @@ const CourseVideo = () => {
                             <span className="module-title">
                               MODULE-{moduleIndex + 1} : {module.title}
                             </span>
+                            <span className="module-duration">{formattedTime}</span>
                             <div className="module-controls">
                               <button className="check-btn">
                                 <i
@@ -1222,7 +1246,7 @@ const CourseVideo = () => {
               <div className="absolute rounded-md md:top-1/4 top-10 md:right-1/3 right-4 z-10 bg-[#F5F6FA] p-5">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-xl font-bold text-black">
-                    {reviewWithStudentId.length !== 0 ? "Update Your Review" : "Write Your Review"}
+                    Write Your Review
                   </h2>
                   <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark"></i></button>
                 </div>
@@ -1259,7 +1283,7 @@ const CourseVideo = () => {
                     type="submit"
                     className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
                   >
-                    {reviewWithStudentId.length !== 0 ? "Update Review" : "Submit Review"}
+                    Save
                   </button>
                 </form>
               </div>
@@ -1268,6 +1292,10 @@ const CourseVideo = () => {
             <div className="md:block hidden course-info md:ml-2">
               {moduleData.length > 0 ? (
                 moduleData.map((module, moduleIndex) => {
+                  const totalSeconds = module.time;
+                  const totalMinutes = totalSeconds / 60;
+                  const minutes = totalMinutes % 60;
+                  const formattedTime = `${parseFloat(minutes.toFixed(2))} minutes`;
                   return (
                     <div className="module" key={moduleIndex}>
                       <div
@@ -1283,6 +1311,7 @@ const CourseVideo = () => {
                         <span className="module-title">
                           MODULE-{moduleIndex + 1} : {module.title}
                         </span>
+                        <span className="module-duration">{formattedTime}</span>
                         <div className="module-controls">
                           <button className="check-btn">
                             <i
