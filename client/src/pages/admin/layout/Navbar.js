@@ -32,7 +32,7 @@ const Navbar = () => {
       <nav className="navbar">
         <div className="nav-logo">
           <NavLink to="/admin/dashboard">
-            <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+            <img src={require("../../../assets/image/web logo.png")} alt="logo" style={{width:'95px'}}/>
           </NavLink>
         </div>
 

@@ -13,7 +13,7 @@ const port = process.env.REACT_APP_URL
 
 const ShoppingCart = () => {
   const { cart, setCart, removeCart } = useCart();
-  const { stuUserId } = useContext(userRolesContext);
+  const { stuUserId, setting } = useContext(userRolesContext);
 
   const [couponCode, setCouponCode] = useState('');
   const applyCouponDiscount = async () => {
@@ -155,10 +155,17 @@ const ShoppingCart = () => {
                         </div>
                         <div className='shopping-cart-course-price'>
                           <div className='price-with-btn'>
-                            <span className='course-price'>$ {parseFloat(discount_price).toFixed(2)}</span>
+                            <span className='course-price'>{setting.position == "left" ? setting.symbol : ""}
+                              {parseFloat(discount_price).toFixed(2)}{setting.position == "right" ? setting.symbol : ""}</span>
                             <div className='discount-price py-2 flex items-center'>
-                              <span className='mr-2'>{course.course_discount}% Off</span>
-                              <span>$ {parseFloat(course.course_price).toFixed(2)}</span>
+                              {course.course_discount ? (
+                                <>
+                                  <span className='mr-2'>{course.course_discount}% Off</span>
+                                  <span>{setting.position == "left" ? setting.symbol : ""}{parseFloat(course.course_price).toFixed(2)}
+                                    {setting.position == "right" ? setting.symbol : ""}
+                                  </span>
+                                </>
+                              ) : ("")}
                             </div>
                           </div>
                           <button className='remove-btn' onClick={() => removeCart(course)}>Remove</button>
@@ -192,23 +199,34 @@ const ShoppingCart = () => {
                 <div className="amount-details py-6">
                   <div className="detail-row">
                     <span>Total Amount</span>
-                    <span>${parseFloat(sumOfAllCartAmount).toFixed(2)}</span>
+                    <span>{setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllCartAmount).toFixed(2)}
+                      {setting.position == "right" ? setting.symbol : ""}
+                    </span>
                   </div>
                   <div className="detail-row liner pb-2">
                     <span>Discount</span>
-                    <span><s>${parseFloat(sumOfAllDiscountPrice).toFixed(2)}</s></span>
+                    <span><s>{setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllDiscountPrice).toFixed(2)}
+                      {setting.position == "right" ? setting.symbol : ""}</s></span>
                   </div>
                   <div className="detail-row pt-2">
                     <span>Sub Total</span>
-                    <span>${parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice).toFixed(2)}</span>
+                    <span>{setting.position == "left" ? setting.symbol : ""}
+                      {parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice).toFixed(2)}
+                      {setting.position == "right" ? setting.symbol : ""}
+                    </span>
                   </div>
                   <div className="detail-row liner pb-2">
                     <span>Tax</span>
-                    <span>${parseFloat(sumOfAllCartTax).toFixed(2)}</span>
+                    <span>
+                      {setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllCartTax).toFixed(2)}
+                      {setting.position == "right" ? setting.symbol : ""}
+                    </span>
                   </div>
                   <div className="detail-row liner pb-2 pt-2">
                     <span className='text-base font-semibold'>Payable Amount</span>
-                    <span className='text-base font-semibold'>${parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2)}</span>
+                    <span className='text-base font-semibold'>{setting.position == "left" ? setting.symbol : ""}
+                      {parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2)}
+                      {setting.position == "right" ? setting.symbol : ""}</span>
                   </div>
                 </div>
                 <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2))}>

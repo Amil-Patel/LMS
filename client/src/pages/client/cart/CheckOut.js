@@ -14,6 +14,7 @@ const port = process.env.REACT_APP_URL
 const ENCRYPTION_KEY = process.env.REACT_APP_ENCRYPT_KEY
 const CheckOut = () => {
 
+     const { setting } = useContext(userRolesContext);
     const { courses, total } = useLocation().state || {};
     console.log(courses)
     const encryptData = (data) => {
@@ -361,7 +362,9 @@ const CheckOut = () => {
                                     </div> */}
                                         <div className="price-row total">
                                             <span>Total</span>
-                                            <span>${total || decryptAmount}</span>
+                                            <span>{setting.position == "left" ? setting.symbol : ""}{total || decryptAmount}
+                                            {setting.position == "right" ? setting.symbol : ""}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="pay-now-btn">

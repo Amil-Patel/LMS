@@ -42,7 +42,7 @@
 .discount-badge {
   background-color: var(--light-gray-bg-color);
   color: var(--black);
-  padding: 2px 8px;
+  padding: 0px 8px;
   font-size: 12px;
   margin-left: 5px;
   border-radius: 4px;
