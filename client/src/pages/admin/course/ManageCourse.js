@@ -1284,23 +1284,10 @@ const ManageCourse = () => {
           {tab == "course" && (
             moduleData.length > 0 ? (
               moduleData.map((module, index) => {
-                const lessonTime = (module.course_section_lesson || []).reduce((lessonTotal, item) => {
-                  if (item.is_count_time === 1) {
-                    return lessonTotal + (item.duration || 0);
-                  }
-                  return lessonTotal;
-                }, 0);
-
-                const quizeTime = (module.course_section_quize || []).reduce((quizeTotal, item) => {
-                  if (item.is_count_time === 1) {
-                    return quizeTotal + (item.quize_duration || 0);
-                  }
-                  return quizeTotal;
-                }, 0);
-                const totalMinutes = lessonTime + quizeTime;
-                const hours = Math.floor(totalMinutes / 60);
+                const totalSeconds = module.time;
+                const totalMinutes = totalSeconds / 60;
                 const minutes = totalMinutes % 60;
-                const formattedTime = `${hours} hours and ${minutes} minutes`;
+                const formattedTime = `${parseFloat(minutes.toFixed(2))} minutes`;
                 return (
                   <div div className="module" key={index}>
                     <div className="module-header" onClick={() => toggleContent(index, module.id)}>
