@@ -1,11 +1,18 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { userRolesContext } from "../../admin/layout/RoleContext";
 import { useCart } from "../../../pages/client/layout/CartContext";
 import "../../../assets/css/client/allcourse.css";
 
 const CourseList = ({ courses, category }) => {
     const { cart, addToCart } = useCart();
+    const { setting } = useContext(userRolesContext);
+
+    const navigate = useNavigate();
+    const handleClick = (id) => {
+        navigate(`/view-course/${id}`)
+    }
 
     const savedToken = Cookies.get('student-token');
     return (
@@ -41,7 +48,7 @@ const CourseList = ({ courses, category }) => {
                 }
 
                 return (
-                    <div key={course.id} className="course-main-div">
+                    <div key={course.id} className="course-main-div cursor-pointer" onClick={() => handleClick(course.id)}>
                         <div className="allcourses-course-image" >
                             {course.course_thumbnail === null ?
                                 <img src={require('../../../assets/image/default-thumbnail.png')} alt="course_image" />
@@ -52,10 +59,10 @@ const CourseList = ({ courses, category }) => {
                         <div className="course-details flex justify-between flex-col">
                             <div>
                                 <div className="course-details-header">
-                                    <h3>
-                                        <NavLink to={`/view-course/${course.id}`}>{truncatedTitle}</NavLink>
-                                    </h3>
-                                    <span>$ {course.course_price}</span>
+                                    <h3>{truncatedTitle}</h3>
+                                    <span> {setting.position == "left" ? setting.symbol : ""}{course.course_price}
+                                        {setting.position == "right" ? setting.symbol : ""}
+                                    </span>
                                 </div>
                                 <p>{truncatedDesc}</p>
                                 <div className="course-icon-section">
@@ -77,7 +84,10 @@ const CourseList = ({ courses, category }) => {
                                     <button className="security-button">{truncateCate}</button>
                                     <button
                                         className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
-                                        onClick={() => addToCart(course)}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevents navigation when clicking the button
+                                            addToCart(course);
+                                        }}
                                         disabled={isInCart}
                                     >
                                         {isInCart ? 'Added to Cart' : 'Add to Cart'}

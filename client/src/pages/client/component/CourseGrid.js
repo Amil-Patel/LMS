@@ -1,11 +1,19 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { useCart } from "../../../pages/client/layout/CartContext";
+import { userRolesContext } from "../../admin/layout/RoleContext";
 import "../../../assets/css/client/allcourse.css";
 
 const CourseGrid = ({ courses, category }) => {
     const { cart, addToCart } = useCart();
+    const { setting } = useContext(userRolesContext);
+
+
+    const navigate = useNavigate();
+    const handleClick = (id) => {
+        navigate(`/view-course/${id}`)
+    }
 
     const savedToken = Cookies.get('student-token');
     console.log(courses)
@@ -48,7 +56,7 @@ const CourseGrid = ({ courses, category }) => {
                         })
                     }
                     return (
-                        <div key={course.id} className="course-content">
+                        <div key={course.id} className="course-content cursor-pointer" onClick={() => handleClick(course.id)}>
                             {/* Course Thumbnail */}
                             <div className="allcourses-course-image" >
                                 {course.course_thumbnail === null ?
@@ -73,10 +81,14 @@ const CourseGrid = ({ courses, category }) => {
 
                             {/* Course Price and Add-to-Cart Button */}
                             <div className="course-price-and-add-to-cart-btn">
-                                <div className="course-price">$ {course.course_price}</div>
+                                <div className="course-price">{setting.position == "left" ? setting.symbol : ""}
+                                    {course.course_price}{setting.position == "right" ? setting.symbol : ""}</div>
                                 <button
                                     className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
-                                    onClick={() => addToCart(course)}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevents navigation when clicking the button
+                                        addToCart(course);
+                                    }}
                                     disabled={isInCart}
                                 >
                                     {isInCart ? 'Added to Cart' : 'Add to Cart'}

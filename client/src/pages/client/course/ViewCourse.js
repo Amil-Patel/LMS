@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../../assets/css/client/view-course.css";
 import Navbar from "../layout/Navbar";
 import Breadcrumb from "./Breadcrumb";
 import Footer from "../layout/Footer";
 import { useCart } from "../layout/CartContext";
+import { userRolesContext } from "../../admin/layout/RoleContext";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 const port = process.env.REACT_APP_URL;
+
 const ViewCourse = () => {
   const [activeTab, setActiveTab] = useState("overview");
+
   const { id } = useParams();
+  const { setting } = useContext(userRolesContext);
   const { cart, addToCart } = useCart();
   const [loading, setLoading] = useState(true);
   const [lessonLoading, setLessonLoading] = useState(false);
@@ -534,6 +538,7 @@ const ViewCourse = () => {
             <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
               {courseData.course_thumbnail === null ? (
                 <img
+                  className="view-course-thumbnail w-full mb-6"
                   src={require("../../../assets/image/default-thumbnail.png")}
                   alt="course_thumbnail"
                 />
@@ -546,8 +551,16 @@ const ViewCourse = () => {
               )}
               <div className="price mb-8">
                 <h3>
-                  ${courseData.course_price - (courseData.course_price * courseData.course_discount) / 100} <span className="discount line-through">${courseData.course_price}</span>
-                  <span className="discount-badge">{courseData.course_discount}% Off</span>
+                  {setting.position == "left" ? setting.symbol : ""}
+                  {courseData.course_price - (courseData.course_price * courseData.course_discount) / 100}
+                  {setting.position == "right" ? setting.symbol : ""}
+                  {courseData.course_discount ? (
+                    <>
+                      <span className="discount line-through">{setting.position == "left" ? setting.symbol : ""}
+                        {courseData.course_price}{setting.position == "right" ? setting.symbol : ""}</span>
+                      <span className="discount-badge">{courseData.course_discount}% Off</span>
+                    </>
+                  ) : ("")}
                 </h3>
                 <div className="cart-buttons">
                   <button className={`btn-add ${isInCart ? 'disabled' : ''}`} onClick={() => addToCart(courseData)}
@@ -584,7 +597,7 @@ const ViewCourse = () => {
               </div> */}
             </div>
           </div>
-        </div>
+        </div >
       )}
       <Footer />
     </>

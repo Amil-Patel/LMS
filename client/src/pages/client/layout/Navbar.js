@@ -93,11 +93,11 @@ const Navbar = () => {
   return (
     <>
       <div className='client_section'>
-        <nav className='navbar-section'>
+        <nav className='navbar-section padding-side'>
           <div className={`navbar-logo-section ${isMenuOpen ? 'notdisplay' : ''}`}>
             <div className='navbar-logo'>
               <NavLink to="/">
-                <img src={require("../../../assets/image/Logo.png")} alt="logo" />
+                <img src={require("../../../assets/image/web logo.png")} alt="logo" />
               </NavLink>
             </div>
           </div>
