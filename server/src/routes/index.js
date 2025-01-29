@@ -29,6 +29,7 @@ const Student_Cart = require('./student_cart/Student_CartRoute');
 const OrderRoute = require('./order/OrderRoute');
 const ReviewRoute = require('./review/ReviewRoute');
 const UserDocumentRoute = require('./user/UserDocumentRoute');
+const ModuleTimeRoute = require('./module_time/ModuleTImeRoute');
 
 router.use("/", UserRoleRoute);
 router.use("/", UserMasterRoute);
@@ -58,6 +59,7 @@ router.use('/', Student_Cart)
 router.use('/', OrderRoute)
 router.use('/', ReviewRoute)
 router.use('/', UserDocumentRoute)
+router.use('/', ModuleTimeRoute)
 
 
 

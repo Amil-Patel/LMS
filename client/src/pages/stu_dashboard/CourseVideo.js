@@ -99,59 +99,56 @@ const CourseVideo = () => {
 
   const navigate = useNavigate()
   const handleBack = async () => {
+    await saveTimeToDatabase()
     navigate('/student/learning')
   }
 
 
   useEffect(() => {
+    // Increment elapsedTime every second
+    const intervalOneSecond = setInterval(() => {
+      setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
+    }, 1000);
+
     // Save to database every 10 seconds
-    const intervalId = setInterval(() => {
+    const intervalSaveTime = setInterval(() => {
+      console.log("10 seconds")
       saveTimeToDatabase();
-    }, 10000); // 10-second interval
+    }, 10000);
 
-    // This interval will run every 1 second, incrementing elapsedTime
-    const intervalOneSecond = setInterval(async () => {
-      await setElapsedTime((prevElapsedTime) => {
-        const newElapsedTime = prevElapsedTime + 1;
-        return newElapsedTime;
-      });
-    }, 1000); // 1-second interval
-
-    // Cleanup function to clear intervals when the component unmounts
+    // Cleanup when component unmounts
     return () => {
-      clearInterval(intervalId); // Clean up the 10-second interval
-      clearInterval(intervalOneSecond); // Clean up the 1-second interval
+      clearInterval(intervalOneSecond);
+      clearInterval(intervalSaveTime);
     };
   }, [courseProgress]);
+
+
   const saveTimeToDatabase = async () => {
-    setElapsedTime(async (prevElapsedTime) => {
-      const totalTime = timeStamp + prevElapsedTime;
-      const payload = { watchingDuration: totalTime };
+    setElapsedTime((prevElapsedTime) => {
+      setTimeStamp((prevTimeStamp) => {
+        const totalTime = prevTimeStamp + prevElapsedTime;
+        const payload = { watchingDuration: totalTime };
+        axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload)
+          .then(() => {
+            console.log("Success: Time updated in DB");
+          })
+          .catch((error) => {
+            console.error("Error saving time to database:", error);
+          });
 
-      try {
-        await axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload);
-        setTimeStamp(totalTime); // Update timestamp with the saved total time
-        setElapsedTime(0); // Reset elapsed time after saving
-      } catch (error) {
-        console.error("Error saving time to database:", error);
-      }
+        return totalTime; // Ensure `timeStamp` updates correctly
+      });
 
-      return prevElapsedTime; // Return the previous elapsedTime to avoid directly mutating state
+      return 0; // Reset `elapsedTime`
     });
   };
-  // useEffect(() => {
-  //   // Increment elapsedTime every second for local updates
-  //   const intervalId = setInterval(() => {
-  //     setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
-  //   }, 1000);
 
-  //   // Cleanup the interval when the component unmounts
-  //   return () => clearInterval(intervalId);
-  // }, []);
-  // Convert total time to minutes
-  const totalTimeInMinutes = Math.floor((timeStamp + elapsedTime) / 60);
-  const remainingSeconds = (timeStamp + elapsedTime) % 60;
-
+  // Ensure timeStamp is a number before calculations
+  const validTimeStamp = timeStamp || 0;
+  const validElapsedTime = elapsedTime || 0;
+  const totalTimeInMinutes = Math.floor((validTimeStamp + validElapsedTime) / 60);
+  const remainingSeconds = (validTimeStamp + validElapsedTime) % 60;
   const getcourseProgressDataRefresh = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${id}/${stuUserId}`);
@@ -223,13 +220,31 @@ const CourseVideo = () => {
       getLessonData(sortedData[0].id);
       setModuleData(sortedData);
       setActiveModuleIndex(sortedData[0].id)
+      addModuleTime(sortedData[0].id)
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   }
-
+  //add module time
+  const addModuleTime = async (mId) => {
+    if (!stuUserId) return;
+    try {
+      const data = {
+        student_id: stuUserId,
+        course_id: id,
+        module_id: mId,
+        spent_time: 0,
+      }
+      console.log(data)
+      console.log("object")
+      // const res = await axiosInstance.post(`${port}/addingmoduletimestampdata`, data);
+      // getcourseProgressData();
+    } catch (error) {
+      console.log(error);
+    }
+  }
   //get lesson data
   const [lessonData, setLessonData] = useState([]);
 
@@ -714,7 +729,7 @@ const CourseVideo = () => {
           <div className="video-navbar flex justify-between items-center py-2 bg-[#F5F6FA] px-3">
             <div className="navbar-logo">
               <NavLink to="/">
-                <img src={require("../../assets/image/Logo.png")} alt="logo" />
+                <img src={require("../../assets/image/web logo.png")} alt="logo" />
               </NavLink>
             </div>
 
