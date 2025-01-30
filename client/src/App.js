@@ -11,7 +11,6 @@ import PaymentSettingRoute from "./routes/admin/setting/PaymentSettingRoute";
 import GeneralSettingRoute from "./routes/admin/setting/GeneralSettingRoute";
 import EnrollementsRoute from "./routes/admin/enrollement/EnrollementsRoute";
 import InquiryRoute from "./routes/admin/inquiry/InquiryRoute";
-import PaymentRoute from "./routes/admin/payment/PaymentRoute";
 import RoleslistRoute from "./routes/admin/roles-list/RoleslistRoute";
 import ManageCourseRoute from "./routes/admin/course/ManageCourseRoute";
 import UserRoute from "./routes/admin/user/UserRoute";
@@ -46,7 +45,6 @@ const App = () => {
           <ManageCourseRoute />
           <EnrollementsRoute />
           <InquiryRoute />
-          <PaymentRoute />
           <RoleslistRoute />
           <UserRoute />
           <NotificationSettingRoute />

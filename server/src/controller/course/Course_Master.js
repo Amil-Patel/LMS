@@ -39,6 +39,44 @@ const getCourseMasterData = async (req, res) => {
     }
 }
 
+const getActiveCourseMasterData = async (req, res) => {
+    const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
+    if (!isAuthenticated) return;
+    try {
+        const courses = await Course_Master.findAll({
+            where: {
+                status: 1
+            }
+        });
+
+        // Fetch enrollment and lesson counts for each course
+        const courseData = await Promise.all(
+            courses.map(async (course) => {
+                // Count enrollments for this course
+                const enrollmentCount = await enrollment.count({
+                    where: { course_id: course.id },
+                });
+
+                // Count lessons for this course
+                const lessonCount = await Course_Lesson.count({
+                    where: { course_id: course.id },
+                });
+
+                return {
+                    ...course.toJSON(),
+                    enrollmentCount,
+                    lessonCount,
+                };
+            })
+        );
+
+        res.status(200).json(courseData);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
+
 const getCourseMasterDataWithId = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
@@ -57,12 +95,9 @@ const getCourseMasterDataWithId = async (req, res) => {
         res.sendStatus(500);
     }
 }
-
 const addCourseMasterData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
-    console.log(req.body)
-    console.log("object")
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const publishDate = DateToUnixNumber(req.body.course_publish_date, 'America/Toronto');
     const data = {
@@ -98,12 +133,12 @@ const addCourseMasterData = async (req, res) => {
         meta_desc: req.body.meta_desc,
         canonical_url: req.body.canonical_url,
         title_tag: req.body.title_tag,
+        status: 1,
         created_by: req.body.created_by || 0,
         updated_by: req.body.updated_by || 0,
         createdAt: createddate,
         updatedAt: createddate,
     }
-    console.log(data)
     try {
         const courseCatedate = await Course_Master.create(data);
         res.status(200).json(courseCatedate);
@@ -238,5 +273,6 @@ module.exports = {
     addCourseMasterData,
     updateCourseMasterData,
     updateCourseStatusData,
-    deleteCourseMaster
+    deleteCourseMaster,
+    getActiveCourseMasterData
 }
