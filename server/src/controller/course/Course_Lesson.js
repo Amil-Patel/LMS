@@ -128,7 +128,7 @@ const addCourseLessonData = async (req, res) => {
         description: req.body.description,
         minimum_duration: null,
         drip_content: null,
-        order: getdata.length === 0 ? 0 : getdata.length,
+        order: getdata.length === 0 ? 1 : getdata.length + 1,
         createdAt: date,
         updatedAt: date,
     }
@@ -198,15 +198,15 @@ const updateCourseLessonData = async (req, res) => {
         updatedAt: date,
     };
     console.log(data)
-    // try {
-    //     const updatedLesson = await Course_Lesson.update(data, {
-    //         where: { id }
-    //     });
-    //     res.status(200).json(updatedLesson);
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).json({ message: error.message });
-    // }
+    try {
+        const updatedLesson = await Course_Lesson.update(data, {
+            where: { id }
+        });
+        res.status(200).json(updatedLesson);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
 };
 
 const updateCourseLessonStatus = async (req, res) => {

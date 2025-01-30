@@ -9,6 +9,7 @@ const upload = require("../../middleware/upload");
 // ]);
 
 CourseMaster.get("/gettingCourseMasterData", CourseMasterController.getCourseMasterData);
+CourseMaster.get("/gettingActiveCourseMasterData", CourseMasterController.getActiveCourseMasterData);
 CourseMaster.get("/gettingCourseMasterDataWithId/:id", CourseMasterController.getCourseMasterDataWithId);
 CourseMaster.post("/addingCourseMaster", upload.single('course_thumbnail'), CourseMasterController.addCourseMasterData);
 CourseMaster.put("/updatingCourseMaster/:id", upload.single('course_thumbnail'), CourseMasterController.updateCourseMasterData);

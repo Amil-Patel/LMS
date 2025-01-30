@@ -161,7 +161,6 @@ const AllCourse = () => {
                 <th style={{ width: '35%' }}>Title <i className="fa-solid fa-sort" onClick={() => handleSort('course_title')}></i></th>
                 <th style={{ width: '11%' }}>Category <i className="fa-solid fa-sort" onClick={() => handleSort('course_cate')}></i></th>
                 <th style={{ width: '10%' }}>Price <i className="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
-                <th style={{ width: '13%' }}>Enrollments <i className="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
                 <th style={{ width: '10%' }}>Lessions <i className="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
                 <th style={{ width: '9%' }}>Author <i className="fa-solid fa-sort" onClick={() => handleSort('auther')}></i></th>
                 <th style={{ width: '5%' }}>Status</th>
@@ -204,7 +203,6 @@ const AllCourse = () => {
                     </td>
                     <td>{category}</td>
                     <td>{setting.position == "left" ? setting.symbol : ""}{i.course_price}{setting.position == "right" ? setting.symbol : ""}</td>
-                    <td>{i.enrollmentCount}</td>
                     <td>{i.lessonCount}</td>
                     <td>
                       {formattedData}

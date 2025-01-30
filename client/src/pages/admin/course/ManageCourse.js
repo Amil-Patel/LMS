@@ -509,7 +509,6 @@ const ManageCourse = () => {
     status: "",
     is_count_time: "",
     description: "",
-    order: 0,
   })
 
   const handleAddLessonChange = (e) => {
@@ -615,7 +614,7 @@ const ManageCourse = () => {
     formData.append("is_count_time", addLesson.is_count_time);
     formData.append("description", addLesson.description);
     formData.append("order", addLesson.order);
-
+    console.log(addLesson)
     if (addLesson.attachment) {
       formData.append("attachment", addLesson.attachment);
     }
@@ -646,7 +645,6 @@ const ManageCourse = () => {
         status: "",
         is_count_time: "",
         description: "",
-        order: 0,
       });
 
     } catch (error) {
@@ -687,6 +685,14 @@ const ManageCourse = () => {
   const getLessonDataForEdit = async (id) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
+      console.log(res.data)
+      let text_content = res.data.text_content;
+      try {
+        text_content = JSON.parse(text_content); // Removes outer escaped quotes
+      } catch (e) {
+        // If parsing fails, keep it as is
+      }
+      res.data.text_content = text_content.replace(/^"|"$/g, "");
       setEditLessonData(res.data);
     } catch (error) {
       console.log(error);
@@ -739,6 +745,7 @@ const ManageCourse = () => {
       notifyWarning("Description is required.");
       return;
     }
+    console.log(editLessonData)
     const formData = new FormData();
     formData.append("title", editLessonData.title);
     formData.append("duration", editLessonData.duration);
@@ -904,6 +911,7 @@ const ManageCourse = () => {
       notifyWarning("Summery is required.");
       return;
     }
+    console.log(editQuizData)
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
       notifySuccess("Quiz updated successfully");
@@ -1285,16 +1293,20 @@ const ManageCourse = () => {
             moduleData.length > 0 ? (
               moduleData.map((module, index) => {
                 const totalSeconds = module.time;
-                const totalMinutes = totalSeconds / 60;
-                const minutes = totalMinutes % 60;
-                const formattedTime = `${parseFloat(minutes.toFixed(2))} minutes`;
+                console.log(totalSeconds)
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 return (
                   <div div className="module" key={index}>
                     <div className="module-header" onClick={() => toggleContent(index, module.id)}>
                       <p className="module-title min-w-[28rem] max-w-md">
                         MODULE-{index + 1} : {module.title}
                       </p>
-                      <span className="module-duration">{formattedTime}</span>
+                      {totalSeconds && totalSeconds !== 0 ? (
+                        <span className="module-duration">{formattedTime}</span>
+                      ) : null}
                       <span className="module-status green-dot"></span>
                       <div className="module-controls">
                         <button className="arrow-btn" onClick={() => handleOpenSortLesson(module.id)}>
@@ -1356,9 +1368,9 @@ const ManageCourse = () => {
                                     + Add Questions
                                   </button>
                                 )}
-                                <button className="resource-btn" onClick={() => resourceToggleModal(module.id, lesson.id)}>
+                                {/* <button className="resource-btn" onClick={() => resourceToggleModal(module.id, lesson.id)}>
                                   <i className="fa-solid fa-folder-open"></i>Resource
-                                </button>
+                                </button> */}
                                 <label className="switch">
                                   <input
                                     type="checkbox"
@@ -1405,72 +1417,12 @@ const ManageCourse = () => {
                   <th>Time Spent</th>
                   <th>Progress</th>
                   <th>Completed Lesson</th>
-                  <th>Last Seen</th>
                   <th>Quiz Passed</th>
                   <th>Inquiry Status</th>
                 </tr>
               </thead>
 
               <tbody>
-                {/* {progressData && progressData.length !== 0 ? (
-                  progressData.map((i, index) => {
-                    const time = moment.unix(i.enroll[0].createdAt).tz(setting.timezone).format("DD-MM-YYYY");
-                    const completeDate = moment.unix(i.academicData[0]?.completed_date).tz(setting.timezone).format("DD-MM-YYYY");
-                    let completedLessons;
-                    if (i.academicData[0]?.completed_lesson_id !== null) {
-                      completedLessons = JSON.parse(i?.academicData[0]?.completed_lesson_id);
-                      if (typeof completedLessons === 'string') {
-                        completedLessons = JSON.parse(completedLessons);
-                      }
-                    }
-                    const lessonIds = i.lessonData.map(lesson => lesson.id);
-                    let commonLessonIds;
-                    if (completedLessons) {
-                      commonLessonIds = completedLessons.filter(id => lessonIds.includes(id));
-                    }
-                    // Step 3: Calculate the progress as a percentage
-                    let progressPercentage;
-                    let progressFormatted;
-                    if (commonLessonIds) {
-                      progressPercentage = (commonLessonIds.length / i.lessonData.length) * 100;
-                      progressFormatted = Math.round(progressPercentage);
-                    }
-                    return (
-                      <tr key={index}>
-                        <td className="id">{index + 1}</td>
-                        <td>
-                          <h6>{i.userMaster[0].first_name} {i.userMaster[0].last_name}</h6>
-                        </td>
-                        <td>{time}</td>
-                        <td>{completeDate}</td>
-                        <td>{secondsToHMS(i.academicData[0]?.watching_duration || 0)}</td>
-                        <td>{progressFormatted ? progressFormatted : 0}%</td>
-                        <td>{commonLessonIds ? commonLessonIds.length : 0} out of {i.lessonData.length}</td>
-                        <td>{completeDate}</td>
-                        <td style={{ textAlign: "center" }}>
-                          {i.Quiz_Passed}
-                          <span className="view" onClick={() => { getProgressQuizData(i.userMaster[0].id, i.enroll[0].id) }} >
-                            <i className="fa-regular fa-eye"></i>
-                          </span>
-                        </td>
-                        <td>
-                          <button
-                            className="resource-btn module-btn"
-                          // onClick={openQuizResultmodule}
-                          >
-                            <i
-                              className="fa-regular fa-file"
-                              style={{ marginRight: "8px" }}
-                            ></i>
-                            Document
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  ""
-                )} */}
                 {progressData && progressData.length !== 0 ? (
                   progressData.map((studentData, studentIndex) => {
                     // Ensure enroll data exists
@@ -1499,8 +1451,6 @@ const ManageCourse = () => {
 
                     const lessonIds = studentData.lessonData.map(lesson => lesson.id);
                     const commonLessonIds = completedLessons.filter(id => lessonIds.includes(id));
-                    const progressPercentage = Math.round((commonLessonIds.length / studentData.lessonData.length) * 100) || 0;
-
                     return (
                       <tr key={studentIndex}>
                         <td className="id">{studentIndex + 1}</td>
@@ -1512,7 +1462,6 @@ const ManageCourse = () => {
                         <td>{secondsToHMS(academicData?.watching_duration || 0)}</td>
                         <td>{studentData.academicData[0]?.course_progress}%</td>
                         <td>{completedLessons.length} out of {studentData.lessonData.length}</td>
-                        <td>{completeDate}</td>
                         <td className="text-center">
                           <span className="view" onClick={() => getProgressQuizData(userMaster.id, enroll.id)}>
                             <i className="fa-regular fa-eye"></i>
@@ -1895,7 +1844,7 @@ const ManageCourse = () => {
                 {
                   nullQuizeId != null ? (
                     <>
-                      <h5 style={{ marginBottom: "20px" }}>Add New Quiz</h5>
+                      <h5 style={{ marginBottom: "20px" }}>Edit Quiz</h5>
                       <form onSubmit={handleEditQuizSubmit}>
                         <div className="form-group">
                           <label>Quiz Title</label>

@@ -655,14 +655,14 @@ const User = () => {
                             <img src={require('../../../assets/image/default-profile.png')} alt="User" />
                           )}
                         </td>
-                        <td>{item.first_name}</td>
+                        <td>{item.first_name} {item.id}</td>
                         <td className="lowercase">{item.email}</td>
                         <td>{item.contact}</td>
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" checked={item.status === 1}
+                          <label htmlFor={`switch${item.id}`} className="switch">
+                            <input id={`switch${item.id}`} type="checkbox" checked={item.status === 1}
                               onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
@@ -757,8 +757,8 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" checked={item.status === 1}
+                          <label htmlFor={`switch${item.id}`} className="switch">
+                            <input id={`switch${item.id}`} type="checkbox" checked={item.status === 1}
                               onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
@@ -853,8 +853,8 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" checked={item.status === 1}
+                          <label htmlFor={`switch${item.id}`} className="switch">
+                            <input id={`switch${item.id}`} type="checkbox" checked={item.status === 1}
                               onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>
@@ -945,8 +945,8 @@ const User = () => {
                         <td>{item.gender}</td>
                         <td>{item.country}</td>
                         <td>
-                          <label htmlFor="switch" className="switch">
-                            <input id="switch" type="checkbox" checked={item.status === 1}
+                          <label htmlFor={`switch${item.id}`} className="switch">
+                            <input id={`switch${item.id}`} type="checkbox" checked={item.status === 1}
                               onChange={() => handleStatusChange(item.id, item.status)} />
                             <span className="slider"></span>
                           </label>

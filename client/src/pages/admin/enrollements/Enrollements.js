@@ -295,7 +295,6 @@ function Enrollements() {
               <th>Student name</th>
               <th>Course Name</th>
               <th>Course Expire</th>
-              <th>Enrolled Mode</th>
               {(userRole === "superAdmin" || editEnrollPermission == 1) && (
                 <th>Status</th>
               )}
@@ -329,7 +328,6 @@ function Enrollements() {
                   }
 
                 </td>
-                <td>{enroll.enrollment_mode}</td>
                 {(userRole === "superAdmin" || editEnrollPermission == 1) && (
                   <td>
                     <label htmlFor={`coursestatus-${enroll.id}`} className="switch">

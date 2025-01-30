@@ -153,15 +153,6 @@ const Sidebar = () => {
                 <span>Inquiry</span>
               </NavLink>
             </li>
-
-            <li className="main-li">
-              <NavLink to={"/admin/payment"}>
-                <i>
-                  <IoWallet style={{ fontSize: "17px" }} />
-                </i>
-                <span>Payment</span>
-              </NavLink>
-            </li>
             {userRole === "superAdmin" && (
               <li className="main-li">
                 <NavLink to={"/admin/roles-list"}>
