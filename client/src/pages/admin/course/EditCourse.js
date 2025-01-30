@@ -395,11 +395,8 @@ const EditCourse = () => {
         formData.append('title_tag', courseData.title_tag)
         formData.append('updated_by', courseData.updated_by)
         try {
-            const res = await axiosInstance.put(`${port}/updatingCourseMaster/${id}`, courseData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const res = await axiosInstance.put(`${port}/updatingCourseMaster/${id}`, courseData
+            );
             navigate('/admin/all-course');
             setLoading(false);
         } catch (error) {
@@ -775,7 +772,7 @@ const EditCourse = () => {
                                             {Array.isArray(courseData.auther) && courseData.auther.map((keyword, index) => (
                                                 <div className="tag" key={index}>
                                                     <span>{keyword}</span>
-                                                    {userData?.role_id == keyword ?
+                                                    {userData?.first_name == keyword ?
                                                         ""
                                                         : (
                                                             <span
