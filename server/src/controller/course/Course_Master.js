@@ -61,6 +61,8 @@ const getCourseMasterDataWithId = async (req, res) => {
 const addCourseMasterData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
+    console.log(req.body)
+    console.log("object")
     const createddate = DateToUnixNumber(new Date(), 'America/Toronto');
     const publishDate = DateToUnixNumber(req.body.course_publish_date, 'America/Toronto');
     const data = {
@@ -101,6 +103,7 @@ const addCourseMasterData = async (req, res) => {
         createdAt: createddate,
         updatedAt: createddate,
     }
+    console.log(data)
     try {
         const courseCatedate = await Course_Master.create(data);
         res.status(200).json(courseCatedate);

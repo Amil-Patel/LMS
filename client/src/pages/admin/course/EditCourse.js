@@ -85,6 +85,13 @@ const EditCourse = () => {
                 setIsTax(true);
             }
             // setup for auther
+            let long_desc = res.data.long_desc;
+            try {
+                long_desc = JSON.parse(long_desc); // Removes outer escaped quotes
+            } catch (e) {
+                // If parsing fails, keep it as is
+            }
+            res.data.long_desc = long_desc.replace(/^"|"$/g, "");
             let auther = res.data.auther;
             try {
                 auther = JSON.parse(auther);
@@ -159,7 +166,6 @@ const EditCourse = () => {
                 ...res.data,
                 publish_date: time,
             }));
-
             setLoading(false)
         } catch (error) {
             console.log(error);
@@ -349,7 +355,7 @@ const EditCourse = () => {
             ),
         });
     };
-
+    console.log(courseData)
     const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -646,7 +652,7 @@ const EditCourse = () => {
                             <div style={{ display: "flex" }}>
                                 <div className="flex-row" style={{ width: isLimited ? "43%" : "26%" }}>
                                     <div className="chekbox2">
-                                        <input type="checkbox" name="is_life_time" checked={courseData.is_life_time == 1} onChange={handleChange} />
+                                        <input type="checkbox" name="is_life_time" checked={courseData.expiring_time == "life_time"} onChange={handleChange} />
                                         <label>Life Time</label>
                                     </div>
                                     <div className="chekbox2">
@@ -709,7 +715,7 @@ const EditCourse = () => {
                                             />
                                         ) : courseData.course_thumbnail ? (
                                             <img
-                                                src={`../upload/${courseData.course_thumbnail}`}
+                                                src={`../../upload/${courseData.course_thumbnail}`}
                                                 style={{ width: "67px", maxHeight: "67px" }}
                                                 alt="Course Thumbnail"
                                             />
@@ -1089,6 +1095,9 @@ const EditCourse = () => {
                                     <label>Meta Description</label>
                                     <textarea
                                         placeholder="Describe Your Meta Description over Here"
+                                        name="meta_desc"
+                                        onChange={handleChange}
+                                        value={courseData.meta_desc}
                                         className="col12input"
                                     ></textarea>
                                 </div>
