@@ -106,7 +106,7 @@ const Document = () => {
                             <form className='student_profile_form' onSubmit={saveUSerDocument}>
                                 {/* first / middle / last  name */}
                                 <div className="flex-row name gap-4 mb-0">
-                                    <div className="form-group mb-0 w-3/5">
+                                    <div className="w-full sm:w-3/5 form-group mb-0">
                                         <label htmlFor="course_select">
                                             Select Course<span className="required">*</span>
                                         </label>
@@ -133,7 +133,7 @@ const Document = () => {
                                     <button type="submit" className="primary-btn module-btn">Save</button>
                                 </div>
                             </form>
-                            <div className="table-responsive overflow-y-scroll">
+                            <div className="table-responsive overflow-y-scroll  " style={{scrollbarWidth:"none"}}>
                             <table className="table table-striped table-hover mt-8">
                                     <thead>
                                         <tr>

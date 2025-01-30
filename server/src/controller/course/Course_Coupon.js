@@ -18,7 +18,7 @@ const getCourseCouponData = async (req, res) => {
         console.log(error);
         res.sendStatus(500);
     }
-}
+}           
 
 const validateCoupon = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
