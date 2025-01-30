@@ -106,6 +106,11 @@ const ShoppingCart = () => {
               {
                 cart.length > 0 ? (
                   cart.map((course, index) => {
+                    const truncatedTitle =
+                    course.course_title.length > 55
+                        ? `${course.course_title.slice(0, 55)} ...`
+                        : course.course_title;
+
                     const discount_price = course.course_price - (course.course_price * course.course_discount / 100);
                     return (
                       <div className='horizontal-card flex justify-between py-5 border-b-2 border-border-color' key={index}>
@@ -121,7 +126,7 @@ const ShoppingCart = () => {
                             />
                           )}
                           <div className="course-details-header block">
-                            <h3>{course.course_title}</h3>
+                            <h3>{truncatedTitle}</h3>
                             <p className='py-2 text-base font-normal lg:pb-0'>
                               By {""}
                               {(() => {

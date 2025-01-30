@@ -48,6 +48,11 @@ const Learning = () => {
                         <h1>My Learning</h1>
 
                         {enrollCourse?.map((item, index) => {
+                            const truncatedTitle =
+                            item.course_master_enrollment.course_title.length > 40
+                                ? `${item.course_master_enrollment.course_title.slice(0, 40)} ...`
+                                : item.course_master_enrollment.course_title;
+
                             return (
                                 <div className="course-main-div" key={index}>
                                     {item.course_master_enrollment.course_thumbnail === null ? (
@@ -61,7 +66,7 @@ const Learning = () => {
                                     <div className="course-details flex justify-between flex-col">
                                         <div>
                                             <div className="course-details-header pb-1">
-                                                <h3>{item.course_master_enrollment.course_title}</h3>
+                                                <h3>{truncatedTitle}</h3>
                                                 <button className="py-0.5 font-medium h-fit px-6 border border-solid 
                                 text-blue-600 text-base border-blue-600 
                                 hover:bg-blue-500 hover:text-white" onClick={() => { navigate(`/student/coursevideo/${item.course_id}`) }}>View</button>
