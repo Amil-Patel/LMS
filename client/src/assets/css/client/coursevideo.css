@@ -46,31 +46,6 @@
   animation: borderZoom 2s infinite ease-in-out;
 }
 
-/* Play Button Icon (Triangle Shape) */
-.play-icon {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  border-left: 20px solid white;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-}
-
-/* Animation for the border zoom effect */
-@keyframes borderZoom {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.2);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
 /* Thumbnail Section */
 .thumbnail {
   position: relative;
@@ -94,6 +69,10 @@
 
 .course-info .module {
   box-shadow: none;
+}
+
+.course-info .module{
+  
 }
 
 .course-info .module-content {
@@ -187,6 +166,10 @@
   .back-btn span,
   .back-btn i + * {
     display: none;
+  }
+  
+  .course-info {
+    margin: 0px;
   }
 }
 

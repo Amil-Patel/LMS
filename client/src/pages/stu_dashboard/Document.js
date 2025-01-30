@@ -99,7 +99,7 @@ const Document = () => {
                 <div className='main_stu_dashboard'>
                     <Sidebar />
                     <div className="main static bg-[white] ml-[30px] p-0" style={{ scrollbarWidth: "none" }} >
-                        <div className="course-form-container pt-0" style={{boxShadow:"none"}}>
+                        <div className="course-form-container pt-0" style={{ boxShadow: "none" }}>
                             <div className='profile_header_title flex items-center bg-white justify-between'>
                                 <h1 className='student_dashboard_profile_header_title'>Documents</h1>
                             </div>
@@ -134,14 +134,14 @@ const Document = () => {
                                 </div>
                             </form>
                             <div className="table-responsive overflow-y-scroll">
-                            <table className="table table-striped table-hover mt-8">
+                                <table className="table table-striped table-hover mt-8">
                                     <thead>
                                         <tr>
-                                            <th>Sr.No</th>
-                                            <th>Course Name</th>
-                                            <th>Attachment</th>
-                                            <th>Status</th>
-                                            <th>Message</th>
+                                            <th style={{width:"5%"}}>Sr.No</th>
+                                            <th style={{width:"45%"}}>Course Name</th>
+                                            <th style={{width:"15%"}}>Attachment</th>
+                                            <th style={{width:"15%"}}>Status</th>
+                                            <th style={{width:"20%"}}>Message</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -150,15 +150,21 @@ const Document = () => {
                                                 <td>{index + 1}</td>
                                                 <td>{item.course_id}</td>
                                                 <td>
-                                                    <a href={`../upload/${item.attachment}`} target="_blank" rel="noopener noreferrer">
-                                                        View
+                                                    <a className='border  px-2 rounded' href={`../upload/${item.attachment}`} target="_blank" rel="noopener noreferrer">
+                                                    <i class="fa-solid fa-eye"></i> View
                                                     </a>
                                                 </td>
-                                                <td>{item.status}</td>
+                                                <td className={`font-semibold 
+                                                        ${item.status === "success" ? "text-[#2DB224]" : ""}
+                                                        ${item.status === "pending" ? "text-[#FA8232]" : ""}
+                                                        ${item.status === "rejected" ? "text-[#E35050]" : ""}`}>
+                                                    {item.status}
+                                                </td>
                                                 <td>{item.message}</td>
                                             </tr>
                                         ))}
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
