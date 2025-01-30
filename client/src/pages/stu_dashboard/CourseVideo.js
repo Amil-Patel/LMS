@@ -834,15 +834,15 @@ const CourseVideo = () => {
             </button>
 
           </div>
-          <div className="course-video-container">
+          <div className="course-video-container ">
             {/* Video Section */}
-            <div className="video-player p-2">
+            <div className="video-player p-2 ">
               <div className={editLessonData.lesson_type == "text" || editLessonData.lesson_type == "pdf" ? "thumbnail-container" : "thumbnail-other-type-container"}>
                 {editLessonData?.title || editQuizData?.title ? (
-                  <div className="edit-content border-2 rounded-md">
+                  <div className="edit-content border-2">
                     {editLessonData?.title && (
                       <>
-                        <div className="md:flex block justify-between items-center border-b p-2 " style={{ backgroundColor: "#F5F6FA" }}>
+                        <div className=" stu_dashboard_coursevideo_view-header md:flex block justify-between items-center border-b p-2 " style={{ backgroundColor: "#F5F6FA" }}>
                           <div className="flex">
                             <h2 className="font-bold flex text-xl text-black">{editLessonData.title}
                             </h2>
@@ -914,7 +914,7 @@ const CourseVideo = () => {
                         ) && (
                             <button
                               type="button"
-                              className="primary-btn module-btn"
+                              className="primary-btn module-btn m-3"
                               onClick={handleViewedLessonData}
                             >
                               Next
@@ -922,12 +922,12 @@ const CourseVideo = () => {
                           )}
                       </>
                     )}
-                    <div className="max-w-[650px] mx-auto">
+                    <div>
                       {editQuizData?.title && (
                         <>
                           {/* Simplified Header Section */}
-                          <header className="mb-6">
-                            <div className="flex justify-between items-center">
+                          <header className="mb-6" style={{ backgroundColor: "#F5F6FA" }}>
+                            <div className="stu_dashboard_coursevideo_view-header md:flex block justify-between items-center p-2 " >
                               <div className="flex">
                                 <h2 className="font-bold flex text-xl text-black">{editQuizData.title}
                                 </h2>
@@ -939,8 +939,7 @@ const CourseVideo = () => {
                                 <strong>Instruction:</strong> {editQuizData.instruction || "No instructions available"}
                               </p>
                             </div>
-
-                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                            <div className="flex justify-between mx-auto border-y p-2 text-sm text-gray-600">
                               <p>
                                 <strong>Total Marks:</strong> {editQuizData.total_marks || "N/A"}
                               </p>
@@ -951,10 +950,11 @@ const CourseVideo = () => {
                                 <strong>Total Questions:</strong> {quizQuestionData.length || "N/A"}
                               </p>
                             </div>
+
                           </header>
 
                           {/* Question Section */}
-                          <section>
+                          <section className="max-w-[650px] p-3 mx-auto">
                             <h2 className="text-lg font-semibold text-gray-700 mb-4">
                               <span className="mr-2 font-extrabold">{currentQuestionIndex + 1}.)</span>
                               {quizQuestionData[currentQuestionIndex]?.title}
@@ -990,10 +990,10 @@ const CourseVideo = () => {
                                       </label>
                                     ) : (
                                       <label
-                                        className={`block px-4 py-3 rounded-lg cursor-pointer transition hover:bg-gray-200 ${answers[quizQuestionData[currentQuestionIndex].id] ===
+                                        className={`block px-4 py-3 rounded-lg cursor-pointer transition ${answers[quizQuestionData[currentQuestionIndex].id] ===
                                           index
                                           ? "bg-blue-500 text-white shadow-md"
-                                          : "bg-gray-100"
+                                          : "bg-gray-100 hover:bg-blue-200"
                                           }`}
                                       >
                                         <span className="mr-2 font-semibold">{index + 1}.</span>
@@ -1024,11 +1024,11 @@ const CourseVideo = () => {
                           </section>
 
                           {/* Navigation Section */}
-                          <footer className="mt-6 flex items-center justify-between space-x-4">
+                          <footer className="md:px-20 sm:px-1 py-3 mt-8 border-t flex items-center justify-between  " style={{ backgroundColor: '#F5F6FA' }}>
                             {/* Previous Button */}
                             <button
                               onClick={prevQuestion}
-                              className={`flex-1 px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${currentQuestionIndex === 0
+                              className={`min-w-[115px] sm:min-w-[130px] px-5 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${currentQuestionIndex === 0
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                                 : "bg-gray-400 text-white hover:bg-gray-500 hover:shadow-md"
                                 }`}
@@ -1041,13 +1041,13 @@ const CourseVideo = () => {
                             {currentQuestionIndex !== quizQuestionData.length - 1 ? (
                               <button
                                 onClick={nextQuestion}
-                                className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 hover:shadow-md transition-all duration-200"
+                                className=" min-w-[130px] px-5 py-3 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 hover:shadow-md transition-all duration-200"
                               >
                                 Next <i className="fa-solid fa-circle-chevron-right"></i>
                               </button>
                             ) : (
                               <button
-                                className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-blue-400 text-white cursor-not-allowed transition-all duration-200"
+                                className="px-5 py-3 rounded-lg text-sm font-medium bg-blue-400 text-white cursor-not-allowed transition-all duration-200"
                                 disabled
                               >
                                 Next <i className="fa-solid fa-circle-chevron-right"></i>
@@ -1077,7 +1077,7 @@ const CourseVideo = () => {
                                 return (
                                   <button
                                     onClick={handleSubmitQuizAnswer}
-                                    className="flex-1 px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
+                                    className=" min-w-[130px] px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
                                   >
                                     Submit
                                   </button>
@@ -1130,7 +1130,7 @@ const CourseVideo = () => {
 
               {/* Tab Bar */}
               <div>
-                <div className="md:hidden block course-info md:ml-2 my-2.5 m-0">
+                <div className="md:hidden block course-info md:ml-2 my-2.5 ">
                   {moduleData.length > 0 ? (
                     moduleData.map((module, moduleIndex) => {
                       const totalSeconds = module.time;
@@ -1140,7 +1140,7 @@ const CourseVideo = () => {
                       return (
                         <div className="module" key={moduleIndex}>
                           <div
-                            className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
+                            className={`module-header  ${activeModuleIndex === module.id ? "active" : ""}`}
                             onClick={() =>
                               toggleContent(
                                 module.id,
@@ -1152,14 +1152,16 @@ const CourseVideo = () => {
                             <span className="module-title">
                               MODULE-{moduleIndex + 1} : {module.title}
                             </span>
-                            <span className="module-duration">{formattedTime}</span>
-                            <div className="module-controls">
-                              <button className="check-btn">
-                                <i
-                                  className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
-                                    }`}
-                                ></i>
-                              </button>
+                            <div className="flex gap-2 item-center">
+                              <span className="module-duration">{formattedTime}</span>
+                              <div className="module-controls">
+                                <button className="check-btn">
+                                  <i
+                                    className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
+                                      }`}
+                                  ></i>
+                                </button>
+                              </div>
                             </div>
                           </div>
                           {activeModuleIndex === module.id && (
@@ -1326,14 +1328,18 @@ const CourseVideo = () => {
                         <span className="module-title">
                           MODULE-{moduleIndex + 1} : {module.title}
                         </span>
-                        <span className="module-duration">{formattedTime}</span>
-                        <div className="module-controls">
-                          <button className="check-btn">
-                            <i
-                              className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
-                                }`}
-                            ></i>
-                          </button>
+                        <div className="flex gap-2 items-center">
+                          {totalSeconds && totalSeconds !== 0 ? (
+                            <span className="module-duration">{formattedTime}</span>
+                          ) : null}
+                          <div className="module-controls">
+                            <button className="check-btn">
+                              <i
+                                className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
+                                  }`}
+                              ></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
                       {activeModuleIndex === module.id && (
