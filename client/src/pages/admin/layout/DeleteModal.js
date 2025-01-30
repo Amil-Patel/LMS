@@ -38,7 +38,7 @@ const DeleteModal = ({ onDelete }) => {
 
   return (
     <>
-      <p onClick={handleShowModal}>Delete</p>
+      <p onClick={handleShowModal}><i class="fa-solid fa-trash"></i>Delete</p>
 
       {showModal && (
         <div className="delete-popup">
