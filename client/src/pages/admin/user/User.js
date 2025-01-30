@@ -538,6 +538,21 @@ const User = () => {
       );
     });
   }, [userData, searchQuery]);
+  const handleClickOutside = (event) => {
+    if (
+      !event.target.closest(".menu-content") &&
+      !event.target.closest(".dropdown-trigger")
+    ) {
+      setActiveDropdown(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <Hoc />
@@ -673,7 +688,7 @@ const User = () => {
                                       <a
                                         style={{ cursor: "pointer" }}
                                       >
-                                        <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                        <p className="border-b border-[#DDDDDD]" onClick={() => editUserToggleModal(item.id)}><i class="fa-solid fa-pencil"></i>Edit</p>
                                       </a>
                                     )
                                   }
@@ -682,7 +697,7 @@ const User = () => {
                                       <a
                                         style={{ cursor: "pointer" }}
                                       >
-                                        <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                        <p onClick={() => deleteToggleModal(item.id)}> <i class="fa-solid fa-trash"></i>Delete</p>
                                       </a>
                                     )
                                   }
@@ -769,7 +784,7 @@ const User = () => {
                                       <a
                                         style={{ cursor: "pointer" }}
                                       >
-                                        <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                        <p className="border-b border-[#DDDDDD]" onClick={() => editUserToggleModal(item.id)}><i class="fa-solid fa-pencil"></i>Edit</p>
                                       </a>
                                     )
                                   }
@@ -778,7 +793,7 @@ const User = () => {
                                       <a
                                         style={{ cursor: "pointer" }}
                                       >
-                                        <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                        <p onClick={() => deleteToggleModal(item.id)}><i class="fa-solid fa-trash"></i>Delete</p>
                                       </a>
                                     )
                                   }
@@ -865,7 +880,7 @@ const User = () => {
                                       <a
                                         style={{ cursor: "pointer" }}
                                       >
-                                        <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                        <p className="border-b border-[#DDDDDD]" onClick={() => editUserToggleModal(item.id)}> <i class="fa-solid fa-pencil"></i>Edit</p>
                                       </a>
                                     )
                                   }
@@ -874,7 +889,7 @@ const User = () => {
                                       <a
                                         style={{ cursor: "pointer" }}
                                       >
-                                        <p onClick={() => deleteToggleModal(item.id)}>Delete</p>
+                                        <p onClick={() => deleteToggleModal(item.id)}><i class="fa-solid fa-trash"></i>Delete</p>
                                       </a>
                                     )
                                   }
@@ -956,13 +971,13 @@ const User = () => {
                                   // }}
                                   style={{ cursor: "pointer" }}
                                 >
-                                  <p onClick={() => editUserToggleModal(item.id)}>Edit</p>
+                                  <p className="border-b border-[#DDDDDD]" onClick={() => editUserToggleModal(item.id)}><i class="fa-solid fa-pencil"></i>Edit</p>
                                 </a>
                                 <p
                                   onClick={() => deleteToggleModal(item.id)}// Open delete modal
                                   style={{ cursor: "pointer" }}
                                 >
-                                  Delete
+                                  <i class="fa-solid fa-trash"></i>Delete
                                 </p>
                               </div>
                             )}

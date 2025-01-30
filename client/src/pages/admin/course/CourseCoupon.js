@@ -481,9 +481,14 @@ const CourseCoupon = () => {
                     <td>{i.coupon_code}</td>
                     <td>{formattedData}</td>
                     <td>
-                      {i.discount_in_percentage
-                        ? i.discount_in_percentage + "%"
-                        : i.discount_in_amount}
+                      {i.discount_in_percentage && (
+                        i.discount_in_percentage + "%"
+                      )}
+                      {i.discount_in_amount && (
+                        <>
+                          {setting.position == "left" ? setting.symbol : ""}{i.discount_in_amount}{setting.position == "right" ? setting.symbol : ""}
+                        </>
+                      )}
                     </td>
                     <td>{time}</td>
                     {(userRole === "superAdmin" || editCourseCoupon == 1) && (
@@ -520,14 +525,13 @@ const CourseCoupon = () => {
                                   }}
                                   style={{ cursor: "pointer" }}
                                 >
-                                  <p>Edit</p>
+                                  <p className="border-b border-[#DDDDDD]"><i class="fa-solid fa-pencil"></i>Edit</p>
                                 </a>
                               )}
                               {(userRole === "superAdmin" || deleteCourseCoupon == 1) && (
-                                <p>
+                                <p className="flex" onDelete={() => handleDelete(i.id)}>
                                   <DeleteModal
-                                    onDelete={() => handleDelete(i.id)}
-                                  />
+                                    onDelete={() => handleDelete(i.id)} />
                                 </p>
                               )}
                             </div>

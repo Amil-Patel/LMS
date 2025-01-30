@@ -411,6 +411,9 @@
   font-weight: 600;
 }
 
+.cus-footer-inner-text a:hover{
+  color: var(--button-primary-color);
+}
 .cus-footer-inner-text a.active {
   color: var(--button-primary-color);
   border-bottom: 1.7px solid var(--button-primary-color);
