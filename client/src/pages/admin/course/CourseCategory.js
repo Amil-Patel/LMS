@@ -170,6 +170,7 @@ const CourseCategory = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
+    console.log(name,value)
     setEditData({
       ...editData,
       [name]: value,
@@ -591,9 +592,11 @@ const CourseCategory = () => {
                       >
                         <option value="NULL">None</option>
                         {nullCourseCategory.map((course, index) => (
-                          <option value={course.id} key={index}>
-                            {course.cate_title}
-                          </option>
+                          editData.id !== course.id && (
+                            <option value={course.id} key={index}>
+                              {course.cate_title}
+                            </option>
+                          )
                         ))}
                       </select>
                     </div>
