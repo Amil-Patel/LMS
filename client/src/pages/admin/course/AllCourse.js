@@ -157,16 +157,16 @@ const AllCourse = () => {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Title <i className="fa-solid fa-sort" onClick={() => handleSort('course_title')}></i></th>
-                <th>Category <i className="fa-solid fa-sort" onClick={() => handleSort('course_cate')}></i></th>
-                <th>Price <i className="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
-                <th>Enrollments <i className="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
-                <th>Lessions <i className="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
-                <th>Author <i className="fa-solid fa-sort" onClick={() => handleSort('auther')}></i></th>
-                <th>Status</th>
+                <th style={{ width: '2%' }}>ID</th>
+                <th style={{ width: '35%' }}>Title <i className="fa-solid fa-sort" onClick={() => handleSort('course_title')}></i></th>
+                <th style={{ width: '11%' }}>Category <i className="fa-solid fa-sort" onClick={() => handleSort('course_cate')}></i></th>
+                <th style={{ width: '10%' }}>Price <i className="fa-solid fa-sort" onClick={() => handleSort('course_price')}></i></th>
+                <th style={{ width: '13%' }}>Enrollments <i className="fa-solid fa-sort" onClick={() => handleSort('enrollment')}></i></th>
+                <th style={{ width: '10%' }}>Lessions <i className="fa-solid fa-sort" onClick={() => handleSort('lession')}></i></th>
+                <th style={{ width: '9%' }}>Author <i className="fa-solid fa-sort" onClick={() => handleSort('auther')}></i></th>
+                <th style={{ width: '5%' }}>Status</th>
                 {(userRole === "superAdmin" || editCoursePermission == 1 || deleteCoursePermission == 1) ? (
-                  <th>Action</th>
+                  <th style={{ width: '5%' }}>Action</th>
                 ) : (
                   ""
                 )
@@ -209,7 +209,7 @@ const AllCourse = () => {
                     <td>
                       {formattedData}
                     </td>
-                    <td className="align-bottom">
+                    <td>
                       <label className="switch">
                         <input
                           type="checkbox"

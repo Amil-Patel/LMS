@@ -219,6 +219,12 @@ button {
   gap: 10px;
 }
 
+.quiz-header h5{
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--black);
+}
+
 .two-btn {
   display: flex;
   width: 35%;

@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from "../layout/RoleContext";
 import Loading from "../layout/Loading";
 import { NavLink, useNavigate } from "react-router-dom";
+import { notifyInfo, notifyWarning } from '../layout/ToastMessage'
 import { Editor } from "@tinymce/tinymce-react";
 const port = process.env.REACT_APP_URL
 
@@ -259,6 +260,19 @@ const AddCourse = () => {
   const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (addCourse.course_title === "") {
+      notifyWarning("Please enter course title");
+      return
+    }
+    if (addCourse.course_cate === "") {
+      notifyWarning("Please select course category");
+      return
+    }
+    if (addCourse.course_price === "") {
+      notifyWarning("Please enter course price");
+      return
+    }
+    console.log(addCourse)
     setLoading(true);
     const formData = new FormData();
     formData.append("course_title", addCourse.course_title);
@@ -294,19 +308,14 @@ const AddCourse = () => {
     formData.append('canonical_url', addCourse.canonical_url);
     formData.append('title_tag', addCourse.title_tag)
     try {
-      const res = await axiosInstance.post(`${port}/addingCourseMaster`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await axiosInstance.post(`${port}/addingCourseMaster`, formData);
       setLoading(false);
-      navigate('/admin/all-course');
+      // navigate('/admin/all-course');
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
-
 
   return (
     <>

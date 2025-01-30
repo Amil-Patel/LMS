@@ -104,25 +104,42 @@ const PurchaseHistory = () => {
                                 <tbody>
                                     {
                                         paymentData.length > 0 ? (
-                                            paymentData.map((item, index) => {
-                                                const time = moment.unix(item?.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
-                                                return (
-                                                    <tr key={index}>
-                                                        <td className='py-3 pl-3'>{index + 1}</td>
-                                                        <td>
-                                                            {item?.orderDetails?.map((course, index) => (
-                                                                <span key={index}>{course.course_title}{index < item.orderDetails.length - 1 && ', '}</span>
-                                                            ))}
-                                                        </td>
-                                                        <td>{item?.orderDetails?.length}</td>
-                                                        <td>{setting.position == "left" ? setting.symbol : ""}{item?.amount}{setting.position == "right" ? setting.symbol : ""}</td>
-                                                        <td>{item?.payment_mode}</td>
-                                                        <td>#12542554</td>
-                                                        <td>{time}</td>
-                                                        <td className='text-lg cursor-pointer' onClick={() => handleViewClick(item)}><ImTicket /></td>
-                                                    </tr>
-                                                )
-                                            })
+                                          paymentData.map((item, index) => {
+                                            const time = moment.unix(item?.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
+                                        
+                                            return (
+                                                <tr key={index}>
+                                                    <td className='py-3 pl-3'>{index + 1}</td>
+                                                    <td>
+                                                        {item?.orderDetails?.map((course, index) => {
+                                                            const truncatedTitle =
+                                                                course.course_title.length > 40
+                                                                    ? `${course.course_title.slice(0, 40)} ...`
+                                                                    : course.course_title;
+                                                            
+                                                            return (
+                                                                <span key={index}>
+                                                                    {truncatedTitle}
+                                                                    {index < item.orderDetails.length - 1 && ', '}
+                                                                </span>
+                                                            );
+                                                        })}
+                                                    </td>
+                                                    <td>{item?.orderDetails?.length}</td>
+                                                    <td>
+                                                        {setting.position === "left" ? setting.symbol : ""}
+                                                        {item?.amount}
+                                                        {setting.position === "right" ? setting.symbol : ""}
+                                                    </td>
+                                                    <td>{item?.payment_mode}</td>
+                                                    <td>#12542554</td>
+                                                    <td>{time}</td>
+                                                    <td className='text-lg cursor-pointer' onClick={() => handleViewClick(item)}>
+                                                        <ImTicket />
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })                                        
                                         ) : (
                                             <p>No Purchase history Found</p>
                                         )
