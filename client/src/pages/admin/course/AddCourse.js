@@ -72,10 +72,8 @@ const AddCourse = () => {
   const getUserData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingUserMasterDataWithId/${userId}`);
-      console.log(res.data)
       setUserData(res.data);
-      setAddCourse((prev) => ({ ...prev, auther: [...prev.auther, res.data.role_id] }));
-      console.log(addCourse)
+      setAddCourse((prev) => ({ ...prev, auther: [...prev.auther, res.data.first_name] }));
     } catch (error) {
       console.log(error);
     }
@@ -287,9 +285,9 @@ const AddCourse = () => {
     formData.append('publish_date', addCourse.publish_date);
     formData.append('is_top_course', addCourse.is_top_course);
     formData.append('featured_course', addCourse.featured_course);
-    formData.append('course_faqs', addCourse.course_faqs);
-    formData.append('course_topics', addCourse.course_topics);
-    formData.append('course_requirenment', addCourse.course_requirenment);
+    formData.append('course_faqs', JSON.stringify(addCourse.course_faqs));
+    formData.append('course_topics', JSON.stringify(addCourse.course_topics));
+    formData.append('course_requirenment', JSON.stringify(addCourse.course_requirenment));
     formData.append('course_price', addCourse.course_price);
     formData.append('course_discount', addCourse.course_discount);
     formData.append('is_tax', isTax);
@@ -302,15 +300,15 @@ const AddCourse = () => {
     formData.append('no_of_month', addCourse.no_of_month);
     formData.append('course_overview_link', addCourse.course_overview_link);
     formData.append('course_thumbnail', newImage);
-    formData.append('meta_tag', addCourse.meta_tag);
-    formData.append('meta_keyword', addCourse.meta_keyword);
+    formData.append('meta_tag', JSON.stringify(addCourse.meta_tag));
+    formData.append('meta_keyword', JSON.stringify(addCourse.meta_keyword));
     formData.append('meta_desc', addCourse.meta_desc);
     formData.append('canonical_url', addCourse.canonical_url);
     formData.append('title_tag', addCourse.title_tag)
     try {
       const res = await axiosInstance.post(`${port}/addingCourseMaster`, formData);
       setLoading(false);
-      // navigate('/admin/all-course');
+      navigate('/admin/all-course');
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -664,7 +662,7 @@ const AddCourse = () => {
                       {addCourse.auther.map((keyword, index) => (
                         <div className="tag" key={index}>
                           <span>{keyword}</span>
-                          {userData?.role_id == keyword ?
+                          {userData?.first_name == keyword ?
                             ""
                             : (
                               <span
@@ -875,6 +873,7 @@ const AddCourse = () => {
 
               <div className="form-group">
                 <label htmlFor="meta_keywords">Meta Keywords</label>
+                <small className="text-muted ms-2">(↵ Press Enter to add Keywords)</small>
                 <input
                   type="text"
                   id="meta_keywords"
@@ -900,6 +899,7 @@ const AddCourse = () => {
 
               <div className="form-group">
                 <label htmlFor="meta_tag">Meta Tags</label>
+                <small className="text-muted ms-2">(↵ Press Enter to add Tags)</small>
                 <input
                   type="text"
                   id="meta_tag"
@@ -931,8 +931,8 @@ const AddCourse = () => {
                     className="col12input"
                     id="meta_description"
                     onChange={handleChange}
-                    name="meta_description"
-                    value={addCourse.meta_description}
+                    name="meta_desc"
+                    value={addCourse.meta_desc}
                   ></textarea>
                 </div>
               </div>
