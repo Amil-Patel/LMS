@@ -99,14 +99,14 @@ const Document = () => {
                 <div className='main_stu_dashboard'>
                     <Sidebar />
                     <div className="main static bg-[white] ml-[30px] p-0" style={{ scrollbarWidth: "none" }} >
-                        <div className="course-form-container shadow-none pt-0">
+                        <div className="course-form-container pt-0" style={{boxShadow:"none"}}>
                             <div className='profile_header_title flex items-center bg-white justify-between'>
                                 <h1 className='student_dashboard_profile_header_title'>Documents</h1>
                             </div>
                             <form className='student_profile_form' onSubmit={saveUSerDocument}>
                                 {/* first / middle / last  name */}
                                 <div className="flex-row name gap-4 mb-0">
-                                    <div className="form-group mb-0">
+                                    <div className="form-group mb-0 w-3/5">
                                         <label htmlFor="course_select">
                                             Select Course<span className="required">*</span>
                                         </label>
@@ -133,7 +133,7 @@ const Document = () => {
                                     <button type="submit" className="primary-btn module-btn">Save</button>
                                 </div>
                             </form>
-                            <div className="table-responsive">
+                            <div className="table-responsive overflow-y-scroll">
                             <table className="table table-striped table-hover mt-8">
                                     <thead>
                                         <tr>
