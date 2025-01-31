@@ -111,6 +111,7 @@ const addCourseLessonData = async (req, res) => {
             section_id: sectionId
         }
     });
+    const maxOrder = Math.max(...getdata.map((item) => item.order));
     const data = {
         title: req.body.title,
         duration: req.body.duration,
@@ -128,7 +129,7 @@ const addCourseLessonData = async (req, res) => {
         description: req.body.description,
         minimum_duration: null,
         drip_content: null,
-        order: getdata.length === 0 ? 1 : getdata.length + 1,
+        order: maxOrder + 1,
         createdAt: date,
         updatedAt: date,
     }
@@ -194,7 +195,6 @@ const updateCourseLessonData = async (req, res) => {
         description: req.body.description,
         minimum_duration: null,
         drip_content: null,
-        order: 0,
         updatedAt: date,
     };
     console.log(data)

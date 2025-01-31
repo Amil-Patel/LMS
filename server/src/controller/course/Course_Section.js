@@ -56,11 +56,17 @@ const addCourseSectionData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const date = DateToUnixNumber(new Date(), "America/Toronto");
+    const getdata = await Course_Section.findAll({
+        where: {
+            course_id: parseInt(req.body.course_id),
+        }
+    });
+    const maxOrder = Math.max(...getdata.map((item) => item.order));
     const data = {
         title: req.body.title,
         time: req.body.time,
         course_id: parseInt(req.body.course_id),
-        order: 0,
+        order: maxOrder + 1,
         status: req.body.status,
         createdAt: date,
         updatedAt: date,
