@@ -72,7 +72,7 @@ h5 {
 }
 
 h6 {
-  font-size: 15px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
   color: var(--heading-h6-color);
 }
@@ -191,7 +191,7 @@ td {
 }
 
 .main {
-  height: calc(100vh - 55px);
+  height: calc(100vh - 20px);
   overflow-y: scroll;
   position: relative;
   left: 230px;

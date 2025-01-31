@@ -645,7 +645,7 @@
   }
 }
 
-@media screen and (max-width: 426px) {
+@media screen and (max-width: 640px) {
   .cus-hero-text,
   .cus-caption h4,
   .cus-inner-text {
@@ -783,7 +783,6 @@
     flex-direction: column;
     gap: 20px;
   }
-
 }
 
 @media screen and (max-width: 321px) {

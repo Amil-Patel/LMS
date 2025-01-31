@@ -132,7 +132,7 @@ const StudentProfile = () => {
       <div className='client_section'>
         <div className='main_stu_dashboard'>
           <Sidebar />
-          <div className="main static bg-[white] ml-[30px] p-0" style={{ scrollbarWidth: "none" }} >
+          <div className="main static bg-[white] ml-[30px] mb-[10px] p-0" style={{ scrollbarWidth: "none" }} >
             <div className="course-form-container shadow-none pt-0">
               <div className='profile_header_title flex items-center bg-white justify-between'>
                 <h1 className='student_dashboard_profile_header_title'>Profile</h1>

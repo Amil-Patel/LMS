@@ -94,7 +94,7 @@ const Navbar = () => {
     <>
       <div className='client_section'>
         <nav className='navbar-section padding-side'>
-          <div className={`navbar-logo-section ${isMenuOpen ? 'notdisplay' : ''}`}>
+          <div className={'navbar-logo-section'}>
             <div className='navbar-logo'>
               <NavLink to="/">
                 <img src={require("../../../assets/image/web logo.png")} alt="logo" />
@@ -115,7 +115,7 @@ const Navbar = () => {
             </ul>
           </div>
 
-          <div className={`navbar-login-section ${isMenuOpen ? '' : 'notdisplay'}`}>
+          <div className={'navbar-login-section'}>
             {/*cart section  */}
             <NavLink to="/shopping-cart" className={`cart_section ${animateCart ? 'animate-cart' : ''}`}>
               <i className="fa-solid fa-cart-arrow-down"></i>
@@ -140,8 +140,8 @@ const Navbar = () => {
             )}
           </div>
           {/* Hamburger Icon */}
-          <div className="hamburger" onClick={toggleMenu}>
-            {isMenuOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
+          <div className="hamburger">
+            {isMenuOpen ? <i className="fa-solid fa-xmark" onClick={toggleMenu}></i> : <i className="fa-solid fa-bars" onClick={toggleMenu}></i>}
           </div>
         </nav>
       </div>
