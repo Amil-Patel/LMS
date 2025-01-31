@@ -1410,15 +1410,15 @@ const ManageCourse = () => {
             <table>
               <thead className="academic-table">
                 <tr>
-                  <th>ID</th>
-                  <th>Student name</th>
-                  <th>Enroll Date</th>
-                  <th>Completed Date</th>
-                  <th>Time Spent</th>
-                  <th>Progress</th>
-                  <th>Completed Lesson</th>
-                  <th>Quiz Passed</th>
-                  <th>Inquiry Status</th>
+                  <th style={{width: '2%'}}>ID</th>
+                  <th style={{width: '30%'}}>Student name</th>
+                  <th style={{width: '8%'}}>Enroll Date</th>
+                  <th style={{width: '12%'}}>Completed Date</th>
+                  <th style={{width: '8%'}}>Time Spent</th>
+                  <th style={{width: '8%'}}>Progress</th>
+                  <th style={{width: '12%'}}>Completed Lesson</th>
+                  <th style={{width: '8%'}}>Quiz Passed</th>
+                  <th style={{width: '12%'}}>Inquiry Status</th>
                 </tr>
               </thead>
 

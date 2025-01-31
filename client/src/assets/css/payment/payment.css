@@ -36,7 +36,7 @@
   margin-bottom: 3px !important;
 }
 
-.payment_view-table_main_div{
+.payment_view-table_main_div {
   overflow-x: scroll;
   scrollbar-width: none;
 }

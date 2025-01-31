@@ -50,6 +50,7 @@
 
 .shopping-cart-course-price {
   text-align: end;
+  align-items: end;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -62,6 +63,7 @@
 }
 
 .shopping-cart-course-price .remove-btn {
+  width: fit-content;
   font-weight: 600;
   background-color: var(--button-primary-color);
   color: var(--white);
@@ -181,6 +183,7 @@
   }
 
   .shopping-cart-course-price .remove-btn {
+    width: -webkit-fill-available;
     margin-top: 5px;
   }
 
