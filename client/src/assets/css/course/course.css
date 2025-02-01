@@ -33,6 +33,7 @@
 
 .module-duration {
   font-size: 14px;
+  width: max-content;
 }
 
 .module-controls {
