@@ -1,6 +1,5 @@
 const { Course_Lesson, Course_Quize, resource } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
-const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const path = require("path")
 const AuthMiddleware = require("../../auth/AuthMiddleware");
 const fs = require("fs");
@@ -197,7 +196,6 @@ const updateCourseLessonData = async (req, res) => {
         drip_content: null,
         updatedAt: date,
     };
-    console.log(data)
     try {
         const updatedLesson = await Course_Lesson.update(data, {
             where: { id }

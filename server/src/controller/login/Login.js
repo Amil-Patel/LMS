@@ -29,9 +29,7 @@ const getLogin = async (req, res) => {
     }
 
     const decryptedPassword = DecryptPassword(user.password);
-    console.log(decryptedPassword);
     if (decryptedPassword !== password) {
-      // Return an error if the password doesn't match
       return res.status(401).json({
         message: "Incorrect password. Please try again.",
         status: 401,
@@ -71,9 +69,7 @@ const getStudentLogin = async (req, res) => {
         role_id: "student",
       },
     });
-    // console.log(user);
     if (!user) {
-      // User with the given email does not exist
       return res
         .status(404)
         .json({ message: "Email does not exist", status: 404 });

@@ -384,45 +384,51 @@ const ViewCourse = () => {
               )}
               {activeTab === "faqs" && (
                 <>
-                  <div className="faqs-header">
-                    {Array.isArray(courseData.course_faqs) && courseData.course_faqs.map((keyword, index) => (
-                      <div className="module">
-                        <div
-                          className="module-header"
-                          onClick={() => toggleFaqsContent(index)}
-                        >
-                          <span
-                            className={`module-title ${activeFaqsIndex === index
-                              ? "text-blue-500"
-                              : "text-black-700"
-                              }`}
-                          >
-                            {keyword.question}
-                          </span>
-                          <div className="module-controls">
-                            <button className="check-btn">
-                              <i
-                                className={`fa-solid ${activeFaqsIndex === index
-                                  ? "fa-angle-up"
-                                  : "fa-angle-down"
+                  {
+                    courseData.course_faqs.length > 0 ? (
+                      <div className="faqs-header">
+                        {Array.isArray(courseData.course_faqs) && courseData.course_faqs.map((keyword, index) => (
+                          <div className="module">
+                            <div
+                              className="module-header"
+                              onClick={() => toggleFaqsContent(index)}
+                            >
+                              <span
+                                className={`module-title ${activeFaqsIndex === index
+                                  ? "text-blue-500"
+                                  : "text-black-700"
                                   }`}
-                              ></i>
-                            </button>
+                              >
+                                {keyword.question}
+                              </span>
+                              <div className="module-controls">
+                                <button className="check-btn">
+                                  <i
+                                    className={`fa-solid ${activeFaqsIndex === index
+                                      ? "fa-angle-up"
+                                      : "fa-angle-down"
+                                      }`}
+                                  ></i>
+                                </button>
+                              </div>
+                            </div>
+                            {activeFaqsIndex === index && (
+                              <>
+                                <p>
+                                  {keyword.answer}
+                                </p>
+                              </>
+                            )}
                           </div>
-                        </div>
-                        {activeFaqsIndex === index && (
-                          <>
-                            <p>
-                              {keyword.answer}
-                            </p>
-                          </>
-                        )}
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    ) : (
+                      <h6>No data available</h6>
+                    )
+                  }
                 </>
               )}
-              {activeTab === "reviews" && (
+              {/* {activeTab === "reviews" && (
                 <div className="reviews-section">
                   <div className="average-rating">
                     <div>
@@ -433,7 +439,7 @@ const ViewCourse = () => {
                         {[...Array(4)].map((_, i) => (
                           <i className="fa-solid fa-star" key={i}></i>
                         ))}
-                        <i className="fa-regular fa-star"></i> {/* Half star */}
+                        <i className="fa-regular fa-star"></i>
                       </div>
                       <p>based on 146,951 ratings</p>
                     </div>
@@ -456,7 +462,6 @@ const ViewCourse = () => {
                                     <i className="fa-solid fa-star" key={i}></i>
                                   ))}
                                   <i className="fa-regular fa-star"></i>{" "}
-                                  {/* Half star */}
                                 </div>
                                 <div className="review-date">
                                   <span>2 weeks ago</span>
@@ -532,7 +537,7 @@ const ViewCourse = () => {
                     </nav>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
 
             <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">

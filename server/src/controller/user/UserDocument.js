@@ -28,14 +28,12 @@ const getUSerWIthStuId = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const id = req.params.id;
-    console.log(id)
     try {
         const data = await user_document.findAll({
             where: {
                 student_id: id
             }
         });
-        console.log(data)
         res.status(200).json(data);
     } catch (error) {
         console.log(error)
@@ -62,7 +60,6 @@ const getUSerWIthStuIdAndCourseId = async (req, res) => {
                 course_id: course_id
             }
         });
-        console.log(document)
         res.status(200).json({ userMaster, courseMaster, document });
     } catch (error) {
         console.log(error)
