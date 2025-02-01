@@ -39,7 +39,6 @@ const addProcessedPaymentData = async (req, res) => {
     const createdate = DateToUnixNumber(new Date(), 'America/Toronto');
     const expiredate = DateToUnixNumber(new Date(), 'America/Toronto');
     const { user_id, courses, billing_info } = req.body;
-    console.log(req.body)
     let orders;
     let paymentData;
     let session;
@@ -140,10 +139,7 @@ const addProcessedPaymentData = async (req, res) => {
             updatedAt: createdate
         });
 
-        // Update payment record with Stripe session ID as transaction ID
         const transactionId = session.id;
-        console.log(session)
-        console.log(paymentData)
         const updatedPayment = await payment.update(
             { transaction_id: transactionId },
             { where: { id: paymentData.dataValues?.id } }

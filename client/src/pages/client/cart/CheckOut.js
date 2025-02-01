@@ -14,7 +14,7 @@ const port = process.env.REACT_APP_URL
 const ENCRYPTION_KEY = process.env.REACT_APP_ENCRYPT_KEY
 const CheckOut = () => {
 
-     const { setting } = useContext(userRolesContext);
+    const { setting } = useContext(userRolesContext);
     const { courses, total } = useLocation().state || {};
     console.log(courses)
     const encryptData = (data) => {
@@ -173,8 +173,10 @@ const CheckOut = () => {
     //         alert("An error occurred. Please try again later.");
     //     }
     // };
+    const [buttonLoad, setButtonLoad] = useState(false);
     const buyCourse = async (e) => {
         e.preventDefault();
+        setButtonLoad(true);
         const storedCourses = localStorage.getItem("checkoutCourseData");
         const storedAmount = localStorage.getItem("checkoutAmountData");
         if (courses && courses.length > 0) { // Check if courses is not undefined or empty
@@ -186,16 +188,16 @@ const CheckOut = () => {
             localStorage.setItem("checkoutAmountData", encryptData(total));
         } else {
             console.log("No courses provided. Skipping update.");
+            setButtonLoad(false);
         }
         if (!storedAmount || !storedCourses) {
-            console.log("Updating cart and course data");
-            // Set new course data in localStorage
             localStorage.setItem("checkoutCourseData", encryptData(courses));
             localStorage.setItem("checkoutAmountData", encryptData(total));
         }
 
         if (!savedToken) {
             alert("Please login to buy the course.");
+            setButtonLoad(false);
             return;
         }
 
@@ -231,6 +233,7 @@ const CheckOut = () => {
 
             if (courseDetails.length === 0) {
                 alert("No courses selected for enrollment.");
+                setButtonLoad(false);
                 return;
             }
 
@@ -251,16 +254,17 @@ const CheckOut = () => {
 
             // Send request to create a Stripe payment session
             const { data: session } = await axiosInstance.post(`${port}/process-courses-payment`, requestData);
-            console.log(session)
             // Redirect to Stripe Checkout
             const result = await stripe.redirectToCheckout({ sessionId: session.id });
 
             if (result.error) {
                 console.error("Stripe Checkout failed:", result.error.message);
+                setButtonLoad(false);
                 alert("An error occurred during payment. Please try again.");
             }
         } catch (error) {
             console.error("Error:", error);
+            setButtonLoad(false);
             alert("An error occurred. Please try again later.");
         }
     };
@@ -325,7 +329,7 @@ const CheckOut = () => {
                                     <input type="text" id="bill_pan" name="bill_pan" onChange={handleChange} placeholder="Enter Bill Pan Number" />
                                 </div>
                                 <div className="checkbox-group">
-                                    <input type="checkbox" id="terms" name="terms" onChange={(e) => setIsChecked(e.target.checked)} required />
+                                    <input type="checkbox" id="terms" name="terms" checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} required />
                                     <label htmlFor="terms">I have read and agree to the Terms and Conditions.</label>
                                 </div>
                             </form>
@@ -363,12 +367,12 @@ const CheckOut = () => {
                                         <div className="price-row total">
                                             <span>Total</span>
                                             <span>{setting.position == "left" ? setting.symbol : ""}{total || decryptAmount}
-                                            {setting.position == "right" ? setting.symbol : ""}
+                                                {setting.position == "right" ? setting.symbol : ""}
                                             </span>
                                         </div>
                                     </div>
                                     <div className="pay-now-btn">
-                                        <button disabled={!isChecked} onClick={(e) => buyCourse(e)}>Pay Now</button>
+                                        <button disabled={!isChecked} className={`${buttonLoad ? "loading" : ""}`} onClick={(e) => buyCourse(e)}>Pay Now</button>
                                     </div>
                                     <div className="secure-checkout">
                                         <span><i className="fa-solid fa-lock"></i>Secure Checkout - SSL Encrypted</span>

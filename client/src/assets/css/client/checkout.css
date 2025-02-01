@@ -162,6 +162,16 @@
   font-weight: 600;
 }
 
+/* .checkout-section .pay-now-btn button {
+  width: 100%;
+  text-align: center;
+  border-radius: 6px;
+  padding: 9px 0;
+  font-size: 17px;
+  font-weight: 500;
+  background-color: var(--button-primary-color);
+  color: var(--white);
+} */
 .checkout-section .pay-now-btn button {
   width: 100%;
   text-align: center;
@@ -171,7 +181,51 @@
   font-weight: 500;
   background-color: var(--button-primary-color);
   color: var(--white);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
+
+/* Loading State */
+.checkout-section .pay-now-btn button.loading {
+  pointer-events: none;
+  /* Disable button interaction */
+  opacity: 0.7;
+}
+
+/* Spinner Animation */
+.checkout-section .pay-now-btn button.loading::before {
+  content: "";
+  position: absolute;
+  left: 62%;
+  top: 32%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid transparent;
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
 
 .checkout-section .pay-now-btn button[disabled] {
   background-color: #8198cf;
@@ -231,6 +285,14 @@
     margin-top: 5%;
 
   }
+}
+
+@media screen and (max-width: 400px) {
+  .checkout-section .pay-now-btn button.loading::before {
+    left: 65%;
+    top: 32%;
+  }
+
 }
 
 @media screen and (max-width: 500px) {

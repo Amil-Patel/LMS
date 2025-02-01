@@ -32,29 +32,6 @@ const getEnrollmentData = async (req, res) => {
     }
 }
 
-
-// const addEnrollmentData = async (req, res) => {
-//     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
-//     if (!isAuthenticated) return;
-//     const createdate = DateToUnixNumber(new Date(), 'America/Toronto');
-//     const expiredate = DateToUnixNumber(new Date(), 'America/Toronto');
-//     const data = {
-//         student_id: req.body.student_id,
-//         course_id: req.body.course_id,
-//         enrollment_mode: req.body.enrollment_mode,
-//         status: 1,
-//         createdAt: createdate,
-//         updatedAt: expiredate,
-//     }
-//     try {
-//         const courseCoupondate = await enrollment.create(data);
-//         res.status(200).json(courseCoupondate);
-//     } catch (error) {
-//         console.log(error);
-//         res.sendStatus(500);
-//     }
-// }
-
 const deleteEnrollmentData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;

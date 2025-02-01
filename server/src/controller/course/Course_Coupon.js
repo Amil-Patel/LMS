@@ -1,7 +1,6 @@
 const { Course_Coupon, System_Setting } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
 const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
-const moment = require('moment-timezone');
 const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getCourseCouponData = async (req, res) => {

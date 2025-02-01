@@ -448,8 +448,8 @@ function Enrollements() {
       {deleteOpen && (
         <div className="modal">
           <div className="modal-container">
-            <h5>Delete Coupon</h5>
-            <p>Are you sure you want to delete this coupon?</p>
+            <h5>Delete Enrollment</h5>
+            <p>Are you sure you want to delete this Enrollment?</p>
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               <button className="primary-btn" onClick={handleDelete}>
                 Delete

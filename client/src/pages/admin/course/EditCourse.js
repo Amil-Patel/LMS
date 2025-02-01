@@ -78,6 +78,7 @@ const EditCourse = () => {
         setLoading(true)
         try {
             const res = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
+            console.log(res.data)
             if (res.data.expiring_time === "limited_time") {
                 setIsLimited(true);
             }
@@ -91,7 +92,7 @@ const EditCourse = () => {
             } catch (e) {
                 // If parsing fails, keep it as is
             }
-            res.data.long_desc = long_desc.replace(/^"|"$/g, "");
+            res.data.long_desc = long_desc?.replace(/^"|"$/g, "");
             let auther = res.data.auther;
             try {
                 auther = JSON.parse(auther);
@@ -355,7 +356,6 @@ const EditCourse = () => {
             ),
         });
     };
-    console.log(courseData)
     const navigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
