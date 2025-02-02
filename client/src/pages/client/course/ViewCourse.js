@@ -215,9 +215,6 @@ const ViewCourse = () => {
                   <i className="fa-solid fa-clock"></i> {totalTime ? totalTime : 0} Hours
                 </span>
                 <span>
-                  <i className="fa-solid fa-graduation-cap"></i> {totalEnroll ? totalEnroll : 0} Students
-                </span>
-                <span>
                   <i className="fa-solid fa-signal"></i> {courseData?.course_level}
                 </span>
                 <span>

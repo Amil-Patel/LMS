@@ -49,9 +49,9 @@ const Learning = () => {
 
                         {enrollCourse?.map((item, index) => {
                             const truncatedTitle =
-                            item.course_master_enrollment.course_title.length > 40
-                                ? `${item.course_master_enrollment.course_title.slice(0, 40)} ...`
-                                : item.course_master_enrollment.course_title;
+                                item.course_master_enrollment.course_title.length > 40
+                                    ? `${item.course_master_enrollment.course_title.slice(0, 40)} ...`
+                                    : item.course_master_enrollment.course_title;
 
                             return (
                                 <div className="course-main-div" key={index}>
@@ -76,8 +76,8 @@ const Learning = () => {
                                             )}
                                             <div className="course-icon-section pt-3 pb-5"><span><i className="fa-solid fa-copy"></i> {item.totalLesson} Lessons</span>
                                                 <span><i className="fa-solid fa-clock"></i> {totalTime ? totalTime : 0} Hours</span>
-                                                <span><i className="fa-solid fa-graduation-cap"></i> {item.totalEnroll} Students</span>
-                                                <span><i className="fa-solid fa-signal"></i>{item.course_master_enrollment.course_level}</span>
+                                                {item.course_master_enrollment.course_level && <span><i className="fa-solid fa-signal"></i>{item.course_master_enrollment.course_level}</span>}
+
                                             </div>
                                         </div>
                                         <div>

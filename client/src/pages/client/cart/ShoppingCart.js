@@ -16,6 +16,7 @@ const ShoppingCart = () => {
   const { stuUserId, setting } = useContext(userRolesContext);
 
   const [couponCode, setCouponCode] = useState('');
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const applyCouponDiscount = async () => {
     if (!couponCode) {
       notifyError("Please enter a coupon code.");
@@ -28,21 +29,32 @@ const ShoppingCart = () => {
 
         const parsedCourseIds = JSON.parse(courseIds);
 
+        let totalDiscount = 0; // Accumulator for total discount
+
         const updatedCart = cart.map((course) => {
           if (parsedCourseIds.includes(course.course_id)) {
+            const courseDiscountAmount = course.course_price - (course.course_price * course.course_discount / 100);
+            let finalDiscount = 0;
+
             if (is_percentage) {
-              const discountedPrice = course.course_price - (course.course_price * discount / 100);
-              return { ...course, course_price: discountedPrice, appliedDiscount: `${discount}%` };
+              const discountedPrice = courseDiscountAmount - (courseDiscountAmount * discount / 100);
+              finalDiscount = courseDiscountAmount - discountedPrice;
             } else if (is_amount) {
               const discountedPrice = Math.max(course.course_price - discount, 0);
-              return { ...course, course_price: discountedPrice, appliedDiscount: `$${discount}` };
+              finalDiscount = courseDiscountAmount - discountedPrice;
             }
+
+            totalDiscount += finalDiscount; // Accumulate discount
           }
           return course;
         });
+
+        // **Update State Once After Looping**
+        setCouponDiscount((prevDiscount) => prevDiscount + totalDiscount); // Preserve previous value if needed
         setCart(updatedCart);
         notifySuccess("Coupon applied successfully.");
-      } else {
+      }
+      else {
         notifyError("Invalid coupon code.");
       }
 
@@ -70,6 +82,8 @@ const ShoppingCart = () => {
     const discount_price = (item.course_price * item.course_discount) / 100;
     return total + discount_price;
   }, 0);
+  console.log(sumOfAllDiscountPrice)
+  console.log(couponDiscount)
   const navigate = useNavigate();
   // Navigate to Checkout with state
   const processToCheckout = (total) => {
@@ -107,7 +121,7 @@ const ShoppingCart = () => {
                 cart.length > 0 ? (
                   cart.map((course, index) => {
                     const truncatedTitle =
-                    course.course_title.length > 55
+                      course.course_title.length > 55
                         ? `${course.course_title.slice(0, 55)} ...`
                         : course.course_title;
 
@@ -173,7 +187,7 @@ const ShoppingCart = () => {
                               ) : ("")}
                             </div>
                           </div>
-                          <button className='remove-btn' onClick={() => removeCart(course)}>Remove</button>
+                          <button className='remove-btn' onClick={() => (removeCart(course), setCouponDiscount(0))}>Remove</button>
                         </div>
                       </div>
                     )
@@ -210,13 +224,13 @@ const ShoppingCart = () => {
                   </div>
                   <div className="detail-row liner pb-2">
                     <span>Discount</span>
-                    <span><s>{setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllDiscountPrice).toFixed(2)}
+                    <span><s>{setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllDiscountPrice + couponDiscount).toFixed(2)}
                       {setting.position == "right" ? setting.symbol : ""}</s></span>
                   </div>
                   <div className="detail-row pt-2">
                     <span>Sub Total</span>
                     <span>{setting.position == "left" ? setting.symbol : ""}
-                      {parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice).toFixed(2)}
+                      {parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice - couponDiscount).toFixed(2)}
                       {setting.position == "right" ? setting.symbol : ""}
                     </span>
                   </div>
@@ -230,11 +244,11 @@ const ShoppingCart = () => {
                   <div className="detail-row liner pb-2 pt-2">
                     <span className='text-base font-semibold'>Payable Amount</span>
                     <span className='text-base font-semibold'>{setting.position == "left" ? setting.symbol : ""}
-                      {parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2)}
+                      {parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice + couponDiscount) + sumOfAllCartTax).toFixed(2)}
                       {setting.position == "right" ? setting.symbol : ""}</span>
                   </div>
                 </div>
-                <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice) + sumOfAllCartTax).toFixed(2))}>
+                <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice + couponDiscount) + sumOfAllCartTax).toFixed(2))}>
                   Process To Checkout
                 </button>
               </div>
