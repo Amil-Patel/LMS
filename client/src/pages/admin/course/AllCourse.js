@@ -7,12 +7,12 @@ import { userRolesContext } from "../layout/RoleContext";
 import axiosInstance from "../utils/axiosInstance";
 import Loading from "../layout/Loading";
 import useCheckRolePermission from "../layout/CheckRolePermission";
+import DeleteModal from "../layout/DeleteModal";
 const port = process.env.REACT_APP_URL
 
 const AllCourse = () => {
   const { userRole, setting } = useContext(userRolesContext);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [deleteOpen, setDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState("");
   // Get course category
@@ -39,24 +39,20 @@ const AllCourse = () => {
     }
   }
 
-  const [deleteId, setDeleteId] = useState(null);
-  const deleteToggleModal = (index) => {
-    setDeleteOpen(!deleteOpen);
-    setDeleteId(index);
-  };
 
-  const handleDelete = async () => {
+  //delete code
+
+  const handleDelete = async (id) => {
     setLoading(true)
     try {
-      const res = await axiosInstance.delete(`${port}/deletingCourseMaster/${deleteId}`);
+      const res = await axiosInstance.delete(`${port}/deletingCourseMaster/${id}`);
       getCourseData();
-      setDeleteOpen(false)
       setLoading(false)
     } catch (error) {
       console.log(error);
       setLoading(false)
     }
-  }
+  };
 
   useEffect(() => {
     getCourseData();
@@ -249,12 +245,9 @@ const AllCourse = () => {
                               }
                               {(userRole === "superAdmin" ||
                                 deleteCoursePermission == 1) && (
-                                  <p
-                                    onClick={() => deleteToggleModal(i.id)}
-                                    className="cursor-pointer"
-                                  >
-                                    <i class="fa-solid fa-trash"></i>
-                                    Delete
+                                  <p className="flex cursor-pointer" onDelete={() => handleDelete(i.id)}>
+                                    <DeleteModal
+                                      onDelete={() => handleDelete(i.id)} />
                                   </p>
                                 )
                               }
@@ -273,25 +266,6 @@ const AllCourse = () => {
         </div>
 
       </div>
-
-
-      {/* Delete Confirmation Modal */}
-      {deleteOpen && (
-        <div className="modal">
-          <div className="modal-container">
-            <h5>Delete Coupon</h5>
-            <p>Are you sure you want to delete this coupon?</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <button className="primary-btn" onClick={handleDelete}>
-                Delete
-              </button>
-              <button onClick={deleteToggleModal} className="secondary-btn">
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

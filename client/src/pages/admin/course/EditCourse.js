@@ -78,7 +78,6 @@ const EditCourse = () => {
         setLoading(true)
         try {
             const res = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
-            console.log(res.data)
             if (res.data.expiring_time === "limited_time") {
                 setIsLimited(true);
             }
@@ -388,14 +387,14 @@ const EditCourse = () => {
         formData.append('no_of_month', courseData.no_of_month);
         formData.append('course_overview_link', courseData.course_overview_link);
         formData.append('course_thumbnail', courseData.course_thumbnail);
-        formData.append('meta_tag', courseData.meta_tag);
-        formData.append('meta_keyword', courseData.meta_keyword);
+        formData.append('meta_tag', JSON.stringify(courseData.meta_tag));
+        formData.append('meta_keyword', JSON.stringify(courseData.meta_keyword));
         formData.append('meta_desc', courseData.meta_desc);
         formData.append('canonical_url', courseData.canonical_url);
         formData.append('title_tag', courseData.title_tag)
         formData.append('updated_by', courseData.updated_by)
         try {
-            const res = await axiosInstance.put(`${port}/updatingCourseMaster/${id}`, courseData
+            const res = await axiosInstance.put(`${port}/updatingCourseMaster/${id}`, formData
             );
             navigate('/admin/all-course');
             setLoading(false);
@@ -411,8 +410,6 @@ const EditCourse = () => {
         getNullCourseCategoryData();
         getUserData();
     }, [])
-
-
 
     const handleButtonClick = () => {
         document.getElementById("fileInput").click();
@@ -1045,6 +1042,7 @@ const EditCourse = () => {
                                 <input
                                     type="text"
                                     name="meta_keywords"
+                                    placeholder='Enter Your Keywords here separated by commas'
                                     className="col12input"
                                     onKeyDown={handleAddKeywords}
                                 />
