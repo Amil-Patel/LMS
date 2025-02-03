@@ -86,22 +86,13 @@ const ManageCourse = () => {
 
   const getUserDocumentData = async (userId, id) => {
 
-    console.log(userId, id)
-
     try {
 
       const res = await axiosInstance.get(`${port}/gettingUserDocumentWithStuIdAndCourseId/${userId}/${id}`);
-
       setOpenUserDocument(true);
-
-      console.log(res.data)
-
       setUserDocumentData(res.data);
-
     } catch (err) {
-
       console.log(err);
-
     }
 
   }
@@ -614,7 +605,6 @@ const ManageCourse = () => {
     formData.append("is_count_time", addLesson.is_count_time);
     formData.append("description", addLesson.description);
     formData.append("order", addLesson.order);
-    console.log(addLesson)
     if (addLesson.attachment) {
       formData.append("attachment", addLesson.attachment);
     }
@@ -685,7 +675,6 @@ const ManageCourse = () => {
   const getLessonDataForEdit = async (id) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
-      console.log(res.data)
       let text_content = res.data.text_content;
       try {
         text_content = JSON.parse(text_content); // Removes outer escaped quotes
@@ -745,7 +734,6 @@ const ManageCourse = () => {
       notifyWarning("Description is required.");
       return;
     }
-    console.log(editLessonData)
     const formData = new FormData();
     formData.append("title", editLessonData.title);
     formData.append("duration", editLessonData.duration);
@@ -911,7 +899,6 @@ const ManageCourse = () => {
       notifyWarning("Summery is required.");
       return;
     }
-    console.log(editQuizData)
     try {
       const res = await axiosInstance.put(`${port}/updatingCourseQuize/${nullQuizeId}`, editQuizData);
       notifySuccess("Quiz updated successfully");
@@ -1410,15 +1397,15 @@ const ManageCourse = () => {
             <table>
               <thead className="academic-table">
                 <tr>
-                  <th style={{width: '2%'}}>ID</th>
-                  <th style={{width: '22%'}}>Student name</th>
-                  <th style={{width: '9%'}}>Enroll Date</th>
-                  <th style={{width: '13%'}}>Completed Date</th>
-                  <th style={{width: '9%'}}>Time Spent</th>
-                  <th style={{width: '8%'}}>Progress</th>
-                  <th style={{width: '14%'}}>Completed Lesson</th>
-                  <th style={{width: '10%'}}>Quiz Passed</th>
-                  <th style={{width: '13%'}}>Inquiry Status</th>
+                  <th style={{ width: '2%' }}>ID</th>
+                  <th style={{ width: '22%' }}>Student name</th>
+                  <th style={{ width: '9%' }}>Enroll Date</th>
+                  <th style={{ width: '13%' }}>Completed Date</th>
+                  <th style={{ width: '9%' }}>Time Spent</th>
+                  <th style={{ width: '8%' }}>Progress</th>
+                  <th style={{ width: '14%' }}>Completed Lesson</th>
+                  <th style={{ width: '10%' }}>Quiz Passed</th>
+                  <th style={{ width: '13%' }}>Inquiry Status</th>
                 </tr>
               </thead>
 

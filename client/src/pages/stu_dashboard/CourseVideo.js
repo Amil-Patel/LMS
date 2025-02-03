@@ -151,7 +151,6 @@ const CourseVideo = () => {
 
     // Save to database every 10 seconds
     const intervalSaveTime = setInterval(() => {
-      console.log("10 seconds")
       saveTimeToDatabase();
     }, 10000);
 
@@ -170,7 +169,6 @@ const CourseVideo = () => {
         const payload = { watchingDuration: totalTime };
         axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload)
           .then(() => {
-            console.log("Success: Time updated in DB");
           })
           .catch((error) => {
             console.error("Error saving time to database:", error);
@@ -203,7 +201,6 @@ const CourseVideo = () => {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setActiveModuleIndex(res.data.section_id)
       getLessonData(res.data.section_id);
-      console.log(res.data)
       if (res.data.quiz_id == null && num !== 1) {
         await getLessonDataForEdit(res.data.id);
       }
@@ -278,8 +275,6 @@ const CourseVideo = () => {
         module_id: mId,
         spent_time: 0,
       }
-      console.log(data)
-      console.log("object")
       // const res = await axiosInstance.post(`${port}/addingmoduletimestampdata`, data);
       // getcourseProgressData();
     } catch (error) {
@@ -360,7 +355,6 @@ const CourseVideo = () => {
   }
 
   const getLessonDataForEdit = async (id, num) => {
-    console.log(id, num)
     setEditQuizData({
       title: "",
       section_id: "",
@@ -542,8 +536,6 @@ const CourseVideo = () => {
               getcourseProgressDataRefresh();
               return;
             }
-
-            console.log(nextModule);
             setActiveModuleIndex(nextModule.id);
             const res = await getLessonData(nextModule.id);
 
@@ -731,7 +723,6 @@ const CourseVideo = () => {
     try {
       const response = await axiosInstance.get(`${port}/gettingReviewWithStudentId/${stuUserId}`);
       setReviewWithStudentId(response.data[0]);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -920,7 +911,7 @@ const CourseVideo = () => {
                             </h2>
                             <span className="ml-2 font-semibold px-2 py-0.5 h-fit text-[12px] rounded bg-[#DDDDDD] uppercase">{editLessonData.lesson_type}</span>
                           </div>
-                          <p className="course_module_duration"><strong>Duration:</strong> {editLessonData.duration || "N/A"} Minutes</p>
+                          <p className="course_module_duration"><strong>Duration:</strong> {editLessonData.duration || "0"} Minutes</p>
                         </div>
 
                         {editLessonData.lesson_type === "youtube-video" && (
@@ -1211,7 +1202,7 @@ const CourseVideo = () => {
                       return (
                         <div className="module" key={moduleIndex}>
                           <div
-                            className={`module-header  ${activeModuleIndex === module.id ? "active" : ""}`}
+                            className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
                             onClick={() =>
                               toggleContent(
                                 module.id,
@@ -1223,8 +1214,10 @@ const CourseVideo = () => {
                             <span className="module-title">
                               MODULE-{moduleIndex + 1} : {module.title}
                             </span>
-                            <div className="flex gap-2 item-center">
-                              <span className="module-duration">{formattedTime}</span>
+                            <div className="flex gap-2 items-center">
+                              {totalSeconds && totalSeconds !== 0 ? (
+                                <span className="module-duration">{formattedTime}</span>
+                              ) : null}
                               <div className="module-controls">
                                 <button className="check-btn">
                                   <i
@@ -1307,6 +1300,7 @@ const CourseVideo = () => {
                                                 : "cursor-pointer"
                                                 }`}
                                               checked={isCompleted}
+                                              onChange={() => !isCompleted && handleViewedLessonData()}
                                               readOnly
                                             />
                                           </div>
