@@ -81,60 +81,21 @@ const CourseVideo = () => {
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${id}/${stuUserId}`);
-      const progressData = res.data[0];
-      if (!progressData) {
+      const fetchedTimeStamp = res.data[0]?.watching_duration;
+      await setCourseProgress(res.data[0]);
+      await setTimeStamp(fetchedTimeStamp);
+      // setElapsedTime(0);
+      if (res.data.length === 0 && stuUserId) {
         getModuleData();
         addcourseProgressData();
-        return;
       }
-      let completedLessonIds = progressData.completed_lesson_id === null ? [] : JSON.parse(progressData.completed_lesson_id);
-      if (typeof completedLessonIds === "string") {
-        completedLessonIds = completedLessonIds.replace(/[^\d,]/g, "").split(",").map(Number);
-      }
-
-      if (!Array.isArray(completedLessonIds)) {
-        console.error("completedLessonIds is not an array after parsing", completedLessonIds);
-      }
-
-      const currentWatchingLessonId = progressData?.current_watching_lesson;
-      const sectionRes = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
-      const sectionData = sectionRes.data;
-      if (sectionData.length === 0) return;
-
-      let allLessons = [];
-
-      for (let section of sectionData) {
-        const lessonRes = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${section.id}`);
-        allLessons = [...allLessons, ...lessonRes.data.map(lesson => lesson.id)];
-      }
-      const missingLessons = allLessons.filter(lessonId => !completedLessonIds.includes(lessonId));
-      getLessonDataForEdit(missingLessons[0]);
-      if (missingLessons.length > 0) {
-
-        let firstUncompletedLesson = missingLessons[0];
-        const data = {
-          student_id: stuUserId,
-          course_id: id,
-          current_watching_lesson: firstUncompletedLesson
-        }
-        const res = await axiosInstance.put(`${port}/updattingAcademicProgressDataForViewed/${progressData.id}/${stuUserId}`, data);
-        await getLessonDataForEdit(firstUncompletedLesson);
-      }
-      getcourseProgressDataRefresh();
-      setCourseProgress(progressData);
-      setTimeStamp(progressData?.watching_duration);
-
-      if (currentWatchingLessonId) {
-        getLessonWithCompletedId(currentWatchingLessonId, 1);
+      if (res.data[0]?.current_watching_lesson) {
+        getLessonWithCompletedId(res.data[0]?.current_watching_lesson)
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-
-
-
 
   const navigate = useNavigate()
   const handleBack = async () => {
@@ -151,7 +112,6 @@ const CourseVideo = () => {
 
     // Save to database every 10 seconds
     const intervalSaveTime = setInterval(() => {
-      console.log("10 seconds")
       saveTimeToDatabase();
     }, 10000);
 
@@ -170,7 +130,6 @@ const CourseVideo = () => {
         const payload = { watchingDuration: totalTime };
         axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload)
           .then(() => {
-            console.log("Success: Time updated in DB");
           })
           .catch((error) => {
             console.error("Error saving time to database:", error);
@@ -198,20 +157,18 @@ const CourseVideo = () => {
   };
 
   //get lesson iwth id
-  const getLessonWithCompletedId = async (id, num) => {
+  const getLessonWithCompletedId = async (id) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setActiveModuleIndex(res.data.section_id)
       getLessonData(res.data.section_id);
-      console.log(res.data)
-      if (res.data.quiz_id == null && num !== 1) {
+      if (res.data.quiz_id === null) {
         await getLessonDataForEdit(res.data.id);
       }
       if (res.data.quiz_id !== null) {
         await getQuizeDataForEdit(res.data.quiz_id);
-        await getQuizQuestionData(res.data.quiz_id);
-        await getQuizResultDatWithquizId(res.data.quiz_id);
-        await setCompareLessonId(res.data.id);
+        getQuizQuestionData(res.data.quiz_id);
+        getQuizResultDatWithquizId(res.data.quiz_id);
       }
     } catch (error) {
       console.log(error);
@@ -278,8 +235,6 @@ const CourseVideo = () => {
         module_id: mId,
         spent_time: 0,
       }
-      console.log(data)
-      console.log("object")
       // const res = await axiosInstance.post(`${port}/addingmoduletimestampdata`, data);
       // getcourseProgressData();
     } catch (error) {
@@ -359,8 +314,7 @@ const CourseVideo = () => {
     }
   }
 
-  const getLessonDataForEdit = async (id, num) => {
-    console.log(id, num)
+  const getLessonDataForEdit = async (id) => {
     setEditQuizData({
       title: "",
       section_id: "",
@@ -379,15 +333,6 @@ const CourseVideo = () => {
     });
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
-      let text_content = res.data?.text_content;
-      if (text_content) {
-        try {
-          text_content = JSON.parse(text_content); // Removes outer escaped quotes
-        } catch (e) {
-          // If parsing fails, keep it as is
-        }
-        res.data.text_content = text_content.replace(/^"|"$/g, "");
-      }
       setEditLessonData(res.data);
     } catch (error) {
       console.log(error);
@@ -487,36 +432,27 @@ const CourseVideo = () => {
       } catch (parseError) {
         parsData = [];
       }
-
       setCompareLessonId(editLessonData.quiz_id);
       parsData.push(editLessonData.id);
-      const course_progress = (
-        (parsData.length / lessonDataWithCourseId.length) * 100
-      ).toFixed(0);
-
+      const course_progress = ((parsData.length / lessonDataWithCourseId.length) * 100).toFixed(0)
       const data = {
         completed_lesson_id: JSON.stringify(parsData),
         course_progress: course_progress,
         current_watching_lesson: editLessonData.id,
       };
-
       const res = await axiosInstance.put(
         `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
         data
       );
-
       if (res.status === 200) {
         const currentLesson = lessonData.find((item) => item.id === editLessonData.id);
-        const currentOrder = currentLesson?.order;
-
-        // Find the next lesson with the lowest order greater than the current lesson's order
-        const nextLesson = lessonData
-          .filter((item) => item.order > currentOrder)
-          .sort((a, b) => a.order - b.order)[0];
-
+        const currentOrder = currentLesson.order;
+        const nextLesson = lessonData.find((item) => item.order === currentOrder + 1);
         if (nextLesson) {
           if (nextLesson.id) {
-            const data = { current_watching_lesson: nextLesson.id };
+            const data = {
+              current_watching_lesson: nextLesson.id,
+            };
             await axiosInstance.put(
               `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
               data
@@ -527,29 +463,23 @@ const CourseVideo = () => {
           if (nextLesson.quiz_id !== null) {
             await getQuizeDataForEdit(nextLesson.quiz_id);
           }
-        } else {
-          // No next lesson, move to the next module
+        }
+        else if (!nextLesson) {
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
-
           if (currentModule) {
-            // Find the next module dynamically
-            const nextModule = moduleData
-              .filter((item) => item.order > currentModule.order) // Get modules with a higher order
-              .sort((a, b) => a.order - b.order)[0]; // Get the closest next module
-
+            const nextModule = moduleData.find((item) => item.order === currentModule.order + 1);
             if (!nextModule) {
-              notifySuccess("Course Completed");
+              console.log("Course is completed");
               getcourseProgressDataRefresh();
               return;
             }
-
-            console.log(nextModule);
             setActiveModuleIndex(nextModule.id);
             const res = await getLessonData(nextModule.id);
-
             if (res.length > 0) {
               if (res[0].id) {
-                const data = { current_watching_lesson: res[0].id };
+                const data = {
+                  current_watching_lesson: res[0].id,
+                };
                 await axiosInstance.put(
                   `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
                   data
@@ -568,7 +498,6 @@ const CourseVideo = () => {
       console.error("Error in handleViewedLessonData:", error);
     }
   };
-
 
   const handleSubmitQuizAnswer = async () => {
     const correctAnswersKeyValue = {};
@@ -650,9 +579,7 @@ const CourseVideo = () => {
         // getQuizResultDatWithquizId(editQuizData.id);
         const currentLesson = lessonData.find((item) => item.quiz_id === editQuizData.id);
         const currentOrder = currentLesson.order;
-        const nextLesson = lessonData
-          .filter((item) => item.order > currentOrder)
-          .sort((a, b) => a.order - b.order)[0];
+        const nextLesson = lessonData.find((item) => item.order === currentOrder + 1);
         if (nextLesson) {
           if (nextLesson.id) {
             const data = {
@@ -671,14 +598,11 @@ const CourseVideo = () => {
         }
         else if (!nextLesson) {
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
-          getcourseProgressData();
           if (currentModule) {
-            const nextModule = moduleData
-              .filter((item) => item.order > currentModule.order) // Get modules with a higher order
-              .sort((a, b) => a.order - b.order)[0];
+            const nextModule = moduleData.find((item) => item.order === currentModule.order + 1);
             if (!nextModule) {
               getcourseProgressDataRefresh();
-              notifySuccess("Course Completed");
+              console.log("Course is Completed");
               return;
             }
             setActiveModuleIndex(nextModule.id);
@@ -731,7 +655,6 @@ const CourseVideo = () => {
     try {
       const response = await axiosInstance.get(`${port}/gettingReviewWithStudentId/${stuUserId}`);
       setReviewWithStudentId(response.data[0]);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -898,8 +821,8 @@ const CourseVideo = () => {
             </div>
 
             {/* Back Button */}
-            <button className="back-btn">
-              <div onClick={handleBack}>
+            <button className="back-btn" onClick={handleBack}>
+              <div >
                 <i className="fa-solid fa-angle-left mr-2"></i>
                 <span>Back To Main</span>
               </div>
@@ -909,7 +832,7 @@ const CourseVideo = () => {
           <div className="course-video-container ">
             {/* Video Section */}
             <div className="video-player p-2 ">
-              <div className={editLessonData?.lesson_type == "text" || editLessonData?.lesson_type == "pdf" ? "thumbnail-container" : "thumbnail-other-type-container"}>
+              <div className={editLessonData.lesson_type == "text" || editLessonData.lesson_type == "pdf" ? "thumbnail-container" : "thumbnail-other-type-container"}>
                 {editLessonData?.title || editQuizData?.title ? (
                   <div className="edit-content border-2">
                     {editLessonData?.title && (
@@ -950,7 +873,7 @@ const CourseVideo = () => {
                               width="100%"
                               height="500px"
                               title="PDF Viewer"
-                              className="border rounded shadow"
+                              className="border shadow"
                             ></iframe>
                           </div>
                         )}
@@ -1129,6 +1052,7 @@ const CourseVideo = () => {
                             {/* Submit Button */}
                             {(() => {
                               let completedLessonIds = courseProgress?.completed_lesson_id;
+
                               try {
                                 if (!completedLessonIds) {
                                   completedLessonIds = [];
@@ -1224,7 +1148,9 @@ const CourseVideo = () => {
                               MODULE-{moduleIndex + 1} : {module.title}
                             </span>
                             <div className="flex gap-2 item-center">
-                              <span className="module-duration">{formattedTime}</span>
+                              {totalSeconds && totalSeconds !== 0 ? (
+                                <span className="module-duration">{formattedTime}</span>
+                              ) : null}
                               <div className="module-controls">
                                 <button className="check-btn">
                                   <i
@@ -1307,6 +1233,7 @@ const CourseVideo = () => {
                                                 : "cursor-pointer"
                                                 }`}
                                               checked={isCompleted}
+                                              onChange={() => !isCompleted && handleViewedLessonData()}
                                               readOnly
                                             />
                                           </div>
@@ -1331,17 +1258,18 @@ const CourseVideo = () => {
             </div>
             {/* Rating & Review Dropdown */}
             {isReviewOpen && (
-              <div className="absolute rounded-md md:top-1/4 top-10 md:right-1/3 right-4 z-10 bg-[#F5F6FA] p-5">
+              <div className="leave_your_review_model">
+                <div className="leave_your_review_model_container">
                 <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-xl font-bold text-black">
+                  <h2 className="text-[22px] font-bold text-black">
                     Write Your Review
                   </h2>
-                  <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark"></i></button>
+                  <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark text-lg"></i></button>
                 </div>
                 <form onSubmit={handleSubmitReview}>
                   {/* Star Rating */}
 
-                  <div className="flex items-center space-x-2 mb-2">
+                  <div className="flex items-center space-x-1 mb-2">
                     {[...Array(5)].map((_, index) => (
                       <i
                         key={index}
@@ -1360,7 +1288,7 @@ const CourseVideo = () => {
                   </div>
                   {/* Review Text */}
                   <textarea
-                    className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-lg p-4 h-[150px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                     rows="2"
                     name="review"
                     placeholder="Share your experience about this course..."
@@ -1369,11 +1297,12 @@ const CourseVideo = () => {
                   ></textarea>
                   <button
                     type="submit"
-                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
                   >
                     Save
                   </button>
                 </form>
+                </div>
               </div>
             )}
 

@@ -176,11 +176,38 @@ const ViewCourse = () => {
     getViewCourseData();
     getAllLessonData();
     getTotalEnroll();
+    getReviewData();
   }, []);
   useEffect(() => {
     getCourseCategory();
     getModuleData();
   }, [courseData]);
+
+
+  //review
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
+
+  const getReviewData = async () => {
+    axiosInstance
+      .get(`${port}/gettingReviewWithCourseId/${id}`)
+      .then((response) => {
+        setReviews(response.data);
+        const total = response.data.length;
+        const sum = response.data.reduce(
+          (acc, review) => acc + review.rating,
+          0
+        );
+        const avgRating = total > 0 ? sum / total : 0;
+
+        setAverageRating(avgRating); // Store avgRating as a number
+        setTotalRatings(total);
+      })
+      .catch((error) => {
+        console.error("Error fetching reviews:", error);
+      });
+  };
   return (
     <>
       <Navbar />
@@ -219,11 +246,6 @@ const ViewCourse = () => {
                 </span>
                 <span>
                   <i className="fa-solid fa-graduation-cap"></i> {courseData?.course_language}
-                </span>
-              </div>
-              <div className="course-icon-section mt-2">
-                <span className="w-max">
-                  <i className="fa-solid fa-clock"></i> Last Update: 11/2024
                 </span>
               </div>
 
@@ -289,10 +311,11 @@ const ViewCourse = () => {
                         }
                         return quizeTotal;
                       }, 0);
-                      const totalMinutes = lessonTime + quizeTime;
-                      const hours = Math.floor(totalMinutes / 60);
-                      const minutes = totalMinutes % 60;
-                      const formattedTime = `${hours} hours and ${minutes} minutes`;
+                      const totalSeconds = module.time;
+                      const hours = Math.floor(totalSeconds / 3600);
+                      const minutes = Math.floor((totalSeconds % 3600) / 60);
+                      const seconds = totalSeconds % 60;
+                      const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                       return (
                         <div className="module" key={index}>
                           <div
@@ -302,8 +325,10 @@ const ViewCourse = () => {
                             <span className="module-title">
                               MODULE-{index + 1} : {module.title}
                             </span>
-                            <span className="module-duration">{formattedTime}</span>
                             <div className="module-controls">
+                              {totalSeconds && totalSeconds !== 0 ? (
+                                <span className="module-duration">{formattedTime}</span>
+                              ) : null}
                               <span className="check-btn">
                                 <i
                                   className={`fa-solid ${activeModuleIndex === index
@@ -358,9 +383,9 @@ const ViewCourse = () => {
                                               )
                                             }
                                           </div>
-                                          <button className="resource-btn text-sm ml-3">
+                                          {/* <button className="resource-btn text-sm ml-3">
                                             <i className="fa-solid fa-eye mr-2"></i> Preview
-                                          </button>
+                                          </button> */}
                                         </div>
                                       </div>
                                     ))
@@ -425,116 +450,79 @@ const ViewCourse = () => {
                   }
                 </>
               )}
-              {/* {activeTab === "reviews" && (
+              {activeTab === "reviews" && (
                 <div className="reviews-section">
                   <div className="average-rating">
-                    <div>
-                      <h2>4.0 </h2>
-                    </div>
+                    <div>{<h2>{averageRating.toFixed(1)}</h2>}</div>
                     <div>
                       <div className="review-rating">
-                        {[...Array(4)].map((_, i) => (
-                          <i className="fa-solid fa-star" key={i}></i>
+                        {[...Array(5)].map((_, i) => (
+                          <i
+                            className={
+                              i < averageRating
+                                ? "fa-solid fa-star"
+                                : "fa-regular fa-star"
+                            }
+                            key={i}
+                          ></i>
                         ))}
-                        <i className="fa-regular fa-star"></i>
                       </div>
-                      <p>based on 146,951 ratings</p>
+                      <p>based on {totalRatings} ratings</p>
                     </div>
                   </div>
+
                   <div className="review-list">
-                    {Array(2)
-                      .fill()
-                      .map((_, index) => (
+                    {reviews.length > 0 ? (
+                      reviews.map((review, index) => (
                         <div className="review-item" key={index}>
                           <div className="reviewer-info">
-                            <img
-                              src="https://via.placeholder.com/50"
-                              alt="Reviewer"
-                            />
+                            {review?.student?.profile ? (
+                              <img
+                                src={`../upload/${review.student.profile}`}
+                                alt="Profile"
+                              />
+                            ) : (
+                              <img
+                                src={require("../../../assets/image/default-profile.png")}
+                                alt="Profile"
+                              />
+                            )}
                             <div>
-                              <h4>David W.</h4>
+                              <h4>
+                                {review.student.first_name}{" "}
+                                {review.student.last_name}
+                              </h4>
                               <div className="flex items-center gap-2.5 pt-1">
                                 <div className="review-rating">
-                                  {[...Array(4)].map((_, i) => (
-                                    <i className="fa-solid fa-star" key={i}></i>
+                                  {[...Array(5)].map((_, i) => (
+                                    <i
+                                      className={
+                                        i < review.rating
+                                          ? "fa-solid fa-star"
+                                          : "fa-regular fa-star"
+                                      }
+                                      key={i}
+                                    ></i>
                                   ))}
-                                  <i className="fa-regular fa-star"></i>{" "}
                                 </div>
-                                <div className="review-date">
-                                  <span>2 weeks ago</span>
-                                </div>
+                                {/* <div className="review-date">
+                                  <span>{review.createdAt}</span>
+                                </div> */}
                               </div>
                             </div>
                           </div>
-                          <p className="review-text">
-                            I love the way the instructor goes about the course. So easy to follow, even though a little bit
-                            challenging as expected.
-                          </p>
+                          <p className="review-text">{review.review}</p>
                         </div>
-                      ))}
+                      ))
+                    ) : (
+                      <p>No reviews available.</p>
+                    )}
                   </div>
 
-                  <div className="container mx-auto px-4 mt-5">
-                    <nav
-                      className="flex flex-row flex-nowrap justify-between md:justify-center items-center"
-                      aria-label="Pagination"
-                    >
-                      <a
-                        className="flex w-10 h-10 mr-1 justify-center items-center rounded-full border border-gray-200 text-black hover:border-gray-300"
-                        href="#"
-                        title="Previous Page"
-                      >
-                        <span className="sr-only">Previous Page</span>
-                        <svg
-                          className="block w-4 h-4 fill-current"
-                          viewBox="0 0 256 512"
-                          aria-hidden="true"
-                          role="presentation"
-                        >
-                          <path d="M238.475 475.535l7.071-7.07c4.686-4.686 4.686-12.284 0-16.971L50.053 256 245.546 60.506c4.686-4.686 4.686-12.284 0-16.971l-7.071-7.07c-4.686-4.686-12.284-4.686-16.97 0L10.454 247.515c-4.686 4.686-4.686 12.284 0 16.971l211.051 211.05c4.686 4.686 12.284 4.686 16.97-.001z"></path>
-                        </svg>
-                      </a>
-                      <a
-                        className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
-                        href="#"
-                        title="Page 1"
-                      >
-                        1
-                      </a>
-                      <a
-                        className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
-                        href="#"
-                        title="Page 2"
-                      >
-                        2
-                      </a>
-                      <a
-                        className="hidden md:flex w-10 h-10 mx-1 justify-center items-center rounded-full border border-black bg-black text-white"
-                        href="#"
-                        aria-current="page"
-                        title="Page 3"
-                      >
-                        3
-                      </a>
-                      <a
-                        className="flex w-10 h-10 ml-1 justify-center items-center rounded-full border border-gray-200 bg-white text-black hover:border-gray-300"
-                        href="#"
-                        title="Next Page"
-                      >
-                        <span className="sr-only">Next Page</span>
-                        <svg
-                          className="block w-4 h-4 fill-current"
-                          viewBox="0 0 256 512"
-                          aria-hidden="true"
-                          role="presentation"
-                        >
-                          <path d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z"></path>
-                        </svg>
-                      </a>
-                    </nav>
-                  </div>
+
+
                 </div>
-              )} */}
+              )}
             </div>
 
             <div className="course-image 2xl:w-4/12 xl:w-4/12 lg:w-4/12 w-full">
