@@ -216,19 +216,36 @@ function Enrollements() {
   }
 
   //delete data
+  const generateCaptcha = () => {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+  };
+  const [captchaValue, setCaptchaValue] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+  const [generatedCaptcha, setGeneratedCaptcha] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const deleteToggleModal = (index) => {
     setDeleteOpen(!deleteOpen);
+    setGeneratedCaptcha(generateCaptcha());
     setDeleteId(index);
   };
+  const handleChange = (e) => {
+    setCaptchaValue(e.target.value);
+    setCaptchaError("");
+  };
   const handleDelete = async () => {
-    try {
-      const res = await axiosInstance.delete(`${port}/deletingEnrollment/${deleteId}`);
-      getEnrollmentData();
-      setDeleteOpen(false);
-    } catch (error) {
-      console.log(error);
+    if (generatedCaptcha === captchaValue) {
+      try {
+        const res = await axiosInstance.delete(`${port}/deletingEnrollment/${deleteId}`);
+        getEnrollmentData();
+        setDeleteOpen(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
+    else {
+      setCaptchaError("Incorrect CAPTCHA value. Please try again.");
+    }
+
   }
 
   useEffect(() => {
@@ -450,6 +467,19 @@ function Enrollements() {
           <div className="modal-container">
             <h5>Delete Enrollment</h5>
             <p>Are you sure you want to delete this Enrollment?</p>
+            <p>
+              If you want to delete, enter <b>{generatedCaptcha}</b>
+            </p>
+            <div>
+              <input
+                type="text"
+                placeholder="Enter Captcha"
+                className="col12input"
+                value={captchaValue}
+                onChange={handleChange}
+              />
+              {captchaError && <p className="captcha-error"> {captchaError}</p>}
+            </div>
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               <button className="primary-btn" onClick={handleDelete}>
                 Delete

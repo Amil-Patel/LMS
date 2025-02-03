@@ -162,7 +162,7 @@ const CourseVideo = () => {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setActiveModuleIndex(res.data.section_id)
       getLessonData(res.data.section_id);
-      if (res.data.quiz_id === null) {
+      if (res.data.quiz_id == null && num !== 1) {
         await getLessonDataForEdit(res.data.id);
       }
       if (res.data.quiz_id !== null) {
@@ -314,7 +314,7 @@ const CourseVideo = () => {
     }
   }
 
-  const getLessonDataForEdit = async (id) => {
+  const getLessonDataForEdit = async (id, num) => {
     setEditQuizData({
       title: "",
       section_id: "",
@@ -843,7 +843,7 @@ const CourseVideo = () => {
                             </h2>
                             <span className="ml-2 font-semibold px-2 py-0.5 h-fit text-[12px] rounded bg-[#DDDDDD] uppercase">{editLessonData.lesson_type}</span>
                           </div>
-                          <p className="course_module_duration"><strong>Duration:</strong> {editLessonData.duration || "N/A"} Minutes</p>
+                          <p className="course_module_duration"><strong>Duration:</strong> {editLessonData.duration || "0"} Minutes</p>
                         </div>
 
                         {editLessonData.lesson_type === "youtube-video" && (
@@ -1135,7 +1135,7 @@ const CourseVideo = () => {
                       return (
                         <div className="module" key={moduleIndex}>
                           <div
-                            className={`module-header  ${activeModuleIndex === module.id ? "active" : ""}`}
+                            className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
                             onClick={() =>
                               toggleContent(
                                 module.id,
@@ -1148,6 +1148,7 @@ const CourseVideo = () => {
                               MODULE-{moduleIndex + 1} : {module.title}
                             </span>
                             <div className="flex gap-2 item-center">
+
                               {totalSeconds && totalSeconds !== 0 ? (
                                 <span className="module-duration">{formattedTime}</span>
                               ) : null}

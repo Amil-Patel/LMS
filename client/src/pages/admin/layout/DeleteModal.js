@@ -43,7 +43,7 @@ const DeleteModal = ({ onDelete }) => {
       {showModal && (
         <div className="delete-popup">
           <div className="delete-popup-content">
-            <h5>Enter Captcha</h5>
+            <h4>Enter Captcha</h4>
             <p>
               If you want to delete, enter <b>{generatedCaptcha}</b>
             </p>

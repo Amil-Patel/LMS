@@ -152,14 +152,14 @@ const ShoppingCart = () => {
                                     authors = JSON.parse(authors);
                                   } catch (error) {
                                     console.error("Error parsing course.auther:", error);
-                                    return "Unknown";
+                                    return;
                                   }
                                 }
 
                                 if (Array.isArray(authors) && authors.length > 0) {
                                   return authors.join(", ");
                                 } else {
-                                  return "Unknown";
+                                  return;
                                 }
                               })()}
                             </p>

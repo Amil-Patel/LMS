@@ -690,6 +690,7 @@ const AddCourse = () => {
               <Editor
                 apiKey='1ufup43ij0id27vrhewjb9ez5hf6ico9fpkd8qwsxje7r5bo'
                 onInit={(evt, editor) => (editorRef.current = editor)}
+                value={addCourse.long_desc}
                 init={{
                   height: 500,
                   menubar: true,
