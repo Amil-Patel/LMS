@@ -27,7 +27,8 @@
 }
 
 .course-category label {
-  display: block;
+  display: flex;
+  align-items: center;
   color: var(--light-grey-text-color);
   font-family: var(--jost-ff);
   font-size: 18px;
@@ -40,7 +41,6 @@
   margin-right: 8px;
   width: 16px;
   height: 16px;
-  vertical-align: middle;
 }
 
 .course-section-header {

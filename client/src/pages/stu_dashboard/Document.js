@@ -140,8 +140,8 @@ const Document = () => {
                                             <th style={{width:"5%"}}>Sr.No</th>
                                             <th style={{width:"45%"}}>Course Name</th>
                                             <th style={{width:"15%"}}>Attachment</th>
-                                            <th style={{width:"15%"}}>Status</th>
-                                            <th style={{width:"20%"}}>Message</th>
+                                            <th style={{width:"10%"}}>Status</th>
+                                            <th style={{width:"25%"}}>Message</th>
                                         </tr>
                                     </thead>
                                     <tbody>
