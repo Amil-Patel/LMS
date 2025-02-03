@@ -24,7 +24,7 @@ const ViewCourse = () => {
   const getLessonData = async (id) => {
     setLessonLoading(true)
     try {
-      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
+      const res = await axiosInstance.get(${port}/gettingCourseLessonDataWithSectionId/${id});
       const lessonquizdata = res.data
       // const filterOrderData = lessonquizdata.filter((item) => item.order !== 0);
       const sortedData = lessonquizdata.sort((a, b) => a.order - b.order);
@@ -40,7 +40,7 @@ const ViewCourse = () => {
   const [allLessonData, setAllLessonData] = useState([]);
   const getAllLessonData = async () => {
     try {
-      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithCourseId/${id}`);
+      const res = await axiosInstance.get(${port}/gettingCourseLessonDataWithCourseId/${id});
       const lessonquizdata = res.data
       // const filterOrderData = lessonquizdata.filter((item) => item.order !== 0);
       const sortedData = lessonquizdata.sort((a, b) => a.order - b.order);
@@ -59,7 +59,7 @@ const ViewCourse = () => {
   const [totalEnroll, setTotalEnroll] = useState(0);
   const getTotalEnroll = async () => {
     try {
-      const response = await axiosInstance.get(`${port}/gettingEnrollWithCourseId/${id}`);
+      const response = await axiosInstance.get(${port}/gettingEnrollWithCourseId/${id});
       const data = await response.data;
       setTotalEnroll(data.length);
     } catch (error) {
@@ -81,7 +81,7 @@ const ViewCourse = () => {
   const getCourseCategory = async () => {
     setLoading(true)
     try {
-      const response = await axiosInstance.get(`${port}/gettingCoureseCategoryWithId/${courseData.course_cate}`);
+      const response = await axiosInstance.get(${port}/gettingCoureseCategoryWithId/${courseData.course_cate});
       const data = await response.data;
       setCourseCategory(data);
       setLoading(false)
@@ -96,7 +96,7 @@ const ViewCourse = () => {
   const getViewCourseData = async () => {
     setLoading(true)
     try {
-      const response = await axiosInstance.get(`${port}/gettingCourseMasterDataWithId/${id}`);
+      const response = await axiosInstance.get(${port}/gettingCourseMasterDataWithId/${id});
       const data = await response.data;
       setCourseData(data);
       // setup for auther
@@ -156,7 +156,7 @@ const ViewCourse = () => {
   const getModuleData = async () => {
     setLoading(true)
     try {
-      const response = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
+      const response = await axiosInstance.get(${port}/gettingCourseSectionData/${id});
       const sectionData = response.data;
       const sortedData = sectionData.sort((a, b) => a.order - b.order);
       setModuleData(sortedData);
@@ -170,7 +170,7 @@ const ViewCourse = () => {
   //buy course
   const handleBuy = (data) => {
     addToCart(data);
-    navigate(`/shopping-cart`);
+    navigate(/shopping-cart);
   }
   useEffect(() => {
     getViewCourseData();
@@ -191,7 +191,7 @@ const ViewCourse = () => {
 
   const getReviewData = async () => {
     axiosInstance
-      .get(`${port}/gettingReviewWithCourseId/${id}`)
+      .get(${port}/gettingReviewWithCourseId/${id})
       .then((response) => {
         setReviews(response.data);
         const total = response.data.length;
@@ -231,7 +231,7 @@ const ViewCourse = () => {
               </p>
               <div className="rating-author">
                 <p className="author-name mt-2">
-                  By {courseData?.auther?.map((author, index) => `${author}`).join(', ')}
+                  By {courseData?.auther?.map((author, index) => ${author}).join(', ')}
                 </p>
               </div>
               <div className="course-icon-section">
@@ -315,7 +315,7 @@ const ViewCourse = () => {
                       const hours = Math.floor(totalSeconds / 3600);
                       const minutes = Math.floor((totalSeconds % 3600) / 60);
                       const seconds = totalSeconds % 60;
-                      const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                      const formattedTime = ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')};
                       return (
                         <div className="module" key={index}>
                           <div
@@ -478,7 +478,7 @@ const ViewCourse = () => {
                           <div className="reviewer-info">
                             {review?.student?.profile ? (
                               <img
-                                src={`../upload/${review.student.profile}`}
+                                src={../upload/${review.student.profile}}
                                 alt="Profile"
                               />
                             ) : (
@@ -535,7 +535,7 @@ const ViewCourse = () => {
               ) : (
                 <img
                   className="view-course-thumbnail w-full mb-6"
-                  src={`../upload/${courseData.course_thumbnail}`}
+                  src={../upload/${courseData.course_thumbnail}}
                   alt="Course Thumbnail"
                 />
               )}
@@ -553,7 +553,7 @@ const ViewCourse = () => {
                   ) : ("")}
                 </h3>
                 <div className="cart-buttons">
-                  <button className={`btn-add ${isInCart ? 'disabled' : ''}`} onClick={() => addToCart(courseData)}
+                  <button className={btn-add ${isInCart ? 'disabled' : ''}} onClick={() => addToCart(courseData)}
                     disabled={isInCart}>{isInCart ? 'Added to Cart' : 'Add to Cart'}</button>
                   <button className="btn-buy" onClick={() => handleBuy(courseData)}>Buy Now</button>
                 </div>
@@ -594,4 +594,4 @@ const ViewCourse = () => {
   );
 };
 
-export default ViewCourse;
+export default ViewCourse;
