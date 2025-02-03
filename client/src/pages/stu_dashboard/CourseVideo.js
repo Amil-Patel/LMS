@@ -157,7 +157,7 @@ const CourseVideo = () => {
   };
 
   //get lesson iwth id
-  const getLessonWithCompletedId = async (id) => {
+  const getLessonWithCompletedId = async (id, num) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setActiveModuleIndex(res.data.section_id)
@@ -1261,48 +1261,48 @@ const CourseVideo = () => {
             {isReviewOpen && (
               <div className="leave_your_review_model">
                 <div className="leave_your_review_model_container">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-[22px] font-bold text-black">
-                    Write Your Review
-                  </h2>
-                  <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark text-lg"></i></button>
-                </div>
-                <form onSubmit={handleSubmitReview}>
-                  {/* Star Rating */}
-
-                  <div className="flex items-center space-x-1 mb-2">
-                    {[...Array(5)].map((_, index) => (
-                      <i
-                        key={index}
-                        className={`cursor-pointer text-base ${index < addReview.rating
-                          ? "fa-solid fa-star text-orange-500"
-                          : "fa-regular fa-star text-gray-300"
-                          }`}
-                        onClick={() =>
-                          setAddReview((prevReview) => ({
-                            ...prevReview,
-                            rating: index + 1, // Update rating based on star clicked
-                          }))
-                        }
-                      ></i>
-                    ))}
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-[22px] font-bold text-black">
+                      Write Your Review
+                    </h2>
+                    <button onClick={() => setIsReviewOpen(false)}><i className="fa-solid fa-xmark text-lg"></i></button>
                   </div>
-                  {/* Review Text */}
-                  <textarea
-                    className="w-full border border-gray-300 rounded-lg p-4 h-[150px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows="2"
-                    name="review"
-                    placeholder="Share your experience about this course..."
-                    value={addReview.review}
-                    onChange={handleReviewChange}
-                  ></textarea>
-                  <button
-                    type="submit"
-                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
-                  >
-                    Save
-                  </button>
-                </form>
+                  <form onSubmit={handleSubmitReview}>
+                    {/* Star Rating */}
+
+                    <div className="flex items-center space-x-1 mb-2">
+                      {[...Array(5)].map((_, index) => (
+                        <i
+                          key={index}
+                          className={`cursor-pointer text-base ${index < addReview.rating
+                            ? "fa-solid fa-star text-orange-500"
+                            : "fa-regular fa-star text-gray-300"
+                            }`}
+                          onClick={() =>
+                            setAddReview((prevReview) => ({
+                              ...prevReview,
+                              rating: index + 1, // Update rating based on star clicked
+                            }))
+                          }
+                        ></i>
+                      ))}
+                    </div>
+                    {/* Review Text */}
+                    <textarea
+                      className="w-full border border-gray-300 rounded-lg p-4 h-[150px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows="2"
+                      name="review"
+                      placeholder="Share your experience about this course..."
+                      value={addReview.review}
+                      onChange={handleReviewChange}
+                    ></textarea>
+                    <button
+                      type="submit"
+                      className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
+                    >
+                      Save
+                    </button>
+                  </form>
                 </div>
               </div>
             )}
