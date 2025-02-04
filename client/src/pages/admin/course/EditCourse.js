@@ -372,9 +372,9 @@ const EditCourse = () => {
         formData.append('publish_date', courseData.publish_date);
         formData.append('is_top_course', courseData.is_top_course);
         formData.append('featured_course', courseData.featured_course);
-        formData.append('course_faqs', courseData.course_faqs);
-        formData.append('course_topics', courseData.course_topics);
-        formData.append('course_requirenment', courseData.course_requirenment);
+        formData.append('course_faqs', JSON.stringify(courseData.course_faqs));
+        formData.append('course_topics', JSON.stringify(courseData.course_topics));
+        formData.append('course_requirenment', JSON.stringify(courseData.course_requirenment));
         formData.append('course_price', courseData.course_price);
         formData.append('course_discount', courseData.course_discount);
         formData.append('is_tax', courseData.is_tax);
@@ -552,7 +552,7 @@ const EditCourse = () => {
                                     </div>
 
                                     <div className="form-group mb-0" style={{ width: "48%" }}>
-                                        <label>Course Discount %</label>
+                                        <label>Course Discount <small className="text-muted">(%)</small></label>
                                         <input type="text" className="col12input" name="course_discount" onChange={handleChange} value={courseData.course_discount} />
                                     </div>
                                 </div>
@@ -609,7 +609,7 @@ const EditCourse = () => {
 
                                             <div className="form-group mb-0" style={{ width: "32%" }}>
                                                 <label>
-                                                    Tax Rate
+                                                    Tax Rate <small className="text-muted">(%)</small>
                                                     <label>
                                                         <span className="required">*</span>
                                                     </label>
@@ -849,6 +849,7 @@ const EditCourse = () => {
                                             <input
                                                 type="text"
                                                 name="question"
+                                                placeholder="Enter Question"
                                                 value={faq.question}
                                                 onChange={(event) => handleFaqChange(index, event)}
                                                 className="col12input"
@@ -877,7 +878,7 @@ const EditCourse = () => {
                                             name="answer"
                                             value={faq.answer}
                                             onChange={(event) => handleFaqChange(index, event)}
-                                            placeholder="Your FAQS Answer Description Here"
+                                            placeholder="Enter Answer"
                                             className="textarea-field col12input"
                                         />
                                     </div>
@@ -1020,6 +1021,7 @@ const EditCourse = () => {
                                 <input
                                     type="text"
                                     name="title_tag"
+                                    placeholder="Enter Meta Title"
                                     onChange={handleChange}
                                     value={courseData.title_tag}
                                     className="col12input"
@@ -1031,6 +1033,7 @@ const EditCourse = () => {
                                 <input
                                     type="text"
                                     name="canonical_url"
+                                    placeholder="Enter Canonical URL"
                                     onChange={handleChange}
                                     value={courseData.canonical_url}
                                     className="col12input"

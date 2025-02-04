@@ -164,8 +164,11 @@ const CourseCoupon = () => {
       setAddOpen(false);
       setLoading(false);
     } catch (error) {
+      if (error.response.status == 400) {
+        notifyWarning(error.response.data.message);
+        setLoading(false);
+      }
       console.log(error);
-      setLoading(false);
     }
   };
 
@@ -698,7 +701,7 @@ const CourseCoupon = () => {
                   <button type="submit" className="primary-btn">
                     Submit
                   </button>
-                  <button onClick={addToggleModal} className="secondary-btn">
+                  <button type="button" onClick={addToggleModal} className="secondary-btn">
                     Close
                   </button>
                 </div>
@@ -854,7 +857,7 @@ const CourseCoupon = () => {
                   <button type="submit" className="primary-btn">
                     Update
                   </button>
-                  <button onClick={editToggleModal} className="secondary-btn">
+                  <button type='button' onClick={editToggleModal} className="secondary-btn">
                     Close
                   </button>
                 </div>

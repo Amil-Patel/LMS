@@ -78,10 +78,6 @@ const ShoppingCart = () => {
       }
     }
   };
-
-
-
-
   const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + item.course_price, 0);
   const sumOfAllCartTax = cart.reduce((acc, item) => {
     if (item.is_inclusive == 1) {
@@ -95,8 +91,6 @@ const ShoppingCart = () => {
     const discount_price = (item.course_price * item.course_discount) / 100;
     return total + discount_price;
   }, 0);
-  console.log(sumOfAllDiscountPrice)
-  console.log(couponDiscount)
   const navigate = useNavigate();
   // Navigate to Checkout with state
   const processToCheckout = (total) => {
@@ -116,6 +110,7 @@ const ShoppingCart = () => {
           amount: course.course_price,
           course_tax: course.tax_rate,
           course_taxamount: discountedPrice,
+          coupon_discount_price: isCouponApplicable ? couponDiscount : 0,
           discount: course.course_discount,
           is_inclusive: course.is_inclusive,
           is_exclusive: course.is_exclusive
@@ -132,6 +127,36 @@ const ShoppingCart = () => {
       notifyWarning("Your cart is empty. Please add courses to proceed.");
     }
   };
+  //review
+  const [averageRatings, setAverageRatings] = useState({});
+  const [totalRatings, setTotalRatings] = useState({});
+  const getReviewData = async (id) => {
+    console.log(id)
+    axiosInstance
+      .get(`${port}/gettingReviewWithCourseId/${id}`)
+      .then((response) => {
+        const total = response.data.length;
+        const sum = response.data.reduce(
+          (acc, review) => acc + review.rating,
+          0
+        );
+        const avgRating = total > 0 ? sum / total : 0;
+
+        setAverageRatings((prev) => ({ ...prev, [id]: avgRating }));
+        setTotalRatings((prev) => ({ ...prev, [id]: total }));
+      })
+      .catch((error) => {
+        console.error("Error fetching reviews:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      cart.forEach((course) => {
+        getReviewData(course.course_id);
+      });
+    }
+  }, [cart]);
 
   return (
     <>
@@ -149,7 +174,6 @@ const ShoppingCart = () => {
                       course.course_title.length > 55
                         ? `${course.course_title.slice(0, 55)} ...`
                         : course.course_title;
-
                     const discount_price = course.course_price - (course.course_price * course.course_discount / 100);
                     return (
                       <div className='horizontal-card flex justify-between py-5 border-b-2 border-border-color' key={index}>
@@ -188,12 +212,18 @@ const ShoppingCart = () => {
                                 }
                               })()}
                             </p>
-                            <span className="courses-reviews font-semibold"> 4.5 <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <i className="fa-solid fa-star"></i>
-                              <span className="customer-review-number"> (3,902) </span>
+                            <span className="courses-reviews font-semibold">
+                              {[...Array(5)].map((_, i) => (
+                                <i
+                                  className={
+                                    i < (averageRatings[course.course_id] || 0)
+                                      ? "fa-solid fa-star"
+                                      : "fa-regular fa-star"
+                                  }
+                                  key={i}
+                                ></i>
+                              ))}
+                              <span className="customer-review-number ms-1">({totalRatings[course.course_id] || 0})</span>
                             </span>
                           </div>
                         </div>

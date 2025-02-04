@@ -165,7 +165,7 @@ const Navbar = () => {
             </div>
             <ul className="space-y-3">
               <li>
-                <NavLink to="/student/stu-profile" className="flex items-center text-gray-700 hover:text-primary">
+                <NavLink to="/student/learning" className="flex items-center text-gray-700 hover:text-primary">
                   <i className="fa-solid fa-user-gear mr-2"></i>My Profile
                 </NavLink>
               </li>
