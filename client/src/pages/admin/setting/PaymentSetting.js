@@ -164,7 +164,7 @@ function PaymentSetting() {
       console.log(error);
     }
   }
-
+  console.log(selectedCurrency)
   return (
     <>
       <Hoc />
@@ -191,7 +191,7 @@ function PaymentSetting() {
                 <option value="">Select</option>
                 {
                   currencyData.map((item) => (
-                    <option key={item.name} value={item.name} name={item.symbol}>{item.name} ({item.symbol})</option>
+                    <option key={item.name} value={item.code} name={item.symbol}>{item.name} ({item.symbol})</option>
                   ))
                 }
               </select>

@@ -128,7 +128,7 @@ const CourseVideo = () => {
       setTimeStamp((prevTimeStamp) => {
         const totalTime = prevTimeStamp + prevElapsedTime;
         const payload = { watchingDuration: totalTime };
-        axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress.id}`, payload)
+        axiosInstance.put(`${port}/updateWatchingDuration/${courseProgress?.id}`, payload)
           .then(() => {
           })
           .catch((error) => {

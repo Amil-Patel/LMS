@@ -14,23 +14,29 @@ const port = process.env.REACT_APP_URL
 const ShoppingCart = () => {
   const { cart, setCart, removeCart } = useCart();
   const { stuUserId, setting } = useContext(userRolesContext);
-
+  const [eligibleCourses, setEligibleCourses] = useState([]);
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
   const applyCouponDiscount = async () => {
-    if (!couponCode) {
-      notifyError("Please enter a coupon code.");
+    setCouponCode('');
+    if (!couponCode && isCouponApplied == true) {
+      notifyError("Enter other a Promo code.");
       return;
     }
+    else if (!couponCode) {
+      notifyError("Enter Valid Promo Code.");
+      return;
+    }
+    const enterdCouponCode = couponCode
     try {
-      const response = await axiosInstance.post(`${port}/validateCoupon`, { couponCode });
+      const response = await axiosInstance.post(`${port}/validateCoupon`, { couponCode: enterdCouponCode });
+
       if (response.data.success) {
         const { courseIds, discount, is_percentage, is_amount } = response.data;
-
         const parsedCourseIds = JSON.parse(courseIds);
 
-        let totalDiscount = 0; // Accumulator for total discount
-
+        let totalDiscount = 0; // Reset total discount
         const updatedCart = cart.map((course) => {
           if (parsedCourseIds.includes(course.course_id)) {
             const courseDiscountAmount = course.course_price - (course.course_price * course.course_discount / 100);
@@ -49,16 +55,22 @@ const ShoppingCart = () => {
           return course;
         });
 
-        // **Update State Once After Looping**
-        setCouponDiscount((prevDiscount) => prevDiscount + totalDiscount); // Preserve previous value if needed
+        // **Reset old discount and apply new one**
+        setEligibleCourses(parsedCourseIds);
+        setCouponDiscount(totalDiscount);
+        setIsCouponApplied(true);
         setCart(updatedCart);
+
+
         notifySuccess("Coupon applied successfully.");
-      }
-      else {
+      } else {
         notifyError("Invalid coupon code.");
       }
-
     } catch (error) {
+      if (error.response && error.response.status == 404) {
+        notifyError("Enter Valid Promo Code.");
+        return
+      }
       if (error.response && error.response.status === 400) {
         notifyWarning(error.response.data.message);
       } else {
@@ -66,6 +78,7 @@ const ShoppingCart = () => {
       }
     }
   };
+
 
 
 
@@ -88,16 +101,27 @@ const ShoppingCart = () => {
   // Navigate to Checkout with state
   const processToCheckout = (total) => {
     if (cart.length > 0) {
-      const courseDetails = cart.map((course) => ({
-        id: course.course_id,
-        title: course.course_title,
-        amount: course.course_price,
-        course_tax: course.tax_rate,
-        course_taxamount: course.course_price - (course.course_price * course.course_discount / 100),
-        discount: course.course_discount,
-        is_inclusive: course.is_inclusive,
-        is_exclusive: course.is_exclusive
-      }));
+      const courseDetails = cart.map((course) => {
+        // Check if this course is eligible for a coupon discount
+        const isCouponApplicable = couponDiscount > 0 && eligibleCourses.includes(course.course_id);
+
+        // Calculate final price after discount (only for applicable courses)
+        const discountedPrice = isCouponApplicable
+          ? course.course_price - (course.course_price * course.course_discount / 100) - couponDiscount
+          : course.course_price - (course.course_price * course.course_discount / 100);
+
+        return {
+          id: course.course_id,
+          title: course.course_title,
+          amount: course.course_price,
+          course_tax: course.tax_rate,
+          course_taxamount: discountedPrice,
+          discount: course.course_discount,
+          is_inclusive: course.is_inclusive,
+          is_exclusive: course.is_exclusive
+        };
+      });
+
       navigate(`/checkout`, {
         state: {
           courses: courseDetails,
@@ -108,6 +132,7 @@ const ShoppingCart = () => {
       notifyWarning("Your cart is empty. Please add courses to proceed.");
     }
   };
+
   return (
     <>
       <Navbar />
@@ -207,11 +232,22 @@ const ShoppingCart = () => {
                 <label htmlFor="promocode-title">Enter Promo Code</label>
                 <div className="flex flex-col sm:flex-row items-center sm:gap-2">
                   <div className="flex w-full mt-1">
-                    <input id="promo-code" type="text" placeholder=""
-                      className="w-full sm:flex-1 py-2 px-4 border border-gray-300  focus:outline-none"
+                    <input
+                      id="promo-code"
+                      type="text"
+                      placeholder=""
+                      className="w-full sm:flex-1 py-2 px-4 border border-gray-300 focus:outline-none"
                       value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)} />
-                    <button type="button" className="promo-code-apply-button py-2 xl:px-9 lg:px-4 px-4 rounded-none bg-blue-500 text-white font-semibold  hover:bg-blue-600" onClick={applyCouponDiscount}>Apply</button>
+                      onChange={(e) => setCouponCode(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="promo-code-apply-button py-2 xl:px-9 lg:px-4 px-4 rounded-none bg-blue-500 text-white font-semibold hover:bg-blue-600"
+                      onClick={applyCouponDiscount}
+                    >
+                      Apply
+                    </button>
+
                   </div>
                 </div>
 
@@ -254,8 +290,8 @@ const ShoppingCart = () => {
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </section >
+      </div >
       <Footer />
     </>
   );

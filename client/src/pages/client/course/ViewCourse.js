@@ -4,6 +4,7 @@ import Navbar from "../layout/Navbar";
 import Breadcrumb from "./Breadcrumb";
 import Footer from "../layout/Footer";
 import { useCart } from "../layout/CartContext";
+import Cookies from "js-cookie";
 import { userRolesContext } from "../../admin/layout/RoleContext";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
@@ -149,8 +150,8 @@ const ViewCourse = () => {
       setLoading(false)
     }
   }
-
-  const isInCart = cart.some((item) => item.id === courseData.id);
+  const savedToken = Cookies.get('student-token');
+  const isInCart = cart.some((item) => savedToken ? item.course_id == courseData.id : item.id == courseData.id);
   //get module data
   const [moduleData, setModuleData] = useState([]);
   const getModuleData = async () => {
@@ -555,7 +556,7 @@ const ViewCourse = () => {
                 <div className="cart-buttons">
                   <button className={`btn-add ${isInCart ? 'disabled' : ''}`} onClick={() => addToCart(courseData)}
                     disabled={isInCart}>{isInCart ? 'Added to Cart' : 'Add to Cart'}</button>
-                  <button className="btn-buy" onClick={() => handleBuy(courseData)}>Buy Now</button>
+                  <button className={`btn-buy ${isInCart ? 'cursor-not-allowed' : ''}`} onClick={() => handleBuy(courseData)} disabled={isInCart}>Buy Now</button>
                 </div>
               </div>
               {/* <div className="course-list">

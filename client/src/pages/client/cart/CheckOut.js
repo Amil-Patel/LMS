@@ -10,13 +10,13 @@ import Cookies from 'js-cookie';
 import axiosInstance from "../utils/axiosInstance";
 import { loadStripe } from "@stripe/stripe-js";
 import stripekey from "../../../utils/key";
+import { notifyError } from "../../admin/layout/ToastMessage";
 const port = process.env.REACT_APP_URL
 const ENCRYPTION_KEY = process.env.REACT_APP_ENCRYPT_KEY
 const CheckOut = () => {
 
     const { setting } = useContext(userRolesContext);
     const { courses, total } = useLocation().state || {};
-    console.log(courses)
     const encryptData = (data) => {
         return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
     };
@@ -63,6 +63,29 @@ const CheckOut = () => {
     });
     const { stuUserId } = useContext(userRolesContext);
     const [isChecked, setIsChecked] = useState(false);
+    const [studentData, setStudentData] = useState([]);
+    useEffect(() => {
+        if (savedToken && stuUserId) {
+            const fetchData = async () => {
+                try {
+                    const response = await axiosInstance.get(`/gettingUserMasterDataWithId/${stuUserId}`);
+                    // setStudentData(response.data);
+                    console.log(response.data)
+                    setInfoData({
+                        name: `${response.data.first_name} ${response.data.last_name}`,
+                        email: response.data?.email,
+                        phone: response.data?.phone,
+                        country: response.data?.country,
+                        city: response.data?.city,
+                        pincode: response.data?.pincode
+                    })
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            }
+            fetchData();
+        }
+    }, [savedToken, stuUserId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -174,6 +197,7 @@ const CheckOut = () => {
     //     }
     // };
     const [buttonLoad, setButtonLoad] = useState(false);
+    console.log(courses)
     const buyCourse = async (e) => {
         e.preventDefault();
         setButtonLoad(true);
@@ -196,7 +220,7 @@ const CheckOut = () => {
         }
 
         if (!savedToken) {
-            alert("Please login to buy the course.");
+            notifyError("Please login first.");
             setButtonLoad(false);
             return;
         }
@@ -245,6 +269,7 @@ const CheckOut = () => {
                 billing_info: {
                     phone: infoData.phone,
                     email: infoData.email,
+                    currency: setting.currency,
                     name: infoData.name,
                     address: infoData.bill_address,
                     gst: infoData.bill_gst,
@@ -282,19 +307,19 @@ const CheckOut = () => {
                             <form>
                                 <div className="form-group">
                                     <label htmlFor="name">Full name<span className="required"> *</span></label>
-                                    <input type="text" id="name" name="name" onChange={handleChange} placeholder="Enter full name" required />
+                                    <input type="text" id="name" name="name" onChange={handleChange} placeholder="Enter full name" value={infoData.name} required />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="email">Email address<span className="required"> *</span></label>
-                                    <input type="email" id="email" name="email" onChange={handleChange} placeholder="Enter email address" required />
+                                    <input type="email" id="email" name="email" onChange={handleChange} placeholder="Enter email address" value={infoData.email} required />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="phone">Phone number<span className="required"> *</span></label>
-                                    <input type="tel" id="phone" name="phone" onChange={handleChange} placeholder="Enter phone number" required />
+                                    <label htmlFor="phone">Phone number</label>
+                                    <input type="tel" id="phone" name="phone" onChange={handleChange} placeholder="Enter phone number" value={infoData.phone} required />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="country">Country<span className="required"> *</span></label>
-                                    <select id="country" name="country" onChange={handleChange} required>
+                                    <select id="country" name="country" onChange={handleChange} value={infoData.country} required>
                                         <option value="">Choose country</option>
                                         <option value="india">India</option>
                                         <option value="usa">United States</option>
@@ -304,7 +329,7 @@ const CheckOut = () => {
                                 <div className="form-group-grid">
                                     <div className="form-group">
                                         <label htmlFor="enter-city">City</label>
-                                        <input type="text" id="enter-city" name="city" onChange={handleChange} placeholder="Enter city" required />
+                                        <input type="text" id="enter-city" name="city" onChange={handleChange} placeholder="Enter city" value={infoData.city} required />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="state">State</label>
@@ -312,7 +337,7 @@ const CheckOut = () => {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="zip-code">Zip Code</label>
-                                        <input type="text" id="zip-code" name="pincode" onChange={handleChange} placeholder="Enter ZIP code" required />
+                                        <input type="text" id="zip-code" name="pincode" onChange={handleChange} placeholder="Enter ZIP code" value={infoData.pincode} required />
                                     </div>
 
                                 </div>

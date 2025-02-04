@@ -1,27 +1,33 @@
-import React, { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { userRolesContext } from "../../admin/layout/RoleContext";
 import { useCart } from "../../../pages/client/layout/CartContext";
 import "../../../assets/css/client/allcourse.css";
 
 const CourseList = ({ courses, category }) => {
-    const { cart, addToCart } = useCart();
+    const { cart, addToCart, loading, loadCart } = useCart(); // Include loading state
     const { setting } = useContext(userRolesContext);
-
     const navigate = useNavigate();
-    const handleClick = (id) => {
-        navigate(`/view-course/${id}`)
+    const savedToken = Cookies.get("student-token");
+
+    useEffect(() => {
+        loadCart();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex flex-col justify-center items-center h-60">
+                <p className="text-2xl font-medium text-gray-700">Loading cart...</p>
+            </div>
+        );
     }
 
-    const savedToken = Cookies.get('student-token');
     return (
         <>
             {courses?.length === 0 && (
                 <div className="flex flex-col justify-center items-center h-60">
-                    <p className="text-2xl font-medium text-gray-700">
-                        No courses found
-                    </p>
+                    <p className="text-2xl font-medium text-gray-700">No courses found</p>
                 </div>
             )}
             {courses?.map((course) => {
@@ -34,34 +40,31 @@ const CourseList = ({ courses, category }) => {
                         ? `${course.short_desc.slice(0, 100)} ...`
                         : course.short_desc;
 
-                // Find the category title for the course
-                const courseCategory = category?.find((cat) => cat.id === course.course_cate)?.cate_title || 'Unknown Category';
+                const courseCategory =
+                    category?.find((cat) => cat.id === course.course_cate)?.cate_title || "Unknown Category";
                 const truncateCate = courseCategory.length > 15 ? `${courseCategory.slice(0, 15)} ...` : courseCategory;
-                if (cart) {
-                    var isInCart = cart?.some((item) => {
-                        if (savedToken) {
-                            return item.course_id === course.id
-                        } else {
-                            return item.id === course.id
-                        }
-                    })
-                }
+                console.log(cart)
+                const isInCart = cart.length > 0 && cart.some((item) =>
+                    savedToken ? item.course_id === course.id : item.id === course.id
+                );
 
                 return (
-                    <div key={course.id} className="course-main-div cursor-pointer" onClick={() => handleClick(course.id)}>
-                        <div className="allcourses-course-image" >
-                            {course.course_thumbnail === null ?
-                                <img src={require('../../../assets/image/default-thumbnail.png')} alt="course_image" />
-                                :
+                    <div key={course.id} className="course-main-div cursor-pointer" onClick={() => navigate(`/view-course/${course.id}`)}>
+                        <div className="allcourses-course-image">
+                            {course.course_thumbnail === null ? (
+                                <img src={require("../../../assets/image/default-thumbnail.png")} alt="course_image" />
+                            ) : (
                                 <img src={`../upload/${course.course_thumbnail}`} alt={course.title} />
-                            }
+                            )}
                         </div>
                         <div className="course-details flex justify-between flex-col">
                             <div>
                                 <div className="course-details-header">
                                     <h3>{truncatedTitle}</h3>
-                                    <span> {setting.position == "left" ? setting.symbol : ""}{course.course_price}
-                                        {setting.position == "right" ? setting.symbol : ""}
+                                    <span>
+                                        {setting.position === "left" ? setting.symbol : ""}
+                                        {course.course_price}
+                                        {setting.position === "right" ? setting.symbol : ""}
                                     </span>
                                 </div>
                                 <p>{truncatedDesc}</p>
@@ -78,19 +81,18 @@ const CourseList = ({ courses, category }) => {
                                     )}
                                 </div>
                             </div>
-                            {/* <div className="course-rating">4.7 ***** (255)</div> */}
                             <div>
                                 <div className="course-btn mt-3">
                                     <button className="security-button">{truncateCate}</button>
                                     <button
-                                        className={`add-to-cart-btn ${isInCart ? 'disabled' : ''}`}
+                                        className={`add-to-cart-btn ${isInCart ? "disabled" : ""}`}
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevents navigation when clicking the button
+                                            e.stopPropagation();
                                             addToCart(course);
                                         }}
                                         disabled={isInCart}
                                     >
-                                        {isInCart ? 'Added to Cart' : 'Add to Cart'}
+                                        {isInCart ? "Added to Cart" : "Add to Cart"}
                                     </button>
                                 </div>
                             </div>

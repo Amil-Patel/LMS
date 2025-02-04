@@ -48,26 +48,25 @@ const addProcessedPaymentData = async (req, res) => {
         let totalAmount = 0;
 
         courses.forEach((course) => {
-            totalAmount = totalAmount + (course.discount_amount + course.course_taxamount)
+            totalAmount += parseFloat(course.course_taxamount);
         });
-
         session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: courses.map((course) => {
                 const discountAmount = parseFloat(course.discount_amount) || 0;
                 const taxAmount = parseFloat(course.course_taxamount) || 0;
-            
+
                 // Calculate the final amount in smallest currency unit (e.g., cents for INR)
                 const finalAmount = discountAmount + taxAmount;
-            
-                if (isNaN(finalAmount)) {
-                  throw new Error(`Invalid amount for course: ${JSON.stringify(course)}`);
-                }
-            
 
+                if (isNaN(finalAmount)) {
+                    throw new Error(`Invalid amount for course: ${JSON.stringify(course)}`);
+                }
+
+                console.log(billing_info.currency)
                 return {
                     price_data: {
-                        currency: "inr",
+                        currency: billing_info.currency.toLowerCase(),
                         product_data: {
                             name: course.title,
                         },
@@ -126,7 +125,7 @@ const addProcessedPaymentData = async (req, res) => {
         paymentData = await payment.create({
             student_id: user_id,
             order_id: orders.id,
-            amount: totalAmount, // Use the calculated total amount
+            amount: parseFloat(totalAmount).toFixed(2), // Use the calculated total amount
             payment_mode: "online",
             transaction_id: "", // Placeholder for now
             bill_mobile: billing_info?.phone,

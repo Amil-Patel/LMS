@@ -36,6 +36,7 @@ const PurchaseHistory = () => {
     setCurrentCourse(null);
   };
   const handleViewClick = (course) => {
+    console.log(course)
     const time = moment.unix(course.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
     setCurrentCourse((prev) => ({
       ...prev,
@@ -44,8 +45,10 @@ const PurchaseHistory = () => {
     }));
 
     if (Array.isArray(course.orderDetails)) {
+      console.log(course)
       const sub_total = course.orderDetails.reduce((courseSum, course) => {
-        return courseSum + (course.course_amount || 0);
+        const intAmount = parseFloat(course.course_amount)
+        return courseSum + (intAmount || 0);
       }, 0);
 
       setSubTotal(sub_total);
