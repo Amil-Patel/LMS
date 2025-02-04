@@ -1287,7 +1287,7 @@ const ManageCourse = () => {
                 const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 
                 return (
-                  <div div className="module" key={index}>
+                  <div className="module" key={index}>
                     <div className="module-header" onClick={() => toggleContent(index, module.id)}>
                       <p className="module-title min-w-[28rem] max-w-md">
                         MODULE-{index + 1} : {module.title}
@@ -1307,7 +1307,6 @@ const ManageCourse = () => {
                           <i className="fa fa-trash"></i>
                         </button>
                         <button className="check-btn">
-                          {/* <i className="fa-solid fa-angle-down"></i> */}
                           <i
                             className={`fa-solid ${activeModuleIndex === index
                               ? "fa-angle-up"

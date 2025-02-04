@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../admin/utils/axiosInstance';
-import { notifySuccess } from '../../admin/layout/ToastMessage';
+import { notifyError, notifySuccess } from '../../admin/layout/ToastMessage';
 const port = process.env.REACT_APP_URL
 
 const Contact = () => {
@@ -18,6 +18,31 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const nameRegex = /^[A-Za-z\s]+$/; // Only letters and spaces
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
+        const mobileRegex = /^[\d+\-()\s]+$/;
+
+        if (!formState.name.match(nameRegex)) {
+            notifyError("Please enter a valid name (Alphabets only)");
+            return;
+        }
+
+        if (!formState.email.match(emailRegex)) {
+            notifyError("Please enter a valid email address");
+            return;
+        }
+
+        if (!formState.mobile_number.trim() || !mobileRegex.test(formState.mobile_number)) {
+            notifyError("Please enter a valid Mobile number");
+            return;
+        }
+
+        if (formState.message.trim() === "") {
+            notifyError("Please enter a message");
+            return;
+        }
+
         try {
             await axiosInstance.post(`${port}/addingInquiry`, formState);
             setFormState({
@@ -81,9 +106,9 @@ const Contact = () => {
 
                     <div className="cus-contact-form">
                         <h6>Get In Touch With Us</h6>
-                        <input type="text" name='name' onChange={handleInputChange} value={formState.name} className="cus-full-name" placeholder="Full Name" />
-                        <input type="text" name='email' onChange={handleInputChange} value={formState.email} className="cus-Email" placeholder="Email Address" />
-                        <input type="text" name='mobile_number' onChange={handleInputChange} value={formState.mobile_number} className="cus-phone-no" placeholder="Phone No" />
+                        <input type="text" name='name' onChange={handleInputChange} value={formState.name} className="cus-full-name" placeholder="Full Name:" />
+                        <input type="text" name='email' onChange={handleInputChange} value={formState.email} className="cus-Email" placeholder="Email Address:" />
+                        <input type="text" name='mobile_number' onChange={handleInputChange} value={formState.mobile_number} className="cus-phone-no" placeholder="Phone No:" />
                         <textarea name="message" onChange={handleInputChange} value={formState.message} className="cus-message-box" placeholder="Message..."></textarea>
                         <div className="cus-submit-btn">
                             <button onClick={handleSubmit}>Submit Now</button>
