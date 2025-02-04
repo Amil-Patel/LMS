@@ -27,8 +27,7 @@
 }
 
 .course-category label {
-  display: flex;
-  align-items: center;
+  display: block;
   color: var(--light-grey-text-color);
   font-family: var(--jost-ff);
   font-size: 18px;
@@ -101,8 +100,8 @@
 
 .allcourses-course-image img {
   object-fit: cover;
-  max-width: 290px;
-  min-width: 290px;
+  max-width: 285px;
+  min-width: 285px;
   max-height: 175px;
   min-height: 175px;
 }
@@ -183,7 +182,7 @@
 .course-grid-main-div {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  gap: 18px;
   padding: 2% 0;
 }
 
