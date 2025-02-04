@@ -17,17 +17,15 @@ const getCourseCouponData = async (req, res) => {
         console.log(error);
         res.sendStatus(500);
     }
-}           
+}
 
 const validateCoupon = async (req, res) => {
-    console.log("reached to validate coupon");
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     try {
-        console.log(req.body)
         const { couponCode } = req.body;
         const coupon = await Course_Coupon.findOne({
-            where: { coupon_code: couponCode },
+            where: { coupon_code: couponCode, status: 1 },
         });
 
         if (!coupon) {
@@ -82,6 +80,14 @@ const addCourseCouponData = async (req, res) => {
     if (!isAuthenticated) return;
     const expiredate = DateToUnixNumber(req.body.expired_date, 'America/Toronto');
     const createdate = DateToUnixNumber(new Date(), 'America/Toronto');
+    const getData = await Course_Coupon.findAll({
+        where: {
+            coupon_code: req.body.coupon_code
+        }
+    });
+    if (getData.length > 0) {
+        return res.status(400).json({ message: 'Coupon code already exists' });
+    }
     const data = {
         coupon_code: req.body.coupon_code,
         course_name: req.body.course_name,

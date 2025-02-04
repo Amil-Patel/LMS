@@ -157,12 +157,6 @@ const updateCourseMasterData = async (req, res) => {
     if (!curentcoursemaster) {
         return res.status(404).json({ message: 'course not found' });
     }
-    // if (curentcoursemaster && curentcoursemaster.upcoming_course_thumbnail) {
-    //     const imagePath = path.join(__dirname, '../../../../client/public/upload', curentcoursemaster.upcoming_course_thumbnail);
-    //     if (fs.existsSync(imagePath)) {
-    //         fs.unlinkSync(imagePath);
-    //     }
-    // }
     if (req.file) {
         if (curentcoursemaster && curentcoursemaster.course_thumbnail) {
             const imagePath = path.join(__dirname, '../../../../client/public/upload', curentcoursemaster.course_thumbnail);
@@ -184,9 +178,9 @@ const updateCourseMasterData = async (req, res) => {
         publish_date: req.body.course_status == 'upcoming' ? (publishDate || null) : null,
         is_top_course: req.body.is_top_course,
         featured_course: req.body.featured_course,
-        course_faqs: JSON.stringify(req.body.course_faqs),
-        course_requirenment: JSON.stringify(req.body.course_requirenment),
-        course_topics: JSON.stringify(req.body.course_topics),
+        course_faqs: req.body.course_faqs,
+        course_requirenment: req.body.course_requirenment,
+        course_topics: req.body.course_topics,
         course_price: req.body.course_price,
         course_discount: req.body.course_discount,
         is_tax: req.body.is_tax,
