@@ -164,7 +164,6 @@ function PaymentSetting() {
       console.log(error);
     }
   }
-  console.log(selectedCurrency)
   return (
     <>
       <Hoc />

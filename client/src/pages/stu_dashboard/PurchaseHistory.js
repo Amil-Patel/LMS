@@ -44,7 +44,6 @@ const PurchaseHistory = () => {
     }));
 
     if (Array.isArray(course.orderDetails)) {
-      console.log(course)
       const sub_total = course.orderDetails.reduce((courseSum, course) => {
         const intAmount = parseFloat(course.course_amount)
         return courseSum + (intAmount || 0);

@@ -1,6 +1,5 @@
 const { Course_Quize, Course_Lesson } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
-const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const { sequelize } = require("../../database/models/index");
 const AuthMiddleware = require("../../auth/AuthMiddleware")
 

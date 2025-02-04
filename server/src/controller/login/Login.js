@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const DecryptPassword = require("../../middleware/DecryptPassword");
 const secret_key = process.env.JWT_SECRET_KEY;
 const AuthMiddleware = require("../../auth/AuthMiddleware");
-const { where } = require("sequelize");
 const { Op } = require("sequelize");
 
 const getLogin = async (req, res) => {

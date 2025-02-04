@@ -170,7 +170,6 @@ const CourseCategory = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value)
     setEditData({
       ...editData,
       [name]: value,

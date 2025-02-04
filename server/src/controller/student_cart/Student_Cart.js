@@ -1,6 +1,6 @@
 const { student_cart } = require('../../database/models/index');
 const AuthMiddleware = require('../../auth/AuthMiddleware');
-const { Op, where } = require('sequelize');
+const { Op } = require('sequelize');
 
 const getStudentCartData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -25,7 +25,6 @@ const addStudentCartData = async (req, res) => {
 
     try {
         let cartData = req.body.cart;
-        console.log(cartData)
         // Normalize cartData: If it's a single object, wrap it in an array
         if (!Array.isArray(cartData)) {
             cartData = [cartData];
@@ -59,7 +58,6 @@ const addStudentCartData = async (req, res) => {
                 },
             },
         })
-        console.log(existingData)
         const existingCourseIds = existingData.map((item) => item.course_id);
         const existingStudentIds = existingData.map((item) => item.student_id);
 

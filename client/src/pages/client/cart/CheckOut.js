@@ -23,11 +23,9 @@ const CheckOut = () => {
     const [decryptAmount, setDecryptAmount] = useState(null)
     const [decryptCourse, setDecryptCourse] = useState([])
     const decryptData = (encryptedData) => {
-        if (!encryptedData) return null; // Check for empty or null data
-        console.log(encryptedData)
+        if (!encryptedData) return null;
         try {
             const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
-            console.log(bytes)
             return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         } catch (error) {
             console.error("Error decrypting data:", error);
@@ -63,14 +61,11 @@ const CheckOut = () => {
     });
     const { stuUserId } = useContext(userRolesContext);
     const [isChecked, setIsChecked] = useState(false);
-    const [studentData, setStudentData] = useState([]);
     useEffect(() => {
         if (savedToken && stuUserId) {
             const fetchData = async () => {
                 try {
                     const response = await axiosInstance.get(`/gettingUserMasterDataWithId/${stuUserId}`);
-                    // setStudentData(response.data);
-                    console.log(response.data)
                     setInfoData({
                         name: `${response.data.first_name} ${response.data.last_name}`,
                         email: response.data?.email,
@@ -199,7 +194,6 @@ const CheckOut = () => {
     const [buttonLoad, setButtonLoad] = useState(false);
     const buyCourse = async (e) => {
         e.preventDefault();
-        console.log(infoData)
         const nameRegex = /^[A-Za-z\s]+$/; // Only letters and spaces
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
         
@@ -235,7 +229,6 @@ const CheckOut = () => {
             localStorage.setItem("checkoutCourseData", encryptData(courses));
             localStorage.setItem("checkoutAmountData", encryptData(total));
         } else {
-            console.log("No courses provided. Skipping update.");
             setButtonLoad(false);
         }
         if (!storedAmount || !storedCourses) {
@@ -301,7 +294,6 @@ const CheckOut = () => {
                     pan: infoData.bill_pan,
                 },
             };
-            console.log(requestData)
             // Send request to create a Stripe payment session
             const { data: session } = await axiosInstance.post(`${port}/process-courses-payment`, requestData);
             // Redirect to Stripe Checkout
