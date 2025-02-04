@@ -86,7 +86,8 @@ const getEnrollWithStuId = async (req, res) => {
                 },
             ],
             where: {
-                student_id: studentId
+                student_id: studentId,
+                status: 1
             }
         });
 

@@ -191,7 +191,7 @@ td {
 }
 
 .main {
-  height: calc(100vh - 20px);
+  height: calc(100vh - 59px);
   overflow-y: scroll;
   position: relative;
   left: 230px;
