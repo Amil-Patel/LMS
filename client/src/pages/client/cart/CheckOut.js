@@ -197,23 +197,33 @@ const CheckOut = () => {
     //     }
     // };
     const [buttonLoad, setButtonLoad] = useState(false);
-    console.log(courses)
     const buyCourse = async (e) => {
         e.preventDefault();
-        const nameRegex = /^[A-Za-z\s]+$/;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (infoData.name.match(nameRegex)) {
-            notifyError("Please enter a valid name.");
-            return
+        console.log(infoData)
+        const nameRegex = /^[A-Za-z\s]+$/; // Only letters and spaces
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+        
+        if (!infoData.name || !nameRegex.test(infoData.name)) {
+            notifyError("Please enter a valid name (Alphabets only)");
+            return;
         }
-        if (infoData.email.match(emailRegex)) {
-            notifyError("Please enter a valid email.");
-            return
+        
+        if (!infoData.email || !emailRegex.test(infoData.email)) {
+            notifyError("Please enter a valid email address");
+            return;
         }
-        if (infoData.country == "") {
-            notifyError("Please select a country.");
-            return
+        
+        if (infoData.country=="null") {
+            notifyError("Please select your country.");
+            return;
         }
+        
+       
+        
+        
+        
+
+
         setButtonLoad(true);
         const storedCourses = localStorage.getItem("checkoutCourseData");
         const storedAmount = localStorage.getItem("checkoutAmountData");
@@ -322,19 +332,19 @@ const CheckOut = () => {
                             <form>
                                 <div className="form-group">
                                     <label htmlFor="name">Full name<span className="required"> *</span></label>
-                                    <input type="text" id="name" name="name" onChange={handleChange} placeholder="Enter full name" value={infoData.name} required />
+                                    <input type="text" id="name" name="name" onChange={handleChange} placeholder="Enter full name" value={infoData.name} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="email">Email address<span className="required"> *</span></label>
-                                    <input type="email" id="email" name="email" onChange={handleChange} placeholder="Enter email address" value={infoData.email} required />
+                                    <input type="email" id="email" name="email" onChange={handleChange} placeholder="Enter email address" value={infoData.email} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="phone">Phone number</label>
-                                    <input type="tel" id="phone" name="phone" onChange={handleChange} placeholder="Enter phone number" value={infoData.phone} required />
+                                    <input type="tel" id="phone" name="phone" onChange={handleChange} placeholder="Enter phone number" value={infoData.phone} />
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="country">Country<span className="required"> *</span></label>
-                                    <select id="country" name="country" onChange={handleChange} value={infoData.country} required>
+                                    <select id="country" name="country" onChange={handleChange} value={infoData.country}>
                                         <option value="">Choose country</option>
                                         <option value="india">India</option>
                                         <option value="usa">United States</option>
@@ -344,15 +354,15 @@ const CheckOut = () => {
                                 <div className="form-group-grid">
                                     <div className="form-group">
                                         <label htmlFor="enter-city">City</label>
-                                        <input type="text" id="enter-city" name="city" onChange={handleChange} placeholder="Enter city" value={infoData.city} required />
+                                        <input type="text" id="enter-city" name="city" onChange={handleChange} placeholder="Enter city" value={infoData.city} />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="state">State</label>
-                                        <input type="text" id="state" name="state" onChange={handleChange} placeholder="Enter state" required />
+                                        <input type="text" id="state" name="state" onChange={handleChange} placeholder="Enter state" />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="zip-code">Zip Code</label>
-                                        <input type="text" id="zip-code" name="pincode" onChange={handleChange} placeholder="Enter ZIP code" value={infoData.pincode} required />
+                                        <input type="text" id="zip-code" name="pincode" onChange={handleChange} placeholder="Enter ZIP code" value={infoData.pincode} />
                                     </div>
 
                                 </div>
@@ -369,7 +379,7 @@ const CheckOut = () => {
                                     <input type="text" id="bill_pan" name="bill_pan" onChange={handleChange} placeholder="Enter Bill Pan Number" />
                                 </div>
                                 <div className="checkbox-group">
-                                    <input type="checkbox" id="terms" name="terms" checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} required />
+                                    <input type="checkbox" id="terms" name="terms" checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} />
                                     <label htmlFor="terms">I have read and agree to the Terms and Conditions.</label>
                                 </div>
                             </form>
