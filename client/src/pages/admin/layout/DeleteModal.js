@@ -44,18 +44,18 @@ const DeleteModal = ({ onDelete }) => {
         <div className="delete-popup">
           <div className="delete-popup-content">
             <h4>Enter Captcha</h4>
-            <p>
+            <p id="delete-popup-number">
               If you want to delete, enter <b>{generatedCaptcha}</b>
             </p>
             <div>
               <input
                 type="text"
                 placeholder="Enter Captcha"
-                className="col12input"
+                className="col12input text-black"
                 value={captchaValue}
                 onChange={handleChange}
               />
-              {captchaError && <p className="captcha-error"> {captchaError}</p>}
+              {captchaError && <p className="captcha-error cursor-default"> {captchaError}</p>}
             </div>
             <div className="delete-popup-buttons">
               <button className="primary-btn" onClick={handleDelete}>

@@ -434,7 +434,7 @@ input:checked + .slider:before {
   margin-right: 7px;
 }
 
-.menu-container .menu-content p{
+.menu-container .menu-content p {
   padding: 2px 0;
 }
 
@@ -461,6 +461,14 @@ input:checked + .slider:before {
 
 .menu-content p:hover {
   color: var(--hover-color);
+}
+
+#delete-popup-number {
+  cursor: auto;
+}
+
+#delete-popup-number:hover {
+  color: #666666;
 }
 
 @media screen and (max-width: 1025px) {
