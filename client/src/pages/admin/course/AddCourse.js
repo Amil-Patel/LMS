@@ -270,7 +270,6 @@ const AddCourse = () => {
       notifyWarning("Please enter course price");
       return
     }
-    console.log(addCourse)
     setLoading(true);
     const formData = new FormData();
     formData.append("course_title", addCourse.course_title);

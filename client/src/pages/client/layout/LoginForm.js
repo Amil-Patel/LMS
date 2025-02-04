@@ -35,7 +35,6 @@ const LoginForm = ({ toggleSignupForm, toggleLoginForm }) => {
     } catch (error) {
       if (error.response) {
         const { status, data } = error.response;
-        console.log(status, data);
         if (status == 404) {
           notifyInfo(data.message); // "Email does not exist"
         } else if (status == 401) {

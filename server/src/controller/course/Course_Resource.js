@@ -1,6 +1,5 @@
 const { resource } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
-const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const AuthMiddleware = require("../../auth/AuthMiddleware");
 
 const getCourseResourceData = async (req, res) => {

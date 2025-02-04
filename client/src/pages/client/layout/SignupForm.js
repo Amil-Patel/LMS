@@ -59,7 +59,6 @@ const SignupForm = ({ toggleLoginForm }) => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(port)
         if (!validate()) return;
 
         setIsSubmitting(true);

@@ -70,7 +70,6 @@ export const CartProvider = ({ children }) => {
 
         const uniqueCourse = { ...course, studentId: stuUserId || 0 };
         const updatedCart = [...cart, uniqueCourse];
-        console.log(updatedCart)
         setCart(updatedCart);
         await saveCart(updatedCart);
     };
@@ -92,7 +91,6 @@ export const CartProvider = ({ children }) => {
             localStorage.setItem("cart", JSON.stringify(updatedCart));
         }
     };
-    console.log(cart)
     useEffect(() => {
         const moveCartToDatabase = async () => {
             if (savedToken && stuUserId) {

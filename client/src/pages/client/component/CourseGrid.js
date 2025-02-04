@@ -16,7 +16,6 @@ const CourseGrid = ({ courses, category }) => {
     }
 
     const savedToken = Cookies.get('student-token');
-    console.log(courses)
     return (
         <>
             {courses?.length === 0 && (

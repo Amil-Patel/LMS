@@ -1,7 +1,5 @@
 const { enrollment, Course_Master, UserMaster, academic_progress, Course_Quize, Course_Lesson } = require("../../database/models/index");
 const AuthMiddleware = require("../../auth/AuthMiddleware");
-const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
-const { where } = require("sequelize");
 
 const getEnrollmentData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);

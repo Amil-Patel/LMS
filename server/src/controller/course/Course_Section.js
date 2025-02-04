@@ -1,6 +1,5 @@
 const { Course_Section, Course_Lesson, Course_Quize } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
-const UnixNumberToDate = require("../../middleware/UnixNumberToDate");
 const AuthMiddleware = require("../../auth/AuthMiddleware")
 
 const getCourseSectionData = async (req, res) => {

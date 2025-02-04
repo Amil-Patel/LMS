@@ -352,67 +352,40 @@ const ManageCourse = () => {
   const [message, setMessage] = useState('');
 
   const handleEditDocumentClick = (inquiry) => {
-
     setCurrentDocument(inquiry);
-
     setSelectedStatus(inquiry.status || "pending");
-
     setMessage(inquiry.message);
-
     setEditDocumentOpen(true);
-
   };
 
   const [deleteDocumentOpen, setDeleteDocumentOpen] = useState(false);
-
   const [currentDocumentId, setCurrentDocumentId] = useState(null);
-
   const handleDeleteDocumentClick = (id) => {
-
     setDeleteDocumentOpen(true);
-
     setCurrentDocumentId(id);
-
   }
 
   const handleDeleteDocumentOpen = () => {
-
     setDeleteDocumentOpen(false);
-
     setCurrentDocumentId(null)
-
   }
 
   const handleEditDocumentClose = () => {
-
     setCurrentDocument(null);
-
     setSelectedStatus("pending");
-
     setEditDocumentOpen(false);
-
   }
 
   const handleDocumentDelete = async () => {
-
     try {
-
       const res = await axiosInstance.delete(`${port}/deletingUserDocument/${currentDocumentId}`);
-
       if (res.status === 200) {
-
         handleDeleteDocumentOpen();
-
         getUserDocumentData(userDocumentData.userMaster?.id, id);
-
         notifySuccess("Document deleted successfully");
-
       }
-
     } catch (err) {
-
       console.log(err);
-
     }
 
   }
@@ -1280,12 +1253,11 @@ const ManageCourse = () => {
             moduleData.length > 0 ? (
               moduleData.map((module, index) => {
                 const totalSeconds = module.time;
-                console.log(totalSeconds)
                 const hours = Math.floor(totalSeconds / 3600);
                 const minutes = Math.floor((totalSeconds % 3600) / 60);
                 const seconds = totalSeconds % 60;
                 const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                
+
                 return (
                   <div className="module" key={index}>
                     <div className="module-header" onClick={() => toggleContent(index, module.id)}>

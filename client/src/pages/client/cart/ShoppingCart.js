@@ -131,7 +131,6 @@ const ShoppingCart = () => {
   const [averageRatings, setAverageRatings] = useState({});
   const [totalRatings, setTotalRatings] = useState({});
   const getReviewData = async (id) => {
-    console.log(id)
     axiosInstance
       .get(`${port}/gettingReviewWithCourseId/${id}`)
       .then((response) => {
