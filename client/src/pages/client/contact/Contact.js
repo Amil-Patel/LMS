@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../admin/utils/axiosInstance';
-import { notifySuccess } from '../../admin/layout/ToastMessage';
+import { notifyError, notifySuccess } from '../../admin/layout/ToastMessage';
 const port = process.env.REACT_APP_URL
 
 const Contact = () => {
+    const nameRegex = /^[A-Za-z\s]+$/; // Only alphabets and spaces
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email validation
+    const mobileRegex = /^[\d+\-()\s]+$/;
     const [formState, setFormState] = useState({
         name: '',
         email: '',
@@ -20,6 +23,31 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formState.name.trim() || !nameRegex.test(formState.name)) {
+            notifyError("Please enter a valid name (only alphabets)");
+            return;
+        }
+        if (!formState.email.trim() || !emailRegex.test(formState.email)) {
+            notifyError("Please enter a valid email address");
+            return;
+        }
+        if (!formState.mobile_number.trim() || !mobileRegex.test(formState.mobile_number)) {
+            notifyError("Please enter a valid mobile number (only numbers and symbols like +, -, ())");
+            return;
+        }
+        if (!formState.country.trim()) {
+            notifyError("Please select your country");
+            return;
+        }
+        if(formState.address == ""){
+            notifyError("Please enter your address");
+            return
+        }
+        if (!formState.message.trim()) {
+            notifyError("Please enter your message");
+            return;
+        }
+
         try {
             await axiosInstance.post(`${port}/addingInquiry`, formState);
             notifySuccess("Message sent successfully");
@@ -65,7 +93,6 @@ const Contact = () => {
                                             type="text"
                                             value={formState.name}
                                             onChange={handleInputChange}
-                                            required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="Your Name"
                                         />
@@ -83,7 +110,6 @@ const Contact = () => {
                                             type="email"
                                             value={formState.email}
                                             onChange={handleInputChange}
-                                            required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="your@email.com"
                                         />
@@ -101,7 +127,6 @@ const Contact = () => {
                                             type="mobile_number"
                                             value={formState.mobile_number}
                                             onChange={handleInputChange}
-                                            required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="Mobile Number"
                                         />
@@ -118,7 +143,6 @@ const Contact = () => {
                                             name="country"
                                             value={formState.country}
                                             onChange={handleInputChange}
-                                            required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                         >
                                             <option value="">Select Country</option>
@@ -141,7 +165,6 @@ const Contact = () => {
                                             type="text"
                                             value={formState.address}
                                             onChange={handleInputChange}
-                                            required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="What is this regarding?"
                                         />
@@ -158,7 +181,6 @@ const Contact = () => {
                                             name="message"
                                             value={formState.message}
                                             onChange={handleInputChange}
-                                            required
                                             className="w-full px-4 py-2 border rounded-sm focus:ring-1 focus:ring-blue-500"
                                             placeholder="Your message here..."
                                             rows={4}
