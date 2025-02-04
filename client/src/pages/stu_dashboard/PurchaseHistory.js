@@ -36,7 +36,6 @@ const PurchaseHistory = () => {
     setCurrentCourse(null);
   };
   const handleViewClick = (course) => {
-    console.log(course)
     const time = moment.unix(course.createdAt).tz(setting.timezone).format("DD-MM-YYYY");
     setCurrentCourse((prev) => ({
       ...prev,
@@ -53,17 +52,20 @@ const PurchaseHistory = () => {
 
       setSubTotal(sub_total);
 
-      const total_discount = course.orderDetails.reduce((discountSum, course) => {
-        const discount = course?.course_amount * (course?.discount / 100);
-        return discountSum + discount;
+      const total_discount = course.orderDetails.reduce((discountSum, item) => {
+        const discount = item?.course_amount * (item?.discount / 100);
+        const coupopnDiscont = parseFloat(item?.coupon_discount_amount || 0).toFixed(2);
+        const totalDiscount = parseFloat(discount || 0) + parseFloat(coupopnDiscont);
+        return discountSum + totalDiscount;
       }, 0);
 
       setTotalDiscount(total_discount);
 
-      const inclusiveTax = course.orderDetails.reduce((taxSum, course) => {
-        if (course.is_inclusive == 1) {
-          const amountWithDiscount = course?.course_amount - (course?.course_amount * (course?.discount / 100));
-          const tax_amount = amountWithDiscount * (parseFloat(course?.course_tax) / 100);
+      const inclusiveTax = course.orderDetails.reduce((taxSum, item) => {
+        if (item.is_inclusive == 1) {
+          const discount = item?.course_amount * (item?.discount / 100);
+          const withDiscountPrice = item.course_amount - discount;
+          const tax_amount = withDiscountPrice * (item?.course_tax / 100);
           taxSum += tax_amount;
         }
         return taxSum;
@@ -145,7 +147,9 @@ const PurchaseHistory = () => {
                         );
                       })
                     ) : (
-                      <p>No Purchase history Found</p>
+                      <tr>
+                        <td colSpan={8} className='text-center'>No Purchase History Found</td>
+                      </tr>
                     )
                   }
 
@@ -199,18 +203,20 @@ const PurchaseHistory = () => {
                           <th style={{ width: '45%' }} className="py-2">Course Name</th>
                           <th style={{ width: '10%' }} className="py-2">Validity</th>
                           <th style={{ width: '9%' }} className="py-2">Amount</th>
+                          <th style={{ width: '8%' }} className="py-2">Discount</th>
                           <th style={{ width: '8%' }} className="py-2">Tax</th>
                           <th style={{ width: '10%' }} className="py-2">Tax Amt</th>
-                          <th style={{ width: '8%' }} className="py-2">Discount</th>
                           <th style={{ width: '10%' }} className="py-2">Net Amt</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentCourse?.orderDetails?.map((item, index) => {
                           const discount = item?.course_amount * (item?.discount / 100);
+                          const coupopnDiscont = parseFloat(item?.coupon_discount_amount || 0).toFixed(2);
+                          const totalDiscount = parseFloat(discount || 0) + parseFloat(coupopnDiscont);
                           const withDiscountPrice = item.course_amount - discount;
                           const tax_amount = withDiscountPrice * (item?.course_tax / 100);
-                          const net_amount = item?.course_amount - tax_amount - item?.discount;
+                          const net_amount = (item?.course_amount - totalDiscount) + tax_amount;
 
                           return (
                             <tr key={index} className="border border-gray-200">
@@ -223,15 +229,15 @@ const PurchaseHistory = () => {
                                 {item?.course_amount}
                                 {setting.position === "right" ? setting.symbol : ""}
                               </td>
+                              <td className="px-4 py-2">
+                                {setting.position === "left" ? setting.symbol : ""}
+                                {totalDiscount}
+                                {setting.position === "right" ? setting.symbol : ""}
+                              </td>
                               <td className="px-4 py-2">{parseFloat(item?.course_tax) || 0}%</td>
                               <td className="px-4 py-2">
                                 {setting.position === "left" ? setting.symbol : ""}
                                 {parseFloat(tax_amount).toFixed(2)}
-                                {setting.position === "right" ? setting.symbol : ""}
-                              </td>
-                              <td className="px-4 py-2">
-                                {setting.position === "left" ? setting.symbol : ""}
-                                {parseFloat(discount || 0).toFixed(2)}
                                 {setting.position === "right" ? setting.symbol : ""}
                               </td>
                               <td className="px-4 py-2">

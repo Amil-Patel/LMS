@@ -200,6 +200,20 @@ const CheckOut = () => {
     console.log(courses)
     const buyCourse = async (e) => {
         e.preventDefault();
+        const nameRegex = /^[A-Za-z\s]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (infoData.name.match(nameRegex)) {
+            notifyError("Please enter a valid name.");
+            return
+        }
+        if (infoData.email.match(emailRegex)) {
+            notifyError("Please enter a valid email.");
+            return
+        }
+        if (infoData.country == "") {
+            notifyError("Please select a country.");
+            return
+        }
         setButtonLoad(true);
         const storedCourses = localStorage.getItem("checkoutCourseData");
         const storedAmount = localStorage.getItem("checkoutAmountData");
@@ -235,9 +249,10 @@ const CheckOut = () => {
                     title: course.title,
                     amount: course.amount,
                     course_taxamount: course.course_taxamount,
+                    coupon_discount_price: course.coupon_discount_price,
                     discount_amount: course.discount_amount,
                     tax: course.course_tax,
-                    taxAmount: course.course_taxamount,
+                    taxAmount: course.is_inclusive ? (course.course_taxamount * course.course_tax) / 100 : 0,
                     discount: course.discount,
                     is_inclusive: course.is_inclusive,
                     is_exclusive: course.is_exclusive,
@@ -247,20 +262,20 @@ const CheckOut = () => {
                     title: course.title,
                     amount: course.amount,
                     course_taxamount: course.course_taxamount,
+                    coupon_discount_price: course.coupon_discount_price,
                     discount_amount: course.discount_amount,
                     tax: course.course_tax,
-                    taxAmount: course.course_taxamount,
+                    taxAmount: course.is_inclusive ? (course.course_taxamount * course.course_tax) / 100 : 0,
                     discount: course.discount,
                     is_inclusive: course.is_inclusive,
                     is_exclusive: course.is_exclusive,
                 }));
 
             if (courseDetails.length === 0) {
-                alert("No courses selected for enrollment.");
+                notifyError("No courses selected for enrollment.");
                 setButtonLoad(false);
                 return;
             }
-
             // Prepare data for the backend
             const requestData = {
                 user_id: stuUserId,
@@ -276,7 +291,7 @@ const CheckOut = () => {
                     pan: infoData.bill_pan,
                 },
             };
-
+            console.log(requestData)
             // Send request to create a Stripe payment session
             const { data: session } = await axiosInstance.post(`${port}/process-courses-payment`, requestData);
             // Redirect to Stripe Checkout
@@ -285,12 +300,12 @@ const CheckOut = () => {
             if (result.error) {
                 console.error("Stripe Checkout failed:", result.error.message);
                 setButtonLoad(false);
-                alert("An error occurred during payment. Please try again.");
+                notifyError("An error occurred during payment. Please try again.");
             }
         } catch (error) {
             console.error("Error:", error);
             setButtonLoad(false);
-            alert("An error occurred. Please try again later.");
+            notifyError("An error occurred. Please try again later.");
         }
     };
 

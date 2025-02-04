@@ -48,22 +48,36 @@ const addProcessedPaymentData = async (req, res) => {
         let totalAmount = 0;
 
         courses.forEach((course) => {
-            totalAmount += parseFloat(course.course_taxamount);
+            const discount = (parseFloat(course.amount) * course.discount) / 100;
+            const coupondiscount = course.coupon_discount_price || 0; // Ensure coupon discount is not undefined
+            const discountAmount = parseFloat(course.amount).toFixed(2) - discount;
+            const tax = (discountAmount * course.tax) / 100;
+            const couponDiscount = discountAmount - coupondiscount
+            const finalAmount = couponDiscount + tax;
+
+            totalAmount += finalAmount; // Summing up all final amounts
         });
+
+
         session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: courses.map((course) => {
-                const discountAmount = parseFloat(course.discount_amount) || 0;
-                const taxAmount = parseFloat(course.course_taxamount) || 0;
+                const discount = (parseFloat(course.amount).toFixed(2) * course.discount) / 100;
+                const coupondiscount = course.coupon_discount_price
+                const discountAmount = parseFloat(course.amount).toFixed(2) - discount;
+                const tax = (discountAmount * course.tax) / 100;
+                const couponDiscount = discountAmount - coupondiscount
+                const finalAmount = couponDiscount + tax;
+                // const discountAmount = parseFloat(course.discount_amount) || 0;
+                // const taxAmount = parseFloat(course.course_taxamount) || 0;
 
-                // Calculate the final amount in smallest currency unit (e.g., cents for INR)
-                const finalAmount = discountAmount + taxAmount;
+                // // Calculate the final amount in smallest currency unit (e.g., cents for INR)
+                // const finalAmount = discountAmount + taxAmount;
 
                 if (isNaN(finalAmount)) {
                     throw new Error(`Invalid amount for course: ${JSON.stringify(course)}`);
                 }
 
-                console.log(billing_info.currency)
                 return {
                     price_data: {
                         currency: billing_info.currency.toLowerCase(),
@@ -82,7 +96,7 @@ const addProcessedPaymentData = async (req, res) => {
         });
 
 
-        // Add data into enrollment
+        // // Add data into enrollment
         for (const course of courses) {
             await enrollment.create({
                 student_id: user_id,
@@ -103,8 +117,9 @@ const addProcessedPaymentData = async (req, res) => {
             updatedAt: createdate,
         });
 
-        // Add order details in order_detail table
+        // // Add order details in order_detail table
         for (const course of courses) {
+            const taxAmount = (course.amount * course.tax) / 100
             await order_detail.create({
                 order_id: orders.id,
                 course_id: course.id,
@@ -112,8 +127,9 @@ const addProcessedPaymentData = async (req, res) => {
                 quantity: 1,
                 course_amount: course.amount,
                 course_tax: course.tax,
-                course_taxamount: course.taxAmount,
+                course_taxamount: taxAmount,
                 discount: course.discount,
+                coupon_discount_amount: course.coupon_discount_price,
                 is_inclusive: course.is_inclusive,
                 is_exclusive: course.is_exclusive,
                 createdAt: createdate,
@@ -121,7 +137,7 @@ const addProcessedPaymentData = async (req, res) => {
             });
         }
 
-        // Add payment data
+        // // Add payment data
         paymentData = await payment.create({
             student_id: user_id,
             order_id: orders.id,
@@ -224,7 +240,7 @@ const getPaymentDataForStudent = async (req, res) => {
                 // Fetch student name
                 const orderDetailData = await order_detail.findAll({
                     where: { order_id: order_id },
-                    attributes: ['course_title', 'quantity', 'course_amount', "course_tax", "course_amount", "discount"],
+                    attributes: ['course_title', 'quantity', 'course_amount', "course_tax", "course_amount", "discount", "coupon_discount_amount", "is_inclusive", "is_exclusive"],
                     raw: true,
                 });
                 const studentData = await UserMaster.findOne({

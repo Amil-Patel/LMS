@@ -37,7 +37,7 @@ const addStudentCartData = async (req, res) => {
                 course_id: item.id,
                 student_id: item.studentId,
                 course_title: item.course_title,
-                auther: item.auther,
+                auther: Array.isArray(item.auther) && item.auther.length > 0 ? JSON.stringify(item.auther) : null,
                 course_thumbnail: item.course_thumbnail,
                 expiring_time: item.expiring_time || null,
                 no_of_month: item.no_of_month || 0,
@@ -59,7 +59,7 @@ const addStudentCartData = async (req, res) => {
                 },
             },
         })
-
+        console.log(existingData)
         const existingCourseIds = existingData.map((item) => item.course_id);
         const existingStudentIds = existingData.map((item) => item.student_id);
 

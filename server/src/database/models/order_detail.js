@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     course_tax: DataTypes.INTEGER,
     course_taxamount: DataTypes.INTEGER,
     discount: DataTypes.INTEGER,
+    coupon_discount_amount: DataTypes.STRING,
     is_inclusive: DataTypes.INTEGER,
     is_exclusive: DataTypes.INTEGER
   }, {
