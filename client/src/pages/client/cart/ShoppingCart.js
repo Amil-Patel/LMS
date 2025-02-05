@@ -5,6 +5,7 @@ import Footer from "../layout/Footer";
 import Breadcrumb from "../../../pages/client/course/Breadcrumb";
 import { useCart } from "../layout/CartContext"
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from '../../admin/layout/RoleContext';
 import { notifyWarning, notifySuccess, notifyError } from "../../admin/layout/ToastMessage";
@@ -16,79 +17,71 @@ const ShoppingCart = () => {
   const { stuUserId, setting } = useContext(userRolesContext);
   const [eligibleCourses, setEligibleCourses] = useState([]);
   const [couponCode, setCouponCode] = useState('');
-  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponDiscount, setCouponDiscount] = useState({});
+  const [totalCouponDiscount, setTotalCouponDiscount] = useState(0);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const savedToken = Cookies.get('student-token');
   const applyCouponDiscount = async () => {
-    setCouponCode('');
-    if (!couponCode && isCouponApplied == true) {
-      notifyError("Enter other a Promo code.");
+    if (!couponCode) {
+      notifyError("Enter a Valid Promo Code.");
       return;
     }
-    else if (!couponCode) {
-      notifyError("Enter Valid Promo Code.");
-      return;
-    }
-    const enterdCouponCode = couponCode
+
     try {
-      const response = await axiosInstance.post(`${port}/validateCoupon`, { couponCode: enterdCouponCode });
+      const response = await axiosInstance.post(`${port}/validateCoupon`, { couponCode });
 
       if (response.data.success) {
         const { courseIds, discount, is_percentage, is_amount } = response.data;
         const parsedCourseIds = JSON.parse(courseIds);
 
-        let totalDiscount = 0; // Reset total discount
-        const updatedCart = cart.map((course) => {
-          if (parsedCourseIds.includes(course.course_id)) {
-            const courseDiscountAmount = course.course_price - (course.course_price * course.course_discount / 100);
+        let courseDiscounts = {}; // Store discounts per course
+
+        cart.forEach((course) => {
+          const uniqueCourseId = savedToken ? course.course_id : course.id;
+          if (parsedCourseIds.includes(uniqueCourseId)) {
+            const basePrice = course.course_price - (course.course_price * course.course_discount / 100);
             let finalDiscount = 0;
 
             if (is_percentage) {
-              const discountedPrice = courseDiscountAmount - (courseDiscountAmount * discount / 100);
-              finalDiscount = courseDiscountAmount - discountedPrice;
+              finalDiscount = basePrice * (discount / 100);
             } else if (is_amount) {
-              const discountedPrice = Math.max(course.course_price - discount, 0);
-              finalDiscount = courseDiscountAmount - discountedPrice;
+              finalDiscount = Math.min(discount, basePrice);
             }
 
-            totalDiscount += finalDiscount; // Accumulate discount
+            courseDiscounts[uniqueCourseId] = finalDiscount;
           }
-          return course;
         });
 
-        // **Reset old discount and apply new one**
+        const totalCouponDiscount = Object.values(courseDiscounts).reduce((acc, val) => acc + val, 0);
+        console.log("Total Coupon Discount:", totalCouponDiscount);
+        console.log(courseDiscounts)
+        setCouponDiscount(courseDiscounts); // Store per-course discount as an object
+        setTotalCouponDiscount(totalCouponDiscount);
         setEligibleCourses(parsedCourseIds);
-        setCouponDiscount(totalDiscount);
         setIsCouponApplied(true);
-        setCart(updatedCart);
-
 
         notifySuccess("Coupon applied successfully.");
       } else {
         notifyError("Invalid coupon code.");
       }
     } catch (error) {
-      if (error.response && error.response.status == 404) {
-        notifyError("Enter Valid Promo Code.");
-        return
-      }
-      if (error.response && error.response.status === 400) {
-        notifyWarning(error.response.data.message);
-      } else {
-        console.error('An unexpected error occurred:', error);
-      }
+      notifyError("Error applying coupon. Try again.");
     }
   };
-  const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + item.course_price, 0);
+
+
+  console.log(cart)
+  const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + parseFloat(item.course_price), 0);
   const sumOfAllCartTax = cart.reduce((acc, item) => {
     if (item.is_inclusive == 1) {
-      const disc = item.course_price - (item.course_price * item.course_discount / 100)
+      const disc = parseFloat(item.course_price) - (parseFloat(item.course_price) * item.course_discount / 100)
       const tax = disc * (item.tax_rate / 100)
       acc += tax
     }
     return acc
   }, 0)
   const sumOfAllDiscountPrice = cart.reduce((total, item) => {
-    const discount_price = (item.course_price * item.course_discount) / 100;
+    const discount_price = (parseFloat(item.course_price) * item.course_discount) / 100;
     return total + discount_price;
   }, 0);
   const navigate = useNavigate();
@@ -96,26 +89,24 @@ const ShoppingCart = () => {
   const processToCheckout = (total) => {
     if (cart.length > 0) {
       const courseDetails = cart.map((course) => {
-        // Check if this course is eligible for a coupon discount
-        const isCouponApplicable = couponDiscount > 0 && eligibleCourses.includes(course.course_id);
+        console.log(couponDiscount)
+        const isCouponApplicable = eligibleCourses.includes(course.course_id);
+        const courseSpecificDiscount = isCouponApplicable ? (couponDiscount[course.course_id] || 0) : 0;
 
-        // Calculate final price after discount (only for applicable courses)
-        const discountedPrice = isCouponApplicable
-          ? course.course_price - (course.course_price * course.course_discount / 100) - couponDiscount
-          : course.course_price - (course.course_price * course.course_discount / 100);
-
+        const discountedPrice = course.course_price - (course.course_price * course.course_discount / 100) - courseSpecificDiscount;
         return {
           id: course.course_id,
           title: course.course_title,
           amount: course.course_price,
           course_tax: course.tax_rate,
           course_taxamount: discountedPrice,
-          coupon_discount_price: isCouponApplicable ? couponDiscount : 0,
+          coupon_discount_price: courseSpecificDiscount,
           discount: course.course_discount,
           is_inclusive: course.is_inclusive,
           is_exclusive: course.is_exclusive
         };
       });
+      console.log(courseDetails)
 
       navigate(`/checkout`, {
         state: {
@@ -127,6 +118,7 @@ const ShoppingCart = () => {
       notifyWarning("Your cart is empty. Please add courses to proceed.");
     }
   };
+
   //review
   const [averageRatings, setAverageRatings] = useState({});
   const [totalRatings, setTotalRatings] = useState({});
@@ -156,6 +148,8 @@ const ShoppingCart = () => {
       });
     }
   }, [cart]);
+
+
 
   return (
     <>
@@ -289,13 +283,13 @@ const ShoppingCart = () => {
                   </div>
                   <div className="detail-row liner pb-2">
                     <span>Discount</span>
-                    <span><s>{setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllDiscountPrice + couponDiscount).toFixed(2)}
+                    <span><s>{setting.position == "left" ? setting.symbol : ""}{parseFloat(sumOfAllDiscountPrice + totalCouponDiscount).toFixed(2)}
                       {setting.position == "right" ? setting.symbol : ""}</s></span>
                   </div>
                   <div className="detail-row pt-2">
                     <span>Sub Total</span>
                     <span>{setting.position == "left" ? setting.symbol : ""}
-                      {parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice - couponDiscount).toFixed(2)}
+                      {parseFloat(sumOfAllCartAmount - sumOfAllDiscountPrice - totalCouponDiscount.toFixed(2)).toFixed(2)}
                       {setting.position == "right" ? setting.symbol : ""}
                     </span>
                   </div>
@@ -309,11 +303,11 @@ const ShoppingCart = () => {
                   <div className="detail-row liner pb-2 pt-2">
                     <span className='text-base font-semibold'>Payable Amount</span>
                     <span className='text-base font-semibold'>{setting.position == "left" ? setting.symbol : ""}
-                      {parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice + couponDiscount) + sumOfAllCartTax).toFixed(2)}
+                      {parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice + totalCouponDiscount) + sumOfAllCartTax).toFixed(2)}
                       {setting.position == "right" ? setting.symbol : ""}</span>
                   </div>
                 </div>
-                <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice + couponDiscount) + sumOfAllCartTax).toFixed(2))}>
+                <button className='process-to-checkout-btn hover:bg-blue-600' onClick={() => processToCheckout(parseFloat(sumOfAllCartAmount - parseFloat(sumOfAllDiscountPrice + totalCouponDiscount) + sumOfAllCartTax).toFixed(2))}>
                   Process To Checkout
                 </button>
               </div>

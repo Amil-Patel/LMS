@@ -43,6 +43,7 @@ const addProcessedPaymentData = async (req, res) => {
     let paymentData;
     let session;
     const total_amount = parseInt(req.body.total_amount)
+    console.log(req.body)
     try {
         // Calculate total amount with discount and tax adjustments
         let totalAmount = 0;

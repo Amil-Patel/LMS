@@ -195,27 +195,27 @@ const CheckOut = () => {
     const buyCourse = async (e) => {
         e.preventDefault();
         const nameRegex = /^[A-Za-z\s]+$/; // Only letters and spaces
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (!infoData.name || !nameRegex.test(infoData.name)) {
             notifyError("Please enter a valid name (Alphabets only)");
             return;
         }
-        
+
         if (!infoData.email || !emailRegex.test(infoData.email)) {
             notifyError("Please enter a valid email address");
             return;
         }
-        
-        if (infoData.country=="null") {
+
+        if (infoData.country == "null") {
             notifyError("Please select your country.");
             return;
         }
-        
-       
-        
-        
-        
+
+
+
+
+
 
 
         setButtonLoad(true);
@@ -273,15 +273,14 @@ const CheckOut = () => {
                     is_inclusive: course.is_inclusive,
                     is_exclusive: course.is_exclusive,
                 }));
-
-            if (courseDetails.length === 0) {
-                notifyError("No courses selected for enrollment.");
-                setButtonLoad(false);
-                return;
-            }
-            // Prepare data for the backend
-            const requestData = {
-                user_id: stuUserId,
+                if (courseDetails.length === 0) {
+                    notifyError("No courses selected for enrollment.");
+                    setButtonLoad(false);
+                    return;
+                }
+                // Prepare data for the backend
+                const requestData = {
+                    user_id: stuUserId,
                 courses: courseDetails,
                 total_amount: total,
                 billing_info: {
@@ -294,6 +293,7 @@ const CheckOut = () => {
                     pan: infoData.bill_pan,
                 },
             };
+            console.log(requestData);
             // Send request to create a Stripe payment session
             const { data: session } = await axiosInstance.post(`${port}/process-courses-payment`, requestData);
             // Redirect to Stripe Checkout

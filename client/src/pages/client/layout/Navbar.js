@@ -145,7 +145,7 @@ const Navbar = () => {
           </div>
         </nav>
       </div>
-      {isModalOpen && (
+      {isModalOpen && savedToken && (
         <div className="profile-modal-overlay" onClick={closeModal}>
           <div
             className="modal absolute bg-white rounded-lg shadow-lg p-4"

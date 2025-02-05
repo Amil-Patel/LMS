@@ -81,16 +81,51 @@ const CourseVideo = () => {
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${id}/${stuUserId}`);
-      const fetchedTimeStamp = res.data[0]?.watching_duration;
-      await setCourseProgress(res.data[0]);
-      await setTimeStamp(fetchedTimeStamp);
-      // setElapsedTime(0);
-      if (res.data.length === 0 && stuUserId) {
+      const progressData = res.data[0];
+      if (!progressData) {
         getModuleData();
         addcourseProgressData();
+        return;
       }
-      if (res.data[0]?.current_watching_lesson) {
-        getLessonWithCompletedId(res.data[0]?.current_watching_lesson)
+      let completedLessonIds = progressData.completed_lesson_id === null ? [] : JSON.parse(progressData.completed_lesson_id);
+      if (typeof completedLessonIds === "string") {
+        completedLessonIds = completedLessonIds.replace(/[^\d,]/g, "").split(",").map(Number);
+      }
+
+      if (!Array.isArray(completedLessonIds)) {
+        console.error("completedLessonIds is not an array after parsing", completedLessonIds);
+      }
+
+      const currentWatchingLessonId = progressData?.current_watching_lesson;
+      const sectionRes = await axiosInstance.get(`${port}/gettingCourseSectionData/${id}`);
+      const sectionData = sectionRes.data;
+      if (sectionData.length === 0) return;
+
+      let allLessons = [];
+
+      for (let section of sectionData) {
+        const lessonRes = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${section.id}`);
+        allLessons = [...allLessons, ...lessonRes.data.map(lesson => lesson.id)];
+      }
+      const missingLessons = allLessons.filter(lessonId => !completedLessonIds.includes(lessonId));
+      getLessonDataForEdit(missingLessons[0]);
+      if (missingLessons.length > 0) {
+
+        let firstUncompletedLesson = missingLessons[0];
+        const data = {
+          student_id: stuUserId,
+          course_id: id,
+          current_watching_lesson: firstUncompletedLesson
+        }
+        const res = await axiosInstance.put(`${port}/updattingAcademicProgressDataForViewed/${progressData.id}/${stuUserId}`, data);
+        await getLessonDataForEdit(firstUncompletedLesson);
+      }
+      getcourseProgressDataRefresh();
+      setCourseProgress(progressData);
+      setTimeStamp(progressData?.watching_duration);
+
+      if (currentWatchingLessonId) {
+        getLessonWithCompletedId(currentWatchingLessonId, 1);
       }
     } catch (error) {
       console.log(error);
@@ -416,6 +451,7 @@ const CourseVideo = () => {
     }
   };
 
+
   const handleViewedLessonData = async () => {
     try {
       var parsData = [];
@@ -432,27 +468,36 @@ const CourseVideo = () => {
       } catch (parseError) {
         parsData = [];
       }
+
       setCompareLessonId(editLessonData.quiz_id);
       parsData.push(editLessonData.id);
-      const course_progress = ((parsData.length / lessonDataWithCourseId.length) * 100).toFixed(0)
+      const course_progress = (
+        (parsData.length / lessonDataWithCourseId.length) * 100
+      ).toFixed(0);
+
       const data = {
         completed_lesson_id: JSON.stringify(parsData),
         course_progress: course_progress,
         current_watching_lesson: editLessonData.id,
       };
+
       const res = await axiosInstance.put(
         `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
         data
       );
+
       if (res.status === 200) {
         const currentLesson = lessonData.find((item) => item.id === editLessonData.id);
-        const currentOrder = currentLesson.order;
-        const nextLesson = lessonData.find((item) => item.order === currentOrder + 1);
+        const currentOrder = currentLesson?.order;
+
+        // Find the next lesson with the lowest order greater than the current lesson's order
+        const nextLesson = lessonData
+          .filter((item) => item.order > currentOrder)
+          .sort((a, b) => a.order - b.order)[0];
+
         if (nextLesson) {
           if (nextLesson.id) {
-            const data = {
-              current_watching_lesson: nextLesson.id,
-            };
+            const data = { current_watching_lesson: nextLesson.id };
             await axiosInstance.put(
               `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
               data
@@ -463,23 +508,29 @@ const CourseVideo = () => {
           if (nextLesson.quiz_id !== null) {
             await getQuizeDataForEdit(nextLesson.quiz_id);
           }
-        }
-        else if (!nextLesson) {
+        } else {
+          // No next lesson, move to the next module
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
+
           if (currentModule) {
-            const nextModule = moduleData.find((item) => item.order === currentModule.order + 1);
+            // Find the next module dynamically
+            const nextModule = moduleData
+              .filter((item) => item.order > currentModule.order) // Get modules with a higher order
+              .sort((a, b) => a.order - b.order)[0]; // Get the closest next module
+
             if (!nextModule) {
-              console.log("Course is completed");
+              notifySuccess("Course Completed");
               getcourseProgressDataRefresh();
               return;
             }
+
+            console.log(nextModule);
             setActiveModuleIndex(nextModule.id);
             const res = await getLessonData(nextModule.id);
+
             if (res.length > 0) {
               if (res[0].id) {
-                const data = {
-                  current_watching_lesson: res[0].id,
-                };
+                const data = { current_watching_lesson: res[0].id };
                 await axiosInstance.put(
                   `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
                   data
@@ -498,6 +549,7 @@ const CourseVideo = () => {
       console.error("Error in handleViewedLessonData:", error);
     }
   };
+
 
   const handleSubmitQuizAnswer = async () => {
     const correctAnswersKeyValue = {};
@@ -579,7 +631,9 @@ const CourseVideo = () => {
         // getQuizResultDatWithquizId(editQuizData.id);
         const currentLesson = lessonData.find((item) => item.quiz_id === editQuizData.id);
         const currentOrder = currentLesson.order;
-        const nextLesson = lessonData.find((item) => item.order === currentOrder + 1);
+        const nextLesson = lessonData
+          .filter((item) => item.order > currentOrder)
+          .sort((a, b) => a.order - b.order)[0];
         if (nextLesson) {
           if (nextLesson.id) {
             const data = {
@@ -598,11 +652,14 @@ const CourseVideo = () => {
         }
         else if (!nextLesson) {
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
+          getcourseProgressData();
           if (currentModule) {
-            const nextModule = moduleData.find((item) => item.order === currentModule.order + 1);
+            const nextModule = moduleData
+              .filter((item) => item.order > currentModule.order) // Get modules with a higher order
+              .sort((a, b) => a.order - b.order)[0];
             if (!nextModule) {
               getcourseProgressDataRefresh();
-              console.log("Course is Completed");
+              notifySuccess("Course Completed");
               return;
             }
             setActiveModuleIndex(nextModule.id);
