@@ -1,6 +1,7 @@
 const AuthMiddleware = require("../../auth/AuthMiddleware")
 const { academic_progress, enrollment, Course_Lesson, UserMaster, Course_Quize, quize_result, Course_Master } = require("../../database/models/index");
 const DateToUnixNumber = require("../../middleware/DateToUnixNumber");
+const { get } = require("../../routes/academic_progress/Academic_ProgressRoute");
 
 const getAcademicProgressData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
@@ -252,6 +253,16 @@ const addAcedemicProgressData = async (req, res) => {
     const isAuthenticated = AuthMiddleware.AuthMiddleware(req, res);
     if (!isAuthenticated) return;
     const createdDate = DateToUnixNumber(new Date(), "America/Toronto");
+    const getData = await academic_progress.findOne({
+        where: {
+            student_id: req.body.student_id,
+            course_id: req.body.course_id,
+        }
+    })
+    if (getData != null) {
+        res.status(200).json(getData);
+        return;
+    }
     const data = {
         student_id: req.body.student_id,
         course_id: req.body.course_id,
