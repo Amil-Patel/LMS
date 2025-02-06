@@ -15,11 +15,13 @@ const CourseVideo = () => {
   const [loading, setLoading] = useState(true);
   const [lessonLoading, setLessonLoading] = useState(false);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+  const [activeModuleIndex2, setActiveModuleIndex2] = useState(0);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const toggleContent = (index, id, type) => {
     setLessonLoading(true)
-    setActiveModuleIndex((prevIndex) => (prevIndex === index ? null : index));
+    setActiveModuleIndex2((prevIndex) => (prevIndex === index ? null : index));
     if (type !== null) {
+      getLessonData2(activeModuleIndex);
       getLessonData(id);
     }
   };
@@ -81,7 +83,7 @@ const CourseVideo = () => {
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${id}/${stuUserId}`);
-      const progressData = res.data[0];
+      const progressData = await res.data[0];
       if (!progressData) {
         getModuleData();
         addcourseProgressData();
@@ -196,6 +198,7 @@ const CourseVideo = () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
       setActiveModuleIndex(res.data.section_id)
+      setActiveModuleIndex2(res.data.section_id)
       getLessonData(res.data.section_id);
       if (res.data.quiz_id == null && num !== 1) {
         await getLessonDataForEdit(res.data.id);
@@ -253,6 +256,7 @@ const CourseVideo = () => {
       getLessonData(sortedData[0].id);
       setModuleData(sortedData);
       setActiveModuleIndex(sortedData[0].id)
+      setActiveModuleIndex2(sortedData[0].id)
       addModuleTime(sortedData[0].id)
       setLoading(false);
     } catch (error) {
@@ -278,7 +282,32 @@ const CourseVideo = () => {
   }
   //get lesson data
   const [lessonData, setLessonData] = useState([]);
-
+  const [lessonData2, setLessonData2] = useState([]);
+  const getLessonData2 = async (id) => {
+    setLessonLoading(true);
+    try {
+      const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithSectionId/${id}`);
+      const lessonquizdata = res.data
+      setLessonData2(lessonquizdata);
+      const sortedData = lessonquizdata && lessonquizdata.sort((a, b) => a.order - b.order);
+      // if (sortedData.length > 0) {
+      //   if (courseProgress && stuUserId) {
+      //     const data = {
+      //       current_watching_lesson: sortedData[0]?.id,
+      //     };
+      //     await axiosInstance.put(
+      //       `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
+      //       data
+      //     );
+      //   }
+      // }
+      setLessonLoading(false);
+      return sortedData;
+    } catch (error) {
+      console.log(error);
+      setLessonLoading(false);
+    }
+  }
   const getLessonData = async (id) => {
     setLessonLoading(true);
     try {
@@ -304,6 +333,7 @@ const CourseVideo = () => {
       setLessonLoading(false);
     }
   }
+
 
   //get lesson and quiz with id for display
   const [editLessonData, setEditLessonData] = useState({
@@ -480,21 +510,22 @@ const CourseVideo = () => {
         course_progress: course_progress,
         current_watching_lesson: editLessonData.id,
       };
-
       const res = await axiosInstance.put(
         `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
         data
       );
 
       if (res.status === 200) {
-        const currentLesson = lessonData.find((item) => item.id === editLessonData.id);
+        const currentLesson =
+          lessonData[0].section_id == activeModuleIndex ? lessonData.find((item) => item.id === editLessonData.id) : lessonData2.find((item) => item.id === editLessonData.id);
         const currentOrder = currentLesson?.order;
-
-        // Find the next lesson with the lowest order greater than the current lesson's order
-        const nextLesson = lessonData
-          .filter((item) => item.order > currentOrder)
-          .sort((a, b) => a.order - b.order)[0];
-
+        const nextLesson = lessonData[0].section_id == activeModuleIndex ?
+          lessonData
+            .filter((item) => item.order > currentOrder)
+            .sort((a, b) => a.order - b.order)[0] :
+          lessonData2
+            .filter((item) => item.order > currentOrder)
+            .sort((a, b) => a.order - b.order)[0];
         if (nextLesson) {
           if (nextLesson.id) {
             const data = { current_watching_lesson: nextLesson.id };
@@ -502,6 +533,8 @@ const CourseVideo = () => {
               `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
               data
             );
+            setActiveModuleIndex2(nextLesson.section_id);
+            getLessonData(nextLesson.section_id);
             await getLessonDataForEdit(nextLesson.id);
           }
 
@@ -511,21 +544,18 @@ const CourseVideo = () => {
         } else {
           // No next lesson, move to the next module
           const currentModule = moduleData.find((item) => item.id === activeModuleIndex);
-
           if (currentModule) {
             // Find the next module dynamically
             const nextModule = moduleData
               .filter((item) => item.order > currentModule.order) // Get modules with a higher order
-              .sort((a, b) => a.order - b.order)[0]; // Get the closest next module
-
+              .sort((a, b) => a.order - b.order)[0];
             if (!nextModule) {
               notifySuccess("Course Completed");
               getcourseProgressDataRefresh();
               return;
             }
-
-            console.log(nextModule);
             setActiveModuleIndex(nextModule.id);
+            setActiveModuleIndex2(nextModule.id);
             const res = await getLessonData(nextModule.id);
 
             if (res.length > 0) {
@@ -573,7 +603,9 @@ const CourseVideo = () => {
       parsData = [];
     }
     //i want to find lessson id from lessonData with the help of editQuizData id
-    const lessonQuizId = lessonData.find((item) => item.quiz_id === editQuizData.id);
+    // const lessonQuizId = lessonData.find((item) => item.quiz_id === editQuizData.id);
+    const lessonQuizId =
+      lessonData.section_id == activeModuleIndex ? lessonData.find((item) => item.quiz_id === editQuizData.id) : lessonData2.find((item) => item.quiz_id === editQuizData.id);
     parsData.push(lessonQuizId.id);
     const course_progress = ((parsData.length / lessonDataWithCourseId.length) * 100).toFixed(0)
     const datas = {
@@ -629,11 +661,16 @@ const CourseVideo = () => {
       const res = await axiosInstance.post(`${port}/addingQuizResultData`, quizAnswerData);
       if (res.status === 200) {
         // getQuizResultDatWithquizId(editQuizData.id);
-        const currentLesson = lessonData.find((item) => item.quiz_id === editQuizData.id);
-        const currentOrder = currentLesson.order;
-        const nextLesson = lessonData
-          .filter((item) => item.order > currentOrder)
-          .sort((a, b) => a.order - b.order)[0];
+        const currentLesson =
+          lessonData[0].section_id == activeModuleIndex ? lessonData.find((item) => item.id === editLessonData.id) : lessonData2.find((item) => item.id === editLessonData.id);
+        const currentOrder = currentLesson?.order;
+        const nextLesson = lessonData[0].section_id == activeModuleIndex ?
+          lessonData
+            .filter((item) => item.order > currentOrder)
+            .sort((a, b) => a.order - b.order)[0] :
+          lessonData2
+            .filter((item) => item.order > currentOrder)
+            .sort((a, b) => a.order - b.order)[0];
         if (nextLesson) {
           if (nextLesson.id) {
             const data = {
@@ -643,6 +680,8 @@ const CourseVideo = () => {
               `${port}/updattingAcademicProgressDataForViewed/${courseProgress.id}/${stuUserId}`,
               data
             );
+            setActiveModuleIndex2(nextLesson.section_id);
+            getLessonData(nextLesson.section_id);
             await getLessonDataForEdit(nextLesson.id);
             setQuizPassOrFail("")
           }
@@ -663,6 +702,7 @@ const CourseVideo = () => {
               return;
             }
             setActiveModuleIndex(nextModule.id);
+            setActiveModuleIndex2(nextModule.id);
             const res = await getLessonData(nextModule.id);
             if (res.length > 0) {
               if (res[0].id) {
@@ -900,7 +940,21 @@ const CourseVideo = () => {
                             </h2>
                             <span className="ml-2 font-semibold px-2 py-0.5 h-fit text-[12px] rounded bg-[#DDDDDD] uppercase">{editLessonData.lesson_type}</span>
                           </div>
-                          <p className="course_module_duration"><strong>Duration:</strong> {editLessonData.duration || "0"} Minutes</p>
+                          <div className="flex items-center">
+                            <p className="course_module_duration me-2"><strong>Duration:</strong> {editLessonData.duration || "0"} Minutes</p>
+                            {!(
+                              courseProgress.completed_lesson_id &&
+                              JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)
+                            ) && (
+                                <button
+                                  type="button"
+                                  className="primary-btn module-btn"
+                                  onClick={handleViewedLessonData}
+                                >
+                                  Next
+                                </button>
+                              )}
+                          </div>
                         </div>
 
                         {editLessonData.lesson_type === "youtube-video" && (
@@ -960,18 +1014,7 @@ const CourseVideo = () => {
                             {editLessonData.description || "No description available"}
                           </p>
                         </div>
-                        {!(
-                          courseProgress.completed_lesson_id &&
-                          JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)
-                        ) && (
-                            <button
-                              type="button"
-                              className="primary-btn module-btn m-3"
-                              onClick={handleViewedLessonData}
-                            >
-                              Next
-                            </button>
-                          )}
+
                       </>
                     )}
                     <div>
@@ -1131,7 +1174,7 @@ const CourseVideo = () => {
                                     onClick={handleSubmitQuizAnswer}
                                     className=" min-w-[130px] px-5 py-3 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 hover:shadow-md transition-all duration-200"
                                   >
-                                    Submit
+                                    Submitww
                                   </button>
                                 )
 
@@ -1192,12 +1235,12 @@ const CourseVideo = () => {
                       return (
                         <div className="module" key={moduleIndex}>
                           <div
-                            className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
+                            className={`module-header ${activeModuleIndex2 === module.id ? "active" : ""}`}
                             onClick={() =>
                               toggleContent(
                                 module.id,
                                 module.id,
-                                activeModuleIndex === module.id ? null : module.id
+                                activeModuleIndex2 === module.id ? null : module.id
                               )
                             }
                           >
@@ -1212,14 +1255,14 @@ const CourseVideo = () => {
                               <div className="module-controls">
                                 <button className="check-btn">
                                   <i
-                                    className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
+                                    className={`fa-solid ${activeModuleIndex2 === module.id ? "fa-angle-up" : "fa-angle-down"
                                       }`}
                                   ></i>
                                 </button>
                               </div>
                             </div>
                           </div>
-                          {activeModuleIndex === module.id && (
+                          {activeModuleIndex2 === module.id && (
                             <>
                               <div className="module-list">
                                 {lessonLoading ? (
@@ -1374,12 +1417,12 @@ const CourseVideo = () => {
                   return (
                     <div className="module" key={moduleIndex}>
                       <div
-                        className={`module-header ${activeModuleIndex === module.id ? "active" : ""}`}
+                        className={`module-header ${activeModuleIndex2 === module.id ? "active" : ""}`}
                         onClick={() =>
                           toggleContent(
                             module.id,
                             module.id,
-                            activeModuleIndex === module.id ? null : module.id
+                            activeModuleIndex2 === module.id ? null : module.id
                           )
                         }
                       >
@@ -1393,14 +1436,14 @@ const CourseVideo = () => {
                           <div className="module-controls">
                             <button className="check-btn">
                               <i
-                                className={`fa-solid ${activeModuleIndex === module.id ? "fa-angle-up" : "fa-angle-down"
+                                className={`fa-solid ${activeModuleIndex2 === module.id ? "fa-angle-up" : "fa-angle-down"
                                   }`}
                               ></i>
                             </button>
                           </div>
                         </div>
                       </div>
-                      {activeModuleIndex === module.id && (
+                      {activeModuleIndex2 === module.id && (
                         <>
                           <div className="module-list">
                             {lessonLoading ? (

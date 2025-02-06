@@ -183,7 +183,7 @@ const ShoppingCart = () => {
                           )}
                           <div className="course-details-header block">
                             <h3>{truncatedTitle}</h3>
-                            <p className='py-2 text-base font-normal lg:pb-0'>
+                            <p style={{ fontSize: "14px" }} className='py-2 lg:pb-0'>
                               By {""}
                               {(() => {
 
