@@ -36,7 +36,7 @@ const getQuizResultDatWithquizId = async (req, res) => {
     if (!isAuthenticated) return;
     const id = req.params.id;
     try {
-        const result = await quize_result.findAll({ where: { quize_id: id, student_id: req.params.stuId } });
+        const result = await quize_result.findAll({ where: { quize_id: id, student_id: req.params.stuId, },order:[['createdAt', 'DESC']] });
         res.status(200).json(result);
     } catch (error) {
         console.log(error);
