@@ -153,7 +153,9 @@ function Inquiry() {
                 </tr>
               ))
             ) : (
-              <p>No inquiry data available</p>
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>No data available</td>
+              </tr>
             )}
           </tbody>
         </table>

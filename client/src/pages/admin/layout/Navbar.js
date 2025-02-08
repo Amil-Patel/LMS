@@ -32,7 +32,7 @@ const Navbar = () => {
       <nav className="navbar">
         <div className="nav-logo">
           <NavLink to="/admin/dashboard">
-            <img src={require("../../../assets/image/web logo.png")} alt="logo" style={{width:'95px'}}/>
+            <img src={require("../../../assets/image/web logo.png")} alt="logo" style={{ width: '95px' }} />
           </NavLink>
         </div>
 
@@ -50,7 +50,7 @@ const Navbar = () => {
               <p>English</p>
               <i className="fa-solid fa-angle-down"></i>
             </span>
-            <span className="nav-right-section profile-box cursor-pointer " onClick={handleClick} >
+            <span className="nav-right-section profile-box cursor-pointer" onClick={handleClick} >
               {userData?.profile ?
                 <img src={`../../upload/${userData?.profile}`} alt="profile" />
                 :

@@ -32,7 +32,7 @@
   color: var(--light-grey-text-color);
   font-family: var(--jost-ff);
   font-size: 18px;
-  line-height: 1.4em;
+  line-height: 1.8em;
   cursor: pointer;
   user-select: none;
 }

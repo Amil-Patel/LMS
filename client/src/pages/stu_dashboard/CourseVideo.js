@@ -83,7 +83,6 @@ const CourseVideo = () => {
   const getcourseProgressData = async () => {
     try {
       const res = await axiosInstance.get(`${port}/gettingAcademicProgressDataWithCourseId/${id}/${stuUserId}`);
-      console.log(res.data)
       const progressData = await res.data[0];
       if (!progressData) {
         getModuleData();
@@ -118,20 +117,12 @@ const CourseVideo = () => {
       }
       const res2 = await axiosInstance.post(`${port}/gettingModuleTimeData`, data);
       const filteredModuleData = moduleData.filter((item) => item.id === activeModuleIndex);
-      console.log(activeModuleIndex)
-      console.log(moduleData)
-      console.log(res2.data.data[0]?.spent_time)
-      console.log(filteredModuleData)
-      if(filteredModuleData.length > 0 && res2.data.data[0]?.spent_time >= filteredModuleData[0].time){
-        console.log("in iffff")
+      if (filteredModuleData.length > 0 && res2.data.data[0]?.spent_time >= filteredModuleData[0].time) {
         getLessonDataForEdit(missingLessons[0]);
-      }else{
-        console.log("in else")
-        console.log(progressData?.current_watching_lesson)
+      } else {
         getLessonDataForEdit(progressData?.current_watching_lesson);
       }
       if (missingLessons.length > 0 && filteredModuleData.length > 0 && res2.data.data[0]?.spent_time >= filteredModuleData[0].time) {
-        console.log("hiiiiiiiiiiiiii")
         let firstUncompletedLesson = missingLessons[0];
         const data = {
           student_id: stuUserId,
@@ -181,7 +172,6 @@ const CourseVideo = () => {
     }
     try {
       const res = await axiosInstance.post(`${port}/gettingModuleTimeData`, data);
-      console.log(res.data)
       await setCurrentModuleTime(res.data.data[0].spent_time);
     }
     catch (error) {
@@ -245,11 +235,8 @@ const CourseVideo = () => {
 
   //get lesson iwth id
   const getLessonWithCompletedId = async (lessonid, num) => {
-    console.log(lessonid)
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${lessonid}`);
-      console.log(res.data);
-      console.log("get lesson with id");
       setActiveModuleIndex(res.data.section_id)
       setActiveModuleIndex2(res.data.section_id)
       getLessonData(res.data.section_id);
@@ -310,29 +297,13 @@ const CourseVideo = () => {
       setModuleData(sortedData);
       setActiveModuleIndex(sortedData[0].id)
       setActiveModuleIndex2(sortedData[0].id)
-      addModuleTime(sortedData[0].id)
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   }
-  //add module time
-  const addModuleTime = async (mId) => {
-    if (!stuUserId) return;
-    try {
-      const data = {
-        student_id: stuUserId,
-        course_id: id,
-        module_id: mId,
-        spent_time: 0,
-      }
-      // const res = await axiosInstance.post(`${port}/addingmoduletimestampdata`, data);
-      // getcourseProgressData();
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
   //get lesson data
   const [lessonData, setLessonData] = useState([]);
   const [lessonData2, setLessonData2] = useState([]);
@@ -449,13 +420,21 @@ const CourseVideo = () => {
       is_skipable: "",
       instruction: "",
     });
+
     try {
       const res = await axiosInstance.get(`${port}/gettingCourseLessonDataWithId/${id}`);
-      setEditLessonData(res.data);
+      let text_content = res.data.text_content;
+      try {
+        text_content = JSON.parse(text_content);
+      } catch (e) {
+        text_content = text_content.replace(/^"(.*)"$/, '$1');
+      }
+      setEditLessonData({ ...res.data, text_content });
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
   const getQuizeDataForEdit = async (id) => {
     setEditLessonData({
       title: "",
@@ -491,7 +470,6 @@ const CourseVideo = () => {
   const getQuizResultDatWithquizId = async (id) => {
     try {
       const res = await axiosInstance.get(`${port}/gettingQuizResultDatWithquizId/${id}/${stuUserId}`);
-      console.log(res.data)
       const quizResultData = res.data[0];
       setQuizeResultId(res.data[0]);
       if (!quizResultData) {
@@ -504,6 +482,7 @@ const CourseVideo = () => {
       console.log(error);
     }
   }
+
   const [quizQuestionData, setQuizQuestionData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -634,9 +613,7 @@ const CourseVideo = () => {
             module_id: activeModuleIndex
           }
           const res = await axiosInstance.post(`${port}/gettingModuleTimeData`, data);
-          console.log(res.data.data[0].spent_time)
-          console.log(currentModule.time)
-          if (res.data.data[0]?.spent_time >= currentModule.time) {
+          if (res.data.data[0]?.spent_time >= currentModule.time || currentModuleTime.length < 0) {
             if (currentModule) {
               // Find the next module dynamically
               const nextModule = moduleData
@@ -652,7 +629,6 @@ const CourseVideo = () => {
               setActiveModuleIndex(nextModule.id);
               setActiveModuleIndex2(nextModule.id);
               const res = await getLessonData(nextModule.id);
-              console.log(res)
               if (res.length > 0) {
                 if (res[0].id) {
                   const data = { current_watching_lesson: res[0].id };
@@ -739,7 +715,10 @@ const CourseVideo = () => {
     const passingMarks = editQuizData.passing__marks;
     const obtainedMarks = (matchingAnswers.length * perQuizMark)
     const passOrFail = obtainedMarks >= passingMarks ? "pass" : "fail";
-
+    if (passOrFail === "fail") {
+      notifyWarning("You have failed the quiz");
+      return;
+    }
     const quizAnswerData = {
       quiz_id: editQuizData.id,
       student_id: stuUserId,
@@ -780,7 +759,7 @@ const CourseVideo = () => {
       );
       const res = await axiosInstance.post(`${port}/addingQuizResultData`, quizAnswerData);
       if (res.status === 200) {
-        // getQuizResultDatWithquizId(editQuizData.id);
+        getQuizResultDatWithquizId(editQuizData.id);
         const currentLesson =
           lessonData[0].section_id == activeModuleIndex ? lessonData.find((item) => item.id === editLessonData.id) : lessonData2.find((item) => item.id === editLessonData.id);
         const currentOrder = currentLesson?.order;
@@ -819,8 +798,6 @@ const CourseVideo = () => {
             module_id: activeModuleIndex
           }
           const res = await axiosInstance.post(`${port}/gettingModuleTimeData`, data);
-          console.log(res.data.data[0].spent_time)
-          console.log(currentModule.time)
           if (res.data.data[0].spent_time >= currentModule.time) {
             if (currentModule) {
               // Find the next module dynamically
@@ -837,7 +814,6 @@ const CourseVideo = () => {
               setActiveModuleIndex(nextModule.id);
               setActiveModuleIndex2(nextModule.id);
               const res = await getLessonData(nextModule.id);
-              console.log(res)
               if (res.length > 0) {
                 if (res[0].id) {
                   const data = { current_watching_lesson: res[0].id };
@@ -1080,7 +1056,7 @@ const CourseVideo = () => {
                             {!(
                               (courseProgress.completed_lesson_id &&
                                 JSON.parse(courseProgress.completed_lesson_id).includes(editLessonData.id)) &&
-                              currentModuleTime >= filteredModuleData[0]?.time
+                              currentModuleTime >= filteredModuleData[0]?.time || currentModuleTime.length < 0
                             ) && (
                                 <button
                                   type="button"
@@ -1556,7 +1532,7 @@ const CourseVideo = () => {
                         <span className="module-title">
                           MODULE-{moduleIndex + 1} : {module.title}
                         </span>
-                        <div className="flex gap-2 items-center">
+                        <div className="flex gap-2 item-center">
                           {totalSeconds && totalSeconds !== 0 ? (
                             <span className="module-duration">{formattedTime}</span>
                           ) : null}

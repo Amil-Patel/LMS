@@ -283,7 +283,6 @@
 
 .cus-contact-section {
   display: flex;
-  align-items: center;
 }
 
 .cus-contact-inner-section {
@@ -297,7 +296,7 @@
 }
 
 .cus-live-chat-section {
-  padding-top: 8%;
+  padding-top: 3%;
 }
 
 .cus-live-chat-section h5 {
