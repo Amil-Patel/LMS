@@ -426,7 +426,7 @@ const EditCourse = () => {
                 {loading && <Loading />}
                 <div className="main-top-bar">
                     <div id="user-tag">
-                        <h5>Courses</h5>
+                        <h5>Edit Course</h5>
                     </div>
                     <div id="search-inner-hero-section">
                         <input type="text" placeholder="Search" />

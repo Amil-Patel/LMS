@@ -321,7 +321,7 @@ const AddCourse = () => {
         {loading && <Loading />}
         <div className="main-top-bar">
           <div id="user-tag">
-            <h5>Courses</h5>
+            <h5>Add Course</h5>
           </div>
           <div id="search-inner-hero-section">
             <input id="search-input" type="text" placeholder="Search" />

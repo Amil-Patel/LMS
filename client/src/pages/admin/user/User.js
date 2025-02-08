@@ -642,7 +642,7 @@ const User = () => {
                 {
                   filtereData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No user data found</td>
+                      <td colSpan="9" style={{ textAlign: "center" }}>No user data found</td>
                     </tr>
                   ) : (
                     filtereData.map((item, index) => (
@@ -738,7 +738,7 @@ const User = () => {
                 {
                   filtereData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No instructure data found</td>
+                      <td colSpan="9" style={{ textAlign: "center" }}>No instructure data found</td>
                     </tr>
                   ) : (
                     filtereData.map((item, index) => (
@@ -834,7 +834,7 @@ const User = () => {
                 {
                   filtereData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No admin data found</td>
+                      <td colSpan="9" style={{ textAlign: "center" }}>No admin data found</td>
                     </tr>
                   ) : (
                     filtereData.map((item, index) => (
@@ -926,7 +926,7 @@ const User = () => {
                 {
                   filtereData.length === 0 ? (
                     <tr>
-                      <td colSpan="9">No super admin data found</td>
+                      <td colSpan="9" style={{ textAlign: "center" }}>No superAdmin data found</td>
                     </tr>
                   ) : (
                     filtereData.map((item, index) => (

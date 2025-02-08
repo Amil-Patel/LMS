@@ -149,7 +149,8 @@ const Navbar = () => {
         <div className="profile-modal-overlay" onClick={closeModal}>
           <div
             className="modal absolute bg-white rounded-lg shadow-lg p-4"
-            style={{ top: modalPosition.top + 6, left: modalPosition.left - 223 }}
+            style={{ top: modalPosition.top + 6, left: modalPosition.left - 180 }}
+            // style={{ top: modalPosition.top + 6, left: modalPosition.left - 223 }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center mb-5">
@@ -159,7 +160,7 @@ const Navbar = () => {
                 <img src={require("../../../assets/image/default-profile.png")} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
               )}
               <div>
-                <p className="font-semibold text-[15px] text-[#4880FF]">{userData?.first_name + " " + userData?.last_name}</p>
+                <p className="font-semibold p-0 text-[15px] text-[#4880FF]">{userData?.first_name + " " + userData?.last_name}</p>
                 <p className="text-sm text-gray-500 lowercase">{userData?.email}</p>
               </div>
             </div>

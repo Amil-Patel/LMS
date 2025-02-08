@@ -4,7 +4,7 @@ import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import Breadcrumb from "../../../pages/client/course/Breadcrumb";
 import { useCart } from "../layout/CartContext"
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axiosInstance from "../utils/axiosInstance";
 import { userRolesContext } from '../../admin/layout/RoleContext';
@@ -53,8 +53,6 @@ const ShoppingCart = () => {
         });
 
         const totalCouponDiscount = Object.values(courseDiscounts).reduce((acc, val) => acc + val, 0);
-        console.log("Total Coupon Discount:", totalCouponDiscount);
-        console.log(courseDiscounts)
         setCouponDiscount(courseDiscounts); // Store per-course discount as an object
         setTotalCouponDiscount(totalCouponDiscount);
         setEligibleCourses(parsedCourseIds);
@@ -69,8 +67,6 @@ const ShoppingCart = () => {
     }
   };
 
-
-  console.log(cart)
   const sumOfAllCartAmount = cart.reduce((accumulator, item) => accumulator + parseFloat(item.course_price), 0);
   const sumOfAllCartTax = cart.reduce((acc, item) => {
     if (item.is_inclusive == 1) {
@@ -89,7 +85,6 @@ const ShoppingCart = () => {
   const processToCheckout = (total) => {
     if (cart.length > 0) {
       const courseDetails = cart.map((course) => {
-        console.log(couponDiscount)
         const isCouponApplicable = eligibleCourses.includes(course.course_id);
         const courseSpecificDiscount = isCouponApplicable ? (couponDiscount[course.course_id] || 0) : 0;
 
@@ -106,8 +101,6 @@ const ShoppingCart = () => {
           is_exclusive: course.is_exclusive
         };
       });
-      console.log(courseDetails)
-
       navigate(`/checkout`, {
         state: {
           courses: courseDetails,
@@ -241,7 +234,10 @@ const ShoppingCart = () => {
                     )
                   })
                 ) : (
-                  <p>No courses in cart</p>
+                  <>
+                    <span>No courses in cart</span>
+                    <NavLink className="ms-5 text-blue-700 underline" to="/all-course">Go To Courses</NavLink>
+                  </>
                 )
               }
             </div>
