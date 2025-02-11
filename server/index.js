@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const routes = require("./src/routes/index")
+const { handleStripeWebhook } = require("./src/controller/payments/Payments");
 
 app.use(cors({
     origin: ["http://localhost:3001", "http://localhost:3000"],
@@ -18,7 +19,7 @@ app.use(router);
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
-
+app.post("/webhook", express.raw({ type: "application/json" }), handleStripeWebhook);
 router.use("/", routes);
 
 app.use((err, req, res, next) => {
