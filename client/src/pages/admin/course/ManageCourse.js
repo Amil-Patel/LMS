@@ -654,7 +654,7 @@ const ManageCourse = () => {
       } catch (e) {
         // If parsing fails, keep it as is
       }
-      res.data.text_content = text_content.replace(/^"|"$/g, "");
+      res.data.text_content = text_content?.replace(/^"|"$/g, "");
       setEditLessonData(res.data);
     } catch (error) {
       console.log(error);
@@ -703,7 +703,7 @@ const ManageCourse = () => {
     //   notifyWarning("Either URL or attachment is required.");
     //   return;
     // }
-    if (!editLessonData.description.trim()) {
+    if (!editLessonData?.description?.trim()) {
       notifyWarning("Description is required.");
       return;
     }
@@ -1310,13 +1310,13 @@ const ManageCourse = () => {
                                 }
                               </div>
                               <div className="lesson-time">
-                                {
-                                  lesson.quiz_id != null ? (
+                                {lesson.quiz_id != null && lesson.course_quize_lesson.quize_duration
+                                  ? lesson.course_quize_lesson.quize_duration !== 0 && (
                                     <span>{lesson.course_quize_lesson.quize_duration} Minutes</span>
-                                  ) : (
-                                    <span>{lesson.duration} Minutes</span>
                                   )
-                                }
+                                  : lesson.duration !== null && lesson.duration !== 0 && (
+                                    <span>{lesson.duration} Minutes</span>
+                                  )}
                               </div>
                               <div className="lesson-actions">
                                 {lesson.quiz_id && (

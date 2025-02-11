@@ -23,7 +23,7 @@ const Footer = () => {
                     <div className='cus-footer-down-section pt-3'>
                         <p>Comfort Security Services, Copyright 2024 | All Right Reserved.</p>
                         <div className="cus-policy-text">
-                            <p><NavLink>Privacy Policy</NavLink></p>
+                            <p><NavLink to="/privacy-policy">Privacy Policy</NavLink></p>
                             <p><NavLink>Terms & Conditions</NavLink></p>
                         </div>
                     </div>

@@ -161,6 +161,7 @@ const Profile = () => {
   useEffect(() => {
     getUserData();
   }, []);
+  console.log(userData)
   return (
     <>
       <Hoc />
@@ -201,7 +202,7 @@ const Profile = () => {
                   id="middle_name"
                   type="text"
                   name="middle_name"
-                  value={userData.middle_name}
+                  value={userData.middle_name != "null" ? userData.middle_name : ""}
                   onChange={handleChange}
                   placeholder="Enter Middle Name"
                   className="col12input"
@@ -216,7 +217,7 @@ const Profile = () => {
                   type="text"
                   id="last_name"
                   name="last_name"
-                  value={userData.last_name}
+                  value={userData.last_name != "null" ? userData.last_name : ""}
                   onChange={handleChange}
                   placeholder="Enter Last Name"
                   className="col12input"
@@ -249,7 +250,7 @@ const Profile = () => {
                   type="text"
                   id="contact"
                   name="contact"
-                  value={userData.contact}
+                  value={userData.contact != "null" ? userData.contact : ""}
                   onChange={handleChange}
                   placeholder="Enter Contact No."
                   className="col12input"
@@ -271,7 +272,7 @@ const Profile = () => {
                   type="text"
                   id="whatsapp_number"
                   name="whatsapp_number"
-                  value={userData.whatsapp_number}
+                  value={userData.whatsapp_number != "null" ? userData.whatsapp_number : ""}
                   onChange={handleChange}
                   placeholder="Enter Contact No."
                   className="col12input"
@@ -289,7 +290,7 @@ const Profile = () => {
                   name="address"
                   placeholder="Address"
                   className="col12input"
-                  value={userData.address}
+                  value={userData.address != "null" ? userData.address : ""}
                   onChange={handleChange}
                 />
               </div>
@@ -302,7 +303,7 @@ const Profile = () => {
                   name="country"
                   placeholder="Country"
                   className="col12input"
-                  value={userData.country}
+                  value={userData.country != "null" ? userData.country : ""}
                   onChange={handleChange}
                 />
               </div>
@@ -326,7 +327,7 @@ const Profile = () => {
                     type="date"
                     id="dob"
                     name="dob"
-                    value={userData.dob}
+                    value={userData.dob != "null" ? userData.dob : ""}
                     onChange={handleChange}
                     placeholder="Enter Course Title"
                     className="col12input"
@@ -414,7 +415,7 @@ const Profile = () => {
                   className="col12input"
                   id="description"
                   name="description"
-                  value={userData.description}
+                  value={userData.description != "null" ? userData.description : ""}
                   onChange={handleChange}
                 />
               </div>

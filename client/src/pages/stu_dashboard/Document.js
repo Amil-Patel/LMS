@@ -5,6 +5,7 @@ import DocumentBreadcrumb from './DocumentBreadcrumb';
 import axiosInstance from '../client/utils/axiosInstance';
 import { userRolesContext } from '../admin/layout/RoleContext';
 import { notifyError, notifySuccess } from '../admin/layout/ToastMessage';
+import { NavLink } from 'react-router-dom';
 const port = process.env.REACT_APP_URL
 const Document = () => {
     const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -103,8 +104,28 @@ const Document = () => {
                             <div className='profile_header_title flex items-center bg-white justify-between'>
                                 <h1 className='student_dashboard_profile_header_title'>Documents</h1>
                             </div>
+                            <div className='student_profile_form mb-3'>
+                                <div className="flex-row name gap-4 mb-0">
+                                    <div className="w-full sm:w-3/5 form-group mb-0">
+                                        <label htmlFor="course_select">
+                                            Please download the CRLF from
+                                        </label>
+                                    </div>
+                                    <div className="form-group mb-0 md:mt-0 mt-3">
+                                        <NavLink to={require("../../assets/image/CRLF_Comfort Security Services_CSS.pdf")} target="_blank" download className="primary-btn module-btn">Download</NavLink>
+                                    </div>
+                                </div>
+                            </div>
                             <form className='student_profile_form' onSubmit={saveUSerDocument}>
                                 {/* first / middle / last  name */}
+                                <div className='mb-3'>
+                                    <p className='m-0 font-medium' style={{ paddingBottom: "5px" }}>please upload the following documents:-</p>
+                                    <ul className='px-4 md:flex gap-7 block'>
+                                        <li className='list-decimal text-sm'>CRLF Form</li>
+                                        <li className='list-decimal text-sm'>Photo Id</li>
+                                        <li className='list-decimal text-sm'>First aid CPR Certificate</li>
+                                    </ul>
+                                </div>
                                 <div className="flex-row name gap-4 mb-0">
                                     <div className="w-full sm:w-3/5 form-group mb-0">
                                         <label htmlFor="course_select">
