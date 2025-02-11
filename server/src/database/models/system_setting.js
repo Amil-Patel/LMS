@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class System_Setting extends Model {
     /**
@@ -13,42 +11,46 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  System_Setting.init({
-    timezone: {
-      type: DataTypes.STRING,
-      allowNull: false
+  System_Setting.init(
+    {
+      timezone: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      currency: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      symbol: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      position: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email_verification: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      max_authorized_device: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
-    currency: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    symbol: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    position: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    email_verification: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    max_authorized_device: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+    {
+      sequelize,
+      modelName: "System_Setting",
+      tableName: "system_settings",
     }
-  }, {
-    sequelize,
-    modelName: 'System_Setting',
-  });
+  );
   return System_Setting;
 };

@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class enrollment extends Model {
     /**
@@ -11,48 +9,52 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       enrollment.belongsTo(models.Course_Master, {
-        foreignKey: 'course_id',
-        as: 'course_master_enrollment'
+        foreignKey: "course_id",
+        as: "course_master_enrollment",
       });
       enrollment.belongsTo(models.UserMaster, {
-        foreignKey: 'student_id',
-        as: 'user_enrollment'
+        foreignKey: "student_id",
+        as: "user_enrollment",
       });
     }
   }
-  enrollment.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: false
+  enrollment.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: false,
+      },
+      student_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      course_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      enrollment_mode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
-    student_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    course_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    enrollment_mode: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+    {
+      sequelize,
+      modelName: "enrollment",
+      tableName: "enrollments",
     }
-  }, {
-    sequelize,
-    modelName: 'enrollment',
-  });
+  );
   return enrollment;
 };

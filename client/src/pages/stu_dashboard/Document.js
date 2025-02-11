@@ -133,36 +133,39 @@ const Document = () => {
                                     <button type="submit" className="primary-btn module-btn">Save</button>
                                 </div>
                             </form>
-                            <div className="table-responsive overflow-y-scroll  " style={{scrollbarWidth:"none"}}>
-                            <table className="table table-striped table-hover mt-8">
+                            <div className="table-responsive overflow-y-scroll  " style={{ scrollbarWidth: "none" }}>
+                                <table className="table table-striped table-hover mt-8">
                                     <thead>
                                         <tr>
-                                            <th style={{width:"5%"}}>Sr.No</th>
-                                            <th style={{width:"45%"}}>Course Name</th>
-                                            <th style={{width:"15%"}}>Attachment</th>
-                                            <th style={{width:"10%"}}>Status</th>
-                                            <th style={{width:"25%"}}>Message</th>
+                                            <th style={{ width: "5%" }}>Sr.No</th>
+                                            <th style={{ width: "45%" }}>Course Name</th>
+                                            <th style={{ width: "15%" }}>Attachment</th>
+                                            <th style={{ width: "10%" }}>Status</th>
+                                            <th style={{ width: "25%" }}>Message</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {documentData.map((item, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.course_id}</td>
-                                                <td>
-                                                    <a className='border  px-2 rounded' href={`../upload/${item.attachment}`} target="_blank" rel="noopener noreferrer">
-                                                    <i class="fa-solid fa-eye"></i> View
-                                                    </a>
-                                                </td>
-                                                <td className={`font-semibold 
+                                        {documentData.map((item, index) => {
+                                            const courseName = enrolledCourses.find((course) => course.course_id === item.course_id)?.course_master_enrollment.course_title
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{courseName ? courseName : "-"}</td>
+                                                    <td>
+                                                        <a className='border  px-2 rounded' href={`../upload/${item.attachment}`} target="_blank" rel="noopener noreferrer">
+                                                            <i class="fa-solid fa-eye"></i> View
+                                                        </a>
+                                                    </td>
+                                                    <td className={`font-semibold 
                                                         ${item.status === "success" ? "text-[#2DB224]" : ""}
                                                         ${item.status === "pending" ? "text-[#FA8232]" : ""}
                                                         ${item.status === "rejected" ? "text-[#E35050]" : ""}`}>
-                                                    {item.status}
-                                                </td>
-                                                <td>{item.message}</td>
-                                            </tr>
-                                        ))}
+                                                        {item.status}
+                                                    </td>
+                                                    <td>{item.message}</td>
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
 
                                 </table>

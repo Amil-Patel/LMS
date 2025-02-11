@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class timezone extends Model {
     /**
@@ -13,19 +11,23 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  timezone.init({
-    time_zone_name: DataTypes.STRING,
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+  timezone.init(
+    {
+      time_zone_name: DataTypes.STRING,
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+    {
+      sequelize,
+      modelName: "timezone",
+      tableName: "timezones",
     }
-  }, {
-    sequelize,
-    modelName: 'timezone',
-  });
+  );
   return timezone;
 };

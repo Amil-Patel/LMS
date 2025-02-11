@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class order_detail extends Model {
     /**
@@ -11,26 +9,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       order_detail.belongsTo(models.order, {
-        foreignKey: 'order_id',
-        as: 'order_detail_id'
+        foreignKey: "order_id",
+        as: "order_detail_id",
       });
     }
   }
-  order_detail.init({
-    order_id: DataTypes.INTEGER,
-    course_id: DataTypes.INTEGER,
-    course_title: DataTypes.STRING,
-    quantity: DataTypes.INTEGER,
-    course_amount: DataTypes.INTEGER,
-    course_tax: DataTypes.INTEGER,
-    course_taxamount: DataTypes.INTEGER,
-    discount: DataTypes.INTEGER,
-    coupon_discount_amount: DataTypes.STRING,
-    is_inclusive: DataTypes.INTEGER,
-    is_exclusive: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'order_detail',
-  });
+  order_detail.init(
+    {
+      order_id: DataTypes.INTEGER,
+      course_id: DataTypes.INTEGER,
+      course_title: DataTypes.STRING,
+      quantity: DataTypes.INTEGER,
+      course_amount: DataTypes.INTEGER,
+      course_tax: DataTypes.INTEGER,
+      course_taxamount: DataTypes.INTEGER,
+      discount: DataTypes.INTEGER,
+      coupon_discount_amount: DataTypes.STRING,
+      is_inclusive: DataTypes.INTEGER,
+      is_exclusive: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "order_detail",
+      tableName: "order_details",
+    }
+  );
   return order_detail;
 };

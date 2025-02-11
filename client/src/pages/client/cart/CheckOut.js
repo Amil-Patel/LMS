@@ -293,7 +293,6 @@ const CheckOut = () => {
                     pan: infoData.bill_pan,
                 },
             };
-            console.log(requestData);
             // Send request to create a Stripe payment session
             const { data: session } = await axiosInstance.post(`${port}/process-courses-payment`, requestData);
             // Redirect to Stripe Checkout

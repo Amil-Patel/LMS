@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Permission_Group extends Model {
     /**
@@ -11,25 +9,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Permission_Group.hasMany(models.Permission_Category, {
-        foreignKey: 'perm_group_id',
-        as: 'permission_group'
+        foreignKey: "perm_group_id",
+        as: "permission_group",
       });
     }
   }
-  Permission_Group.init({
-    name: DataTypes.STRING,
-    short_desc: DataTypes.TEXT,
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+  Permission_Group.init(
+    {
+      name: DataTypes.STRING,
+      short_desc: DataTypes.TEXT,
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+    {
+      sequelize,
+      modelName: "Permission_Group",
+      tableName: "permission_groups",
     }
-  }, {
-    sequelize,
-    modelName: 'Permission_Group',
-  });
+  );
   return Permission_Group;
 };

@@ -31,7 +31,7 @@ const Sidebar = () => {
     getUserData();
   }, [stuUserId]);
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

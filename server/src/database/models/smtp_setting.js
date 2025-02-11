@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class smtp_setting extends Model {
     /**
@@ -13,46 +11,50 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  smtp_setting.init({
-    protocol: {
-      type: DataTypes.STRING,
-      allowNull: false
+  smtp_setting.init(
+    {
+      protocol: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      smtp_crypto: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      smtp_host: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      smtp_port: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      smtp_from_email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      smtp_username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      smtp_password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
-    smtp_crypto: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    smtp_host: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    smtp_port: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    smtp_from_email: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    smtp_username: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    smtp_password: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+    {
+      sequelize,
+      modelName: "smtp_setting",
+      tableName: "smtp_settings",
     }
-  }, {
-    sequelize,
-    modelName: 'smtp_setting',
-  });
+  );
   return smtp_setting;
 };

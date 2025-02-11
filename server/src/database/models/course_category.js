@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Course_Category extends Model {
     /**
@@ -11,49 +9,53 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Course_Category.hasMany(models.Course_Master, {
-        foreignKey: 'course_cate',
-        as: 'course_category'
+        foreignKey: "course_cate",
+        as: "course_category",
       });
     }
   }
-  Course_Category.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: false
+  Course_Category.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: false,
+      },
+      cate_title: {
+        type: DataTypes.STRING,
+      },
+      cate_parent_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      cate_thumbnail: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      status: {
+        type: DataTypes.INTEGER,
+      },
+      created_by: {
+        type: DataTypes.INTEGER,
+      },
+      updated_by: {
+        type: DataTypes.INTEGER,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
     },
-    cate_title: {
-      type: DataTypes.STRING,
-    },
-    cate_parent_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    cate_thumbnail: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    status: {
-      type: DataTypes.INTEGER
-    },
-    created_by: {
-      type: DataTypes.INTEGER
-    },
-    updated_by: {
-      type: DataTypes.INTEGER
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.INTEGER
+    {
+      sequelize,
+      modelName: "Course_Category",
+      tableName: "course_categories",
+      timestamps: false,
     }
-  }, {
-    sequelize,
-    modelName: 'Course_Category',
-    timestamps: false
-  });
+  );
   return Course_Category;
 };
