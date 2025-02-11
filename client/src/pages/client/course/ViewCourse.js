@@ -365,129 +365,122 @@ const ViewCourse = () => {
                 <>
                   {moduleData.length > 0
                     ? moduleData.map((module, index) => {
-                        const lessonTime = (
-                          module.course_section_lesson || []
-                        ).reduce((lessonTotal, item) => {
-                          if (item.is_count_time === 1) {
-                            return lessonTotal + (item.duration || 0);
-                          }
-                          return lessonTotal;
-                        }, 0);
+                      const lessonTime = (
+                        module.course_section_lesson || []
+                      ).reduce((lessonTotal, item) => {
+                        if (item.is_count_time === 1) {
+                          return lessonTotal + (item.duration || 0);
+                        }
+                        return lessonTotal;
+                      }, 0);
 
-                        const quizeTime = (
-                          module.course_section_quize || []
-                        ).reduce((quizeTotal, item) => {
-                          if (item.is_count_time === 1) {
-                            return quizeTotal + (item.quize_duration || 0);
-                          }
-                          return quizeTotal;
-                        }, 0);
-                        const totalSeconds = module.time;
-                        const hours = Math.floor(totalSeconds / 3600);
-                        const minutes = Math.floor((totalSeconds % 3600) / 60);
-                        const seconds = totalSeconds % 60;
-                        const formattedTime = `${String(hours).padStart(
-                          2,
-                          "0"
-                        )}:${String(minutes).padStart(2, "0")}:${String(
-                          seconds
-                        ).padStart(2, "0")}`;
-                        return (
-                          <div className="module" key={index}>
-                            <div
-                              className="module-header"
-                              onClick={() => toggleContent(index, module.id)}
-                            >
-                              <span className="module-title">
-                                MODULE-{index + 1} : {module.title}
-                              </span>
-                              <div className="module-controls">
-                                {totalSeconds && totalSeconds !== 0 ? (
-                                  <span className="module-duration">
-                                    {formattedTime}
-                                  </span>
-                                ) : null}
-                                <span className="check-btn">
-                                  <i
-                                    className={`fa-solid ${
-                                      activeModuleIndex === index
-                                        ? "fa-angle-up"
-                                        : "fa-angle-down"
-                                    }`}
-                                  ></i>
+                      const quizeTime = (
+                        module.course_section_quize || []
+                      ).reduce((quizeTotal, item) => {
+                        if (item.is_count_time === 1) {
+                          return quizeTotal + (item.quize_duration || 0);
+                        }
+                        return quizeTotal;
+                      }, 0);
+                      const totalSeconds = module.time;
+                      const hours = Math.floor(totalSeconds / 3600);
+                      const minutes = Math.floor((totalSeconds % 3600) / 60);
+                      const seconds = totalSeconds % 60;
+                      const formattedTime = `${String(hours).padStart(
+                        2,
+                        "0"
+                      )}:${String(minutes).padStart(2, "0")}:${String(
+                        seconds
+                      ).padStart(2, "0")}`;
+                      return (
+                        <div className="module" key={index}>
+                          <div
+                            className="module-header"
+                            onClick={() => toggleContent(index, module.id)}
+                          >
+                            <span className="module-title">
+                              MODULE-{index + 1} : {module.title}
+                            </span>
+                            <div className="module-controls">
+                              {totalSeconds && totalSeconds !== 0 ? (
+                                <span className="module-duration">
+                                  {formattedTime}
                                 </span>
-                              </div>
+                              ) : null}
+                              <span className="check-btn">
+                                <i
+                                  className={`fa-solid ${activeModuleIndex === index
+                                    ? "fa-angle-up"
+                                    : "fa-angle-down"
+                                    }`}
+                                ></i>
+                              </span>
                             </div>
-                            {activeModuleIndex === index && (
-                              <>
-                                <div className="module-content min-h-10">
-                                  {lessonLoading ? (
+                          </div>
+                          {activeModuleIndex === index && (
+                            <>
+                              <div className="module-content min-h-10">
+                                {lessonLoading ? (
+                                  <div
+                                    className="lesson_loader"
+                                    style={{ top: "-2px" }}
+                                  ></div>
+                                ) : lessonData.length > 0 ? (
+                                  lessonData.map((lesson, index) => (
                                     <div
-                                      className="lesson_loader"
-                                      style={{ top: "-2px" }}
-                                    ></div>
-                                  ) : lessonData.length > 0 ? (
-                                    lessonData.map((lesson, index) => (
-                                      <div
-                                        className="module-lesson flex flex-wrap gap-2 p-3"
-                                        key={index}
-                                      >
-                                        {/* Lesson Icon and Title */}
-                                        <div className="lesson-title flex items-center gap-1 w-full">
-                                          {lesson.quiz_id ? (
-                                            <span className="quiz-icon">
-                                              <i className="fa-regular fa-circle-question"></i>
-                                            </span>
-                                          ) : (
-                                            <span className="lesson-icon">
-                                              <i className="fa-regular fa-file-lines"></i>
-                                            </span>
-                                          )}
+                                      className="module-lesson flex flex-wrap gap-2 p-3"
+                                      key={index}
+                                    >
+                                      {/* Lesson Icon and Title */}
+                                      <div className="lesson-title flex items-center gap-1 w-full">
+                                        {lesson.quiz_id ? (
+                                          <span className="quiz-icon">
+                                            <i className="fa-regular fa-circle-question"></i>
+                                          </span>
+                                        ) : (
+                                          <span className="lesson-icon">
+                                            <i className="fa-regular fa-file-lines"></i>
+                                          </span>
+                                        )}
 
-                                          {/* <span className="font-medium">
+                                        {/* <span className="font-medium">
                                       Video: Course Intro
                                     </span> */}
-                                          <span className="font-medium">
-                                            {lesson.quiz_id != null
-                                              ? lesson.course_quize_lesson.title
-                                              : lesson.title}
-                                          </span>
-                                        </div>
+                                        <span className="font-medium">
+                                          {lesson.quiz_id != null
+                                            ? lesson.course_quize_lesson.title
+                                            : lesson.title}
+                                        </span>
+                                      </div>
 
-                                        {/* Preview Button and Lesson Time */}
-                                        <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
-                                          <div className="lesson-time text-gray-500">
-                                            {lesson.quiz_id != null ? (
-                                              <span>
-                                                {
-                                                  lesson.course_quize_lesson
-                                                    .quize_duration
-                                                }{" "}
-                                                Minutes
-                                              </span>
-                                            ) : (
-                                              <span>
-                                                {lesson.duration} Minutes
-                                              </span>
+                                      {/* Preview Button and Lesson Time */}
+                                      <div className="lesson-actions-time flex justify-between items-center w-full sm:w-auto">
+                                        <div className="lesson-time text-gray-500">
+                                          {lesson.quiz_id != null && lesson.course_quize_lesson.quize_duration
+                                            ? lesson.course_quize_lesson.quize_duration !== 0 && (
+                                              <span>{lesson.course_quize_lesson.quize_duration} Minutes</span>
+                                            )
+                                            : lesson.duration !== null && lesson.duration !== 0 && (
+                                              <span>{lesson.duration} Minutes</span>
                                             )}
-                                          </div>
-                                          {/* <button className="resource-btn text-sm ml-3">
+                                        </div>
+                                        {/* <button className="resource-btn text-sm ml-3">
                                             <i className="fa-solid fa-eye mr-2"></i> Preview
                                           </button> */}
-                                        </div>
                                       </div>
-                                    ))
-                                  ) : (
-                                    <h6 className="p-3">
-                                      No data available 😂
-                                    </h6> // Display this if lessonData is empty
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        );
-                      })
+                                    </div>
+                                  ))
+                                ) : (
+                                  <h6 className="p-3">
+                                    No data available 😂
+                                  </h6> // Display this if lessonData is empty
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })
                     : "No modules found"}
                 </>
               )}
@@ -508,22 +501,20 @@ const ViewCourse = () => {
                                   onClick={() => toggleFaqsContent(index)}
                                 >
                                   <span
-                                    className={`module-title ${
-                                      activeFaqsIndex === index
-                                        ? "text-blue-500"
-                                        : "text-black-700"
-                                    }`}
+                                    className={`module-title ${activeFaqsIndex === index
+                                      ? "text-blue-500"
+                                      : "text-black-700"
+                                      }`}
                                   >
                                     {keyword.question}
                                   </span>
                                   <div className="module-controls">
                                     <button className="check-btn">
                                       <i
-                                        className={`fa-solid ${
-                                          activeFaqsIndex === index
-                                            ? "fa-angle-up"
-                                            : "fa-angle-down"
-                                        }`}
+                                        className={`fa-solid ${activeFaqsIndex === index
+                                          ? "fa-angle-up"
+                                          : "fa-angle-down"
+                                          }`}
                                       ></i>
                                     </button>
                                   </div>
@@ -630,9 +621,8 @@ const ViewCourse = () => {
                           <button
                             key={i}
                             onClick={() => goToPage(i + 1)}
-                            className={`pagination-button ${
-                              currentPage === i + 1 ? "active" : ""
-                            }`}
+                            className={`pagination-button ${currentPage === i + 1 ? "active" : ""
+                              }`}
                           >
                             {i + 1}
                           </button>
@@ -671,7 +661,7 @@ const ViewCourse = () => {
                   {setting.position == "left" ? setting.symbol : ""}
                   {courseData.course_price -
                     (courseData.course_price * courseData.course_discount) /
-                      100}
+                    100}
                   {setting.position == "right" ? setting.symbol : ""}
                   {courseData.course_discount ? (
                     <>
@@ -697,9 +687,8 @@ const ViewCourse = () => {
                     {isInCart ? "Added to Cart" : "Add to Cart"}
                   </button>
                   <button
-                    className={`btn-buy ${
-                      isInCart ? "cursor-not-allowed" : ""
-                    }`}
+                    className={`btn-buy ${isInCart ? "cursor-not-allowed" : ""
+                      }`}
                     onClick={() => handleBuy(courseData)}
                     disabled={isInCart}
                   >

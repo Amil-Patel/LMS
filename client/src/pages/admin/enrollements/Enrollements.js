@@ -339,7 +339,7 @@ function Enrollements() {
                 <td>{enroll.course_master_enrollment.course_title}</td>
                 <td>
                   {enroll.course_master_enrollment.expiring_time ?
-                    <p>{enroll.course_master_enrollment.expiring_time === "life_time" ? "" : enroll.course_master_enrollment.no_of_month + " month"}</p>
+                    <p>{enroll.course_master_enrollment.expiring_time === "life_time" ? "-" : enroll.course_master_enrollment.no_of_month + " month"}</p>
                     :
                     "-"
                   }

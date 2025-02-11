@@ -32,7 +32,7 @@ const Sidebar = () => {
   }, [stuUserId]);
 
   const [open, setOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
