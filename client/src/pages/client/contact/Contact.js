@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../admin/utils/axiosInstance';
 import { notifyError, notifySuccess } from '../../admin/layout/ToastMessage';
 const port = process.env.REACT_APP_URL
@@ -39,7 +39,7 @@ const Contact = () => {
             notifyError("Please select your country");
             return;
         }
-        if(formState.address == ""){
+        if (formState.address == "") {
             notifyError("Please enter your address");
             return
         }
@@ -63,7 +63,9 @@ const Contact = () => {
             console.error('Error sending message:', error);
         }
     };
-
+    useEffect(() => {
+        document.title = "Comfort Security | Contact"; // Set the page title dynamically
+    }, []);
     return (
         <>
             <div className='client_section'>

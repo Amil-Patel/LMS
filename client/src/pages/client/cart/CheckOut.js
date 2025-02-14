@@ -273,14 +273,14 @@ const CheckOut = () => {
                     is_inclusive: course.is_inclusive,
                     is_exclusive: course.is_exclusive,
                 }));
-                if (courseDetails.length === 0) {
-                    notifyError("No courses selected for enrollment.");
-                    setButtonLoad(false);
-                    return;
-                }
-                // Prepare data for the backend
-                const requestData = {
-                    user_id: stuUserId,
+            if (courseDetails.length === 0) {
+                notifyError("No courses selected for enrollment.");
+                setButtonLoad(false);
+                return;
+            }
+            // Prepare data for the backend
+            const requestData = {
+                user_id: stuUserId,
                 courses: courseDetails,
                 total_amount: total,
                 billing_info: {
@@ -309,7 +309,9 @@ const CheckOut = () => {
             notifyError("An error occurred. Please try again later.");
         }
     };
-
+    useEffect(() => {
+        document.title = "Comfort Security | Checkout"; // Set the page title dynamically
+    }, []);
 
     return (
         <>

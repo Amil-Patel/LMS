@@ -26,6 +26,9 @@ const Navbar = () => {
   const handleClick = () => {
     navigate("/admin/profile")
   }
+  useEffect(() => {
+    document.title = "Comfort Security | Admin Dashboard"; // Set the page title dynamically
+  }, []);
 
   return (
     <>

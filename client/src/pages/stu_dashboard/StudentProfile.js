@@ -121,10 +121,14 @@ const StudentProfile = () => {
       console.log(error);
     }
   };
+  
   useEffect(() => {
     getUserData();
   }, [stuUserId]);
 
+  useEffect(() => {
+    document.title = "Comfort Security | Profile"; // Set the page title dynamically
+  }, []);
   return (
     <>
       <Navbar />
