@@ -92,7 +92,9 @@ const AllCourse = () => {
     getCourseData();
     getCourseCategory();
   }, []);
-
+  useEffect(() => {
+    document.title = "Comfort Security | Courses"; // Set the page title dynamically
+  }, []);
   return (
     <>
       <div className="client_section">

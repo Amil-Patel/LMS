@@ -81,7 +81,9 @@ const PurchaseHistory = () => {
   useEffect(() => {
     getPaymentData();
   }, [stuUserId]);
-
+  useEffect(() => {
+    document.title = "Comfort Security | Purchase History"; // Set the page title dynamically
+  }, []);
   return (
     <>
       <Navbar />

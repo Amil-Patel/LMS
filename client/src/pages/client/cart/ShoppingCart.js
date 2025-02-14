@@ -142,7 +142,9 @@ const ShoppingCart = () => {
     }
   }, [cart]);
 
-
+  useEffect(() => {
+    document.title = "Comfort Security | Shopping Cart"; // Set the page title dynamically
+  }, []);
 
   return (
     <>

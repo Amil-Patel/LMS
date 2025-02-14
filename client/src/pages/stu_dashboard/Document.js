@@ -92,6 +92,9 @@ const Document = () => {
         getEnrolledCourses();
         getDocumentData()
     }, [stuUserId]);
+    useEffect(() => {
+        document.title = "Comfort Security | Documents"; // Set the page title dynamically
+    }, []);
     return (
         <>
             <Navbar />

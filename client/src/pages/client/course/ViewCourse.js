@@ -251,6 +251,9 @@ const ViewCourse = () => {
       setCurrentPage(page);
     }
   };
+  useEffect(() => {
+    document.title = "Comfort Security | View Course"; // Set the page title dynamically
+  }, []);
   return (
     <>
       <Navbar />

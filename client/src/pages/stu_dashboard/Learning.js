@@ -36,7 +36,9 @@ const Learning = () => {
     useEffect(() => {
         getEnrollCourse();
     }, [stuUserId])
-
+    useEffect(() => {
+        document.title = "Comfort Security | Learning"; // Set the page title dynamically
+    }, []);
     return (
         <>
             <Navbar />

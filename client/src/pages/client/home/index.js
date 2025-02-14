@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../layout/Navbar'
 import HeroSection from './HeroSection'
 import '../../../assets/css/client/home.css'
@@ -7,7 +7,10 @@ import EnrollSection from './EnrollSection'
 import Contact from './Contact'
 import Footer from '../layout/Footer'
 
-const index = () => {
+const Index = () => {
+    useEffect(() => {
+        document.title = "Comfort Security | Home"; // Set the page title dynamically
+    }, []);
     return (
         <>
             <Navbar />
@@ -20,4 +23,4 @@ const index = () => {
     )
 }
 
-export default index
+export default Index

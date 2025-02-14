@@ -920,7 +920,9 @@ const CourseVideo = () => {
       });
     }
   }, [reviewWithStudentId, stuUserId, id]);
-
+  useEffect(() => {
+    document.title = "Comfort Security | Course Video"; // Set the page title dynamically
+  }, []);
   return (
     <>
       {loading ? (
